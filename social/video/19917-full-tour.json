@@ -1,9 +1,10 @@
 {
- "plan": "c14e0fffdf33",
+ "plan": "2b14d7e3550f",
  "model": "gen4_turbo",
  "ratio": "1280:720",
  "shots": 17,
  "seconds": 64.2,
+ "new_clips": 17,
  "credits": 425,
- "made": "2026-11-20 22:20 UTC"
+ "made": "2026-11-20 22:47 UTC"
 }

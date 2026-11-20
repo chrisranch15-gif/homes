@@ -8,6 +8,7 @@ private Listing Concierge on claude.ai. One source, three outputs.
 | Listing Concierge (The Desk, seller portal, story) | claude.ai artifact `6a12fcfd-7e65-4e8d-8acd-573532aab862` | `app/build.py <artifact url>` |
 | homes.ranchpnw.com/19917 | repo `chrisranch15-gif/homes` (GitHub Pages) | `public-site/build_public.py` + `finish.py` |
 | gotehaleh.com | repo `chrisranch15-gif/gotehaleh` (GitHub Pages) | same |
+| live.ranchpnw.com/<town> (town guides; data in `app/src/towns.js`) | repo `chrisranch15-gif/live` (GitHub Pages) — not created yet | same |
 | Lead emails + Sheet | Google Apps Script "Ranch Leads · homes.ranchpnw.com" (Chris's KW Google account) | `apps-script/Code.gs` |
 
 Lead endpoint (web app): `https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec`
@@ -19,13 +20,14 @@ Lead endpoint (web app): `https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaR
 mkdir -p /home/claude/app /home/claude/public-site/fontpkg
 cp -r source/app/. /home/claude/app/
 cp -r photos thumbs /home/claude/app/          # photos live at the repo root
-cp source/public-site/*.py /home/claude/public-site/
+cp source/public-site/*.py source/public-site/*.html /home/claude/public-site/
 cd /home/claude/public-site/fontpkg && npm init -y && npm i terser@5 lighthouse@12 @fontsource/playfair-display @fontsource/inter
 # tests (must stay green)
 cd /home/claude/app && node -e "const LC=require('./src/engine.js');const T=require('./src/tests.js');const r=T.run(LC);console.log(r.filter(x=>x.pass).length+'/'+r.length)"
 # public sites
 cd /home/claude/public-site && python3 build_public.py "<lead endpoint>" && python3 finish.py
-# then copy sites/homes → repo homes, sites/gotehaleh → repo gotehaleh, commit, push main
+# then copy sites/homes → repo homes, sites/gotehaleh → repo gotehaleh, sites/live → repo live (live.ranchpnw.com), commit, push main
+# (homes/sitemap.xml has a hand-added /sell entry — don't overwrite it)
 ```
 
 `finish.py` pre-renders each page in headless Chrome (so AI crawlers see full text), adds JSON-LD,

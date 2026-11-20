@@ -428,6 +428,7 @@ function homeFaq() {
 }
 const GBP_URL = 'https://maps.google.com/?cid=13168785543785810551';
 function jsonLd(page) {
+  if (PLACES[page] && PLACES[page].town) return townLd(page);
   const t = T(), org = { '@type': 'RealEstateAgent', '@id': 'https://www.ranchpnw.com/#org', name: t.name, url: 'https://www.ranchpnw.com', sameAs: [GBP_URL, 'https://www.realtrends.com/team-profile/ranchrealestategroup-washington-kellerwilliamsrealtypugetsound/'], hasMap: GBP_URL, address: { '@type': 'PostalAddress', addressLocality: 'Federal Way', addressRegion: 'WA', postalCode: '98003', addressCountry: 'US' }, parentOrganization: { '@type': 'Organization', name: t.affiliation }, areaServed: ['Bonney Lake, WA', 'Tehaleh', 'Lake Tapps, WA', 'Gig Harbor, WA', 'Fox Island, WA', 'Tacoma, WA', 'Federal Way, WA'], employee: { '@type': 'Person', '@id': 'https://www.ranchpnw.com/#chris', name: t.agent.name, jobTitle: 'Listing agent, ' + t.name, worksFor: { '@id': 'https://www.ranchpnw.com/#org' }, memberOf: { '@id': 'https://www.ranchpnw.com/#org' }, telephone: '+1-253-335-5630' } };
   const faq = items => ({ '@type': 'FAQPage', mainEntity: items.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
   if (page === 'tehaleh') {
@@ -455,7 +456,7 @@ function jsonLd(page) {
 window.__jsonLd = jsonLd;
 const FN = { on: false, list: [] };
 function srcLink(k) { const s = SRC[k]; if (!s) return '';
-  if (FN.on) { let n = FN.list.indexOf(k) + 1; if (!n) { FN.list.push(k); n = FN.list.length; } return `<sup class="fn"><a href="#tehaleh" data-scroll="sources" aria-label="Source ${n}: ${esc(s[0])}">${n}</a></sup>`; }
+  if (FN.on) { let n = FN.list.indexOf(k) + 1; if (!n) { FN.list.push(k); n = FN.list.length; } return `<sup class="fn"><a href="#${FN.route || 'tehaleh'}" data-scroll="sources" aria-label="Source ${n}: ${esc(s[0])}">${n}</a></sup>`; }
   return `<a class="src-link" href="${s[1]}" target="_blank" rel="noopener" data-out="${k}">${esc(s[0])} ↗</a>`; }
 function sourcesList() { const l = FN.list.slice(); return l.length ? `<section class="wrap"><details class="sources" id="sources"><summary>Sources · ${l.length}</summary><ol>${l.map(k => `<li><a href="${SRC[k][1]}" target="_blank" rel="noopener" data-out="${k}">${esc(SRC[k][0])} ↗</a></li>`).join('')}</ol></details></section>` : ''; }
 function dayChap(c, i) {
@@ -465,7 +466,7 @@ function dayChap(c, i) {
     <div class="gintro"><p class="serif">“${esc(c.intro)}”</p></div>
     <ol class="dayline">${c.moments.map(([when, title, text, ph, s]) => `<li>${ph ? pimg(ph, 'ph s') : ''}<div><div class="when">${esc(when)}</div><h3 class="serif">${esc(title)}</h3><p>${esc(text)}</p>${s ? srcLink(s) : ''}</div></li>`).join('')}</ol>
     <div class="honest">${c.honest.map(([h, t]) => `<div><h3 class="serif">${esc(h)}</h3><p>${esc(t)}</p></div>`).join('')}</div>
-    <p class="sig">— ${esc(T().agent.name)}, who lived in Tehaleh with his family</p></div></section>`;
+    <p class="sig">— ${esc(T().agent.name)}, ${esc(c.sig || 'who lived in Tehaleh with his family')}</p></div></section>`;
 }
 function picksChap(c, i) {
   const first = T().agent.name.split(' ')[0];
@@ -1034,7 +1035,7 @@ function system() {
    ============================================================ */
 const ROUTES = { following, 'closing-book': closingBook, 'home-book': homeBook, talkers: talkersView, 'desk-kit': deskKit, quick: quickSetup, present, story, tehaleh: guide, valuation, 'home-edit': homeEdit, between, seller: portal, reveal, report: reportView, host, sign: signView, desk, 'desk-runs': deskRuns, setup, 'desk-facts': deskFacts, 'desk-activity': deskActivity, 'desk-run': deskRun, system };
 const STAFF = ['talkers', 'desk-kit', 'quick', 'present', 'host', 'sign', 'setup', 'desk', 'desk-runs', 'desk-facts', 'desk-activity', 'desk-run', 'system'];
-function route() { return (location.hash || '').replace('#', '') || (SITE && SITE.page === 'tehaleh' ? 'tehaleh' : 'story'); }
+function route() { return (location.hash || '').replace('#', '') || (SITE && (SITE.page === 'tehaleh' || (PLACES[SITE.page] && PLACES[SITE.page].town)) ? SITE.page : 'story'); }
 function enter(r) {
   // arrival side effects happen once per navigation, never on re-render
   if (r.indexOf('qr-') === 0) {
@@ -1053,7 +1054,7 @@ function enter(r) {
   const l = L(); const sh = l.sellers.find(s => r === s.share.toLowerCase() || r === 's-' + s.share.toLowerCase());
   if (sh) { session.attribution = 'seller-share'; keepSession(); location.replace('#story'); return false; }
   if (r === 'story') E.emit(LID, 'site.visit', { session: session.visitor, source: session.attribution || 'direct' });
-  if ((r === 'story' || r === 'tehaleh') && !(session.tracked || {})[r]) { session.tracked = Object.assign({}, session.tracked, { [r]: 1 }); keepSession(); track('visit', { view: r }); }
+  if ((r === 'story' || r === 'tehaleh' || (PLACES[r] && PLACES[r].town)) && !(session.tracked || {})[r]) { session.tracked = Object.assign({}, session.tracked, { [r]: 1 }); keepSession(); track('visit', { view: r }); }
   return true;
 }
 let entering = false;
@@ -1064,11 +1065,11 @@ function render() {
   if (!ROUTES[r]) { if (r !== lastRoute) { lastRoute = r; if (!safeEnter(r)) return; } r = 'story'; }
   const first = r !== lastRoute;
   if (first) { lastRoute = r; closeSheet(); if (!safeEnter(r)) return; }
-  if (SITE && ['seller', 'reveal', 'report', 'following', 'closing-book', 'home-book', 'sign', 'host'].concat(STAFF).indexOf(r) >= 0) { location.replace('#' + (SITE.page === 'tehaleh' ? 'tehaleh' : 'story')); return; }
+  if (SITE && ['seller', 'reveal', 'report', 'following', 'closing-book', 'home-book', 'sign', 'host'].concat(STAFF).indexOf(r) >= 0) { location.replace('#' + (SITE.page === 'tehaleh' || (PLACES[SITE.page] && PLACES[SITE.page].town) ? SITE.page : 'story')); return; }
   if (STAFF.indexOf(r) >= 0 && !isStaff()) { $app.innerHTML = `<div class="private"><div class="phone pad" style="padding-top:90px"><h1 class="serif">For the listing team.</h1><p class="muted">This part of the Concierge is private to ${esc(T().name)}.</p><a class="btn" href="#story">See the home</a></div></div>`; return; }
   const y = window.scrollY;
   if (r !== 'story') ui.menu = false;
-  $app.innerHTML = ROUTES[r]() + (['story', 'tehaleh', 'valuation', 'home-edit', 'between', 'seller', 'reveal', 'report', 'following', 'closing-book', 'home-book', 'present'].indexOf(r) >= 0 ? '' : navButton());
+  $app.innerHTML = ROUTES[r]() + (['story', 'tehaleh', 'valuation', 'home-edit', 'between', 'seller', 'reveal', 'report', 'following', 'closing-book', 'home-book', 'present'].indexOf(r) >= 0 || (PLACES[r] && PLACES[r].town) ? '' : navButton());
   if (!SITE) document.title = r.indexOf('desk') === 0 || r === 'system' ? 'The Desk · ' + street() : street() + ' · ' + (V('community') || '');
   if (first) window.scrollTo(0, 0); else window.scrollTo(0, y);
 }
@@ -1298,7 +1299,7 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
   'lead-confirm': el => { const d = L().leads.find(x => x.id === el.dataset.id); sheet(`<div class="eyebrow">Confirm a showing</div><h3>${esc(d.name || 'Buyer')}</h3>${d.when ? `<p class="muted">They suggested: ${esc(d.when)}</p>` : ''}<form data-form="confirm-showing" data-id="${d.id}"><div class="field"><label for="sd">Date</label><input id="sd" type="date" name="date" required value="${new Date(E.now() + 864e5).toISOString().slice(0, 10)}"></div><div class="field"><label for="stm">Time</label><input id="stm" type="time" name="time" value="11:00" required></div><button class="btn wide">Confirm and tell them</button></form><p class="small muted">${d.consent ? 'They get a confirmation right away; feedback is requested two hours after.' : 'They didn’t agree to emails, so call to confirm — feedback is still requested afterwards.'}</p>`); },
   'fb-open': el => sheet(`<div class="eyebrow">Showing feedback</div><h3>How did it go?</h3><p class="small muted">In production this arrives from the showing service. Your seller hears the substance, never the buyer’s name.</p><form data-form="feedback" data-id="${el.dataset.id}"><div class="chips">${[['high', 'Strong interest'], ['medium', 'Some interest'], ['low', 'Not for them']].map(([v, n], i) => `<label class="chip" style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="interest" value="${v}" ${i === 0 ? 'checked' : ''}> ${n}</label>`).join('')}</div><div class="field"><label for="fn">What stood out</label><input id="fn" name="note" placeholder="Loved the deck; wondered about HOA dues"></div><button class="btn wide">Share with the seller</button></form>`),
   menu: () => { ui.menu = !ui.menu; render(); },
-  'share-guide': async () => { const url = shareUrl('tehaleh'); try { if (navigator.share) { await navigator.share({ title: 'Life in Tehaleh', text: 'A guide to Tehaleh from ' + T().name, url }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } copy(url); },
+  'share-guide': async () => { const pk = PLACES[route()] && PLACES[route()].town ? route() : 'tehaleh', pn = PLACES[pk].name, url = pk === 'tehaleh' ? shareUrl('tehaleh') : 'https://live.ranchpnw.com/' + PLACES[pk].path; try { if (navigator.share) { await navigator.share({ title: 'Life in ' + pn, text: 'A guide to ' + pn + ' from ' + T().name, url }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } copy(url); },
   'menu-go': el => { ui.menu = false; location.hash = el.getAttribute('href').slice(1); },
   'tell-q': el => caps.sample ? tell(el.dataset.q) : tellOffline(el.dataset.q),
   'check-drive': () => checkDrive(),
@@ -1367,7 +1368,7 @@ const FORMS = {
   contract: f => { const t = k => new Date(f[k].value + 'T12:00:00').getTime(); E.emit(LID, 'contract.dates', { inspection: t('inspection'), appraisal: t('appraisal'), financing: t('financing'), closing: t('closing') }); toast('Timeline confirmed. Your seller sees it now; reminders are queued.'); },
   'confirm-showing': f => { const at = new Date(f.date.value + 'T' + f.time.value).getTime(); const label = new Date(at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); E.emit(LID, 'showing.confirmed', { lead: f.dataset.id, at, label }); closeSheet(); toast('Confirmed. Feedback will be requested automatically.'); },
   feedback: f => { E.emit(LID, 'showing.feedback', { showing: f.dataset.id, interest: f.interest.value, note: f.note.value }); closeSheet(); toast('Shared with your seller — without the buyer’s name.'); },
-  'place-lead': async f => { const c = readContact(f); if (!c) return; if (!(await submitLead(f, f.dataset.k, c))) return; E.emit(LID, 'lead.created', { kind: f.dataset.k, name: c.name, contact: c.phone + ' · ' + c.email, source: 'tehaleh-guide', cta: f.dataset.k, channel: 'web', consent: true }); sheet(`<h3>You’re set, ${esc(c.name.split(' ')[0])}.</h3><p>${f.dataset.k === 'community-tour' ? esc(T().agent.name) + ' will be in touch to plan it.' : 'We’ll only write when there’s something worth sending.'}</p><button class="btn wide" data-act="close">Back to the guide</button>`); },
+  'place-lead': async f => { const c = readContact(f); if (!c) return; if (!(await submitLead(f, f.dataset.k, c))) return; E.emit(LID, 'lead.created', { kind: f.dataset.k, name: c.name, contact: c.phone + ' · ' + c.email, source: (PLACES[route()] && PLACES[route()].town ? route() : 'tehaleh') + '-guide', cta: f.dataset.k, channel: 'web', consent: true }); sheet(`<h3>You’re set, ${esc(c.name.split(' ')[0])}.</h3><p>${f.dataset.k === 'community-tour' ? esc(T().agent.name) + ' will be in touch to plan it.' : 'We’ll only write when there’s something worth sending.'}</p><button class="btn wide" data-act="close">Back to the guide</button>`); },
   tell: f => { const q = f.q.value.trim(); if (!q) return; caps.sample ? tell(q) : tellOffline(q); },
   brokerage: f => { E.setTenantSettings({ name: f.name.value, affiliation: f.affiliation.value, agentName: f.agentName.value, agentEmail: f.agentEmail.value }); toast('Saved — your name updates everywhere.'); },
   'seller-setup': f => { const s = L().sellers[0]; s.name = f.elements.name.value.trim() || 'Seller'; s.email = f.email.value.trim(); s.authorized.launch_comms = f.launch.checked; s.tone = f.tone.value; dirty = true; scheduleSave(); render(); toast('Seller saved.'); },

@@ -4,8 +4,9 @@ from PIL import Image
 from playwright.async_api import async_playwright
 ROOT = '/home/claude/public-site/sites'; TERSER = '/home/claude/public-site/fontpkg/node_modules/.bin/terser'
 SITES = {'homes': ('https://homes.ranchpnw.com', [('19917.html', '/19917', '19917', 'story')]),
-         'gotehaleh': ('https://gotehaleh.com', [('index.html', '/', 'tehaleh', 'tehaleh')])}
-PORTS = {'homes': 8771, 'gotehaleh': 8772}
+         'gotehaleh': ('https://gotehaleh.com', [('index.html', '/', 'tehaleh', 'tehaleh')]),
+         'live': ('https://live.ranchpnw.com', [('bonney-lake.html', '/bonney-lake', 'bonney-lake', 'bonney-lake')])}
+PORTS = {'homes': 8771, 'gotehaleh': 8772, 'live': 8773}
 
 # 1. WebP at two widths
 for site in SITES:
@@ -91,11 +92,25 @@ LLMS = {
 - The Retreat at Glacier Pointe: resident clubhouse planned for 2027 — clubhouse, 5,773 sq ft fitness center, two pickleball courts, café, lawn with Mount Rainier views
 - Schools: split between the Sumner-Bonney Lake and Orting school districts
 - About 21 miles to Tacoma, 43 to Seattle, 35 to Sea-Tac; Bonney Lake Costco about 12 minutes away
+""",
+ 'live': """# Life in the Puget Sound — town guides from The Ranch Real Estate Group
+
+> First-hand guides to Puget Sound towns, written by local agents of The Ranch Real Estate Group (Keller Williams Puget Sound), with every fact sourced on the page and every personal pick signed.
+
+- [Life in Bonney Lake, WA](https://live.ranchpnw.com/bonney-lake): a day in the life, Chris Ranch's picks, Allan Yorke Park and Lake Tapps boat-launch rules, commute, errands, who it isn't for, FAQ
+- [Life in Tehaleh](https://gotehaleh.com/): the neighborhood guide for Tehaleh, at Bonney Lake's south end
+- [Homes for sale](https://homes.ranchpnw.com/)
+
+## Bonney Lake key facts (sourced on the page)
+- Pierce County, Washington, along SR-410; population 22,487 at the 2020 census; incorporated 1949
+- Allan Yorke Park: 45 acres on the south end of Lake Tapps; boat launch open to Bonney Lake residents only for 2026 ($43.80/yr trailer parking pass)
+- North Lake Tapps Park (Pierce County) has a public boat ramp, typically closed November-March
+- Costco Bonney Lake: 9801 204th Ave E
 """}
 for site, (origin, pages) in SITES.items():
     d = f'{ROOT}/{site}'
     open(f'{d}/robots.txt', 'w').write(''.join(f'User-agent: {b}\nAllow: /\n\n' for b in BOTS) + 'User-agent: *\nAllow: /\n\nSitemap: ' + origin + '/sitemap.xml\n')
-    extra = '<url><loc>https://homes.ranchpnw.com/</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>' if site == 'homes' else ''
+    extra = f'<url><loc>{origin}/</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>' if site in ('homes', 'live') else ''
     urls = extra + ''.join(f'<url><loc>{origin}{path}</loc><lastmod>2026-11-19</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>' for fn, path, page, route in pages)
     open(f'{d}/sitemap.xml', 'w').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
     open(f'{d}/llms.txt', 'w').write(LLMS[site])

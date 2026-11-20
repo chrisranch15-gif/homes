@@ -4,9 +4,9 @@
 import sys, os, shutil, json
 APP = '/home/claude/app'; ROOT = '/home/claude/public-site/sites'
 API = sys.argv[1] if len(sys.argv) > 1 else 'https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec'
-HOMES, GUIDE = 'https://homes.ranchpnw.com', 'https://gotehaleh.com'
+HOMES, GUIDE, LIVE = 'https://homes.ranchpnw.com', 'https://gotehaleh.com', 'https://live.ranchpnw.com'
 css = open(f'{APP}/src/styles.css').read()
-app = open(f'{APP}/src/app.js').read().replace('/* ---------- start ---------- */', open(f'{APP}/src/extras.js').read() + '\n/* ---------- start ---------- */')
+app = open(f'{APP}/src/app.js').read().replace('/* ---------- start ---------- */', open(f'{APP}/src/extras.js').read() + '\n' + open(f'{APP}/src/towns.js').read() + '\n/* ---------- start ---------- */')
 libs = [open(f'{APP}/vendor/node_modules/qrcode-generator/qrcode.js').read(), open(f'{APP}/src/engine.js').read()]
 PAGES = [
   dict(site='homes', file='19917.html', page='19917', url=f'{HOMES}/19917', title='19917 145th St E, Bonney Lake, WA 98391 · 5-Bed Tehaleh Home for Sale · The Ranch Real Estate Group',
@@ -15,8 +15,11 @@ PAGES = [
   dict(site='gotehaleh', file='index.html', page='tehaleh', url=f'{GUIDE}/', title='Living in Tehaleh, Bonney Lake WA: Trails, Parks, Schools & The Retreat (2026 Guide)',
        desc='What it’s really like to live in Tehaleh, the 4,700-acre community south of Bonney Lake: 40+ miles of connected trails, 18 parks, Post & Pour, The Retreat clubhouse (2027), schools, Costco and Lake Tapps — from a local agent who lived there.',
        image='photos/og-tehaleh.jpg', alt='Life in Tehaleh: a Tehaleh boulevard leading to Mount Rainier', origin=GUIDE),
+  dict(site='live', file='bonney-lake.html', page='bonney-lake', url=f'{LIVE}/bonney-lake', title='Living in Bonney Lake, WA: A Local’s Guide to Allan Yorke Park, Lake Tapps, Commutes & Picks (2026)',
+       desc='What it’s really like to live in Bonney Lake, Washington: a Saturday in the life, Allan Yorke Park and the Lake Tapps boat launch rules, the SR-410 commute, Costco runs, and who it isn’t for — from a local agent, with sources.',
+       image='photos/og-bonney-lake.jpg', alt='Life in Bonney Lake, a guide from The Ranch Real Estate Group', origin=LIVE),
 ]
-for site, domain in [('homes', 'homes.ranchpnw.com'), ('gotehaleh', 'gotehaleh.com')]:
+for site, domain in [('homes', 'homes.ranchpnw.com'), ('gotehaleh', 'gotehaleh.com'), ('live', 'live.ranchpnw.com')]:
     out = f'{ROOT}/{site}'; os.makedirs(out, exist_ok=True)
     for d in ['photos', 'thumbs']: shutil.copytree(f'{APP}/{d}', f'{out}/{d}', dirs_exist_ok=True)
     open(f'{out}/CNAME', 'w').write(domain + '\n'); open(f'{out}/robots.txt', 'w').write('User-agent: *\nAllow: /\n'); open(f'{out}/.nojekyll', 'w').write('')
@@ -43,8 +46,9 @@ for m in PAGES:
 '''
     body = ''.join(f'<script>\n{j}\n</script>\n' for j in libs + [app.replace('__ARTIFACT_URL__', HOMES + '/19917')])
     open(f"{ROOT}/{m['site']}/{m['file']}", 'w').write(head + body + '</body></html>')
+open(f'{ROOT}/live/index.html', 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'live-index.template.html')).read())
 open(f'{ROOT}/homes/index.html', 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'collection.template.html')).read().replace('__API__', API))
-print('built', {s: sorted(x for x in os.listdir(f'{ROOT}/{s}') if '.' in x) for s in ['homes', 'gotehaleh']})
+print('built', {s: sorted(x for x in os.listdir(f'{ROOT}/{s}') if '.' in x) for s in ['homes', 'gotehaleh', 'live']})
 
 # seller portal (static, noindex) — reads live numbers from the email engine
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sites/homes/sellers.html'), 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sellers.template.html')).read().replace('__API__', API))

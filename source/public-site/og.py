@@ -7,6 +7,7 @@ fonts=f"""@font-face{{font-family:P;src:url(data:font/woff2;base64,{b64(F+'playf
 @font-face{{font-family:I;font-weight:500;src:url(data:font/woff2;base64,{b64(F+'inter/files/inter-latin-500-normal.woff2')})}}"""
 CARDS={
  'og-19917':('photos/great-room.jpg','center 60%','Just listed · Tehaleh, Bonney Lake','19917 145th St E','5 bedrooms · Mount Rainier views · backs to the greenbelt'),
+ 'og-bonney-lake':('','','A local agent’s first-hand guide','Life in Bonney Lake','Allan Yorke Park · Lake Tapps · a day in the life · honest FAQs'),
  'og-tehaleh':('photos/teh-rainier-boulevard.jpg','center 40%','A guide from someone who lived there','Life in Tehaleh','40+ miles of connected trails · 18 parks · The Retreat, 2027'),
 }
 async def main():
@@ -16,7 +17,7 @@ async def main():
         for name,(img,pos,eb,title,sub) in CARDS.items():
             html=f"""<html><head><style>{fonts}
 *{{margin:0;box-sizing:border-box}}body{{width:1200px;height:630px;position:relative;overflow:hidden;font-family:I;background:#16191B}}
-.bg{{position:absolute;inset:0;background:url(data:image/jpeg;base64,{b64('/home/claude/app/'+img)}) {pos}/cover}}
+.bg{{position:absolute;inset:0;background:{('url(data:image/jpeg;base64,'+b64('/home/claude/app/'+img)+') '+pos+'/cover') if img else 'radial-gradient(120% 90% at 85% 0%,#2A3136 0%,#16191B 60%)'}}}
 .s{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,25,27,.38) 0%,rgba(22,25,27,0) 22%,rgba(22,25,27,0) 30%,rgba(22,25,27,.55) 62%,rgba(22,25,27,.9) 100%)}}
 .c{{position:absolute;left:64px;right:64px;bottom:52px;color:#F7F5F1}}
 .e{{font-size:20px;letter-spacing:.22em;text-transform:uppercase;color:#E7D7BF;font-weight:500}}

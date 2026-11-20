@@ -505,3 +505,10 @@ sup.fn a{color:var(--accent);text-decoration:none;font-family:var(--sans);font-w
 .ohinv{display:inline-flex;align-items:center;gap:10px;margin:22px 0 0;padding:6px 12px 6px 10px;border:1px solid rgba(231,215,191,.5);background:rgba(14,16,18,.38);color:#F7F5F1;font:inherit;font-size:13px;letter-spacing:.04em;white-space:nowrap;cursor:pointer;transition:border-color .3s ease}
 .ohinv:hover{border-color:#E7D7BF}
 .ohinv .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#E7D7BF;padding-right:10px;border-right:1px solid rgba(231,215,191,.45)}
+/* town guides without a hero photo (until real photos of the town are supplied) */
+.townhero{position:relative;background:var(--night);color:#F7F5F1;padding-bottom:clamp(56px,9vw,120px)}
+.townhero .topnav{position:relative}
+.townhero .copy{max-width:1240px;margin:0 auto;padding:clamp(48px,9vw,120px) clamp(20px,4vw,48px) 0}
+.townhero h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6.6vw,96px);line-height:1.02;margin:0;letter-spacing:-.01em;max-width:14ch;text-wrap:balance}
+.townhero .eyebrow{color:#E7D7BF}
+.tplace{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(20px,3vw,40px)}

@@ -43,6 +43,15 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
 9. Never show a photo that isn't of the place it sits next to. Credit Anthony Jones / Rainier Real Estate
    Photography where credits appear; Holly's mountain photos are uncredited.
 
+**The agent is the hero**
+16. Everything clients, sellers, buyers and other agents see speaks as the agent: "I" (Chris) or "we"
+    (Chris and the Ranch team). Never credit "the system", "AI", "automation", "Claude" or a bot in client-facing
+    words, and never imply the agent isn't personally behind the work. The system works behind the scenes.
+17. Client messages follow Chris's own writing style (see `source/voice.md` once written): warm, direct, specific,
+    human. Drafts are written to sound like Chris wrote them himself, and he sends them.
+18. When other agents use this, the same holds for them: names, team, phone and voice come from the agent's
+    profile, never hard-coded, and the agent is always the one doing the work in every client-facing line.
+
 **Listing films (Runway)**
 10. Always save every raw Runway clip in `source/video/clips/` (named by a hash of model, ratio, length, photo,
     prompt and crop). Re-edits — captions, timing, order, cards, music — must reuse saved clips and cost $0;

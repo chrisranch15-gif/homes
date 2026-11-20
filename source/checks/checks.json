@@ -1,0 +1,12 @@
+[
+  {"site": "19917 listing page", "url": "https://homes.ranchpnw.com/19917", "expect": ["$775,000", "19917 145th St E", "og:image"]},
+  {"site": "Homes front door", "url": "https://homes.ranchpnw.com/", "expect": ["Our homes", "19917"]},
+  {"site": "Seller portal", "url": "https://homes.ranchpnw.com/sellers", "expect": ["seller portal", "script.google.com/macros"]},
+  {"site": "Tehaleh guide", "url": "https://gotehaleh.com/", "expect": ["Tehaleh", "FAQPage"]},
+  {"site": "Homes sitemap", "url": "https://homes.ranchpnw.com/sitemap.xml", "expect": ["<urlset"]},
+  {"site": "Guide sitemap", "url": "https://gotehaleh.com/sitemap.xml", "expect": ["<urlset"]},
+  {"site": "19917 share image", "url": "https://homes.ranchpnw.com/photos/og-19917.jpg", "type": "image/"},
+  {"site": "Tehaleh share image", "url": "https://gotehaleh.com/photos/og-tehaleh.jpg", "type": "image/"},
+  {"site": "Print brochure", "url": "https://homes.ranchpnw.com/print/19917-145th-St-E-brochure.pdf", "type": "application/pdf"},
+  {"site": "Lead email engine", "url": "https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec?api=ping", "expect": ["\"ok\":true"]}
+]

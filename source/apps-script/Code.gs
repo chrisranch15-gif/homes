@@ -74,6 +74,13 @@ function doPost(e) {
     tab_('Activity', ACTIVITY_HEADERS).appendRow([new Date(), type === 'scan' ? 'Sign scan' : 'Visit · ' + clean_(d.view, 20), clean_(d.page, 30), clean_(d.source, 40), clean_(d.visitor, 20), clean_(d.sign, 20)]);
     return out_({ ok: true });
   }
+  if (type === 'check') {                                  // nightly website check from GitHub Actions
+    const ok = /^https:\/\/(homes\.ranchpnw\.com|gotehaleh\.com|live\.ranchpnw\.com|script\.google\.com)\//;
+    const rows = (Array.isArray(d.rows) ? d.rows : []).slice(0, 60).filter(r => Array.isArray(r) && ok.test(String(r[1])))
+      .map(r => [Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd HH:mm'), clean_(r[0], 60), clean_(r[1], 200), /^ok$/i.test(r[2]) ? 'OK' : 'Problem', clean_(r[3], 200)]);
+    if (rows.length) { const sh = tab_('Checks', ['When', 'Site', 'URL', 'Result', 'Detail']); sh.getRange(sh.getLastRow() + 1, 1, rows.length, 5).setValues(rows); }
+    return out_({ ok: true, saved: rows.length });
+  }
   if (d.website) return out_({ ok: true });               // hidden field: bots only
   const t = TYPES[type];
   if (!t) return out_({ ok: false, reason: 'Unknown request' });

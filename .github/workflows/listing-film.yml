@@ -23,7 +23,7 @@ jobs:
           RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
         run: |
           if [ -n "${{ github.event.inputs.plan }}" ]; then plans="${{ github.event.inputs.plan }}";
-          else plans=$(git diff --name-only HEAD~1 HEAD -- 'source/video/shots/*.json'); fi
+          else plans=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'source/video/shots/*.json'); fi
           status=0
           for p in $plans; do python3 source/video/make.py "$p" || status=1; done
           echo "status=$status" >> $GITHUB_ENV

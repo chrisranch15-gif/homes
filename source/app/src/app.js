@@ -208,9 +208,10 @@ function story() {
       ${ui.menu ? `<nav class="drop" id="drop" aria-label="Menu"><a href="#story" data-scroll="s-story">The Home</a><a href="#story" data-scroll="s-photos">Photos</a><a href="#story" data-scroll="s-home">The Details</a><a href="${SITE ? SITE.guideUrl : '#tehaleh'}" ${SITE ? '' : 'data-act="menu-go"'}>Life in Tehaleh</a>${SITE ? `<a href="#valuation" data-act="menu-go">What’s my home worth?</a>` : `<a href="#following" data-act="menu-go">My homes</a>
         <span class="sep2"></span><a href="#seller" data-act="menu-go"><span>Sellers</span><span class="small">Your private portal</span></a><a href="#desk" data-act="menu-go"><span>Agents</span><span class="small">The Desk</span></a>`}</nav>` : ''}</div>
     <div class="photo">${img(l.heroPhoto || 'great-room', '', 'fetchpriority="high" loading="eager"')}</div><div class="scrim"></div>
-    <div class="copy">${(() => { const o = l.openHouses.find(x => x.status === 'scheduled'); if (!o) return ''; const [d, t] = String(o.label || '').split(' · ');
+    <div class="copy"><h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
+      ${(() => { const o = l.openHouses.find(x => x.status === 'scheduled'); if (!o) return ''; const [d, t] = String(o.label || '').split(' · ');
       const sd = o.start ? new Date(o.start).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/Los_Angeles' }) : (d || '');
-      return `<button class="ohinv" data-act="oh-register" data-id="${esc(o.id)}"><span class="k">Open House</span><span class="d">${esc(sd)} · ${esc(t || '')}</span></button>`; })()}<h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
+      return `<button class="ohinv" data-act="oh-register" data-id="${esc(o.id)}"><span class="k">Open House</span><span class="d">${esc(sd)} · ${esc(t || '')}</span></button>`; })()}
       <div class="meta">${pending ? '<span class="tag" style="color:#E7D7BF">Pending</span>' : ''}<span class="price">${V('price') != null ? LC.money(V('price')) : ''}</span><span>${V('beds')} Bedrooms*</span><span>${V('baths')} Baths</span>${V('sqft') ? `<span>${Number(V('sqft')).toLocaleString()} sq ft</span>` : ''}<span>Backs to greenbelt</span></div><div class="listedby">Listed by ${esc(t.agent.name)} · ${esc(t.firm || t.affiliation)}</div></div>
   </header>
   <section class="lede narrow remarks" id="s-story"><div class="eyebrow">${esc(street())} · ${esc(V('community'))}</div>

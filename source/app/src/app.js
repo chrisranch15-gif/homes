@@ -695,6 +695,7 @@ function desk() {
   ${n ? `<div class="decisions">${ds.slice(0, 2).map(decisionCard).join('')}</div>${n > 2 ? `<details style="margin-top:20px"><summary class="btn ghost" style="display:inline-flex">${n - 2} more</summary><div class="decisions" style="margin-top:20px">${ds.slice(2).map(decisionCard).join('')}</div></details>` : ''}`
     : `<div class="decision" style="margin-top:40px"><div class="t">All quiet. The Concierge is handling the rest.</div><div class="d">You’ll see something here only when a fact conflicts, a judgment call is needed, a connection breaks, or pricing and contracts are involved.</div></div>`}
   ${suggestionsBlock()}
+  ${liveBlock()}
   ${buyersBlock()}
   ${followersBlock()}
   <div class="quiet" style="margin-top:56px"><div><div class="serif">${todays.length || acts.length} things handled ${todays.length ? 'today' : 'so far'}</div><div class="small muted" style="margin-top:8px">${acts.slice(0, 3).map(a => esc(a.text)).join(' · ') || 'Nothing yet'}</div></div><a href="#desk-runs" class="small">See how it ran</a></div>
@@ -984,6 +985,7 @@ function enter(r) {
   if (r.indexOf('fw-') === 0) { session.follower = r.toUpperCase(); keepSession(); location.replace('#following'); return false; }
   if (r.indexOf('hb-') === 0) { try { E.homeBook(LID, 'HOME-' + r.slice(3).toUpperCase()); session.book = 'HOME-' + r.slice(3).toUpperCase(); keepSession(); } catch (e) {} location.replace('#home-book'); return false; }
   if (r.indexOf('t-') === 0) { const tk = E.talkers(LID).find(c => c.id.toLowerCase() === r.slice(2)); const lx = L(); lx.talkerScans = lx.talkerScans || []; if (tk) lx.talkerScans.push({ at: E.now(), id: tk.id }); session.attribution = 'talker'; keepSession(); dirty = true; scheduleSave(); location.replace('#story'); if (tk) setTimeout(() => { const el = document.getElementById(tk.section); if (el) el.scrollIntoView(); }, 120); return false; }
+  if (r === 'shared') { session.attribution = 'seller-share'; keepSession(); location.replace('#story'); return false; }
   const l = L(); const sh = l.sellers.find(s => r === s.share.toLowerCase() || r === 's-' + s.share.toLowerCase());
   if (sh) { session.attribution = 'seller-share'; keepSession(); location.replace('#story'); return false; }
   if (r === 'story') E.emit(LID, 'site.visit', { session: session.visitor, source: session.attribution || 'direct' });

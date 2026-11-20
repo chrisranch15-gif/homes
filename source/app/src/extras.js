@@ -223,3 +223,72 @@ Object.assign(FORMS, {
     if (s < 4) { ui.qs = s + 1; render(); return; }
     ui.created = E.createListing(Object.assign({}, ui.q, { mode: ui.q.mode || 'editorial' })); ui.qs = 1; render(); toast('Listing set up.'); }
 });
+
+/* ============================================================
+   LIVE — the public site's Google Sheet, read and written on The Desk
+   ============================================================ */
+const LIVE_SHEET = '1ROkc-18VbSn7kkLZYrTyJYiooMDLbBxYR0SSWItll2E';
+const PORTAL_URL = 'https://homes.ranchpnw.com/sellers';
+const PORTAL_CODE = 'AH-QCRU9E';
+const MARKETING_PRESETS = [
+  ['Agent network email — all 10 offices', '~600 agents'],
+  ['Local agent calls', ''],
+  ['Social post', ''],
+  ['Open house', ''],
+  ['Broker preview', ''],
+  ['Mailers / door hangers', ''],
+  ['Other', '']
+];
+const liveRows = p => (p && p.values) || [];
+async function liveLoad(quiet) {
+  if (!caps.mcp || ui.liveBusy) return;
+  ui.liveBusy = true; if (!quiet) render();
+  try {
+    const [leads, mk] = await Promise.all([
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Leads!A2:J500' }),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null)
+    ]);
+    ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
+  } catch (e) { ui.live = { at: Date.now(), error: (e && e.message) || 'Couldn’t reach the Sheet.' }; }
+  ui.liveBusy = false; render();
+}
+async function liveAppend(tab, row, done) {
+  try { await callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: tab + '!A1', values: [row] }); toast(done); liveLoad(true); return true; }
+  catch (e) { toast('Not saved — ' + ((e && e.message) || 'the Sheet didn’t respond') + '.'); return false; }
+}
+const liveNow = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+function liveBlock() {
+  if (!isStaff()) return '';
+  if (caps.mcp && !ui.live && !ui.liveBusy) setTimeout(() => liveLoad(true), 0);
+  const lv = ui.live, digits = s => String(s || '').replace(/[^\d+]/g, '');
+  const leads = lv && lv.leads ? lv.leads.slice(0, 8) : [];
+  const leadHtml = !caps.mcp ? '<p class="small muted">Open The Desk on claude.ai and allow Google Sheets to see live leads here.</p>'
+    : lv && lv.error ? `<p class="small muted">${esc(lv.error)}</p>`
+    : !lv ? '<p class="small muted">Loading…</p>'
+    : !leads.length ? '<p class="small muted">No requests yet. Tour, home-value, follow and question requests from the website land here and in your inbox.</p>'
+    : `<div class="list">${leads.map(r => `<div><span aria-hidden="true">●</span><span><b>${esc(r[1])}</b> · ${esc(r[2])}${r[5] ? `<span class="muted small"> · ${esc(String(r[5]).slice(0, 90))}</span>` : ''}<br><span class="small">${r[3] ? `<a href="tel:${digits(r[3])}">Call</a> · <a href="sms:${digits(r[3])}">Text</a> · ` : ''}${r[4] ? `<a href="mailto:${esc(r[4])}">Email</a>` : ''}${r[8] ? ` <span class="muted">· came from ${esc(r[8])}</span>` : ''}</span></span><span class="when">${esc(String(r[0]).split(' ')[0])}</span></div>`).join('')}</div>`;
+  const mk = lv && lv.marketing ? lv.marketing.slice(0, 4) : [];
+  return `<div style="margin-top:44px" id="live"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="serif" style="font-size:26px;margin:0">Live from your website</h2>${caps.mcp ? `<button class="btn text small" data-act="live-load" ${ui.liveBusy ? 'disabled' : ''}>${ui.liveBusy ? 'Refreshing…' : 'Refresh'}</button>` : ''}</div>
+  <p class="small muted" style="margin:4px 0 14px">Requests from homes.ranchpnw.com and gotehaleh.com${lv && lv.at ? ' · checked ' + ago(lv.at) : ''}</p>
+  ${leadHtml}
+  <div class="decision" style="margin-top:28px"><div class="eyebrow">Seller portal · Aaron and Holly</div><div class="t" style="margin-top:6px"><a href="${PORTAL_URL}" target="_blank" rel="noopener">${PORTAL_URL.replace('https://', '')}</a> · code <b>${PORTAL_CODE}</b></div><div class="d">They see live visits, shares, scans, tour and follow counts (never names), your updates, the marketing log and showing feedback.</div>
+    <div class="chips" style="margin-top:12px"><button class="chip" data-act="portal-copy">Copy their invite</button><a class="chip" href="${PORTAL_URL}#code=${PORTAL_CODE}" target="_blank" rel="noopener">Open it as them</a></div></div>
+  ${caps.mcp ? `<details style="margin-top:22px"><summary class="btn ghost" style="display:inline-flex">Post an update to the sellers</summary>
+    <form data-form="live-update" style="margin-top:16px"><div class="field"><label for="lu-t">Headline</label><input id="lu-t" name="headline" required placeholder="A strong first weekend"></div><div class="field"><label for="lu-m">Message</label><textarea id="lu-m" name="msg" required placeholder="Three showings booked for Saturday…"></textarea></div><button class="btn">Post to their portal</button></form></details>
+  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log marketing</summary>
+    <form data-form="live-mk" style="margin-top:16px"><div class="field"><label for="lm-w">What we did</label><select id="lm-w" name="what">${MARKETING_PRESETS.map(m => `<option data-reach="${esc(m[1])}">${esc(m[0])}</option>`).join('')}</select></div><div class="field"><label for="lm-r">Reach</label><input id="lm-r" name="reach" placeholder="~600 agents"></div><div class="field"><label for="lm-n">Notes the sellers will see</label><input id="lm-n" name="notes" placeholder="Called top Tehaleh agents personally"></div><button class="btn">Add to their timeline</button></form>
+    ${mk.length ? `<div class="list" style="margin-top:14px">${mk.map(r => `<div><span aria-hidden="true">✓</span><span>${esc(r[2])}${r[3] ? ' <span class="muted small">· ' + esc(r[3]) + '</span>' : ''}</span><span class="when">${esc(String(r[0]).split(' ')[0])}</span></div>`).join('')}</div>` : ''}</details>
+  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log showing feedback</summary>
+    <form data-form="live-show" style="margin-top:16px"><div class="field"><label for="ls-i">Interest</label><select id="ls-i" name="interest"><option>Strong interest</option><option>Some interest</option><option>Not for them</option><option>Second showing</option></select></div><div class="field"><label for="ls-f">Feedback (no buyer names)</label><textarea id="ls-f" name="fb" required placeholder="Loved the kitchen and the greenbelt; wondering about the yard size."></textarea></div><button class="btn">Share with the sellers</button></form></details>` : ''}
+  </div>`;
+}
+Object.assign(A, {
+  'live-load': () => liveLoad(),
+  'portal-copy': () => copy(`Aaron and Holly — your seller portal is live: ${PORTAL_URL}\nYour code: ${PORTAL_CODE}\nYou'll see visits, interest, everything we're doing to market the home, and showing feedback as it comes in. Your share link for social media is on the page too.`)
+});
+Object.assign(FORMS, {
+  'live-update': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Seller updates', [liveNow(), '19917 145th St E', f.headline.value.trim(), f.msg.value.trim(), T().agent.name], 'Posted. Aaron and Holly will see it on their portal.')) f.reset(); b.disabled = false; },
+  'live-mk': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Marketing', [liveNow(), '19917 145th St E', f.what.value, f.reach.value.trim(), f.notes.value.trim()], 'Added to the sellers’ timeline.')) f.reset(); b.disabled = false; },
+  'live-show': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Showings', [liveNow(), '19917 145th St E', f.interest.value, f.fb.value.trim()], 'Shared with the sellers.')) f.reset(); b.disabled = false; }
+});
+document.addEventListener('change', e => { if (e.target && e.target.id === 'lm-w') { const r = e.target.selectedOptions[0].dataset.reach, i = document.getElementById('lm-r'); if (i && r && !i.value) i.value = r; } });

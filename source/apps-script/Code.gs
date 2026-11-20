@@ -23,13 +23,26 @@ const TYPES = {
   'updates':             { label: 'Wants Retreat clubhouse news', needs: ['name', 'phone', 'email'] },
   'community-tour':      { label: 'Tehaleh community tour',     needs: ['name', 'phone', 'email'] },
   'open-house-reminder': { label: 'Open house reminder',        needs: ['name', 'phone', 'email'] },
-  'home-edit':           { label: 'Home Edit introduction',     needs: ['name', 'phone', 'email', 'category'] }
+  'home-edit':           { label: 'Home Edit introduction',     needs: ['name', 'phone', 'email', 'category'] },
+  'seller-message':      { label: 'Message from your sellers',  needs: ['name', 'question'] }
 };
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
+const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status'];
+const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
+const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
+const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
 
 /* ---------------- web endpoints ---------------- */
+
+/** Run once: adds the seller-portal tabs and Aaron & Holly's access row. Safe to run again. */
+function setupPortal() {
+  tab_('Sellers', SELLER_HEADERS); tab_('Seller updates', UPDATE_HEADERS); tab_('Marketing', MARKETING_HEADERS); tab_('Showings', SHOWING_HEADERS);
+  if (!seller_('AH-QCRU9E')) tab_('Sellers', SELLER_HEADERS).appendRow(['AH-QCRU9E', 'Aaron and Holly', '19917 145th St E', '19917', new Date('2026-11-19T16:00:00-08:00'), 'Active']);
+  return 'Portal ready: ' + book_().getUrl();
+}
+
 function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return out_({ ok: false, reason: 'Bad request' }); }
@@ -48,6 +61,12 @@ function doPost(e) {
     listing: clean_(d.listing, 80), page: clean_(d.page, 30), source: clean_(d.source, 40)
   };
   for (const k of t.needs) if (!v[k]) return out_({ ok: false, reason: 'Please fill in every field.' });
+  if (type === 'seller-message') {
+    const sel = seller_(d.code); if (!sel) return out_({ ok: false, reason: 'Please sign in again.' });
+    tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, sel.names, '', '', v.question, sel.home, sel.page, 'seller portal', 'New']);
+    try { GmailApp.sendEmail(AGENT_EMAIL, 'Message from ' + sel.names + ' · ' + sel.home, v.question, { htmlBody: shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">From your seller portal</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(sel.names) + '</h1><p style="font:16px/1.65 Arial">' + esc_(v.question) + '</p>'), name: 'Ranch Leads' }); } catch (err) { console.error(err); }
+    return out_({ ok: true });
+  }
   if (v.phone.replace(/\D/g, '').length < 10) return out_({ ok: false, reason: 'Please add a phone number with area code.' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email)) return out_({ ok: false, reason: 'Please add a valid email.' });
 
@@ -72,12 +91,42 @@ function doPost(e) {
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.api === 'ping') return out_({ ok: true, at: new Date().toISOString() });
+  if (p.api === 'seller') return out_(sellerView_(p.code));
   if (p.api === 'unsub' && p.e && p.t === token_(p.e)) {
     const sh = tab_('Followers', FOLLOWER_HEADERS), rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) if (String(rows[i][3]).toLowerCase() === String(p.e).toLowerCase() && !rows[i][5]) sh.getRange(i + 1, 6).setValue(new Date());
     return HtmlService.createHtmlOutput('<div style="font:17px/1.6 Georgia,serif;max-width:480px;margin:80px auto;padding:0 24px;color:#1E2327"><p style="letter-spacing:.2em;font:12px Arial;color:#8C6A43">' + BRAND.toUpperCase() + '</p><h1 style="font-weight:400">You’re unsubscribed.</h1><p>You won’t get any more updates about this home. Thank you for following it.</p></div>');
   }
   return out_({ ok: true });
+}
+
+/* ---------------- seller portal ---------------- */
+function seller_(code) {
+  code = String(code || '').trim().toUpperCase(); if (code.length < 6) return null;
+  const rows = tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1);
+  const r = rows.filter(x => String(x[0]).toUpperCase() === code)[0];
+  return r ? { code: r[0], names: r[1], home: r[2], page: String(r[3]), listed: r[4] ? new Date(r[4]).getTime() : null, status: r[5] || 'Active' } : null;
+}
+function sellerView_(code) {
+  const cache = CacheService.getScriptCache(), tries = Number(cache.get('sellerTries') || 0);
+  if (tries > 60) return { ok: false, reason: 'Too many attempts. Try again in a few minutes.' };
+  const sel = seller_(code);
+  if (!sel) { cache.put('sellerTries', String(tries + 1), 600); return { ok: false, reason: 'That code didn’t match.' }; }
+  const now = Date.now(), week = 7 * 864e5;
+  const act = tab_('Activity', ACTIVITY_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[2]) === sel.page);
+  const visits = act.filter(r => /^Visit/.test(r[1])), seen = {}, seen7 = {};
+  let shared = 0, scans = 0;
+  visits.forEach(r => { const k = r[4] || Math.random(); seen[k] = 1; if (now - new Date(r[0]).getTime() < week) seen7[k] = 1; if (r[3] === 'seller-share') shared++; });
+  act.forEach(r => { if (/^Sign scan/.test(r[1])) scans++; });
+  const leads = tab_('Leads', LEAD_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[6]) === sel.home && r[8] !== 'test');
+  const count = label => leads.filter(r => r[1] === label).length;
+  const pick = (name, headers, map) => tab_(name, headers).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home).map(map).sort((a, b) => b.at - a.at).slice(0, 25);
+  return { ok: true, sellers: sel.names, home: sel.home, page: sel.page, listed: sel.listed, status: sel.status,
+    metrics: { visitors: Object.keys(seen).length, visitors7: Object.keys(seen7).length, shared, scans, tours: count('Tour request'), following: count('Following the home'), questions: count('Question about the home') },
+    updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),
+    marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
+    showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
+    at: now };
 }
 
 /* ---------------- emails ---------------- */
@@ -136,6 +185,7 @@ function notifyFollowers(title, message) {
 /* Run once from the editor: creates the Sheet, then sends you a test email. */
 function setup() {
   tab_('Leads', LEAD_HEADERS); tab_('Followers', FOLLOWER_HEADERS); tab_('Activity', ACTIVITY_HEADERS);
+  tab_('Sellers', SELLER_HEADERS); tab_('Seller updates', UPDATE_HEADERS); tab_('Marketing', MARKETING_HEADERS); tab_('Showings', SHOWING_HEADERS);
   notifyAgent_('tour', 'TEST — Tour request', { name: 'Test Buyer', phone: '(253) 555-0100', email: AGENT_EMAIL, agent: 'No', financing: 'Pre-approved', when: 'Saturday morning', listing: '19917 145th St E', page: 'setup', source: 'test' });
   return 'Sheet ready: ' + book_().getUrl();
 }

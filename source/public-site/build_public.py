@@ -45,3 +45,6 @@ for m in PAGES:
     open(f"{ROOT}/{m['site']}/{m['file']}", 'w').write(head + body + '</body></html>')
 open(f'{ROOT}/homes/index.html', 'w').write(f'<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/19917"><title>The Ranch Real Estate Group</title></head><body><a href="/19917">19917 145th St E</a></body></html>')
 print('built', {s: sorted(x for x in os.listdir(f'{ROOT}/{s}') if '.' in x) for s in ['homes', 'gotehaleh']})
+
+# seller portal (static, noindex) — reads live numbers from the email engine
+open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sites/homes/sellers.html'), 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sellers.template.html')).read().replace('__API__', API))

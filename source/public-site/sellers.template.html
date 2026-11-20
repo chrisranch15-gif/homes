@@ -76,6 +76,12 @@ section h2{font-size:30px;margin:8px 0 18px}
 footer{padding:36px 0 60px;font-size:13px;color:var(--muted)}
 .note{font-size:13px;color:var(--muted);margin-top:12px}
 .hp{position:absolute;left:-9999px}
+.chg{display:block;font-size:12px;color:var(--accent);margin-top:6px}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
+.chart{margin:0;background:var(--card);border:1px solid var(--line);padding:18px 18px 10px}
+.chart figcaption{font-size:13px;color:var(--muted);margin-bottom:10px}
+.chart svg{display:block;width:100%;height:auto;font-family:var(--sans)}
+
 .heroacts{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 .btn.line{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}.btn.line:hover{background:#fff;color:var(--ink)}
 .preview{display:block;max-width:520px;background:#fff;color:var(--ink);text-decoration:none;border-radius:10px;overflow:hidden}
@@ -151,6 +157,7 @@ function render(d,code){
     stat(pr&&pr.saves,'Redfin favorites')+stat(has?reach:null,'people reached on Instagram & Facebook')+stat(m.visitors,'visitors to your home’s page')+
     stat(m.tours,'tour requests')+stat(m.following,'people following your home')+
     '</div>'+(asOf?'<p class="note">Zillow and Redfin as of '+when(asOf)+'.</p>':'')+'</div></section>';
+  html+=marketSection(d.market);
   // share
   html+='<section id="share"><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">Help us spread the word</p><h2 style="margin-bottom:6px">Share your home</h2><p style="opacity:.85;margin:0 0 18px">This is what people see when you post the link on Facebook or Instagram, or text it. Every visit from it is counted'+(m.shared?' — <b>'+m.shared+'</b> so far':'')+'.</p>'+
     '<a class="preview" href="'+STORY+'" target="_blank" rel="noopener"><img src="photos/og-19917.jpg" alt="" width="1200" height="630"><span class="pv"><span class="pd">HOMES.RANCHPNW.COM</span><span class="pt">19917 145th St E, Bonney Lake, WA 98391 · 5-Bed Tehaleh Home for Sale</span></span></a>'+
@@ -171,6 +178,41 @@ function render(d,code){
   var sh=document.getElementById('sh');if(sh)sh.onclick=function(){navigator.share({title:'Our home in Tehaleh',url:SHARE}).catch(function(){})};
   document.getElementById('mf').onsubmit=function(e){e.preventDefault();var f=e.target,b=f.querySelector('button'),t=document.getElementById('msg').value.trim();if(!t||f.website.value)return;b.disabled=true;b.textContent='Sending…';
     fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'seller-message',code:code,name:d.sellers,question:t,page:d.page,listing:d.home,source:'seller portal'})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;f.innerHTML='<p class="letter" style="margin:0">Sent. Chris will get back to you shortly.</p>'}).catch(function(){b.disabled=false;b.textContent='Send to Chris';toast('That didn’t go through — please try again.')})};
+}
+
+function marketSection(rows){
+  rows=(rows||[]).filter(function(r){return r.month});
+  if(!rows.length)return '';
+  var area=rows[rows.length-1].area||'Your market',last=rows[rows.length-1];
+  var prev=rows.filter(function(r){var a=+last.month.slice(0,4),b=+r.month.slice(0,4);return r.month.slice(5)===last.month.slice(5)&&a-b===1})[0];
+  function mlabel(m){var d=new Date(m+'-15');return d.toLocaleDateString('en-US',{month:'short'})+(m.slice(5)==='01'?' '+m.slice(2,4):'')}
+  function chg(a,b,inv){if(a==null||b==null||!b)return '';var p=Math.round((a-b)/b*100);if(!p)return '<span class="chg">same as last year</span>';return '<span class="chg">'+(p>0?'▲ ':'▼ ')+Math.abs(p)+'% vs last year</span>'}
+  function tileM(v,l,c){return '<div class="stat"><div class="n">'+v+'</div><div class="l">'+l+'</div>'+(c||'')+'</div>'}
+  var money=function(n){return n==null?'—':n>=1e6?'$'+(n/1e6).toFixed(2).replace(/0$/,'')+'M':'$'+Math.round(n/1e3)+'K'};
+  var tiles=tileM(money(last.median),'median sold price · '+mlabel(last.month),chg(last.median,prev&&prev.median))+
+    tileM(last.sold==null?'—':last.sold,'homes sold',chg(last.sold,prev&&prev.sold))+
+    tileM(last.dom==null?'—':last.dom,'median days on market',chg(last.dom,prev&&prev.dom))+
+    tileM(last.moi==null?'—':(Math.round(last.moi*10)/10),'months of inventory','<span class="chg">'+(last.moi==null?'':last.moi<3?'a seller’s market':last.moi<=5?'a balanced market':'a buyer’s market')+'</span>')+
+    tileM(last.stl==null?'—':last.stl+'%','of list price, on average','')+
+    tileM(last.active==null?'—':last.active,'homes for sale now','');
+  var pts=rows.filter(function(r){return r.median!=null}).slice(-13),chart='';
+  if(pts.length>=3){
+    var W=640,H=240,L=8,R=8,T=34,B=38,mn=Math.min.apply(null,pts.map(function(r){return r.median})),mx=Math.max.apply(null,pts.map(function(r){return r.median}));
+    var pad=(mx-mn)*0.15||mx*0.05;mn-=pad;mx+=pad;
+    var X=function(i){return L+i*(W-L-R)/(pts.length-1)},Y=function(v){return T+(mx-v)/(mx-mn)*(H-T-B)};
+    var path=pts.map(function(r,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(r.median).toFixed(1)}).join(' ');
+    var area2=path+' L'+X(pts.length-1).toFixed(1)+' '+(H-B)+' L'+X(0)+' '+(H-B)+' Z';
+    var lab=pts.map(function(r,i){return (i===0||i===pts.length-1||i%3===0)?'<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(i===0?'start':i===pts.length-1?'end':'middle')+'" font-size="19" fill="#5E584E">'+mlabel(r.month)+'</text>':''}).join('');
+    var lastP=pts[pts.length-1];
+    chart='<figure class="chart"><figcaption>Median sold price, last '+pts.length+' months</figcaption><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Median sold price by month in '+esc(area)+'"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8C6A43" stop-opacity=".18"/><stop offset="1" stop-color="#8C6A43" stop-opacity="0"/></linearGradient></defs><line x1="'+L+'" x2="'+(W-R)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="#D9D2C6"/><path d="'+area2+'" fill="url(#mg)"/><path d="'+path+'" fill="none" stroke="#8C6A43" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+X(pts.length-1)+'" cy="'+Y(lastP.median)+'" r="5" fill="#8C6A43"/><text x="'+(X(pts.length-1)-10)+'" y="'+(Y(lastP.median)-12)+'" text-anchor="end" font-size="21" font-weight="600" fill="#1E2327">'+money(lastP.median)+'</text>'+lab+'</svg></figure>';
+  }
+  var sp=rows.filter(function(r){return r.sold!=null}).slice(-13),bars='';
+  if(sp.length>=3){
+    var W2=640,H2=200,mx2=Math.max.apply(null,sp.map(function(r){return r.sold}))||1,bw=(W2-16)/sp.length;
+    bars='<figure class="chart"><figcaption>Homes sold each month</figcaption><svg viewBox="0 0 '+W2+' '+H2+'" role="img" aria-label="Homes sold by month in '+esc(area)+'">'+sp.map(function(r,i){var h=(r.sold/mx2)*(H2-70),x=8+i*bw+bw*0.18,w=bw*0.64;return '<rect x="'+x.toFixed(1)+'" y="'+(H2-36-h).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+(i===sp.length-1?'#8C6A43':'#D9CBB6')+'"/>'+(i===sp.length-1||i%3===0?'<text x="'+(x+w/2).toFixed(1)+'" y="'+(H2-8)+'" text-anchor="middle" font-size="19" fill="#5E584E">'+mlabel(r.month)+'</text>':'')+(i===sp.length-1?'<text x="'+(x+w/2).toFixed(1)+'" y="'+(H2-44-h).toFixed(1)+'" text-anchor="middle" font-size="21" font-weight="600" fill="#1E2327">'+r.sold+'</text>':'')}).join('')+'</svg></figure>';
+  }
+  var src=rows.map(function(r){return r.source}).filter(Boolean).pop();
+  return '<section><div class="wrap"><p class="eyebrow">Your market · '+esc(area)+'</p><h2>What the market is doing</h2><div class="stats">'+tiles+'</div><div class="charts">'+chart+bars+'</div>'+(src?'<p class="note">Source: '+esc(src)+'. Updated '+mlabel(last.month)+'.</p>':'')+'</div></section>';
 }
 function pm(n,l){return n==null?'':'<span><b>'+Number(n).toLocaleString('en-US')+'</b> '+l+'</span>'}
 function stat(n,l){return '<div class="stat"><div class="n">'+(n==null?'—':Number(n).toLocaleString('en-US'))+'</div><div class="l">'+l+'</div></div>'}

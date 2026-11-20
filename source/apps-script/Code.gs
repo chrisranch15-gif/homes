@@ -33,6 +33,7 @@ const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status'];
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
+const MARKET_HEADERS = ['Month', 'Home', 'Area', 'Median sold price', 'Homes sold', 'Active listings', 'Median days on market', 'Months of inventory', 'Sale-to-list %', 'Source'];
 const PORTAL_HEADERS = ['When', 'Home', 'Site', 'Views', 'Saves', 'Notes'];
 const SOCIAL_HEADERS = ['Checked', 'Home', 'Network', 'Posted', 'Post link', 'Image', 'Reach', 'Views', 'Interactions', 'Link clicks', 'Boost spend', 'Paid reach'];
 
@@ -52,6 +53,7 @@ function setupHub() {
     D.appendRow([new Date(), '11532 SE 173rd St #53', 'Listing', 'Active', 275000, '', '', '', '', 'Price improved from $299,900']);
   }
   tab_('Checks', ['When', 'Site', 'URL', 'Result', 'Detail']);
+  tab_('Market', MARKET_HEADERS);
   tab_('Documents', ['Saved', 'Address', 'File', 'From', 'Email date', 'Drive link']);
   return 'Hub tabs ready';
 }
@@ -148,6 +150,7 @@ function sellerView_(code) {
     marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
     showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
     portals: latest_(tab_('Portals', PORTAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 2, r => ({ at: new Date(r[0]).getTime(), site: String(r[2]), views: num_(r[3]), saves: num_(r[4]), notes: String(r[5] || '') })),
+    market: tab_('Market', MARKET_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home || String(r[1]) === '*').map(r => ({ month: r[0] instanceof Date ? Utilities.formatDate(r[0], 'America/Los_Angeles', 'yyyy-MM') : String(r[0]).slice(0, 7), area: String(r[2]), median: num_(r[3]), sold: num_(r[4]), active: num_(r[5]), dom: num_(r[6]), moi: num_(r[7]), stl: num_(r[8]), source: String(r[9] || '') })).sort((a, b) => a.month < b.month ? -1 : 1),
     social: latest_(tab_('Social', SOCIAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 4, r => ({ at: new Date(r[0]).getTime(), network: String(r[2]), posted: r[3] ? new Date(r[3]).getTime() : null, url: String(r[4]), image: String(r[5] || ''), reach: num_(r[6]), views: num_(r[7]), interactions: num_(r[8]), clicks: num_(r[9]), spend: num_(r[10]), paidReach: num_(r[11]) })),
     at: now };
 }

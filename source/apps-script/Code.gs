@@ -239,9 +239,10 @@ function syncPhotos() {
     const ready = /^(.*?)\s+is ready!?$/i.exec(subj);
     if (ready && id) {
       const addr = ready[1].trim(), key = homeKey_(addr), r = put(key, { 1: addr, 2: 'Ready', 7: when, 8: RAINIER + '/d/' + id });
-      if (Number(shoots.getRange(r, 10).getValue()) > 0) return; // photos already listed
+      if (String(shoots.getRange(r, 10).getValue()) !== '') return; // already listed, or Rainier asked for a browser
       try {
         const html = UrlFetchApp.fetch(RAINIER + '/h/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
+        if (/Just a moment/i.test(html)) { shoots.getRange(r, 10).setValue('Open download page'); return; }
         const list = parseDownloadPage_(html); console.log('photos page ' + addr + ': ' + html.length + ' chars, ' + list.length + ' photos | ' + html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 400)); if (!list.length) return;
         pics.getRange(pics.getLastRow() + 1, 1, list.length, 5).setValues(list.map((p, i) => [key, addr, i + 1, p.title, p.url]));
         shoots.getRange(r, 10).setValue(list.length);

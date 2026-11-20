@@ -160,6 +160,8 @@ async function syncDrafts() {
 /* ============================================================
    PROPERTY STORY (public)
    ============================================================ */
+const FEATURED = ['kitchen-wide', 'great-room', 'front-dusk', 'primary-bed2', 'covered-deck', 'greenbelt-yard', 'dining', 'primary-bath2', 'deck-fire'];
+function remarkParas(t) { const ss = String(t || '').match(/[^.!?]+[.!?]+(\s|$)/g) || [t || '']; const out = [ss[0].trim()], rest = ss.slice(1).map(x => x.trim()); const k = Math.ceil(rest.length / 2); if (rest.length) out.push(rest.slice(0, k).join(' ')); if (rest.length > k) out.push(rest.slice(k).join(' ')); return out.filter(Boolean); }
 function story() {
   const l = L(), a = E.assets(LID), t = T(), mode = l.mode || 'editorial';
   const live = PUBLIC.indexOf(l.state) >= 0;
@@ -175,41 +177,44 @@ function story() {
   <header class="hero">
     <div class="topnav"><div class="mark"><span class="st">${esc(street())}</span><span class="ct">${esc((V('address') || '').split(',').slice(1).join(',').trim())}</span></div>
       <div class="tn"><a class="cta" href="#story" data-act="tour">Request a Tour</a><button class="menu" data-act="menu" aria-expanded="${!!ui.menu}" aria-controls="drop">Menu</button></div>
-      ${ui.menu ? `<nav class="drop" id="drop" aria-label="Menu"><a href="#story" data-scroll="s-story">The Story</a><a href="#story" data-scroll="s-home">The Home &amp; Photos</a><a href="${SITE ? SITE.guideUrl : '#tehaleh'}" ${SITE ? '' : 'data-act="menu-go"'}>Life in Tehaleh</a>${SITE ? `<a href="#valuation" data-act="menu-go">What’s my home worth?</a>` : `<a href="#following" data-act="menu-go">My homes</a>
+      ${ui.menu ? `<nav class="drop" id="drop" aria-label="Menu"><a href="#story" data-scroll="s-story">The Home</a><a href="#story" data-scroll="s-photos">Photos</a><a href="#story" data-scroll="s-home">The Details</a><a href="${SITE ? SITE.guideUrl : '#tehaleh'}" ${SITE ? '' : 'data-act="menu-go"'}>Life in Tehaleh</a>${SITE ? `<a href="#valuation" data-act="menu-go">What’s my home worth?</a>` : `<a href="#following" data-act="menu-go">My homes</a>
         <span class="sep2"></span><a href="#seller" data-act="menu-go"><span>Sellers</span><span class="small">Your private portal</span></a><a href="#desk" data-act="menu-go"><span>Agents</span><span class="small">The Desk</span></a>`}</nav>` : ''}</div>
     <div class="photo">${img(l.heroPhoto || 'great-room', '', 'fetchpriority="high" loading="eager"')}</div><div class="scrim"></div>
     <div class="copy"><h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
       <div class="meta">${pending ? '<span class="tag" style="color:#E7D7BF">Pending</span>' : ''}<span class="price">${V('price') != null ? LC.money(V('price')) : ''}</span><span>${V('beds')} Bedrooms*</span><span>${V('baths')} Baths</span>${V('sqft') ? `<span>${Number(V('sqft')).toLocaleString()} sq ft</span>` : ''}<span>Backs to greenbelt</span></div></div>
   </header>
-  <section class="lede narrow"><div class="eyebrow">${esc(street())}</div>
-    <p class="big" style="margin-top:26px">Over $100K in upgrades, designer interiors, generous outdoor living and a peaceful greenbelt setting — in the heart of Tehaleh.</p>
-    <div class="acts"><button class="btn" data-scroll="s-story">Explore the Story</button><button class="btn ghost" data-act="tour">Request a Private Tour</button></div></section>
+  <section class="lede narrow remarks" id="s-story"><div class="eyebrow">${esc(street())} · ${esc(V('community'))}</div>
+    ${remarkParas(a.remarks).map((p, i) => i === 0 ? `<p class="big" style="margin-top:26px">${esc(p)}</p>` : `<p class="prose rk">${esc(p)}</p>`).join('')}
+    <div class="acts"><button class="btn" data-scroll="s-photos">See the photos</button><button class="btn ghost" data-act="tour">Request a Private Tour</button></div></section>
 
-  <section class="chapter wrap" id="s-story"><div class="head"><span class="n">01</span><h2>A Home That Feels Different</h2></div>
-    <div class="duo">${img('kitchen-island', 'ph t')}<div class="stackcol">${img('great-room2', 'ph m')}
-      <div><p class="prose" style="margin:6px 0 14px">${esc(V('great_room'))} opens to a kitchen with ${esc((V('kitchen') || '').toLowerCase())}. ${esc(V('character'))} add character throughout.</p>
-      <p class="small muted" style="margin:0">${esc(V('main_floor'))}</p></div></div></div></section>
+  <section class="wrap pgrid-wrap" id="s-photos">
+    <div class="pgrid">${FEATURED.map((id, i) => M(id) ? `<button class="pg${i === 0 ? ' big' : ''}" data-act="zoom" data-id="${id}" aria-label="Open photo: ${esc(M(id).alt)}">${img(id, '', i < 3 ? '' : 'loading="lazy"')}</button>` : '').join('')}</div>
+    <div class="acts" style="justify-content:center;margin-top:22px"><button class="btn ghost" data-act="all-photos" aria-expanded="${!!ui.allPhotos}">${ui.allPhotos ? 'Show fewer' : `See all ${LC.MEDIA.length} photos`}</button></div>
+    ${ui.allPhotos ? `<div class="gallery" style="margin-top:28px">${LC.MEDIA.map(m => `<button data-act="zoom" data-id="${m.id}" aria-label="Open photo: ${esc(m.alt)}"><img src="${m.thumb}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}
+  </section>
 
-  <div class="dark"><section class="chapter wrap"><div class="head"><span class="n">02</span><h2>Mornings With a View</h2></div>
-    <div class="duo"><div>${img('rainier-view2', 'ph t')}<div class="cap">Photographed from upstairs · Mount Rainier</div></div>
-    <div class="stackcol"><p class="serif" style="font-size:clamp(22px,2.2vw,28px);line-height:1.4;margin:0">The primary suite and two more bedrooms capture Mount Rainier. The fourth looks out over the greenbelt.</p>
-      ${img('primary-bed2', 'ph m')}<div class="duo" style="grid-template-columns:1fr 1fr">${img('primary-bath2', 'ph s')}${img('primary-closet', 'ph s')}</div>
-      <p class="prose" style="margin:0">${esc(V('primary'))}. ${esc(V('fourth_bedroom'))}.</p></div></div></section></div>
+  <section class="wrap rooms" aria-label="Room by room">
+    <div class="eyebrow" style="margin-bottom:8px">Room by room</div>
+    <h2 class="serif rooms-h">Inside the home.</h2>
+    ${[
+      ['kitchen-island', 'The kitchen', `${V('great_room') || ''} opens to a kitchen with ${(V('kitchen') || '').toLowerCase()}. ${V('character') || ''} add character throughout.`],
+      ['great-room2', 'The main floor', V('main_floor') || ''],
+      ['primary-bed2', 'The primary suite', `${V('primary') || ''}. Two more bedrooms also capture Mount Rainier; the fourth looks out over the greenbelt.`],
+      ['deck-fire', 'Room to unwind', `${V('deck') || ''}.`],
+      ['greenbelt-yard', 'The greenbelt', `${V('lot') || ''}.`]
+    ].filter(r => M(r[0]) && r[2].replace(/[.\s]/g, '')).map((r, i) => `<div class="room${i % 2 ? ' flip' : ''}"><button class="rimg" data-act="zoom" data-id="${r[0]}" aria-label="Open photo: ${esc(M(r[0]).alt)}">${img(r[0], '', 'loading="lazy"')}</button><div class="rtext"><h3 class="serif">${esc(r[1])}</h3><p class="prose">${esc(r[2].replace(/\s+/g, ' ').trim())}</p></div></div>`).join('')}
+  </section>
 
-  <section class="full">${img('deck-fire', '')}<div class="scrim"></div><div class="inner wrap"><span class="serif" style="color:#D9C2A0">03</span><h2>Room to Unwind</h2>
-    <p class="prose" style="color:inherit;max-width:44ch">${esc(V('deck'))}. ${esc(V('lot'))}.</p></div></section>
-  <section class="wrap" style="padding:24px 0 clamp(80px,10vw,140px)"><div class="duo" style="padding:0 clamp(20px,4vw,48px)">${img('covered-deck', 'ph m')}${img('greenbelt-yard', 'ph m')}</div></section>
-
-  <section class="chapter wrap" id="s-hood"><div class="head"><span class="n">04</span><h2>Life Beyond the Front Door</h2></div>
-    ${img('aerial-mountains', 'ph t')}
+  <section class="chapter wrap" id="s-hood"><div class="head"><h2>Life beyond the front door</h2></div>
+    ${img('aerial-mountains', 'ph t', 'loading="lazy"')}
     <div class="stats"><div><div class="v">40+</div><div class="k">miles of Tehaleh trails</div></div><div><div class="v">18</div><div class="k">community parks</div></div>
       <div><div class="v" style="font-size:clamp(26px,2.6vw,32px)">${/Post & Pour/.test(V('amenities') || '') ? 'Post &amp; Pour' : 'The Post'}</div><div class="k">neighborhood café</div></div><div><div class="v" style="font-size:clamp(26px,2.6vw,32px)">The Retreat</div><div class="k">clubhouse, planned for 2027</div></div></div>
     <p class="muted small" style="margin-top:28px">${esc(V('nearby'))} nearby · ${esc(V('school_district'))}</p>
     <a class="btn ghost" href="${SITE ? SITE.guideUrl : '#tehaleh'}" style="margin-top:28px">Explore life in Tehaleh <span aria-hidden="true">→</span></a></section>
 
   <section style="background:var(--soft)" id="s-home"><div class="wrap" style="padding-top:clamp(72px,9vw,120px);padding-bottom:clamp(72px,9vw,120px)">
-    <h2 class="serif" style="font-size:clamp(32px,4vw,52px);margin:0 0 8px">Explore the Home</h2>
-    <p class="muted" style="margin:0 0 40px">Every detail below comes from one verified record. Correct it once and it updates everywhere.</p>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,52px);margin:0 0 8px">The details</h2>
+    <p class="muted" style="margin:0 0 40px">Every detail below comes from one verified record.</p>
     <div class="specs">
       <div><div class="k">Price</div><div class="v">${LC.money(V('price'))}</div></div>
       <div><div class="k">Bedrooms</div><div class="v">${V('beds')}*</div><div class="n">*${esc(beds.note)}</div></div>
@@ -221,8 +226,6 @@ function story() {
       <div><div class="k">Garage</div><div class="v p">${esc(V('garage'))}</div></div>
       <div><div class="k">Schools</div><div class="v p">${esc(V('school_district'))}</div></div>
     </div>
-    <h3 class="serif" style="font-size:28px;margin:64px 0 20px">Every photograph</h3>
-    <div class="gallery">${LC.MEDIA.map(m => `<button data-act="zoom" data-id="${m.id}" aria-label="Open photo: ${esc(m.alt)}"><img src="${m.thumb}" alt="" loading="lazy"></button>`).join('')}</div>
   </div></section>
 
   <section class="wrap" style="padding-top:clamp(72px,9vw,120px);padding-bottom:clamp(72px,9vw,120px)"><div class="next">
@@ -1244,6 +1247,7 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
   'menu-go': el => { ui.menu = false; location.hash = el.getAttribute('href').slice(1); },
   'tell-q': el => caps.sample ? tell(el.dataset.q) : tellOffline(el.dataset.q),
   'check-drive': () => checkDrive(),
+  'all-photos': () => { ui.allPhotos = !ui.allPhotos; render(); },
   'check-metricool': () => checkMetricool(),
   gmail: el => { const st = settings(); st.gmail = el.dataset.v; if (st.gmail === 'drafts') st.gmailSince = Date.now(); dirty = true; scheduleSave(); render(); if (st.gmail === 'drafts' && !L().sellers[0].email) toast('Add your seller’s email in step 4.'); },
   suggest: () => aiSuggest(),

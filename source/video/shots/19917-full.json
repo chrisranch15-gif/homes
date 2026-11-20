@@ -21,16 +21,17 @@
   {
    "photo": "entry-hall.jpg",
    "move": "Slow dolly forward down the entry hall.",
-   "card": "c-entry"
+   "card": "c-entry",
+   "card_dy": -120
   },
   {
    "photo": "great-room.jpg",
-   "move": "Slow dolly forward into the two-story great room, rising slightly.",
+   "move": "Slow dolly forward into the two-story great room, rising slightly. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are.",
    "card": "c-great"
   },
   {
    "photo": "great-room2.jpg",
-   "move": "Slow arc across the living area toward the fireplace. The fireplace stays calm and dim."
+   "move": "Slow arc across the living area toward the fireplace. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are."
   },
   {
    "photo": "kitchen-wide.jpg",

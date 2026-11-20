@@ -1,0 +1,65 @@
+{
+ "listing": "19917",
+ "model": "gen4.5",
+ "ratio": "720:1280",
+ "seconds": 5,
+ "use": 3.8,
+ "style": "Photorealistic luxury real estate film. Smooth, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture or objects, no text, no warping, no flames or flickering lights.",
+ "cards": "cards/19917/v",
+ "out": "social/video/19917-vertical-30.mp4",
+ "shots": [
+  {
+   "photo": "aerial-mountains.jpg",
+   "focus": 0.55,
+   "move": "Slow aerial drift forward over the neighborhood toward the distant mountains.",
+   "card": "open"
+  },
+  {
+   "photo": "front.jpg",
+   "focus": 0.45,
+   "move": "Slow push-in toward the front entry.",
+   "card": "title"
+  },
+  {
+   "photo": "great-room.jpg",
+   "focus": 0.55,
+   "move": "Slow dolly forward into the two-story great room, tilting up slightly toward the tall windows. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are.",
+   "card": "c-great"
+  },
+  {
+   "photo": "kitchen-wide.jpg",
+   "focus": 0.45,
+   "move": "Slow push forward along the kitchen island.",
+   "card": "c-kitchen"
+  },
+  {
+   "photo": "dining.jpg",
+   "focus": 0.5,
+   "move": "Slow push toward the dining table and window."
+  },
+  {
+   "photo": "primary-bed.jpg",
+   "focus": 0.6,
+   "move": "Slow dolly forward into the primary bedroom.",
+   "card": "c-suite"
+  },
+  {
+   "photo": "mtn-alpenglow.jpg",
+   "focus": 0.42,
+   "move": "Very slow push-in toward Mount Rainier at alpenglow. The mountain, sky and rooftops stay perfectly still.",
+   "card": "c-mtn"
+  },
+  {
+   "photo": "covered-deck.jpg",
+   "focus": 0.5,
+   "move": "Slow push out across the covered deck toward the yard and trees.",
+   "card": "c-deck"
+  },
+  {
+   "photo": "rear-yard.jpg",
+   "focus": 0.45,
+   "move": "Slow push across the lawn toward the back of the house.",
+   "card": "end"
+  }
+ ]
+}

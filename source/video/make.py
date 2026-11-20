@@ -31,9 +31,16 @@ def prompt_image(plan, shot, work, i):
     ff('-i', src, '-vf', f"crop=ih*9/16:ih:(iw-ih*9/16)*{fx}:0,scale=720:1280", '-q:v', '3', dst)
     return 'data:image/jpeg;base64,' + base64.b64encode(open(dst, 'rb').read()).decode()
 
+def clip_key(plan, shot):
+    k = json.dumps([plan['model'], plan['ratio'], plan['seconds'], shot['photo'], shot['move'], plan['style'], shot.get('focus', 0.5)])
+    return hashlib.sha256(k.encode()).hexdigest()[:16]
+
 def clip(plan, shot, i, work):
     dst = os.path.join(work, f'raw{i}.mp4')
     if os.path.exists(dst): return dst
+    cache = os.path.join(ROOT, 'clips', clip_key(plan, shot) + '.mp4')
+    if os.path.exists(cache):
+        import shutil; shutil.copy(cache, dst); print('shot', i, shot['photo'], 'reused (free)', flush=True); return dst
     if os.environ.get('FAKE_RAW'):
         import shutil; shutil.copy(os.path.join(os.environ['FAKE_RAW'], f'raw{i % 5}.mp4'), dst); return dst
     t = call('POST', '/image_to_video', {'model': plan['model'], 'promptImage': prompt_image(plan, shot, work, i),
@@ -44,7 +51,10 @@ def clip(plan, shot, i, work):
         if s.get('status') == 'SUCCEEDED': break
         if s.get('status') in ('FAILED', 'CANCELLED'): raise RuntimeError(f'shot {i} {shot["photo"]}: {s.get("failure") or s}')
     else: raise RuntimeError(f'shot {i} timed out')
-    urllib.request.urlretrieve(s['output'][0], dst); return dst
+    urllib.request.urlretrieve(s['output'][0], dst)
+    if not os.environ.get('FAKE_RAW'):
+        os.makedirs(os.path.dirname(cache), exist_ok=True); import shutil; shutil.copy(dst, cache)
+    return dst
 
 def main(path):
     plan = json.load(open(path)); out = os.path.join(REPO, plan['out'])
@@ -54,7 +64,8 @@ def main(path):
     work = os.path.join('/tmp', 'film-' + os.path.basename(path) + '-' + h); os.makedirs(work, exist_ok=True)
     rw, rh = map(int, plan['ratio'].split(':')); W, H = (1920, 1080) if rw >= rh else (1080, 1920)
     FPS, XF, USE = 30, 0.7, float(plan.get('use', 4.0))
-    shots = plan['shots']; raws = [clip(plan, s, i, work) for i, s in enumerate(shots)]
+    shots = plan['shots']; fresh = sum(not os.path.exists(os.path.join(ROOT, 'clips', clip_key(plan, s) + '.mp4')) for s in shots)
+    raws = [clip(plan, s, i, work) for i, s in enumerate(shots)]
     norm, dur = [], []
     for i, r in enumerate(raws):
         n = os.path.join(work, f'n{i}.mp4'); last = i == len(raws) - 1
@@ -80,12 +91,12 @@ def main(path):
             a, z = st + (0.5 if i else 0.3), st + dur[i] - XF - 0.2
             f = f'fade=in:st={a:.2f}:d=0.6:alpha=1,fade=out:st={z - 0.5:.2f}:d=0.5:alpha=1'
         fc.append(f'[{k}:v]format=rgba,{f}[c{k}]')
-        fc.append(f'[{lab}][c{k}]overlay=shortest=1[o{k}]'); lab = f'o{k}'; k += 1
+        fc.append(f'[{lab}][c{k}]overlay=x=0:y={int(s.get("card_dy", 0))}:shortest=1[o{k}]'); lab = f'o{k}'; k += 1
     fc.append(f'[{lab}]format=yuv420p[v]')
     os.makedirs(os.path.dirname(out), exist_ok=True)
     ff(*inputs, '-filter_complex', ';'.join(fc), '-map', '[v]', '-r', str(FPS), '-c:v', 'libx264', '-crf', '20', '-preset', 'veryfast', '-movflags', '+faststart', out)
     json.dump({'plan': h, 'model': plan['model'], 'ratio': plan['ratio'], 'shots': len(raws), 'seconds': round(total, 1),
-               'credits': len(raws) * plan['seconds'] * COST.get(plan['model'], 12), 'made': time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}, open(man, 'w'), indent=1)
+               'new_clips': fresh, 'credits': fresh * plan['seconds'] * COST.get(plan['model'], 12), 'made': time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}, open(man, 'w'), indent=1)
     err = out.replace('.mp4', '-error.txt')
     if os.path.exists(err): os.remove(err)
     print('made', out, round(total, 1), 's')

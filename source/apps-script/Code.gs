@@ -196,6 +196,54 @@ function syncShowings() {
       if (ar > 0) agents.getRange(ar + 1, 1, 1, arow.length).setValues([arow]); else { agents.appendRow(arow); av.push(arow); }
     });
   } finally { lock.releaseLock(); }
+  try { syncPhotos(); } catch (e) { console.log('syncPhotos: ' + e); }
+}
+
+/* ---------- Rainier Real Estate Photography (HD Photo Hub): orders and finished photos, from email ---------- */
+const SHOOT_HEADERS = ['Key', 'Address', 'Status', 'Order', 'Package', 'Total', 'Ordered', 'Ready', 'Download page', 'Photos', 'Updated'];
+const SHOOT_PHOTO_HEADERS = ['Key', 'Address', 'N', 'Title', 'Original'];
+const RAINIER = 'https://view.rainierrephoto.com';
+function parseDownloadPage_(html) {
+  const out = [], re = /di-pic-title[^>]*>([^<]*)<[\s\S]*?href="(?:https?:)?\/\/media\.hd\.pics\/([a-z0-9]+\/[a-z0-9]+\.(?:jpe?g|png))/gi; let m;
+  while ((m = re.exec(html))) out.push({ title: m[1].trim(), url: 'https://media.hd.pics/' + m[2] });
+  return out;
+}
+function syncPhotos() {
+  const shoots = tab_('Photo shoots', SHOOT_HEADERS), pics = tab_('Shoot photos', SHOOT_PHOTO_HEADERS);
+  const sv = shoots.getDataRange().getValues(), row = {}; sv.slice(1).forEach((r, i) => { row[r[0]] = i + 2; });
+  const stamp = Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd HH:mm');
+  const put = (key, vals) => { // vals: {col index: value}; creates the row if needed
+    let r = row[key]; if (!r) { shoots.appendRow([key].concat(Array(SHOOT_HEADERS.length - 1).fill(''))); r = row[key] = shoots.getLastRow(); }
+    Object.keys(vals).forEach(c => { if (vals[c] !== '' && vals[c] != null) shoots.getRange(r, Number(c) + 1).setValue(vals[c]); });
+    shoots.getRange(r, 11).setValue(stamp); return r;
+  };
+  const msgs = []; GmailApp.search('from:rainierrephoto.com newer_than:45d', 0, 60).forEach(t => t.getMessages().forEach(m => msgs.push(m)));
+  msgs.sort((a, b) => a.getDate() - b.getDate());
+  msgs.forEach(m => {
+    const subj = m.getSubject().replace(/\s+/g, ' '), body = m.getPlainBody(), when = Utilities.formatDate(m.getDate(), 'America/Los_Angeles', 'yyyy-MM-dd');
+    const id = (/\/(?:m|d|h)\/([A-F0-9]{32})/i.exec(m.getBody()) || [])[1] || '';
+    let o = /Order #\s*(\d+)/i.exec(subj);
+    if (/thank you for your order/i.test(subj) && o) {
+      const addr = (/(\d+[^|\n]*?,?\s*WA\s*\d{5})/.exec(body) || [])[1] || '';
+      if (!addr) return;
+      const pkg = ((/\|\s*([A-Z][^|]*?)\s*\|\s*\$[\d,.]+\s*(?:\(reg|\|)/.exec(body.replace(/\n/g, ' ')) || [])[1] || '').replace(/\*/g, '·').replace(/\s+/g, ' ').trim();
+      const total = (/TOTAL\s*\|\s*(\$[\d,.]+)/.exec(body) || [])[1] || '';
+      const key = homeKey_(addr); const r = row[key];
+      put(key, { 1: addr.replace(/\s+/g, ' ').trim(), 2: r && shoots.getRange(r, 3).getValue() === 'Ready' ? '' : 'Ordered', 3: o[1], 4: pkg.slice(0, 200), 5: total, 6: when, 8: id ? RAINIER + '/d/' + id : '' });
+      return;
+    }
+    const ready = /^(.*?)\s+is ready!?$/i.exec(subj);
+    if (ready && id) {
+      const addr = ready[1].trim(), key = homeKey_(addr), r = put(key, { 1: addr, 2: 'Ready', 7: when, 8: RAINIER + '/d/' + id });
+      if (Number(shoots.getRange(r, 10).getValue()) > 0) return; // photos already listed
+      try {
+        const html = UrlFetchApp.fetch(RAINIER + '/d/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
+        const list = parseDownloadPage_(html); if (!list.length) return;
+        pics.getRange(pics.getLastRow() + 1, 1, list.length, 5).setValues(list.map((p, i) => [key, addr, i + 1, p.title, p.url]));
+        shoots.getRange(r, 10).setValue(list.length);
+      } catch (e) { console.log('photos ' + addr + ': ' + e); }
+    }
+  });
 }
 function schedule_(home) {
   const k = homeKey_(home), now = Date.now();

@@ -402,11 +402,17 @@ function setupOffice() { // run once from the editor; copy the key from the log 
   const props = PropertiesService.getScriptProperties();
   let key = props.getProperty('OFFICE_KEY');
   if (!key) { key = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '').slice(0, 8); props.setProperty('OFFICE_KEY', key); }
-  console.log('Your office key (paste it into office.ranchpnw.com once per device): ' + key);
+  console.log('Your office password is in Project Settings → Script properties → OFFICE_KEY. Change it there to any password you like (10+ characters).');
   console.log(props.getProperty('ANTHROPIC_API_KEY') ? 'AI key: set' : 'AI key: not set yet. Project Settings, Script properties, add ANTHROPIC_API_KEY.');
   CalendarApp.getDefaultCalendar(); GmailApp.getAliases();
 }
-function officeOk_(k) { const key = PropertiesService.getScriptProperties().getProperty('OFFICE_KEY'); return !!key && typeof k === 'string' && k.length === key.length && k === key; }
+function officeOk_(k) { // Chris's office password (Script property OFFICE_KEY); 8 wrong tries locks the office for an hour
+  const key = PropertiesService.getScriptProperties().getProperty('OFFICE_KEY'), cache = CacheService.getScriptCache();
+  const fails = Number(cache.get('officeFails') || 0); if (fails >= 8 || !key) return false;
+  const ok = typeof k === 'string' && k.length === key.length && k === key;
+  if (!ok) cache.put('officeFails', String(fails + 1), 3600);
+  return ok;
+}
 function threadOut_(t) {
   const ms = t.getMessages(), last = ms[ms.length - 1], first = ms[0], url = 'https://mail.google.com/mail/u/0/#all/' + t.getId();
   const mOut = m => ({ id: m.getId(), sender: m.getFrom(), subject: m.getSubject(), snippet: m.getPlainBody().replace(/\s+/g, ' ').slice(0, 400), date: m.getDate().toISOString(), viewUrl: url });

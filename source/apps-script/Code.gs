@@ -203,9 +203,9 @@ function syncShowings() {
 const SHOOT_HEADERS = ['Key', 'Address', 'Status', 'Order', 'Package', 'Total', 'Ordered', 'Ready', 'Download page', 'Photos', 'Updated'];
 const SHOOT_PHOTO_HEADERS = ['Key', 'Address', 'N', 'Title', 'Original'];
 const RAINIER = 'https://view.rainierrephoto.com';
-function parseDownloadPage_(html) {
-  const out = [], re = /di-pic-title[^>]*>([^<]*)<[\s\S]*?href="(?:https?:)?\/\/media\.hd\.pics\/([a-z0-9]+\/[a-z0-9]+\.(?:jpe?g|png))/gi; let m;
-  while ((m = re.exec(html))) out.push({ title: m[1].trim(), url: 'https://media.hd.pics/' + m[2] });
+function parseDownloadPage_(html) { // owner-preview page (/h/<id>) embeds every file as JSON; photos are media type 1
+  const out = [], re = /"nMediaTypeID":(\d+),"sMediaName":"([^"]*)","sOrigMediaKey":"([^"]+)"[^{}]*?"sExtension":"([a-z0-9]+)"/gi; let m;
+  while ((m = re.exec(html))) if (m[1] === '1') out.push({ title: m[2], url: 'https://media.hd.pics/' + m[3] + '.' + m[4] });
   return out;
 }
 function syncPhotos() {
@@ -237,7 +237,7 @@ function syncPhotos() {
       const addr = ready[1].trim(), key = homeKey_(addr), r = put(key, { 1: addr, 2: 'Ready', 7: when, 8: RAINIER + '/d/' + id });
       if (Number(shoots.getRange(r, 10).getValue()) > 0) return; // photos already listed
       try {
-        const html = UrlFetchApp.fetch(RAINIER + '/d/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
+        const html = UrlFetchApp.fetch(RAINIER + '/h/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
         const list = parseDownloadPage_(html); if (!list.length) return;
         pics.getRange(pics.getLastRow() + 1, 1, list.length, 5).setValues(list.map((p, i) => [key, addr, i + 1, p.title, p.url]));
         shoots.getRange(r, 10).setValue(list.length);

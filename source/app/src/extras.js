@@ -227,6 +227,7 @@ Object.assign(FORMS, {
 /* ============================================================
    LIVE — the public site's Google Sheet, read and written on The Desk
    ============================================================ */
+const LC_LISTED = 1795132800000;
 const LIVE_SHEET = '1ROkc-18VbSn7kkLZYrTyJYiooMDLbBxYR0SSWItll2E';
 const PORTAL_URL = 'https://homes.ranchpnw.com/sellers';
 const PORTAL_CODE = 'AH-QCRU9E';
@@ -278,17 +279,47 @@ function liveBlock() {
   <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log marketing</summary>
     <form data-form="live-mk" style="margin-top:16px"><div class="field"><label for="lm-w">What we did</label><select id="lm-w" name="what">${MARKETING_PRESETS.map(m => `<option data-reach="${esc(m[1])}">${esc(m[0])}</option>`).join('')}</select></div><div class="field"><label for="lm-r">Reach</label><input id="lm-r" name="reach" placeholder="~600 agents"></div><div class="field"><label for="lm-n">Notes the sellers will see</label><input id="lm-n" name="notes" placeholder="Called top Tehaleh agents personally"></div><button class="btn">Add to their timeline</button></form>
     ${mk.length ? `<div class="list" style="margin-top:14px">${mk.map(r => `<div><span aria-hidden="true">✓</span><span>${esc(r[2])}${r[3] ? ' <span class="muted small">· ' + esc(r[3]) + '</span>' : ''}</span><span class="when">${esc(String(r[0]).split(' ')[0])}</span></div>`).join('')}</div>` : ''}</details>
+  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Update Zillow &amp; Redfin numbers</summary>
+    <form data-form="live-portal" style="margin-top:16px"><div class="small muted" style="margin-bottom:12px">Copy the views and saves from each listing page. The sellers see these at the top of their portal.</div>
+    <div class="row2"><div class="field"><label for="lp-zv">Zillow views</label><input id="lp-zv" name="zv" inputmode="numeric"></div><div class="field"><label for="lp-zs">Zillow saves</label><input id="lp-zs" name="zs" inputmode="numeric"></div></div>
+    <div class="row2"><div class="field"><label for="lp-rv">Redfin views</label><input id="lp-rv" name="rv" inputmode="numeric"></div><div class="field"><label for="lp-rs">Redfin favorites</label><input id="lp-rs" name="rs" inputmode="numeric"></div></div><button class="btn">Update their portal</button></form></details>
+  <details style="margin-top:12px" open><summary class="btn ghost" style="display:inline-flex">Social results</summary>
+    <div style="margin-top:14px"><p class="small muted" style="margin:0 0 12px">Pulls reach, clicks and boost results for every Instagram and Facebook post that mentions this home, and puts them on the sellers’ portal.</p><button class="btn" data-act="social-sync" ${ui.busy === 'social' ? 'disabled' : ''}>${ui.busy === 'social' ? 'Pulling from Metricool…' : 'Pull from Metricool'}</button>${ui.socialMsg ? `<p class="small" style="margin-top:10px">${esc(ui.socialMsg)}</p>` : ''}</div></details>
   <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log showing feedback</summary>
     <form data-form="live-show" style="margin-top:16px"><div class="field"><label for="ls-i">Interest</label><select id="ls-i" name="interest"><option>Strong interest</option><option>Some interest</option><option>Not for them</option><option>Second showing</option></select></div><div class="field"><label for="ls-f">Feedback (no buyer names)</label><textarea id="ls-f" name="fb" required placeholder="Loved the kitchen and the greenbelt; wondering about the yard size."></textarea></div><button class="btn">Share with the sellers</button></form></details>` : ''}
   </div>`;
 }
+const METRICOOL_BRAND = '6646044';
+const SOCIAL_MATCH = /19917|145th st|homes\.ranchpnw\.com\/19917/i;
+const mcDate = v => { const t = String(v || ''); return /^\d{12}/.test(t) ? `${t.slice(0, 4)}-${t.slice(4, 6)}-${t.slice(6, 8)} ${t.slice(8, 10)}:${t.slice(10, 12)}` : t; };
+async function socialSync() {
+  ui.busy = 'social'; ui.socialMsg = ''; render();
+  try {
+    const from = new Date(LC_LISTED - 864e5).toISOString().slice(0, 19) + '-08:00', to = new Date(Date.now() + 864e5).toISOString().slice(0, 19) + '-08:00';
+    const q = metrics => callTool('Metricool Social Media Management', 'getAnalyticsDataByMetrics', { brandId: METRICOOL_BRAND, from, to, metrics });
+    // instagram: when, text, url, image, reach, views, interactions, spend, paid reach, paid clicks
+    const [ig, fb] = await Promise.all([q(['IGPO02', 'IGPO03', 'IGPO06', 'IGPO05', 'IGPO14', 'IGPO28', 'IGPO24', 'IGPO26', 'IGPO19', 'IGPO22']).catch(() => null),
+      q(['FBPO02', 'FBPO03', 'FBPO06', 'FBPO05', 'FBPO20', 'FBPO11', 'FBPO13', 'FBPO24', 'FBPO19', 'FBPO09']).catch(() => null)]);
+    const rows = [], now = liveNow();
+    [['instagram', ig], ['facebook', fb]].forEach(([net, p]) => ((p && p.rows) || []).filter(r => SOCIAL_MATCH.test(String(r[1] || '')) || SOCIAL_MATCH.test(String(r[2] || ''))).forEach(r =>
+      rows.push([now, '19917 145th St E', net, mcDate(r[0]), r[2] || '', r[3] || '', r[4] || '', r[5] || '', r[6] || '', r[9] || '', r[7] || '', r[8] || ''])));
+    if (!ig && !fb) throw new Error('Metricool didn’t respond');
+    if (rows.length) await callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: 'Social!A1', values: rows });
+    ui.socialMsg = rows.length ? `${rows.length} post${rows.length === 1 ? '' : 's'} updated on the sellers’ portal.` : 'No posts about this home yet. Once the launch posts go out, pull again.';
+  } catch (e) { ui.socialMsg = 'Not pulled — ' + ((e && e.message) || 'try again') + '.'; }
+  ui.busy = null; render();
+}
 Object.assign(A, {
+  'social-sync': () => socialSync(),
   'live-load': () => liveLoad(),
   'portal-copy': () => copy(`Aaron and Holly — your seller portal is live: ${PORTAL_URL}\nYour code: ${PORTAL_CODE}\nYou'll see visits, interest, everything we're doing to market the home, and showing feedback as it comes in. Your share link for social media is on the page too.`)
 });
 Object.assign(FORMS, {
   'live-update': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Seller updates', [liveNow(), '19917 145th St E', f.headline.value.trim(), f.msg.value.trim(), T().agent.name], 'Posted. Aaron and Holly will see it on their portal.')) f.reset(); b.disabled = false; },
   'live-mk': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Marketing', [liveNow(), '19917 145th St E', f.what.value, f.reach.value.trim(), f.notes.value.trim()], 'Added to the sellers’ timeline.')) f.reset(); b.disabled = false; },
+  'live-portal': async f => { const v = n => f[n].value.replace(/[^\d]/g, ''); const rows = []; if (v('zv') || v('zs')) rows.push([liveNow(), '19917 145th St E', 'Zillow', v('zv'), v('zs'), '']); if (v('rv') || v('rs')) rows.push([liveNow(), '19917 145th St E', 'Redfin', v('rv'), v('rs'), '']);
+    if (!rows.length) return toast('Add at least one number.'); const b = f.querySelector('button'); b.disabled = true;
+    try { await callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: 'Portals!A1', values: rows }); toast('Updated. The sellers see it now.'); f.reset(); } catch (e) { toast('Not saved — try again.'); } b.disabled = false; },
   'live-show': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Showings', [liveNow(), '19917 145th St E', f.interest.value, f.fb.value.trim()], 'Shared with the sellers.')) f.reset(); b.disabled = false; }
 });
 document.addEventListener('change', e => { if (e.target && e.target.id === 'lm-w') { const r = e.target.selectedOptions[0].dataset.reach, i = document.getElementById('lm-r'); if (i && r && !i.value) i.value = r; } });

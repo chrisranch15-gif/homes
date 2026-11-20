@@ -33,12 +33,15 @@ const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status'];
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
+const PORTAL_HEADERS = ['When', 'Home', 'Site', 'Views', 'Saves', 'Notes'];
+const SOCIAL_HEADERS = ['Checked', 'Home', 'Network', 'Posted', 'Post link', 'Image', 'Reach', 'Views', 'Interactions', 'Link clicks', 'Boost spend', 'Paid reach'];
 
 /* ---------------- web endpoints ---------------- */
 
 /** Run once: adds the seller-portal tabs and Aaron & Holly's access row. Safe to run again. */
 function setupPortal() {
   tab_('Sellers', SELLER_HEADERS); tab_('Seller updates', UPDATE_HEADERS); tab_('Marketing', MARKETING_HEADERS); tab_('Showings', SHOWING_HEADERS);
+  tab_('Portals', PORTAL_HEADERS); tab_('Social', SOCIAL_HEADERS);
   if (!seller_('AH-QCRU9E')) tab_('Sellers', SELLER_HEADERS).appendRow(['AH-QCRU9E', 'Aaron and Holly', '19917 145th St E', '19917', new Date('2026-11-19T16:00:00-08:00'), 'Active']);
   return 'Portal ready: ' + book_().getUrl();
 }
@@ -126,7 +129,16 @@ function sellerView_(code) {
     updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),
     marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
     showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
+    portals: latest_(tab_('Portals', PORTAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 2, r => ({ at: new Date(r[0]).getTime(), site: String(r[2]), views: num_(r[3]), saves: num_(r[4]), notes: String(r[5] || '') })),
+    social: latest_(tab_('Social', SOCIAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 4, r => ({ at: new Date(r[0]).getTime(), network: String(r[2]), posted: r[3] ? new Date(r[3]).getTime() : null, url: String(r[4]), image: String(r[5] || ''), reach: num_(r[6]), views: num_(r[7]), interactions: num_(r[8]), clicks: num_(r[9]), spend: num_(r[10]), paidReach: num_(r[11]) })),
     at: now };
+}
+
+function num_(v) { const n = Number(String(v == null ? '' : v).replace(/[^\d.]/g, '')); return String(v) === '' || isNaN(n) ? null : n; }
+// newest row per key column (a site, or a post link)
+function latest_(rows, keyCol, map) {
+  const out = {}; rows.forEach(r => { const k = String(r[keyCol]); if (!k) return; const t = new Date(r[0]).getTime(); if (!out[k] || t >= out[k].t) out[k] = { t, r }; });
+  return Object.keys(out).map(k => map(out[k].r));
 }
 
 /* ---------------- emails ---------------- */

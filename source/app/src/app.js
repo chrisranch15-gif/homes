@@ -398,7 +398,11 @@ function jsonLd(page) {
     { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: t.name, item: 'https://www.ranchpnw.com' }, { '@type': 'ListItem', position: 2, name: 'Tehaleh', item: SITE ? SITE.guideUrl + '/' : url }, { '@type': 'ListItem', position: 3, name: street(), item: url }] }] };
 }
 window.__jsonLd = jsonLd;
-function srcLink(k) { const s = SRC[k]; return s ? `<a class="src-link" href="${s[1]}" target="_blank" rel="noopener" data-out="${k}">${esc(s[0])} ↗</a>` : ''; }
+const FN = { on: false, list: [] };
+function srcLink(k) { const s = SRC[k]; if (!s) return '';
+  if (FN.on) { let n = FN.list.indexOf(k) + 1; if (!n) { FN.list.push(k); n = FN.list.length; } return `<sup class="fn"><a href="#tehaleh" data-scroll="sources" aria-label="Source ${n}: ${esc(s[0])}">${n}</a></sup>`; }
+  return `<a class="src-link" href="${s[1]}" target="_blank" rel="noopener" data-out="${k}">${esc(s[0])} ↗</a>`; }
+function sourcesList() { const l = FN.list.slice(); return l.length ? `<section class="wrap"><details class="sources" id="sources"><summary>Sources · ${l.length}</summary><ol>${l.map(k => `<li><a href="${SRC[k][1]}" target="_blank" rel="noopener" data-out="${k}">${esc(SRC[k][0])} ↗</a></li>`).join('')}</ol></details></section>` : ''; }
 function dayChap(c, i) {
   const first = T().agent.name.split(' ')[0];
   return `<section class="dayl"><div class="chapter wrap"><div class="head"><span class="n">${String(i + 1).padStart(2, '0')}</span><h2>${esc(c.t)}</h2></div>
@@ -415,7 +419,8 @@ function picksChap(c, i) {
     <div class="pickgrid">${c.items.map(([n, d, ph]) => `<article class="${ph ? '' : 'nophoto'}">${ph ? pimg(ph, 'ph s') : ''}<h3 class="serif">${esc(n)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
     <p class="sig">— ${esc(T().agent.name)} · ${esc(T().name)}</p></div></section>`;
 }
-function guide() {
+function guide() { FN.on = true; FN.list = []; try { return guideBody().replace('<!--SOURCES-->', sourcesList()); } finally { FN.on = false; } }
+function guideBody() {
   const p = PLACES.tehaleh, parent = PLACES[p.parent];
   const chap = (c, i) => c.picks ? picksChap(c, i) : c.day ? dayChap(c, i) : `<section class="${c.dark ? 'dark' : ''}"><div class="chapter wrap"><div class="head"><span class="n">${String(i + 1).padStart(2, '0')}</span><h2>${esc(c.t)}</h2></div>
     ${c.kicker ? `<div class="eyebrow" style="margin:-12px 0 22px">${esc(c.kicker)}</div>` : ''}
@@ -445,8 +450,9 @@ function guide() {
       <div class="card"><span class="eyebrow">In person</span><span class="t">A guided Tehaleh tour</span><span class="muted">Trails, parks and neighborhoods with someone who knows them.</span><button class="btn ghost" data-act="place-lead" data-k="community-tour">Plan a tour</button></div>
       <div class="card"><span class="eyebrow">Ask</span><span class="t">A local question</span><span class="muted">About the home, the trails or the area.</span><button class="btn ghost" data-act="ask" data-from="buyer">Ask</button></div>
     </div>
-    <p class="small muted" style="margin-top:28px;max-width:70ch">${esc(p.fine)} Sources were checked on ${fmtDay(placeChecked('tehaleh'))} and are re-checked monthly. Community photography courtesy of Tehaleh.</p>
+    <p class="small muted" style="margin-top:28px;max-width:70ch">${esc(p.fine)} Sources (listed above) were checked on ${fmtDay(placeChecked('tehaleh'))} and are re-checked monthly. Community photography courtesy of Tehaleh.</p>
   </section>
+  <!--SOURCES-->
   ${footer()}</div>`;
 }
 
@@ -1271,7 +1277,7 @@ document.addEventListener('click', e => {
   const out = e.target.closest('[data-out]');
   if (out) { try { const l = L(); l.outbound = l.outbound || []; l.outbound.push({ at: E.now(), src: out.dataset.out }); dirty = true; scheduleSave(); } catch (err) {} return; }
   const sc = e.target.closest('[data-scroll]');
-  if (sc) { e.preventDefault(); if (ui.menu) { ui.menu = false; render(); } const t = document.getElementById(sc.dataset.scroll); if (t) t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
+  if (sc) { e.preventDefault(); if (ui.menu) { ui.menu = false; render(); } const t = document.getElementById(sc.dataset.scroll); if (t && t.tagName === 'DETAILS') t.open = true; if (t) t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
   const el = e.target.closest('[data-act]'); if (!el || !A[el.dataset.act]) return;
   if (el.tagName === 'A' && el.dataset.act !== 'close') e.preventDefault();
   if (el.tagName === 'A' && el.dataset.act === 'close') { closeSheet(); return; }

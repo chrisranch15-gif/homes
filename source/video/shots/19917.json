@@ -1,0 +1,16 @@
+{
+  "listing": "19917",
+  "model": "gen4_turbo",
+  "seconds": 5,
+  "ratio": "1280:720",
+  "style": "Photorealistic luxury real estate film. Smooth, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture, no text, no warping.",
+  "shots": [
+    {"photo": "front-dusk.jpg", "move": "Slow cinematic push-in toward the front entry, soft clouds drifting overhead."},
+    {"photo": "great-room.jpg", "move": "Slow dolly forward into the two-story great room, rising very slightly."},
+    {"photo": "kitchen-island.jpg", "move": "Slow lateral slide along the kitchen island, gentle parallax."},
+    {"photo": "deck-fire.jpg", "move": "Slow push toward the covered deck, the fire flickering gently."},
+    {"photo": "greenbelt-yard.jpg", "move": "Slow rising drift over the backyard toward the evergreen greenbelt."}
+  ],
+  "cards": {"title": "cards/19917/title.png", "end": "cards/19917/end.png"},
+  "out": "social/video/19917-walkthrough.mp4"
+}

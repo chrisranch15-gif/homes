@@ -1,0 +1,36 @@
+name: Listing walkthrough film
+on:
+  push:
+    branches: [main]
+    paths: ['source/video/shots/*.json']
+  workflow_dispatch:
+    inputs:
+      plan: { description: 'Shot plan (e.g. source/video/shots/19917.json)', required: true, default: 'source/video/shots/19917.json' }
+permissions:
+  contents: write
+concurrency: { group: listing-film, cancel-in-progress: false }
+jobs:
+  film:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Make films for changed plans
+        env:
+          RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+        run: |
+          if [ -n "${{ github.event.inputs.plan }}" ]; then plans="${{ github.event.inputs.plan }}";
+          else plans=$(git diff --name-only HEAD~1 HEAD -- 'source/video/shots/*.json'); fi
+          status=0
+          for p in $plans; do python3 source/video/make.py "$p" || status=1; done
+          echo "status=$status" >> $GITHUB_ENV
+      - name: Save films to the site
+        if: always()
+        run: |
+          git config user.name "Ranch films"; git config user.email "actions@users.noreply.github.com"
+          git add social/video || true
+          git diff --cached --quiet || (git commit -m "Listing film from Runway" && git pull --rebase && git push)
+          exit ${status:-0}

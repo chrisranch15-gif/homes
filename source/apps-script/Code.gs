@@ -141,6 +141,70 @@ function openHouses_(page) {
   cache.put(key, JSON.stringify(res), 60); return res;
 }
 
+/* ---------------- showings, read from ShowingTime emails ----------------
+   Runs every 15 minutes (setupShowings installs the timer once).
+   "Showing schedule" is seller-safe: time, status, type. No agent names.
+   "Showing agents" is private to Chris and the Desk: buyer's agent contact. Never sent to sellers. */
+const SCHEDULE_HEADERS = ['When', 'Home', 'Status', 'Type', 'Key', 'Updated'];
+const SHOWING_AGENT_HEADERS = ['Key', 'Home', 'When', 'Agent', 'Brokerage', 'Phone', 'Email', 'Status', 'Type', 'Updated'];
+function setupShowings() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'syncShowings').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('syncShowings').timeBased().everyMinutes(15).create();
+  syncShowings();
+}
+function homeKey_(s) { const m = String(s || '').toLowerCase().replace(/street/g, 'st').replace(/[^a-z0-9 ]/g, ' ').match(/^\s*(\d+)\s+(\S+)(?:\s+(\S+))?/); return m ? m.slice(1).filter(Boolean).join(' ') : ''; }
+function parseShowing_(subject, body) {
+  const head = /^\s*(AGENT PREVIEW|SHOWING)\s+(REQUESTED|CONFIRMED|CANCELL?ED|DECLINED|RESCHEDULED)\s*\|\s*([^,]+),/i.exec(String(subject).replace(/\s+/g, ' '));
+  if (!head) return null;
+  const text = String(body).replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, '\n').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#0?39;|&#x27;|&rsquo;|\u2019/gi, "'");
+  const L = text.split(/\n/).map(x => x.trim()).filter(Boolean);
+  const di = L.findIndex(x => /^(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day, [A-Z][a-z]+ \d{1,2}, \d{4}$/.test(x));
+  if (di < 0) return null;
+  const tm = /^(\d{1,2}:\d{2} [AP]M)\s*-\s*(\d{1,2}:\d{2} [AP]M)$/.exec(L[di + 1] || '');
+  const ds = L[di].replace(/^\w+, /, '') + ' ' + (tm ? tm[1] : '12:00 PM');
+  const when = (typeof Utilities !== 'undefined') ? Utilities.parseDate(ds, 'America/Los_Angeles', 'MMMM d, yyyy h:mm a') : new Date(ds + ' PST');
+  const ai = L.findIndex(x => /^Buyer'?s Agent Details$/i.test(x)), A = ai >= 0 ? L.slice(ai + 1, ai + 7) : [];
+  const phone = A.find(x => /^\(?\d{3}\)?[ -]?\d{3}-\d{4}$/.test(x)) || '', email = A.find(x => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(x)) || '';
+  let status = head[2].toUpperCase(); status = /CANCEL/.test(status) ? 'Cancelled' : status === 'CONFIRMED' ? 'Confirmed' : status === 'DECLINED' ? 'Declined' : status === 'RESCHEDULED' ? 'Rescheduled' : 'Requested';
+  return { type: /PREVIEW/i.test(head[1]) ? 'Agent preview' : 'Showing', status, address: head[3].trim(), home: homeKey_(head[3]), when,
+    end: tm ? tm[2] : '', agent: A[0] && !/\d/.test(A[0]) ? A[0] : '', brokerage: A[1] && !/\d{3}/.test(A[1]) ? A[1] : '', phone, email };
+}
+function syncShowings() {
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(20000)) return;
+  try {
+    const rank = { Requested: 1, Rescheduled: 1, Confirmed: 2, Declined: 3, Cancelled: 3 };
+    const sched = tab_('Showing schedule', SCHEDULE_HEADERS), agents = tab_('Showing agents', SHOWING_AGENT_HEADERS);
+    const sv = sched.getDataRange().getValues(), av = agents.getDataRange().getValues();
+    const seen = {}; sv.slice(1).forEach((r, i) => { seen[r[4]] = i + 2; });
+    const threads = GmailApp.search('from:callcenter@showingtime.com newer_than:4d', 0, 100);
+    const msgs = []; threads.forEach(t => t.getMessages().forEach(m => msgs.push(m)));
+    msgs.sort((a, b) => a.getDate() - b.getDate());
+    const stamp = Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd HH:mm');
+    msgs.forEach(m => {
+      const s = parseShowing_(m.getSubject(), m.getBody()); if (!s || isNaN(s.when)) return;
+      const key = s.home + ' ' + Utilities.formatDate(s.when, 'America/Los_Angeles', 'yyyy-MM-dd HH:mm');
+      const row = seen[key];
+      if (row) {
+        const cur = String(sched.getRange(row, 3).getValue());
+        if ((rank[s.status] || 0) < (rank[cur] || 0) && s.status !== 'Rescheduled') return;
+        sched.getRange(row, 3).setValue(s.status); sched.getRange(row, 6).setValue(stamp);
+      } else {
+        sched.appendRow([s.when, s.address, s.status, s.type, key, stamp]); seen[key] = sched.getLastRow();
+      }
+      const ar = av.findIndex(r => r[0] === key);
+      const arow = [key, s.address, s.when, s.agent, s.brokerage, s.phone, s.email, s.status, s.type, stamp];
+      if (ar > 0) agents.getRange(ar + 1, 1, 1, arow.length).setValues([arow]); else { agents.appendRow(arow); av.push(arow); }
+    });
+  } finally { lock.releaseLock(); }
+}
+function schedule_(home) {
+  const k = homeKey_(home), now = Date.now();
+  return tab_('Showing schedule', SCHEDULE_HEADERS).getDataRange().getValues().slice(1)
+    .filter(r => homeKey_(r[1]) === k && r[0] instanceof Date)
+    .map(r => ({ at: r[0].getTime(), status: String(r[2]), type: String(r[3]) }))
+    .sort((a, b) => b.at - a.at).slice(0, 40);
+}
+
 /* ---------------- seller portal ---------------- */
 function seller_(code) {
   code = String(code || '').trim().toUpperCase(); if (code.length < 6) return null;
@@ -166,6 +230,7 @@ function sellerView_(code) {
     metrics: { visitors: Object.keys(seen).length, visitors7: Object.keys(seen7).length, shared, scans, tours: count('Tour request'), following: count('Following the home'), questions: count('Question about the home') },
     updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),
     marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
+    schedule: schedule_(sel.home),
     showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
     portals: latest_(tab_('Portals', PORTAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 2, r => ({ at: new Date(r[0]).getTime(), site: String(r[2]), views: num_(r[3]), saves: num_(r[4]), notes: String(r[5] || '') })),
     market: tab_('Market', MARKET_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home || String(r[1]) === '*').map(r => ({ month: r[0] instanceof Date ? Utilities.formatDate(r[0], 'America/Los_Angeles', 'yyyy-MM') : String(r[0]).slice(0, 7), area: String(r[2]), median: num_(r[3]), sold: num_(r[4]), active: num_(r[5]), dom: num_(r[6]), moi: num_(r[7]), stl: num_(r[8]), source: String(r[9] || '') })).sort((a, b) => a.month < b.month ? -1 : 1),

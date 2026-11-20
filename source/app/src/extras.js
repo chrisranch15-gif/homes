@@ -248,8 +248,9 @@ async function liveLoad(quiet) {
     const [leads, mk] = await Promise.all([
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Leads!A2:J500' }),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null),
-      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Open houses'!A2:G200" }).catch(() => null)
-    ]).then(r => { ui.ohRows = liveRows(r[2]); try { applyOpenHouses(ui.ohRows); } catch (e) {} return r; });
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Open houses'!A2:G200" }).catch(() => null),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Showing agents'!A2:J500" }).catch(() => null)
+    ]).then(r => { ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); try { applyOpenHouses(ui.ohRows); } catch (e) {} return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
   } catch (e) { ui.live = { at: Date.now(), error: (e && e.message) || 'Couldn’t reach the Sheet.' }; }
   ui.liveBusy = false; render();
@@ -286,6 +287,35 @@ function ohBlock() {
       <button class="btn" ${ui.busy === 'oh' ? 'disabled' : ''}>${ui.busy === 'oh' ? 'Publishing…' : 'Publish to the listing page'}</button>
       <p class="small muted" style="margin-top:10px">Shows on homes.ranchpnw.com/19917 within a minute. Still add it in NWMLS so it reaches Zillow and Redfin.</p></form></details>`
     : '<p class="small muted" style="margin-top:10px">Open The Desk on claude.ai and allow Google Sheets to add open houses here.</p>'}</div>`;
+}
+
+/* ---------- showings on the Desk: from ShowingTime emails. Agent contact shows here only, never in the seller portal. ---------- */
+function homeKeyJs(s) { const m = String(s || '').toLowerCase().replace(/street/g, 'st').replace(/[^a-z0-9 ]/g, ' ').match(/^\s*(\d+)\s+(\S+)(?:\s+(\S+))?/); return m ? m.slice(1).filter(Boolean).join(' ') : ''; }
+function showList() {
+  const k = homeKeyJs(street()), rows = (ui.showRows || []).filter(r => homeKeyJs(r[1]) === k);
+  return rows.map(r => ({ key: r[0], at: new Date(r[2]).getTime(), agent: r[3], firm: r[4], phone: r[5], email: r[6], status: r[7], type: r[8] }))
+    .filter(x => !isNaN(x.at)).sort((a, b) => b.at - a.at);
+}
+function showBlock() {
+  if (!isStaff() || !caps.mcp) return '';
+  const all = showList(), now = Date.now();
+  if (!ui.live) return '';
+  const up = all.filter(x => x.at >= now - 1800e3 && !/cancel|declin/i.test(x.status)).sort((a, b) => a.at - b.at);
+  const done = all.filter(x => x.at < now - 1800e3 && !/cancel|declin/i.test(x.status)).slice(0, 8);
+  const tel = p => String(p || '').replace(/[^\d]/g, '').replace(/^1?(\d{10})$/, '+1$1');
+  const sms = (x, body) => `sms:${tel(x.phone)}?&body=${encodeURIComponent(body)}`;
+  const first = x => String(x.agent || '').split(' ')[0] || 'there';
+  const dayOf = x => new Date(x.at).toLocaleDateString('en-US', { weekday: 'long' });
+  const timeOf = x => new Date(x.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const fbText = x => `Hi ${first(x)}, it's ${T().agent.name.split(' ')[0]} with ${T().name}. Thanks for showing ${street()} ${dayOf(x)}! What did your buyers think? Anything they loved or that gave them pause? Even a quick reply helps my sellers.`;
+  const preText = x => `Hi ${first(x)}, it's ${T().agent.name.split(' ')[0]} with ${T().name}. Thanks for booking ${street()} for ${dayOf(x)} at ${timeOf(x)}. Happy to answer any questions before or after. Enjoy the showing!`;
+  const row = (x, fb) => `<div style="display:block;padding:14px 0"><div><b>${esc(new Date(x.at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>${x.type === 'Agent preview' ? ' · Agent preview' : ''} · ${esc(x.status)}<br><span class="small muted">${esc(x.agent || 'Agent')}${x.firm ? ' · ' + esc(x.firm) : ''}${x.phone ? ' · ' + esc(x.phone) : ''}</span></div>
+    <div class="chips" style="margin:10px 0 0">${x.phone ? (fb ? `<a class="btn" style="min-height:40px;padding:0 16px" href="${sms(x, fbText(x))}">Text for feedback</a>` : `<a class="chip" href="${sms(x, preText(x))}">Text a welcome</a>`) + `<a class="chip" href="tel:${tel(x.phone)}">Call</a>` : ''}${fb && x.email ? `<button class="chip" data-act="show-fb" data-k="${esc(x.key)}">${ui.fbDone && ui.fbDone[x.key] ? 'Email draft saved' : 'Email instead'}</button>` : ''}</div></div>`;
+  return `<div class="sharebar" id="showings"><div class="eyebrow">Showings</div>
+    ${all.length ? `${up.length ? `<p class="small" style="margin:10px 0 0">Coming up</p><div>${up.map(x => row(x, false)).join('<hr style="border:0;border-top:1px solid var(--line);margin:0">')}</div>` : ''}
+    ${done.length ? `<p class="small" style="margin:16px 0 0">Shown · ask for feedback</p><div>${done.map(x => row(x, true)).join('<hr style="border:0;border-top:1px solid var(--line);margin:0">')}</div>` : ''}`
+    : '<p class="small muted" style="margin:8px 0 0">No showings yet. Requests, confirmations and cancellations from ShowingTime appear here within 15 minutes.</p>'}
+    <p class="small muted" style="margin-top:10px">Texts open in Messages, already written. Agent details stay here; your sellers see times and status only.</p></div>`;
 }
 function liveBlock() {
   if (!isStaff()) return '';
@@ -346,6 +376,14 @@ Object.assign(A, {
   'share-copy-post': () => copy(SHARE_TEXT + '\n\nSee every room and book a private tour: ' + PUBLIC_PAGE),
   'oh-cancel': async (el) => { const id = el.dataset.id, o = ohFromId(id); if (!o) return;
     if (await liveAppend('Open houses', [id, '19917', o.label.split(' · ')[0], '', '', 'Canceled', liveNow()], 'Removed from the listing page.')) { applyOpenHouses([{ id, status: 'Canceled' }]); render(); } },
+  'show-fb': async (el) => {
+    const x = showList().find(s => s.key === el.dataset.k); if (!x || !x.email) return;
+    const first = String(x.agent || '').split(' ')[0] || 'there';
+    const body = `Hi ${first},\n\nThank you for showing ${street()} on ${new Date(x.at).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}. Would you mind sharing a little feedback? A few words on each is perfect:\n\n1. What did your buyers like most?\n2. Anything that gave them pause?\n3. How does it compare with other homes they've seen?\n4. Is it a contender?\n\nIf they have any questions, I'm happy to help. My direct line is ${T().agent.phone}.\n\nThank you!`;
+    try { await callTool('Gmail', 'create_draft', { to: [x.email], subject: 'Feedback on ' + street() + '?', body: body + '\n\n— ' + T().agent.name, includeSignature: true });
+      ui.fbDone = Object.assign({}, ui.fbDone, { [x.key]: 1 }); toast('Draft saved in Gmail. Review and send.'); render(); }
+    catch (e) { toast('Couldn’t save the draft. Try again.'); }
+  },
   'portal-copy': () => copy(`Aaron and Holly — your seller portal is live: ${PORTAL_URL}\nYour code: ${PORTAL_CODE}\nYou'll see visits, interest, everything we're doing to market the home, and showing feedback as it comes in. Your share link for social media is on the page too.`)
 });
 Object.assign(FORMS, {

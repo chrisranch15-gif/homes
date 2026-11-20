@@ -13,6 +13,7 @@ var LC = (function () {
       id: 'ranch',
       name: 'The Ranch Real Estate Group',
       affiliation: 'Keller Williams Puget Sound',
+      firm: 'Keller Williams Realty Puget Sound', office: '33434 8th Ave S, Suite 103, Federal Way, WA 98003', officePhone: '(253) 835-4500',
       agent: { id: 'chris', name: 'Chris Ranch', role: 'Listing agent' },
       brand: { serif: "'Playfair Display'", sans: "'Inter'", ink: '#1E2327', ground: '#F7F5F1', accent: '#8C6A43', night: '#16191B',
         fonts: 'family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600' },

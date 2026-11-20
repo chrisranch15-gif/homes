@@ -181,7 +181,7 @@ function story() {
         <span class="sep2"></span><a href="#seller" data-act="menu-go"><span>Sellers</span><span class="small">Your private portal</span></a><a href="#desk" data-act="menu-go"><span>Agents</span><span class="small">The Desk</span></a>`}</nav>` : ''}</div>
     <div class="photo">${img(l.heroPhoto || 'great-room', '', 'fetchpriority="high" loading="eager"')}</div><div class="scrim"></div>
     <div class="copy"><h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
-      <div class="meta">${pending ? '<span class="tag" style="color:#E7D7BF">Pending</span>' : ''}<span class="price">${V('price') != null ? LC.money(V('price')) : ''}</span><span>${V('beds')} Bedrooms*</span><span>${V('baths')} Baths</span>${V('sqft') ? `<span>${Number(V('sqft')).toLocaleString()} sq ft</span>` : ''}<span>Backs to greenbelt</span></div></div>
+      <div class="meta">${pending ? '<span class="tag" style="color:#E7D7BF">Pending</span>' : ''}<span class="price">${V('price') != null ? LC.money(V('price')) : ''}</span><span>${V('beds')} Bedrooms*</span><span>${V('baths')} Baths</span>${V('sqft') ? `<span>${Number(V('sqft')).toLocaleString()} sq ft</span>` : ''}<span>Backs to greenbelt</span></div><div class="listedby">Listed by ${esc(t.agent.name)} · ${esc(t.firm || t.affiliation)}</div></div>
   </header>
   <section class="lede narrow remarks" id="s-story"><div class="eyebrow">${esc(street())} · ${esc(V('community'))}</div>
     ${remarkParas(a.remarks).map((p, i) => i === 0 ? `<p class="big" style="margin-top:26px">${esc(p)}</p>` : `<p class="prose rk">${esc(p)}</p>`).join('')}
@@ -229,6 +229,7 @@ function story() {
     </div>
   </div></section>
 
+  ${agentCard()}
   <section class="wrap" style="padding-top:clamp(72px,9vw,120px);padding-bottom:clamp(72px,9vw,120px)"><div class="next">
     <div class="panel"><div class="eyebrow">Take the next step</div><h3>See it in person.</h3><div class="stack">
       <button class="btn light wide" data-act="tour">Request a private tour</button>
@@ -241,7 +242,7 @@ function story() {
   </div></section>
   ${faqBlock('Questions about ' + street(), homeFaq())}
   ${footer()}
-  <div class="mbar"><button class="btn light" style="flex:1" data-act="tour">Request a Tour</button>
+  <div class="mbar" id="mbar"><button class="btn light" style="flex:1" data-act="tour">Request a Tour</button>
     <button class="btn line ic" data-act="follow" aria-label="Follow this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
     <button class="btn line ic" data-act="share-public" aria-label="Share this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg></button>
     <button class="btn line ic" data-act="ask" data-from="buyer" aria-label="Ask about this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button></div>
@@ -249,8 +250,20 @@ function story() {
 }
 function footer() {
   const t = T();
-  return `<footer class="foot"><div class="wrap"><div class="brands"><span class="b1">${esc(t.name.toUpperCase())}</span><span class="sep"></span><span class="b2">${esc(t.affiliation)}</span></div>
-  <div class="small" style="max-width:420px;line-height:1.7">${SITE ? `<a href="https://www.ranchpnw.com" rel="noopener">RanchPNW.com</a> · <a href="${GBP_URL}" rel="noopener" target="_blank">Our Google reviews</a> · <a href="${SITE.guideUrl}/">Life in Tehaleh</a><br>` : ''}Brand marks shown as text pending approved brand files. ${esc(t.disclaimer)}</div></div></footer>`;
+  return `<footer class="foot"><div class="wrap"><div class="brands"><span class="b1">${esc(t.name.toUpperCase())}</span><span class="sep"></span><span class="b2">${esc(t.firm || t.affiliation)}</span></div>
+  <div class="legal">
+    ${t.firm ? `<p><strong>${esc(t.firm)}</strong><br>${esc(t.office || '')}${t.officePhone ? ' · ' + esc(t.officePhone) : ''}<br>Each Office Is Independently Owned and Operated.</p>` : ''}
+    ${SITE ? `<p><a href="https://www.ranchpnw.com" rel="noopener">RanchPNW.com</a> · <a href="${GBP_URL}" rel="noopener" target="_blank">Our Google reviews</a> · <a href="${SITE.guideUrl}/">Life in Tehaleh</a></p>` : ''}
+    <p class="eho-row">${'<svg class="eho" viewBox="0 0 64 64" role="img" aria-label="Equal Housing Opportunity"><path d="M32 6 4 26h7v30h42V26h7z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="21" y="32" width="22" height="5" fill="currentColor"/><rect x="21" y="42" width="22" height="5" fill="currentColor"/></svg>'}<span>Equal Housing Opportunity. We are pledged to the letter and spirit of U.S. policy for the achievement of equal housing opportunity throughout the Nation. <a href="https://www.hud.gov/program_offices/fair_housing_equal_opp" rel="noopener" target="_blank">Fair housing</a></span></p>
+    <p>Information deemed reliable but not guaranteed; buyers should verify all information, including square footage, schools and HOA details. ${esc(t.agent.name)}, ${esc(t.name)}, is a licensed real estate broker with ${esc(t.firm || t.affiliation)}. © ${new Date().getFullYear()} ${esc(t.name)}.</p>
+  </div></div></footer>`;
+}
+function agentCard() {
+  const t = T();
+  return `<section class="wrap agent-card" aria-label="Your agent"><div class="ac"><img src="${SITE ? 'photos/chris-ranch.jpg' : 'photos/chris-ranch.jpg'}" alt="${esc(t.agent.name)}" width="689" height="720" loading="lazy">
+    <div class="ac-b"><div class="eyebrow">Presented by</div><h2 class="serif">${esc(t.agent.name)}</h2><p class="muted">${esc(t.name)} · ${esc(t.firm || t.affiliation)}</p>
+    <p class="prose" style="margin:14px 0 22px">Chris lived in Tehaleh and sells here often. Ask him anything about the home or the neighborhood — he answers personally.</p>
+    <div class="acts" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;margin:0"><button class="btn" data-act="tour">Request a private tour</button><button class="btn ghost" data-act="ask" data-from="buyer">Ask Chris a question</button></div></div></div></section>`;
 }
 
 /* ---------- Place records: neighborhoods as reusable, sourced guides ---------- */
@@ -1325,6 +1338,12 @@ const FORMS = {
 };
 document.addEventListener('submit', e => { const f = e.target.closest('[data-form]'); if (!f || !FORMS[f.dataset.form]) return; e.preventDefault(); FORMS[f.dataset.form](f); });
 
+/* mobile tour bar: appears after the hero, steps aside at the footer */
+function mbarSync() { const b = document.getElementById('mbar'); if (!b) return; const hero = document.querySelector('.story .hero'), foot = document.querySelector('.foot');
+  const past = hero ? hero.getBoundingClientRect().bottom < 80 : true, atFoot = foot ? foot.getBoundingClientRect().top < innerHeight - 40 : false;
+  b.classList.toggle('on', past && !atFoot); }
+addEventListener('scroll', mbarSync, { passive: true }); addEventListener('resize', mbarSync);
+new MutationObserver(() => requestAnimationFrame(mbarSync)).observe(document.documentElement, { childList: true, subtree: true });
 /* ---------- start ---------- */
 if (SITE) {
   boot(LC.seed());

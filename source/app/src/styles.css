@@ -120,7 +120,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .foot .b1{font-family:var(--serif);font-size:16px;letter-spacing:.22em}
 .foot .b2{font-size:16px;letter-spacing:.06em}
 .foot .sep{width:1px;height:28px;background:#3A4248}
-.mbar{position:fixed;left:10px;right:10px;bottom:10px;z-index:30;display:none;gap:8px;padding:8px;background:rgba(22,25,27,.96);backdrop-filter:blur(8px)}
+.mbar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:30;display:none;gap:8px;padding:8px;background:rgba(22,25,27,.96);backdrop-filter:blur(8px);transform:translateY(calc(100% + 30px));opacity:0;transition:transform .35s ease,opacity .35s ease;pointer-events:none}
+.mbar.on{transform:none;opacity:1;pointer-events:auto}
 .mbar .btn{min-height:48px}
 .mbar .ic{width:48px;padding:0;flex:none}
 @media (max-width:760px){.mbar{display:flex}.story{padding-bottom:76px}}
@@ -482,3 +483,15 @@ sup.fn a{color:var(--accent);text-decoration:none;font-family:var(--sans);font-w
 .room h3{font-size:clamp(24px,2.4vw,32px);font-weight:400;margin:0 0 10px}
 .room .prose{margin:0;max-width:42ch}
 @media(max-width:760px){.room{grid-template-columns:1fr}.room.flip .rimg{order:0}}
+
+.story .hero .listedby{margin-top:12px;font-size:13px;letter-spacing:.04em;color:rgba(247,245,241,.86)}
+.agent-card{padding-top:clamp(64px,8vw,110px)}
+.ac{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center;max-width:980px;margin:0 auto}
+.ac img{width:100%;height:auto;aspect-ratio:689/720;object-fit:cover;display:block}
+.ac h2{font-size:clamp(32px,4vw,48px);margin:6px 0 4px;font-weight:400}
+@media(max-width:640px){.ac{grid-template-columns:1fr}.ac img{max-width:260px}}
+.foot .legal{max-width:640px;font-size:13px;line-height:1.7;color:#B9B2A6}
+.foot .legal p{margin:0 0 14px}.foot .legal strong{color:#F7F5F1;font-weight:500}
+.foot .legal a{color:#E8DFD2}
+.eho-row{display:flex;gap:14px;align-items:flex-start}
+.eho{width:40px;height:40px;flex:none;color:#F7F5F1}

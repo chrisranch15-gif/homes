@@ -160,7 +160,7 @@ async function syncDrafts() {
 /* ============================================================
    PROPERTY STORY (public)
    ============================================================ */
-const FEATURED = ['kitchen-wide', 'great-room', 'front-dusk', 'primary-bed2', 'covered-deck', 'greenbelt-yard', 'dining', 'primary-bath2', 'deck-fire'];
+const FEATURED = ['kitchen-wide', 'mtn-alpenglow', 'great-room', 'primary-bed2', 'mtn-moonrise', 'covered-deck', 'greenbelt-yard', 'front-dusk', 'deck-fire'];
 function remarkParas(t) { const ss = String(t || '').match(/[^.!?]+[.!?]+(\s|$)/g) || [t || '']; const out = [ss[0].trim()], rest = ss.slice(1).map(x => x.trim()); const k = Math.ceil(rest.length / 2); if (rest.length) out.push(rest.slice(0, k).join(' ')); if (rest.length > k) out.push(rest.slice(k).join(' ')); return out.filter(Boolean); }
 function story() {
   const l = L(), a = E.assets(LID), t = T(), mode = l.mode || 'editorial';
@@ -199,7 +199,8 @@ function story() {
     ${[
       ['kitchen-island', 'The kitchen', `${V('great_room') || ''} opens to a kitchen with ${(V('kitchen') || '').toLowerCase()}. ${V('character') || ''} add character throughout.`],
       ['great-room2', 'The main floor', V('main_floor') || ''],
-      ['primary-bed2', 'The primary suite', `${V('primary') || ''}. Two more bedrooms also capture Mount Rainier; the fourth looks out over the greenbelt.`],
+      ['mtn-alpenglow', 'Mornings with a view', 'Mount Rainier fills the upstairs windows — the primary suite and two more bedrooms all look toward the mountain. The fourth looks out over the greenbelt.'],
+      ['primary-bed2', 'The primary suite', `${V('primary') || ''}.`],
       ['deck-fire', 'Room to unwind', `${V('deck') || ''}.`],
       ['greenbelt-yard', 'The greenbelt', `${V('lot') || ''}.`]
     ].filter(r => M(r[0]) && r[2].replace(/[.\s]/g, '')).map((r, i) => `<div class="room${i % 2 ? ' flip' : ''}"><button class="rimg" data-act="zoom" data-id="${r[0]}" aria-label="Open photo: ${esc(M(r[0]).alt)}">${img(r[0], '', 'loading="lazy"')}</button><div class="rtext"><h3 class="serif">${esc(r[1])}</h3><p class="prose">${esc(r[2].replace(/\s+/g, ' ').trim())}</p></div></div>`).join('')}
@@ -391,7 +392,7 @@ function jsonLd(page) {
   const url = SITE ? SITE.homeUrl : location.href, img = (SITE ? SITE.homeUrl.replace(/\/[^/]*$/, '/') : '') + 'photos/';
   const listed = (L().history.filter(h => h.to === 'active')[0] || {}).at;
   return { '@context': 'https://schema.org', '@graph': [org,
-    { '@type': 'RealEstateListing', '@id': url + '#listing', name: V('address') + ' 98391', url, description: E.assets(LID).remarks, datePosted: listed ? new Date(listed).toISOString().slice(0, 10) : undefined, image: [img + 'og-19917.jpg', img + 'great-room.jpg', img + 'kitchen-island.jpg', img + 'rainier-view2.jpg', img + 'deck-fire.jpg', img + 'front-dusk.jpg'],
+    { '@type': 'RealEstateListing', '@id': url + '#listing', name: V('address') + ' 98391', url, description: E.assets(LID).remarks, datePosted: listed ? new Date(listed).toISOString().slice(0, 10) : undefined, image: [img + 'og-19917.jpg', img + 'great-room.jpg', img + 'kitchen-island.jpg', img + 'mtn-alpenglow.jpg', img + 'deck-fire.jpg', img + 'front-dusk.jpg'],
       offers: { '@type': 'Offer', price: V('price'), priceCurrency: 'USD', availability: 'https://schema.org/InStock', seller: { '@id': 'https://www.ranchpnw.com/#org' } }, about: { '@id': url + '#home' }, provider: { '@id': 'https://www.ranchpnw.com/#org' } },
     { '@type': 'SingleFamilyResidence', '@id': url + '#home', name: street(), address: { '@type': 'PostalAddress', streetAddress: street(), addressLocality: 'Bonney Lake', addressRegion: 'WA', postalCode: '98391', addressCountry: 'US' }, numberOfBedrooms: V('beds'), numberOfRooms: V('beds'),
       additionalProperty: [{ '@type': 'PropertyValue', name: 'Bathrooms', value: String(V('baths')) }, { '@type': 'PropertyValue', name: 'School district', value: V('school_district') }],
@@ -1064,7 +1065,7 @@ function askSheet(from) {
 
 /* ---------- Concierge answers: rules first, then Claude, always grounded ---------- */
 const JUDGMENT = /(should|offer|negotiat|lower|reduc|hold|accept|counter|worth|advice|recommend|strategy|price drop|discount)/i;
-const PHOTO_FOR = [[/(view|rainier|mountain)/i, 'rainier-view2'], [/(deck|fire|outdoor|patio)/i, 'deck-fire'], [/(yard|lot|greenbelt|fence)/i, 'greenbelt-yard'], [/(kitchen|island|pantry)/i, 'kitchen-island'], [/(primary|bath|tub|closet)/i, 'primary-bath2'], [/(great room|fireplace|living)/i, 'great-room'], [/(trail|park|clubhouse)/i, 'aerial-mountains']];
+const PHOTO_FOR = [[/(view|rainier|mountain)/i, 'mtn-alpenglow'], [/(deck|fire|outdoor|patio)/i, 'deck-fire'], [/(yard|lot|greenbelt|fence)/i, 'greenbelt-yard'], [/(kitchen|island|pantry)/i, 'kitchen-island'], [/(primary|bath|tub|closet)/i, 'primary-bath2'], [/(great room|fireplace|living)/i, 'great-room'], [/(trail|park|clubhouse)/i, 'aerial-mountains']];
 function sellerAnswer(text) {
   const l = L(), r = E.report(LID);
   if (/(visit|views|people|traffic|seen|saw)/i.test(text)) { const v = r.metrics.find(m => m.key === 'visits'), s = r.metrics.find(m => m.key === 'showings'); return v.value + ' visits to your home’s story and ' + s.value + ' showing requests in the last 7 days' + (r.demo ? ' (includes sample data loaded for the demonstration)' : '') + '. Zillow and Redfin don’t share reliable numbers, so we don’t guess at them.'; }
@@ -1109,7 +1110,7 @@ function graphicsPlan() {
   const list = [
     { id: 'listed', fmt: 'post', photo: 'front-dusk', eyebrow: 'Just listed · Tehaleh', title: ['A home that', 'feels different.'], focus: 0.55 },
     { id: 'great', fmt: 'story', photo: 'great-room', eyebrow: 'Inside', title: ['Two stories', 'of light.'], focus: 0.5 },
-    { id: 'view', fmt: 'square', photo: 'rainier-view', eyebrow: 'Mornings with a view', title: ['Mount Rainier,', 'from upstairs.'], focus: 0.62, overlay: true },
+    { id: 'view', fmt: 'square', photo: 'mtn-alpenglow', eyebrow: 'Mornings with a view', title: ['Mount Rainier,', 'from upstairs.'], focus: 0.62, overlay: true },
     { id: 'deck', fmt: 'post', photo: 'deck-fire', eyebrow: 'Room to unwind', title: ['Evenings by', 'the fire.'], focus: 0.4 },
     { id: 'link', fmt: 'link', photo: 'kitchen-island', eyebrow: 'Tehaleh · Bonney Lake', title: ['A home that', 'feels different.'], focus: 0.5, overlay: true }
   ];

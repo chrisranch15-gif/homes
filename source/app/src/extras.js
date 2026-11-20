@@ -69,7 +69,7 @@ function closingBook() {
   <section class="bsec narrow"><div class="eyebrow">By the numbers</div><div class="bnums">${nums.map(([v, k]) => `<div><div class="v">${Number(v).toLocaleString()}</div><div class="k">${k}</div></div>`).join('')}${dom ? `<div><div class="v">${dom}</div><div class="k">days from launch to contract</div></div>` : ''}</div>
     <p class="small muted">Counted by your own listing’s site and signs. Zillow and Redfin views aren’t included — there’s no legitimate feed, so we never estimate them.</p></section>
   <section class="bsec narrow"><div class="eyebrow">How it unfolded</div><div class="btl">${tl.length ? tl.map(([at, t, d]) => `<div><span class="d">${new Date(at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span><span><b>${esc(t)}</b>${d ? ' — ' + esc(d) : ''}</span></div>`).join('') : '<div class="muted">The timeline fills in as the sale unfolds.</div>'}</div></section>
-  <section class="bsec wrap"><div class="eyebrow" style="text-align:center">The rooms you made home</div><div class="bphotos">${['great-room', 'kitchen-island', 'primary-bed2', 'deck-fire', 'rainier-view2', 'greenbelt-yard'].map(id => img(id, '')).join('')}</div></section>
+  <section class="bsec wrap"><div class="eyebrow" style="text-align:center">The rooms you made home</div><div class="bphotos">${['great-room', 'kitchen-island', 'primary-bed2', 'deck-fire', 'mtn-alpenglow', 'greenbelt-yard'].map(id => img(id, '')).join('')}</div></section>
   <section class="bsec narrow" style="text-align:center"><div class="eyebrow">Your next chapter</div><p class="serif bnote">Wherever you land, we’ll check in once a year with what your old neighborhood is doing — and we’re here whenever you need us.</p></section>`);
 }
 const CARE = [

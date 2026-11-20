@@ -62,8 +62,10 @@ var LC = (function () {
     ['mudroom', 57, 1, 'Mudroom', 'Built-in mudroom bench with hooks and cubbies'],
     ['powder', 56, 1, 'Main-floor bath', 'Main-floor bathroom with quartz vanity'],
     ['pantry', 45, 1, 'Walk-in pantry', 'Walk-in pantry shelving'],
-    ['rainier-view2', 34, 2, 'Mount Rainier view', 'Mount Rainier framed in an upstairs window'],
-    ['rainier-view', 31, 2, 'Mount Rainier view', 'Mount Rainier above the neighborhood from upstairs'],
+    ['mtn-alpenglow', 31, 2, 'Mount Rainier view', 'Alpenglow on Mount Rainier above the neighborhood, seen from the home'],
+    ['mtn-moonrise', 32, 2, 'Mount Rainier view', 'Moonrise over Mount Rainier at dusk, seen from an upstairs window'],
+    ['mtn-closeup', 33, 2, 'Mount Rainier view', 'Mount Rainier in evening light from upstairs'],
+    ['mtn-clearday', 34, 2, 'Mount Rainier view', 'Mount Rainier on a clear winter day above the rooftops'],
     ['primary-bed2', 28, 2, 'Primary suite', 'Primary suite with tray ceiling'],
     ['primary-bed', 27, 2, 'Primary suite', 'Primary suite seating and windows'],
     ['primary-bed3', 30, 2, 'Primary suite', 'Primary suite toward the bath'],
@@ -502,7 +504,7 @@ var LC = (function () {
         social: [
           { network: 'Instagram', photo: 'great-room', text: 'Just listed in Tehaleh — ' + street + '. ' + bits([v('great_room') ? v('great_room') + '.' : '', v('views') ? v('views') + '.' : '']) + ' ' + specs },
           { network: 'Facebook', photo: 'deck-fire', text: 'Room to unwind: ' + lower(v('deck') || 'outdoor living') + '. ' + (v('lot') ? v('lot') + '.' : '') + ' ' + specs },
-          { network: 'Instagram', photo: 'rainier-view2', text: 'Mornings with a view. ' + (v('views') || '') + '. ' + street + ', Bonney Lake.' }
+          { network: 'Instagram', photo: 'mtn-alpenglow', text: 'Mornings with a view. ' + (v('views') || '') + '. ' + street + ', Bonney Lake.' }
         ].map(function (p) { p.text = p.text.replace(/\s+/g, ' ').replace(/\.\./g, '.').trim(); return p; }),
         agentEmail: 'New listing: ' + street + ' · ' + specs + '. ' + remarks.slice(0, 280) + '…',
         brochure: remarks,

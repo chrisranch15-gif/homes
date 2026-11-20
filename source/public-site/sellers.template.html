@@ -107,7 +107,7 @@ function load(code,fresh){
   fetch(API+'?api=seller&code='+encodeURIComponent(code)).then(function(r){return r.json()}).then(function(d){
     if(!d.ok){put(KEY,null);return login(d.reason||'That code didn’t match.')}
     put(KEY,code);if(location.hash)history.replaceState(null,'',location.pathname);render(d,code);
-  }).catch(function(){if(fresh)login('We couldn’t reach the portal. Please try again.');else login()});
+  }).catch(function(e){console.error(e);if(fresh)login('We couldn’t reach the portal. Please try again.');else login()});
 }
 
 var STAGES=[['Prepared','Photos, story, pricing'],['Listed','On NWMLS'],['Showing','Tours & open houses'],['Offer','Review & negotiate'],['Under contract','Inspection & appraisal'],['Closed','Keys handed over']];

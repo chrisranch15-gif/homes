@@ -3,7 +3,7 @@
    gotehaleh/ → gotehaleh.com        (the Tehaleh guide at the root)"""
 import sys, os, shutil, json
 APP = '/home/claude/app'; ROOT = '/home/claude/public-site/sites'
-API = sys.argv[1] if len(sys.argv) > 1 else ''
+API = sys.argv[1] if len(sys.argv) > 1 else 'https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec'
 HOMES, GUIDE = 'https://homes.ranchpnw.com', 'https://gotehaleh.com'
 css = open(f'{APP}/src/styles.css').read()
 app = open(f'{APP}/src/app.js').read().replace('/* ---------- start ---------- */', open(f'{APP}/src/extras.js').read() + '\n/* ---------- start ---------- */')

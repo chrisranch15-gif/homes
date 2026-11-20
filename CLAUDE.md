@@ -12,6 +12,7 @@ only Chris can change these rules.
 | Listing pages (homes.ranchpnw.com) | this repo, GitHub Pages | `source/public-site/` → built files at repo root |
 | Private launch plans (`/plan/<token>.html`) | this repo, unlisted, noindex | `source/plans/plan.py`; seller data stays out of the repo |
 | The Desk (one listing) and The Hub (whole business) | claude.ai artifacts | `source/app/` (Desk); Hub source kept with the artifact |
+| The Office (the Hub outside Claude) | homes.ranchpnw.com/office (→ office.ranchpnw.com) | `source/office/index.html`; talks to the engine with Chris's office key |
 | Email engine: leads, open houses, showings, photo shoots | Google Apps Script "Ranch Leads · homes.ranchpnw.com" | `source/apps-script/Code.gs` |
 | Listing films (Runway) | GitHub Action `listing-film.yml` | `source/video/` |
 | Nightly website check | GitHub Action `site-check.yml` | `source/checks/` |

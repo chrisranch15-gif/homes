@@ -71,6 +71,7 @@ function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return out_({ ok: false, reason: 'Bad request' }); }
   const type = String(d.type || '');
+  if (type === 'office') return out_(officePost_(d));
   if (type === 'visit' || type === 'scan') {
     tab_('Activity', ACTIVITY_HEADERS).appendRow([new Date(), type === 'scan' ? 'Sign scan' : 'Visit · ' + clean_(d.view, 20), clean_(d.page, 30), clean_(d.source, 40), clean_(d.visitor, 20), clean_(d.sign, 20)]);
     return out_({ ok: true });
@@ -395,4 +396,69 @@ function shell_(inner) {
 }
 function clean_(s, n) { return String(s == null ? '' : s).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n); }
 function esc_(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---------- office.ranchpnw.com: the Hub outside Claude. Runs as Chris; every call needs his private office key. ---------- */
+function setupOffice() { // run once from the editor; copy the key from the log into office.ranchpnw.com the first time you open it
+  const props = PropertiesService.getScriptProperties();
+  let key = props.getProperty('OFFICE_KEY');
+  if (!key) { key = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '').slice(0, 8); props.setProperty('OFFICE_KEY', key); }
+  console.log('Your office key (paste it into office.ranchpnw.com once per device): ' + key);
+  console.log(props.getProperty('ANTHROPIC_API_KEY') ? 'AI key: set' : 'AI key: not set yet. Project Settings, Script properties, add ANTHROPIC_API_KEY.');
+  CalendarApp.getDefaultCalendar(); GmailApp.getAliases();
+}
+function officeOk_(k) { const key = PropertiesService.getScriptProperties().getProperty('OFFICE_KEY'); return !!key && typeof k === 'string' && k.length === key.length && k === key; }
+function threadOut_(t) {
+  const ms = t.getMessages(), last = ms[ms.length - 1], first = ms[0], url = 'https://mail.google.com/mail/u/0/#all/' + t.getId();
+  const mOut = m => ({ id: m.getId(), sender: m.getFrom(), subject: m.getSubject(), snippet: m.getPlainBody().replace(/\s+/g, ' ').slice(0, 400), date: m.getDate().toISOString(), viewUrl: url });
+  return { id: t.getId(), viewUrl: url, messageCount: ms.length, messages: [mOut(last)], first: mOut(first) };
+}
+function calOut_(c, ev) {
+  const me = Session.getEffectiveUser().getEmail(), guests = ev.getGuestList(true).map(g => ({ email: g.getEmail(), responseStatus: ({ YES: 'accepted', NO: 'declined', MAYBE: 'tentative', INVITED: 'needsAction', OWNER: 'accepted' })[String(g.getGuestStatus())] || 'needsAction', self: g.getEmail() === me }));
+  const all = ev.isAllDayEvent(), st = all ? Utilities.formatDate(ev.getAllDayStartDate(), 'America/Los_Angeles', 'yyyy-MM-dd') : ev.getStartTime().toISOString();
+  return { id: ev.getId(), summary: ev.getTitle(), start: all ? { date: st } : { dateTime: st }, location: ev.getLocation(), htmlLink: 'https://calendar.google.com/calendar/r/day/' + Utilities.formatDate(ev.getStartTime(), 'America/Los_Angeles', 'yyyy/M/d'),
+    organizer: { email: ev.getCreators()[0] || '', self: ev.isOwnedByMe() }, attendees: guests, status: 'confirmed', myStatus: String(ev.getMyStatus()) };
+}
+function officeCall_(server, name, a) {
+  a = a || {};
+  if (server === 'Google Sheets') {
+    const ss = book_();
+    if (name === 'get_values') return { values: ss.getRange(a.range).getDisplayValues().filter(r => r.some(v => v !== '')) };
+    if (name === 'append_values') { const sh = ss.getSheetByName(String(a.range).split('!')[0].replace(/'/g, '')); (a.values || []).forEach(r => sh.appendRow(r)); return { ok: true }; }
+  }
+  if (server === 'Gmail') {
+    if (name === 'search_threads') return { threads: GmailApp.search(String(a.query || 'in:inbox'), 0, Math.min(50, a.pageSize || 20)).map(threadOut_) };
+    if (name === 'create_draft') {
+      const body = String(a.body || ''); let d;
+      if (a.replyToMessageId) d = GmailApp.getMessageById(a.replyToMessageId).createDraftReply(body);
+      else d = GmailApp.createDraft((a.to || []).join(','), String(a.subject || ''), body);
+      return { id: d.getId(), viewUrl: 'https://mail.google.com/mail/u/0/#drafts' };
+    }
+  }
+  if (server === 'Google Calendar') {
+    const cal = id => CalendarApp.getCalendarById(id) || CalendarApp.getDefaultCalendar();
+    if (name === 'list_events') { const c = cal(a.calendarId); return { events: c.getEvents(new Date(a.startTime), new Date(a.endTime || Date.now() + 2 * 864e5)).slice(0, a.pageSize || 25).map(ev => calOut_(c, ev)) }; }
+    if (name === 'create_event') { const ev = cal(a.calendarId).createEvent(String(a.summary || 'Event'), new Date(a.startTime), new Date(a.endTime), { location: a.location || '' }); return { id: ev.getId() }; }
+    if (name === 'respond_to_event') { const ev = cal(a.calendarId).getEventById(a.eventId); ev.setMyStatus(a.responseStatus === 'accepted' ? CalendarApp.GuestStatus.YES : CalendarApp.GuestStatus.NO); return { ok: true }; }
+  }
+  throw new Error(server + ' isn’t connected in the office yet.');
+}
+function officeAi_(prompt, opts) {
+  const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
+  if (!key) throw new Error('AI key not set yet.');
+  const r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    payload: JSON.stringify({ model: (opts && opts.model) || 'claude-haiku-5-5', max_tokens: 4000, messages: [{ role: 'user', content: String(prompt) + '\n\nReply with JSON only.' }] }) });
+  const j = JSON.parse(r.getContentText()); if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || 'AI error');
+  const t = (j.content || []).map(c => c.text || '').join('').trim().replace(/^```(?:json)?\s*|\s*```$/g, '');
+  return JSON.parse(t);
+}
+function officePost_(d) {
+  if (!officeOk_(d.key)) return { ok: false, reason: 'locked' };
+  try {
+    if (d.op === 'ping') return { ok: true, me: Session.getEffectiveUser().getEmail(), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') };
+    if (d.op === 'tool') return { ok: true, result: officeCall_(d.server, d.name, d.input) };
+    if (d.op === 'ai') return { ok: true, result: officeAi_(d.prompt, d.opts) };
+    return { ok: false, reason: 'unknown' };
+  } catch (err) { return { ok: false, reason: String(err && err.message || err).slice(0, 300) }; }
+}
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }

@@ -59,3 +59,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://homes.ranchpnw.com/sitemap.xml
+
+User-agent: *
+Disallow: /office/
+Disallow: /plan/

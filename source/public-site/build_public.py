@@ -9,7 +9,7 @@ css = open(f'{APP}/src/styles.css').read()
 app = open(f'{APP}/src/app.js').read().replace('/* ---------- start ---------- */', open(f'{APP}/src/extras.js').read() + '\n/* ---------- start ---------- */')
 libs = [open(f'{APP}/vendor/node_modules/qrcode-generator/qrcode.js').read(), open(f'{APP}/src/engine.js').read()]
 PAGES = [
-  dict(site='homes', file='19917.html', page='19917', url=f'{HOMES}/19917', title='19917 145th St E, Bonney Lake, WA 98391 · 5-Bed Tehaleh Home for Sale',
+  dict(site='homes', file='19917.html', page='19917', url=f'{HOMES}/19917', title='19917 145th St E, Bonney Lake, WA 98391 · 5-Bed Tehaleh Home for Sale · The Ranch Real Estate Group',
        desc='Listed at $775,000: 5 bedrooms, 2.75 baths, over $100K in upgrades, Mount Rainier views, central AC and a new covered deck backing to the greenbelt in Tehaleh, Bonney Lake. Presented by The Ranch Real Estate Group.',
        image='photos/og-19917.jpg', alt='19917 145th St E in Tehaleh, presented by The Ranch Real Estate Group', origin=HOMES),
   dict(site='gotehaleh', file='index.html', page='tehaleh', url=f'{GUIDE}/', title='Living in Tehaleh, Bonney Lake WA: Trails, Parks, Schools & The Retreat (2026 Guide)',

@@ -209,7 +209,8 @@ function story() {
         <span class="sep2"></span><a href="#seller" data-act="menu-go"><span>Sellers</span><span class="small">Your private portal</span></a><a href="#desk" data-act="menu-go"><span>Agents</span><span class="small">The Desk</span></a>`}</nav>` : ''}</div>
     <div class="photo">${img(l.heroPhoto || 'great-room', '', 'fetchpriority="high" loading="eager"')}</div><div class="scrim"></div>
     <div class="copy">${(() => { const o = l.openHouses.find(x => x.status === 'scheduled'); if (!o) return ''; const [d, t] = String(o.label || '').split(' · ');
-      return `<button class="ohinv" data-act="oh-register" data-id="${esc(o.id)}"><span class="k">Open House</span><span class="d">${esc(d || '')}</span><span class="t">${esc(t || '')}</span></button>`; })()}<h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
+      const sd = o.start ? new Date(o.start).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/Los_Angeles' }) : (d || '');
+      return `<button class="ohinv" data-act="oh-register" data-id="${esc(o.id)}"><span class="k">Open House</span><span class="d">${esc(sd)} · ${esc(t || '')}</span></button>`; })()}<h1><span class="h1k">${esc(street())} · ${esc(V('community'))}, Bonney Lake, WA 98391</span>${esc(a.headline)}</h1>
       <div class="meta">${pending ? '<span class="tag" style="color:#E7D7BF">Pending</span>' : ''}<span class="price">${V('price') != null ? LC.money(V('price')) : ''}</span><span>${V('beds')} Bedrooms*</span><span>${V('baths')} Baths</span>${V('sqft') ? `<span>${Number(V('sqft')).toLocaleString()} sq ft</span>` : ''}<span>Backs to greenbelt</span></div><div class="listedby">Listed by ${esc(t.agent.name)} · ${esc(t.firm || t.affiliation)}</div></div>
   </header>
   <section class="lede narrow remarks" id="s-story"><div class="eyebrow">${esc(street())} · ${esc(V('community'))}</div>

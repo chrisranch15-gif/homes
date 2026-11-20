@@ -224,13 +224,16 @@ function syncPhotos() {
     const id = (/\/(?:m|d|h)\/([A-F0-9]{32})/i.exec(m.getBody()) || [])[1] || '';
     let o = /Order #\s*(\d+)/i.exec(subj);
     if (/thank you for your order/i.test(subj) && o) {
-      const addr = (/(\d+[^|\n]*?,?\s*WA\s*\d{5})/.exec(body) || [])[1] || '';
-      console.log('order ' + o[1] + ' address: ' + (addr || 'NOT FOUND') + ' | ' + body.slice(0, 300).replace(/\s+/g, ' '));
+      const flat = body.replace(/\s+/g, ' ');
+      const after = flat.slice(flat.indexOf('PROJECT DETAILS'));
+      const am = /(\d+ [^,|]*?\b(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Ct|Court|Pl|Place|Ln|Lane|Way|Blvd|Loop|Cir|Circle|Ter|Hwy|Pkwy)\b\.?(?: [NSEW]{1,2}\b)?(?:,? #\S+|,? (?:Unit|Apt) ?\S+)?),? ([A-Za-z .]+), WA (\d{5})/i.exec(after.replace(/^PROJECT DETAILS\s+[^@]*@\S+\s+/, ''));
+      const addr = am ? am[1].trim() : '';
+      console.log('order ' + o[1] + ' address: ' + (addr || 'NOT FOUND'));
       if (!addr) return;
-      const pkg = ((/\|\s*([A-Z][^|]*?)\s*\|\s*\$[\d,.]+\s*(?:\(reg|\|)/.exec(body.replace(/\n/g, ' ')) || [])[1] || '').replace(/\*/g, '·').replace(/\s+/g, ' ').trim();
-      const total = (/TOTAL\s*\|\s*(\$[\d,.]+)/.exec(body) || [])[1] || '';
+      const pkg = ((/Packages\s+(.+?)\s+\$[\d,]+\.\d\d/.exec(flat) || [])[1] || '').replace(/\s*\*\s*/g, ' · ').replace(/^·\s*/, '').trim();
+      const total = (/(?<!SUB-)TOTAL\s*\|?\s*(\$[\d,]+\.\d\d)/.exec(flat) || [])[1] || '';
       const key = homeKey_(addr); const r = row[key];
-      put(key, { 1: addr.replace(/\s+/g, ' ').trim(), 2: r && shoots.getRange(r, 3).getValue() === 'Ready' ? '' : 'Ordered', 3: o[1], 4: pkg.slice(0, 200), 5: total, 6: when, 8: id ? RAINIER + '/d/' + id : '' });
+      put(key, { 1: addr, 2: r && shoots.getRange(r, 3).getValue() === 'Ready' ? '' : 'Ordered', 3: o[1], 4: pkg.slice(0, 200), 5: total, 6: when, 8: id ? RAINIER + '/d/' + id : '' });
       return;
     }
     const ready = /^(.*?)\s+is ready!?$/i.exec(subj);
@@ -239,7 +242,7 @@ function syncPhotos() {
       if (Number(shoots.getRange(r, 10).getValue()) > 0) return; // photos already listed
       try {
         const html = UrlFetchApp.fetch(RAINIER + '/h/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
-        const list = parseDownloadPage_(html); console.log('photos page ' + addr + ': ' + html.length + ' chars, ' + list.length + ' photos, keys ' + (html.match(/sOrigMediaKey/g) || []).length); if (!list.length) return;
+        const list = parseDownloadPage_(html); console.log('photos page ' + addr + ': ' + html.length + ' chars, ' + list.length + ' photos | ' + html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 400)); if (!list.length) return;
         pics.getRange(pics.getLastRow() + 1, 1, list.length, 5).setValues(list.map((p, i) => [key, addr, i + 1, p.title, p.url]));
         shoots.getRange(r, 10).setValue(list.length);
       } catch (e) { console.log('photos ' + addr + ': ' + e); }

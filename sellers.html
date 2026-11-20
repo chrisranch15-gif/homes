@@ -149,10 +149,10 @@ function render(d,code){
   html+='<section><div class="wrap"><p class="eyebrow">Live · updated '+when(d.at)+'</p><h2>Your home across the web</h2><div class="stats">'+
     stat(pz&&pz.views,'Zillow views')+stat(pz&&pz.saves,'Zillow saves')+stat(pr&&pr.views,'Redfin views')+
     stat(pr&&pr.saves,'Redfin favorites')+stat(has?reach:null,'people reached on Instagram & Facebook')+stat(m.visitors,'visitors to your home’s page')+
-    stat(m.tours,'tour requests')+stat(m.following,'people following your home')+stat(m.shared,'visits from links you shared')+
+    stat(m.tours,'tour requests')+stat(m.following,'people following your home')+
     '</div>'+(asOf?'<p class="note">Zillow and Redfin as of '+when(asOf)+'.</p>':'')+'</div></section>';
   // share
-  html+='<section id="share"><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">Help us spread the word</p><h2 style="margin-bottom:6px">Share your home</h2><p style="opacity:.85;margin:0 0 18px">This is what people see when you post the link on Facebook or Instagram, or text it. Every visit from it is counted above.</p>'+
+  html+='<section id="share"><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">Help us spread the word</p><h2 style="margin-bottom:6px">Share your home</h2><p style="opacity:.85;margin:0 0 18px">This is what people see when you post the link on Facebook or Instagram, or text it. Every visit from it is counted'+(m.shared?' — <b>'+m.shared+'</b> so far':'')+'.</p>'+
     '<a class="preview" href="'+STORY+'" target="_blank" rel="noopener"><img src="photos/og-19917.jpg" alt="" width="1200" height="630"><span class="pv"><span class="pd">HOMES.RANCHPNW.COM</span><span class="pt">19917 145th St E, Bonney Lake, WA 98391 · 5-Bed Tehaleh Home for Sale</span></span></a>'+
     '<div class="link"><input readonly value="'+SHARE+'" onfocus="this.select()" aria-label="Your share link"><button class="btn light" id="cp">Copy link</button>'+(navigator.share?'<button class="btn light" id="sh">Share…</button>':'')+'<a class="btn line" href="'+STORY+'" target="_blank" rel="noopener">Open your page</a></div><p class="cap" id="capt">We just listed our home in Tehaleh! 5 bedrooms, mountain views and trails right outside. Take a look and share with anyone who might love it: '+SHARE+'</p><button class="btn light" id="cpc" style="margin-top:12px">Copy this caption</button></div></div></section>';
   // social posts
@@ -173,7 +173,7 @@ function render(d,code){
     fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'seller-message',code:code,name:d.sellers,question:t,page:d.page,listing:d.home,source:'seller portal'})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;f.innerHTML='<p class="letter" style="margin:0">Sent. Chris will get back to you shortly.</p>'}).catch(function(){b.disabled=false;b.textContent='Send to Chris';toast('That didn’t go through — please try again.')})};
 }
 function pm(n,l){return n==null?'':'<span><b>'+Number(n).toLocaleString('en-US')+'</b> '+l+'</span>'}
-function stat(n,l){return '<div class="stat"><div class="n">'+(n==null?'—':n)+'</div><div class="l">'+l+'</div></div>'}
+function stat(n,l){return '<div class="stat"><div class="n">'+(n==null?'—':Number(n).toLocaleString('en-US'))+'</div><div class="l">'+l+'</div></div>'}
 function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('Copied')}).catch(function(){prompt('Copy this',t)})}
 document.getElementById('out').onclick=function(){put(KEY,null);login()};
 var saved=get(KEY);

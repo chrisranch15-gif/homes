@@ -154,7 +154,7 @@ function setupShowings() {
 }
 function homeKey_(s) { const m = String(s || '').toLowerCase().replace(/street/g, 'st').replace(/[^a-z0-9 ]/g, ' ').match(/^\s*(\d+)\s+(\S+)(?:\s+(\S+))?/); return m ? m.slice(1).filter(Boolean).join(' ') : ''; }
 function parseShowing_(subject, body) {
-  const head = /^\s*(AGENT PREVIEW|SHOWING)\s+(REQUESTED|CONFIRMED|CANCELL?ED|DECLINED|RESCHEDULED)\s*\|\s*([^,]+),/i.exec(String(subject).replace(/\s+/g, ' '));
+  const head = /^\s*(AGENT PREVIEW|SHOWING)\s+(REQUESTED|CONFIRMED|CANCELL?ED|DECLINED|RESCHEDULED)\s*\|\s*([^,]+),\s*([^,]+)?/i.exec(String(subject).replace(/\s+/g, ' '));
   if (!head) return null;
   const text = String(body).replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, '\n').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#0?39;|&#x27;|&rsquo;|\u2019/gi, "'");
   const L = text.split(/\n/).map(x => x.trim()).filter(Boolean);
@@ -166,7 +166,7 @@ function parseShowing_(subject, body) {
   const ai = L.findIndex(x => /^Buyer'?s Agent Details$/i.test(x)), A = ai >= 0 ? L.slice(ai + 1, ai + 7) : [];
   const phone = A.find(x => /^\(?\d{3}\)?[ -]?\d{3}-\d{4}$/.test(x)) || '', email = A.find(x => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(x)) || '';
   let status = head[2].toUpperCase(); status = /CANCEL/.test(status) ? 'Cancelled' : status === 'CONFIRMED' ? 'Confirmed' : status === 'DECLINED' ? 'Declined' : status === 'RESCHEDULED' ? 'Rescheduled' : 'Requested';
-  return { type: /PREVIEW/i.test(head[1]) ? 'Agent preview' : 'Showing', status, address: head[3].trim(), home: homeKey_(head[3]), when,
+  return { type: /PREVIEW/i.test(head[1]) ? 'Agent preview' : 'Showing', status, address: head[3].trim() + (head[4] ? ', ' + head[4].trim() : ''), home: homeKey_(head[3]), when,
     end: tm ? tm[2] : '', agent: A[0] && !/\d/.test(A[0]) ? A[0] : '', brokerage: A[1] && !/\d{3}/.test(A[1]) ? A[1] : '', phone, email };
 }
 function syncShowings() {

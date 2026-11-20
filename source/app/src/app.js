@@ -87,7 +87,9 @@ function applyOpenHouses(rows) {
     else if (live && cur && cur.status !== 'completed') cur.status = 'scheduled';
     else if (!live && cur && cur.status === 'scheduled') cur.status = /^cancel/i.test(last[id]) ? 'canceled' : 'past';
   });
-  const sched = l.openHouses.filter(o => o.status === 'scheduled').sort((a, b) => (a.start || 0) - (b.start || 0));
+  const seen = new Set(), isNew = (o) => /^OH-\d{8}-\d{4}-\d{4}$/.test(o.id || '');
+  const sched = l.openHouses.filter(o => o.status === 'scheduled').sort((a, b) => (isNew(b) - isNew(a)) || ((a.start || 0) - (b.start || 0)))
+    .filter(o => { const k = o.start || o.label; if (seen.has(k)) return false; seen.add(k); return true; }).sort((a, b) => (a.start || 0) - (b.start || 0));
   l.openHouses = sched.concat(l.openHouses.filter(o => o.status !== 'scheduled'));
 }
 let rev = 0, saving = false, dirty = false, remoteUnsub = null;
@@ -689,7 +691,7 @@ function deskShell(tab, body) {
   const dom = l.history.filter(h => h.to === 'active')[0];
   const tabs = [['desk', 'Overview'], ['desk-runs', 'How it runs'], ['desk-facts', 'Facts'], ['desk-activity', 'Everything handled'], ['desk-run', 'Run the scenario'], ['desk-kit', 'Print & present'], ['setup', 'Setup'], ['system', 'System & tests']];
   return `<div class="private desk">${DB.clockOffset ? `<div class="banner" style="text-align:center">Simulated time: <b>${when(E.now())}</b> · <button class="btn text small" data-act="clock-reset">Back to now</button></div>` : ''}<div class="wrap"><div class="top"><span class="mark">THE DESK</span><span class="small">${greeting()}, ${esc(T().agent.name.split(' ')[0])}</span></div>
-  <div class="dhero">${img('front-dusk', '')}<div class="scrim"></div><div class="c"><div><div class="eyebrow">${dom ? 'Day ' + Math.max(1, Math.ceil((E.now() - dom.at) / 864e5)) + ' on market' : LC.STATES[l.state]}</div><h1>${esc(street())}</h1></div>
+  <div class="dhero">${img('front-dusk', '')}<div class="scrim"></div><div class="c"><div><div class="eyebrow">The Desk · ${dom ? 'Day ' + Math.max(1, Math.ceil((E.now() - dom.at) / 864e5)) + ' on market' : LC.STATES[l.state]}</div><h1>${esc(street())}</h1></div>
     <div class="small" style="display:flex;gap:8px;align-items:center"><span class="dot" style="color:#B8D4B2"></span>Concierge is running · ${esc(LC.STATES[l.state])}</div></div></div>
   <nav class="tabs" aria-label="Desk">${tabs.map(([h, n]) => `<a href="#${h}" ${tab === h ? 'aria-current="page"' : ''}>${n}</a>`).join('')}</nav>
   ${body}</div></div>`;

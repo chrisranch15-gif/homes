@@ -37,5 +37,5 @@ WebP images, minifies, and writes robots.txt / sitemap.xml / llms.txt.
 - Every fact is verified or sourced; unverified facts never publish (square footage stays hidden until confirmed).
 - Chris's first-hand experience is written in his voice and signed, never presented as a sourced fact.
 - Never show a photo that isn't of the place it sits next to.
-- Never put Chris's email or phone in source; the Apps Script sends to whichever account runs it.
+- Never put Chris's email in source; his direct line is approved for marketing. The Apps Script sends to whichever account runs it. Full rules: ../CLAUDE.md
 - See `GUIDES.md` for the town-guide plan and the daily interview routine.

@@ -34,3 +34,4 @@ Keep it to ~10 minutes of Chris's time. Quality over count: 2–3 strong guides 
 
 ## Status log
 - 2026-11-19 — Tehaleh guide live with day in the life (Hounds Hollow → activity trail → Post & Pour, Tehaleh Heights walk to school, Halloween, The Mantel). Bonney Lake is next.
+- 2026-11-20 — Bonney Lake interview sent: 5 questions (Saturday day in the life, 3 picks, kids/dogs, what surprises buyers incl. SR-410/lake traffic, who it's not for) + 2 facts to confirm (2020 pop. 22,487 per Wikipedia; 2026 Allan Yorke boat launch residents-only, $43.80/yr pass per city boating page). **Awaiting Chris's answers** — next run asks for these again instead of starting Fox Island.

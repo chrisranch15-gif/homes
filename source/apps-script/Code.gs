@@ -225,6 +225,7 @@ function syncPhotos() {
     let o = /Order #\s*(\d+)/i.exec(subj);
     if (/thank you for your order/i.test(subj) && o) {
       const addr = (/(\d+[^|\n]*?,?\s*WA\s*\d{5})/.exec(body) || [])[1] || '';
+      console.log('order ' + o[1] + ' address: ' + (addr || 'NOT FOUND') + ' | ' + body.slice(0, 300).replace(/\s+/g, ' '));
       if (!addr) return;
       const pkg = ((/\|\s*([A-Z][^|]*?)\s*\|\s*\$[\d,.]+\s*(?:\(reg|\|)/.exec(body.replace(/\n/g, ' ')) || [])[1] || '').replace(/\*/g, '·').replace(/\s+/g, ' ').trim();
       const total = (/TOTAL\s*\|\s*(\$[\d,.]+)/.exec(body) || [])[1] || '';
@@ -238,7 +239,7 @@ function syncPhotos() {
       if (Number(shoots.getRange(r, 10).getValue()) > 0) return; // photos already listed
       try {
         const html = UrlFetchApp.fetch(RAINIER + '/h/' + id, { followRedirects: true, muteHttpExceptions: true }).getContentText();
-        const list = parseDownloadPage_(html); if (!list.length) return;
+        const list = parseDownloadPage_(html); console.log('photos page ' + addr + ': ' + html.length + ' chars, ' + list.length + ' photos, keys ' + (html.match(/sOrigMediaKey/g) || []).length); if (!list.length) return;
         pics.getRange(pics.getLastRow() + 1, 1, list.length, 5).setValues(list.map((p, i) => [key, addr, i + 1, p.title, p.url]));
         shoots.getRange(r, 10).setValue(list.length);
       } catch (e) { console.log('photos ' + addr + ': ' + e); }

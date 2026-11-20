@@ -37,6 +37,7 @@ var LCTests = (function () {
   });
   test('Accuracy', 'Unverified square footage stays hidden until confirmed', function (LC) {
     var x = fresh(LC);
+    x.e.setFact(x.id, 'sqft', null, 'conflict', 'Test: sources disagree');
     var before = /sq ft|square feet/i.test(x.e.allAssetText(x.id));
     x.e.setFact(x.id, 'sqft', 2999, 'verified', 'Test measurement');
     var after = x.e.allAssetText(x.id).indexOf('2,999') >= 0;

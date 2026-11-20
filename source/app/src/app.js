@@ -97,6 +97,7 @@ function boot(data) {
   DB = data || LC.seed();
   Object.values(DB.tenants).forEach(t => Object.values(t.listings).forEach(l => { l.runs = l.runs || []; }));
   E = LC.createEngine(DB, { now: () => Date.now() + (DB.clockOffset || 0), hooks: { change: () => { dirty = true; scheduleSave(); if (!render.q) { render.q = true; queueMicrotask(() => { render.q = false; render(); }); } } } });
+  try { const sf = E.fact(E.L(LID), 'sqft'); if (!sf || sf.value == null) E.setFact(LID, 'sqft', 2772, 'verified', 'Signed NWMLS listing input sheet (Form 1)'); } catch (e) {}
   E.scanConflicts(LID);
   try { applyOpenHouses(OH_FALLBACK); E.L(LID).openHouses.forEach(o => { if (o.status === 'scheduled' && o.end && o.end < Date.now()) o.status = 'past'; }); } catch (e) {}
   try { const l = E.L(LID), am = E.fact(l, 'amenities');

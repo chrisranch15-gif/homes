@@ -114,7 +114,7 @@ var LC = (function () {
     F('price', 'List price', 775000, 'verified', 'Agreed with seller'),
     F('beds', 'Bedrooms', 5, 'verified', 'Agent walk-through', { note: 'Main-floor 5th bedroom/office has no closet' }),
     F('baths', 'Bathrooms', 2.75, 'verified', 'Agent walk-through'),
-    F('sqft', 'Interior square footage', null, 'conflict', 'County record and builder plan disagree', { options: ['County record', 'Builder plan'] }),
+    F('sqft', 'Interior square footage', 2772, 'verified', 'Signed NWMLS listing input sheet (Form 1): 2,772 finished sq ft; garage and lot not included'),
     F('upgrades', 'Upgrades', 'Over $100K in upgrades', 'verified', 'Seller-provided, agent-approved remarks'),
     F('school_district', 'School district', 'Sumner-Bonney Lake School District', 'verified', 'Approved remarks'),
     F('great_room', 'Great room', 'Soaring two-story great room with fireplace', 'verified', 'Photos 43, 53'),

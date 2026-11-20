@@ -35,6 +35,7 @@ const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
 const MARKET_HEADERS = ['Month', 'Home', 'Area', 'Median sold price', 'Homes sold', 'Active listings', 'Median days on market', 'Months of inventory', 'Sale-to-list %', 'Source'];
 const PORTAL_HEADERS = ['When', 'Home', 'Site', 'Views', 'Saves', 'Notes'];
+const OPENHOUSE_HEADERS = ['Id', 'Page', 'Date', 'Start', 'End', 'Status', 'Added'];
 const SOCIAL_HEADERS = ['Checked', 'Home', 'Network', 'Posted', 'Post link', 'Image', 'Reach', 'Views', 'Interactions', 'Link clicks', 'Boost spend', 'Paid reach'];
 
 /* ---------------- web endpoints ---------------- */
@@ -122,12 +123,22 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.api === 'ping') return out_({ ok: true, at: new Date().toISOString() });
   if (p.api === 'seller') return out_(sellerView_(p.code));
+  if (p.api === 'openhouses') return out_(openHouses_(p.page));
   if (p.api === 'unsub' && p.e && p.t === token_(p.e)) {
     const sh = tab_('Followers', FOLLOWER_HEADERS), rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) if (String(rows[i][3]).toLowerCase() === String(p.e).toLowerCase() && !rows[i][5]) sh.getRange(i + 1, 6).setValue(new Date());
     return HtmlService.createHtmlOutput('<div style="font:17px/1.6 Georgia,serif;max-width:480px;margin:80px auto;padding:0 24px;color:#1E2327"><p style="letter-spacing:.2em;font:12px Arial;color:#8C6A43">' + BRAND.toUpperCase() + '</p><h1 style="font-weight:400">You’re unsubscribed.</h1><p>You won’t get any more updates about this home. Thank you for following it.</p></div>');
   }
   return out_({ ok: true });
+}
+
+/* ---------------- open houses (added from the Desk, shown on the listing page) ---------------- */
+function openHouses_(page) {
+  page = String(page || '').trim(); const cache = CacheService.getScriptCache(), key = 'oh:' + page, hit = cache.get(key);
+  if (hit) return JSON.parse(hit);
+  const rows = tab_('Open houses', OPENHOUSE_HEADERS).getDataRange().getDisplayValues().slice(1).filter(r => r[0] && String(r[1]) === page);
+  const res = { ok: true, rows: rows.map(r => ({ id: r[0], date: r[2], start: r[3], end: r[4], status: r[5] })) };
+  cache.put(key, JSON.stringify(res), 60); return res;
 }
 
 /* ---------------- seller portal ---------------- */

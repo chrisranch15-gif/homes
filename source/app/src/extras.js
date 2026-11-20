@@ -247,8 +247,9 @@ async function liveLoad(quiet) {
   try {
     const [leads, mk] = await Promise.all([
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Leads!A2:J500' }),
-      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null)
-    ]);
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Open houses'!A2:G200" }).catch(() => null)
+    ]).then(r => { ui.ohRows = liveRows(r[2]); try { applyOpenHouses(ui.ohRows); } catch (e) {} return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
   } catch (e) { ui.live = { at: Date.now(), error: (e && e.message) || 'Couldn’t reach the Sheet.' }; }
   ui.liveBusy = false; render();
@@ -258,6 +259,34 @@ async function liveAppend(tab, row, done) {
   catch (e) { toast('Not saved — ' + ((e && e.message) || 'the Sheet didn’t respond') + '.'); return false; }
 }
 const liveNow = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+
+/* ---------- share bar: the one public link, always at the top of the Desk ---------- */
+const PUBLIC_PAGE = 'https://homes.ranchpnw.com/19917';
+const SHARE_TEXT = 'Just listed in Tehaleh: 19917 145th St E, Bonney Lake. Five bedrooms, Mount Rainier views and a backyard on the greenbelt. Offered at $775,000.';
+function shareBar() {
+  if (!isStaff()) return '';
+  return `<div class="sharebar"><div class="eyebrow">Share this listing</div>
+    <div class="shareurl"><span>${PUBLIC_PAGE.replace('https://', '')}</span><button class="btn" data-act="share-listing">Share</button></div>
+    <div class="chips" style="margin:12px 0 0"><button class="chip" data-act="share-copy">Copy link</button><button class="chip" data-act="share-copy-post">Copy link + caption</button><a class="chip" href="${PUBLIC_PAGE}" target="_blank" rel="noopener">Open page</a><a class="chip" href="https://developers.facebook.com/tools/debug/?q=${encodeURIComponent(PUBLIC_PAGE)}" target="_blank" rel="noopener">Refresh Facebook preview</a></div>
+    <div class="small muted" style="margin-top:10px">This is the public page buyers and agents see. The Desk link stays private to you.</div></div>`;
+}
+
+/* ---------- open houses: add from the Desk, publishes to the listing page within a minute ---------- */
+const OH_TIMES = (() => { const out = []; for (let h = 8; h <= 20; h++) for (const m of [0, 30]) out.push([String(h).padStart(2, '0') + String(m).padStart(2, '0'), ohClock(h, m, true)]); return out; })();
+function ohBlock() {
+  if (!isStaff()) return '';
+  const up = L().openHouses.filter(o => o.status === 'scheduled');
+  const nextSat = (() => { const d = new Date(); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7)); return d.toISOString().slice(0, 10); })();
+  const opt = (sel) => OH_TIMES.map(([v, t]) => `<option value="${v}" ${v === sel ? 'selected' : ''}>${t}</option>`).join('');
+  return `<div class="sharebar" id="openhouses"><div class="eyebrow">Open houses</div>
+    ${up.length ? `<div class="list" style="margin-top:10px">${up.map(o => `<div><span aria-hidden="true">●</span><span><b>${esc(o.label)}</b><br><span class="small muted">On the listing page · comes off when it ends</span></span>${caps.mcp ? `<button class="btn text small" data-act="oh-cancel" data-id="${esc(o.id)}">Remove</button>` : ''}</div>`).join('')}</div>` : '<p class="small muted" style="margin:8px 0 0">Nothing scheduled. Add one below when the time is set — it won’t show anywhere until you publish it.</p>'}
+    ${caps.mcp ? `<details style="margin-top:14px" ${ui.ohOpen ? 'open' : ''}><summary class="btn ghost" style="display:inline-flex">Add an open house</summary>
+    <form data-form="oh-add" style="margin-top:16px"><div class="field"><label for="oh-d">Day</label><input id="oh-d" name="day" type="date" required value="${nextSat}"></div>
+      <div class="row2"><div class="field"><label for="oh-s">Starts</label><select id="oh-s" name="start">${opt('1300')}</select></div><div class="field"><label for="oh-e">Ends</label><select id="oh-e" name="end">${opt('1500')}</select></div></div>
+      <button class="btn" ${ui.busy === 'oh' ? 'disabled' : ''}>${ui.busy === 'oh' ? 'Publishing…' : 'Publish to the listing page'}</button>
+      <p class="small muted" style="margin-top:10px">Shows on homes.ranchpnw.com/19917 within a minute. Still add it in NWMLS so it reaches Zillow and Redfin.</p></form></details>`
+    : '<p class="small muted" style="margin-top:10px">Open The Desk on claude.ai and allow Google Sheets to add open houses here.</p>'}</div>`;
+}
 function liveBlock() {
   if (!isStaff()) return '';
   if (caps.mcp && !ui.live && !ui.liveBusy) setTimeout(() => liveLoad(true), 0);
@@ -312,6 +341,11 @@ async function socialSync() {
 Object.assign(A, {
   'social-sync': () => socialSync(),
   'live-load': () => liveLoad(),
+  'share-listing': async () => { try { if (navigator.share) { await navigator.share({ title: '19917 145th St E · Tehaleh', text: SHARE_TEXT, url: PUBLIC_PAGE }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } copy(PUBLIC_PAGE); },
+  'share-copy': () => copy(PUBLIC_PAGE),
+  'share-copy-post': () => copy(SHARE_TEXT + '\n\nSee every room and book a private tour: ' + PUBLIC_PAGE),
+  'oh-cancel': async (el) => { const id = el.dataset.id, o = ohFromId(id); if (!o) return;
+    if (await liveAppend('Open houses', [id, '19917', o.label.split(' · ')[0], '', '', 'Canceled', liveNow()], 'Removed from the listing page.')) { applyOpenHouses([{ id, status: 'Canceled' }]); render(); } },
   'portal-copy': () => copy(`Aaron and Holly — your seller portal is live: ${PORTAL_URL}\nYour code: ${PORTAL_CODE}\nYou'll see visits, interest, everything we're doing to market the home, and showing feedback as it comes in. Your share link for social media is on the page too.`)
 });
 Object.assign(FORMS, {
@@ -320,6 +354,18 @@ Object.assign(FORMS, {
   'live-portal': async f => { const v = n => f[n].value.replace(/[^\d]/g, ''); const rows = []; if (v('zv') || v('zs')) rows.push([liveNow(), '19917 145th St E', 'Zillow', v('zv'), v('zs'), '']); if (v('rv') || v('rs')) rows.push([liveNow(), '19917 145th St E', 'Redfin', v('rv'), v('rs'), '']);
     if (!rows.length) return toast('Add at least one number.'); const b = f.querySelector('button'); b.disabled = true;
     try { await callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: 'Portals!A1', values: rows }); toast('Updated. The sellers see it now.'); f.reset(); } catch (e) { toast('Not saved — try again.'); } b.disabled = false; },
+  'oh-add': async f => {
+    const day = f.day.value, s = f.start.value, e = f.end.value;
+    if (!/^\d{4}-\d\d-\d\d$/.test(day)) { toast('Pick a day.'); return; }
+    if (e <= s) { toast('The end time needs to be after the start.'); return; }
+    const id = 'OH-' + day.replace(/-/g, '') + '-' + s + '-' + e, o = ohFromId(id);
+    if (!o || o.end < Date.now()) { toast('That time has already passed.'); return; }
+    const [, sl, el] = /· (.+) – (.+)$/.exec(o.label) || [];
+    ui.busy = 'oh'; render();
+    const ok = await liveAppend('Open houses', [id, '19917', o.label.split(' · ')[0], sl || '', el || '', 'Published', liveNow()], 'Published · ' + o.label);
+    ui.busy = null; if (ok) { applyOpenHouses([{ id, status: 'Published' }]); ui.ohOpen = false; } render();
+  },
   'live-show': async f => { const b = f.querySelector('button'); b.disabled = true; if (await liveAppend('Showings', [liveNow(), '19917 145th St E', f.interest.value, f.fb.value.trim()], 'Shared with the sellers.')) f.reset(); b.disabled = false; }
 });
 document.addEventListener('change', e => { if (e.target && e.target.id === 'lm-w') { const r = e.target.selectedOptions[0].dataset.reach, i = document.getElementById('lm-r'); if (i && r && !i.value) i.value = r; } });
+

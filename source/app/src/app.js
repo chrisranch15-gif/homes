@@ -63,12 +63,40 @@ function shareUrl(code) { const base = SITE ? SITE.url : ARTIFACT_URL.indexOf('h
 async function copy(text) { try { await navigator.clipboard.writeText(text); toast('Copied'); } catch (e) { sheet(`<h3>Copy this</h3><div class="field"><textarea readonly onfocus="this.select()">${esc(text)}</textarea></div>`); } }
 
 /* ---------- state: database first, this browser as fallback ---------- */
+/* ---------- open houses: one row per open house in the Sheet's "Open houses" tab ----------
+   The Id carries the time (OH-YYYYMMDD-HHMM-HHMM, Pacific) so Sheets can't reformat it.
+   The Desk adds rows; the public page reads them through the engine. Last row for an Id wins. */
+const OH_FALLBACK = [{ id: 'OH-20261122-1100-1300', status: 'Published' }];
+function ptOffset(y, m, d) { try { return /PDT/.test(new Date(Date.UTC(y, m - 1, d, 12)).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', timeZoneName: 'short' })) ? 7 : 8; } catch (e) { return 8; } }
+function ohClock(h, mi, withMer) { const mer = h >= 12 ? 'pm' : 'am', h12 = h % 12 || 12; return h12 + (mi ? ':' + String(mi).padStart(2, '0') : '') + (withMer ? ' ' + mer : ''); }
+function ohFromId(id) {
+  const m = /^OH-(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)-(\d\d)(\d\d)$/.exec(String(id || '').trim()); if (!m) return null;
+  const [y, mo, d, sh, sm, eh, em] = m.slice(1).map(Number), off = ptOffset(y, mo, d);
+  const start = Date.UTC(y, mo - 1, d, sh + off, sm), end = Date.UTC(y, mo - 1, d, eh + off, em);
+  const day = new Date(Date.UTC(y, mo - 1, d, 12)).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const same = (sh >= 12) === (eh >= 12);
+  return { id: m[0], start, end, label: day + ' · ' + ohClock(sh, sm, !same) + ' – ' + ohClock(eh, em, true) };
+}
+function applyOpenHouses(rows) {
+  const l = E.L(LID), last = {};
+  (rows || []).forEach(r => { const id = String(r.id || r[0] || '').trim(), st = String(r.status || r[5] || '').trim(); if (id) last[id] = st; });
+  Object.keys(last).forEach(id => {
+    const o = ohFromId(id); if (!o) return;
+    const cur = l.openHouses.find(x => x.id === id), live = /^publish/i.test(last[id]) && o.end > Date.now();
+    if (live && !cur) l.openHouses.push(Object.assign({ host: T().agent.name, status: 'scheduled', guests: 0, qr: 0, notes: [] }, o));
+    else if (live && cur && cur.status !== 'completed') cur.status = 'scheduled';
+    else if (!live && cur && cur.status === 'scheduled') cur.status = /^cancel/i.test(last[id]) ? 'canceled' : 'past';
+  });
+  const sched = l.openHouses.filter(o => o.status === 'scheduled').sort((a, b) => (a.start || 0) - (b.start || 0));
+  l.openHouses = sched.concat(l.openHouses.filter(o => o.status !== 'scheduled'));
+}
 let rev = 0, saving = false, dirty = false, remoteUnsub = null;
 function boot(data) {
   DB = data || LC.seed();
   Object.values(DB.tenants).forEach(t => Object.values(t.listings).forEach(l => { l.runs = l.runs || []; }));
   E = LC.createEngine(DB, { now: () => Date.now() + (DB.clockOffset || 0), hooks: { change: () => { dirty = true; scheduleSave(); if (!render.q) { render.q = true; queueMicrotask(() => { render.q = false; render(); }); } } } });
   E.scanConflicts(LID);
+  try { applyOpenHouses(OH_FALLBACK); E.L(LID).openHouses.forEach(o => { if (o.status === 'scheduled' && o.end && o.end < Date.now()) o.status = 'past'; }); } catch (e) {}
   try { const l = E.L(LID), am = E.fact(l, 'amenities');
     if (am && /The Post café/.test(am.value) && !l.exceptions.some(x => x.type === 'research' && x.data && x.data.key === 'amenities'))
       E.raise(LID, 'research', '“The Post” is now Post & Pour', 'Tehaleh’s own site says the café building became Post & Pour in April 2024, and The Retreat clubhouse is planned for 2027. Your remarks still say “The Post café.”', { key: 'amenities', value: 'Post & Pour café and the planned Retreat clubhouse (opening 2027)', source: 'tehaleh.com (Apr 2024, Sept 2025) · confirmed by research' });
@@ -233,7 +261,7 @@ function story() {
   <section class="wrap" style="padding-top:clamp(72px,9vw,120px);padding-bottom:clamp(72px,9vw,120px)"><div class="next">
     <div class="panel"><div class="eyebrow">Take the next step</div><h3>See it in person.</h3><div class="stack">
       <button class="btn light wide" data-act="tour">Request a private tour</button>
-      ${oh ? `<button class="btn line wide" data-act="oh-register">Open house · ${esc(oh.label || '')}</button>` : ''}
+      ${l.openHouses.filter(o => o.status === 'scheduled').map(o => `<button class="btn line wide" data-act="oh-register" data-id="${esc(o.id)}">Open house · ${esc(o.label || '')}</button>`).join('')}
       <button class="btn line wide" data-act="follow">♡ Follow this home</button>
       <button class="btn line wide" data-act="ask" data-from="buyer">Ask about this home</button></div>
       <p class="small" style="color:#B9B2A6;margin:18px 0 0">Browse everything freely. We only ask for your details when you ask us for something.</p></div>
@@ -243,27 +271,31 @@ function story() {
   ${faqBlock('Questions about ' + street(), homeFaq())}
   ${footer()}
   <div class="mbar" id="mbar"><button class="btn light" style="flex:1" data-act="tour">Request a Tour</button>
-    <button class="btn line ic" data-act="follow" aria-label="Follow this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    ${T().agent.tel ? `<a class="btn line ic" href="tel:${T().agent.tel}" aria-label="Call Chris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></a><a class="btn line ic" href="sms:${T().agent.tel}?&body=${encodeURIComponent('Hi Chris, I’m interested in ' + street(L()) + '.')}" aria-label="Text Chris"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></a>` : ''}
     <button class="btn line ic" data-act="share-public" aria-label="Share this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg></button>
-    <button class="btn line ic" data-act="ask" data-from="buyer" aria-label="Ask about this home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button></div>
 </div>`;
 }
 function footer() {
   const t = T();
   return `<footer class="foot"><div class="wrap"><div class="brands"><span class="b1">${esc(t.name.toUpperCase())}</span><span class="sep"></span><span class="b2">${esc(t.firm || t.affiliation)}</span></div>
   <div class="legal">
-    ${t.firm ? `<p><strong>${esc(t.firm)}</strong><br>${esc(t.office || '')}${t.officePhone ? ' · ' + esc(t.officePhone) : ''}<br>Each Office Is Independently Owned and Operated.</p>` : ''}
+    ${t.firm ? `<p><strong>${esc(t.firm)}</strong><br>${esc(t.office || '')}<br>Each Office Is Independently Owned and Operated.</p>` : ''}
     ${SITE ? `<p><a href="https://www.ranchpnw.com" rel="noopener">RanchPNW.com</a> · <a href="${GBP_URL}" rel="noopener" target="_blank">Our Google reviews</a> · <a href="${SITE.guideUrl}/">Life in Tehaleh</a></p>` : ''}
     <p class="eho-row">${'<svg class="eho" viewBox="0 0 64 64" role="img" aria-label="Equal Housing Opportunity"><path d="M32 6 4 26h7v30h42V26h7z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="21" y="32" width="22" height="5" fill="currentColor"/><rect x="21" y="42" width="22" height="5" fill="currentColor"/></svg>'}<span>Equal Housing Opportunity. We are pledged to the letter and spirit of U.S. policy for the achievement of equal housing opportunity throughout the Nation. <a href="https://www.hud.gov/program_offices/fair_housing_equal_opp" rel="noopener" target="_blank">Fair housing</a></span></p>
     <p>Information deemed reliable but not guaranteed; buyers should verify all information, including square footage, schools and HOA details. ${esc(t.agent.name)}, ${esc(t.name)}, is a licensed real estate broker with ${esc(t.firm || t.affiliation)}. © ${new Date().getFullYear()} ${esc(t.name)}.</p>
   </div></div></footer>`;
+}
+function agentLinks(t, cls) {
+  const ag = t.agent; if (!ag.tel) return '';
+  const body = encodeURIComponent('Hi Chris, I’m interested in ' + street(L()) + '.');
+  return `<a class="${cls}" href="tel:${ag.tel}">Call ${esc(ag.phone)}</a><a class="${cls}" href="sms:${ag.tel}?&body=${body}">Text Chris</a>`;
 }
 function agentCard() {
   const t = T();
   return `<section class="wrap agent-card" aria-label="Your agent"><div class="ac"><img src="${SITE ? 'photos/chris-ranch.jpg' : 'photos/chris-ranch.jpg'}" alt="${esc(t.agent.name)}" width="689" height="720" loading="lazy">
     <div class="ac-b"><div class="eyebrow">Presented by</div><h2 class="serif">${esc(t.agent.name)}</h2><p class="muted">${esc(t.name)} · ${esc(t.firm || t.affiliation)}</p>
     <p class="prose" style="margin:14px 0 22px">Chris lived in Tehaleh and sells here often. Ask him anything about the home or the neighborhood — he answers personally.</p>
-    <div class="acts" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;margin:0"><button class="btn" data-act="tour">Request a private tour</button><button class="btn ghost" data-act="ask" data-from="buyer">Ask Chris a question</button></div></div></div></section>`;
+    <div class="acts" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;margin:0"><button class="btn" data-act="tour">Request a private tour</button>${agentLinks(t, 'btn ghost')}<button class="btn text" data-act="ask" data-from="buyer">Ask Chris a question</button></div></div></div></section>`;
 }
 
 /* ---------- Place records: neighborhoods as reusable, sourced guides ---------- */
@@ -713,6 +745,8 @@ function desk() {
   const s = l.saved;
   return deskShell('desk', `<div class="narrow" style="padding:0">
   <p class="say">${esc(lead)} ${n <= 3 ? words[n] : n + ' decisions are yours.'}</p>
+  ${shareBar()}
+  ${ohBlock()}
   <form data-form="tell" class="tell"><label for="tell" class="eyebrow">Tell the Concierge</label><div class="tellrow"><input id="tell" name="q" placeholder="Schedule an open house Saturday, 1–4 pm" autocomplete="off"><button class="btn" ${ui.busy === 'tell' ? 'disabled' : ''}>${ui.busy === 'tell' ? '…' : 'Go'}</button></div>
     <div class="chips" style="margin-top:10px">${['What needs me today?', 'How is the listing doing?', 'Send my seller a quick update', 'Open house next Saturday 1–4 pm'].map(q => `<button type="button" class="chip" data-act="tell-q" data-q="${q}">${q}</button>`).join('')}</div></form>
   ${n ? `<div class="decisions">${ds.slice(0, 2).map(decisionCard).join('')}</div>${n > 2 ? `<details style="margin-top:20px"><summary class="btn ghost" style="display:inline-flex">${n - 2} more</summary><div class="decisions" style="margin-top:20px">${ds.slice(2).map(decisionCard).join('')}</div></details>` : ''}`
@@ -1210,7 +1244,7 @@ const A = {
   ask: el => askSheet(el.dataset.from || 'buyer'),
   'ask-q': el => ask(el.dataset.from, el.dataset.q),
   'share-public': () => copy(shareUrl('story')),
-  'oh-register': () => sheet(`<div class="eyebrow">Open house</div><h3>${esc(L().openHouses.find(o => o.status === 'scheduled').label)}</h3><p class="muted">No registration needed — just come by. If you’d like a reminder:</p><form data-form="oh-remind">${contactFields('r')}${honeypot()}<button class="btn wide">Remind me</button><p class="consent-note">We’ll send one reminder about this open house.</p></form>`),
+  'oh-register': (el) => sheet(`<div class="eyebrow">Open house</div><h3>${esc((L().openHouses.find(o => o.status === 'scheduled' && (!el || !el.dataset || !el.dataset.id || o.id === el.dataset.id)) || {}).label || '')}</h3><p class="muted">No registration needed — just come by. If you’d like a reminder:</p><form data-form="oh-remind">${contactFields('r')}${honeypot()}<button class="btn wide">Remind me</button><p class="consent-note">We’ll send one reminder about this open house.</p></form>`),
   'oh-signin': () => sheet(`<div class="eyebrow">Welcome</div><h3>Glad you’re here.</h3><p class="muted">Signing in is optional. Leave your details only if you’d like us to follow up.</p><form data-form="oh-qr"><div class="field"><label for="on">Name (optional)</label><input id="on" name="name"></div><div class="field"><label for="oc">Email or phone (optional)</label><input id="oc" name="contact"></div><button class="btn wide">Sign in</button><p class="consent-note">Leave a phone or email and we’ll follow up once after today. Leave it blank and we won’t.</p></form>`),
   'seller-out': () => { session.seller = null; keepSession(); location.hash = 'story'; },
   'seller-approve': el => { E.approve(LID, el.dataset.id, 'approve'); toast('Approved — your Concierge is preparing everything.'); },
@@ -1354,5 +1388,6 @@ if (SITE) {
   dirty = false; save = async () => {}; scheduleSave = () => {};
 } else boot(loadLocal());
 render();
+if (SITE && SITE.api) fetch(SITE.api + '?api=openhouses&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.rows) { applyOpenHouses(d.rows); render(); } }).catch(() => {});
 if (window.claude && claude.use) connect();
 }

@@ -495,3 +495,10 @@ sup.fn a{color:var(--accent);text-decoration:none;font-family:var(--sans);font-w
 .foot .legal a{color:#E8DFD2}
 .eho-row{display:flex;gap:14px;align-items:flex-start}
 .eho{width:40px;height:40px;flex:none;color:#F7F5F1}
+
+.sharebar{border:1px solid var(--line);padding:18px;margin:4px 0 28px}
+.shareurl{display:flex;align-items:center;gap:12px;margin-top:10px}
+.shareurl span{flex:1;min-width:0;font-family:var(--serif);font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sharebar a.chip{display:inline-flex;align-items:center;text-decoration:none;color:inherit}
+.mbar a.ic{display:inline-flex;align-items:center;justify-content:center;color:#F7F5F1}
+.agent-card a.btn{text-decoration:none}

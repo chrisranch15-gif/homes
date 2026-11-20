@@ -1,0 +1,91 @@
+{
+ "listing": "19917",
+ "model": "gen4_turbo",
+ "ratio": "1280:720",
+ "seconds": 5,
+ "use": 4.4,
+ "style": "Photorealistic luxury real estate film. Smooth, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture or objects, no text, no warping, no flames or flickering lights.",
+ "cards": "cards/19917/h",
+ "out": "social/video/19917-full-tour.mp4",
+ "shots": [
+  {
+   "photo": "aerial-mountains.jpg",
+   "move": "Slow aerial drift forward over the neighborhood toward the distant mountains.",
+   "card": "open"
+  },
+  {
+   "photo": "front.jpg",
+   "move": "Slow push-in toward the front entry.",
+   "card": "title"
+  },
+  {
+   "photo": "entry-hall.jpg",
+   "move": "Slow dolly forward down the entry hall.",
+   "card": "c-entry"
+  },
+  {
+   "photo": "great-room.jpg",
+   "move": "Slow dolly forward into the two-story great room, rising slightly.",
+   "card": "c-great"
+  },
+  {
+   "photo": "great-room2.jpg",
+   "move": "Slow arc across the living area toward the fireplace. The fireplace stays calm and dim."
+  },
+  {
+   "photo": "kitchen-wide.jpg",
+   "move": "Slow push forward along the kitchen island.",
+   "card": "c-kitchen"
+  },
+  {
+   "photo": "kitchen-great.jpg",
+   "move": "Slow lateral slide across the kitchen toward the great room."
+  },
+  {
+   "photo": "dining.jpg",
+   "move": "Slow push toward the dining table and window."
+  },
+  {
+   "photo": "primary-bed.jpg",
+   "move": "Slow dolly forward into the primary bedroom.",
+   "card": "c-suite"
+  },
+  {
+   "photo": "primary-bath2.jpg",
+   "move": "Slow lateral slide past the double vanity toward the soaking tub."
+  },
+  {
+   "photo": "mtn-alpenglow.jpg",
+   "move": "Very slow push-in toward Mount Rainier at alpenglow. The mountain, sky and rooftops stay perfectly still.",
+   "card": "c-mtn"
+  },
+  {
+   "photo": "covered-deck.jpg",
+   "move": "Slow push out across the covered deck toward the yard and trees.",
+   "card": "c-deck"
+  },
+  {
+   "photo": "rear-yard.jpg",
+   "move": "Slow push across the lawn toward the back of the house.",
+   "card": "c-green"
+  },
+  {
+   "photo": "aerial-backyard.jpg",
+   "move": "Slow aerial rise over the backyard, revealing the evergreen forest beyond."
+  },
+  {
+   "photo": "teh-trail-ferns.jpg",
+   "move": "Slow forward glide along the forest trail between the ferns.",
+   "card": "c-trails"
+  },
+  {
+   "photo": "clubhouse-aerial.jpg",
+   "move": "Slow aerial drift past the community clubhouse."
+  },
+  {
+   "photo": "aerial-street.jpg",
+   "move": "Slow aerial pull-back and rise away from the home.",
+   "card": "end"
+  }
+ ]
+}

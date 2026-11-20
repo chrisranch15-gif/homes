@@ -38,6 +38,24 @@ const SOCIAL_HEADERS = ['Checked', 'Home', 'Network', 'Posted', 'Post link', 'Im
 
 /* ---------------- web endpoints ---------------- */
 
+
+/** Run once: adds the hub's tabs (listings, deals, website checks, documents). Safe to run again. */
+function setupHub() {
+  const L = tab_('Listings', ['Address', 'City', 'Price', 'Status', 'Sellers', 'Page', 'Desk', 'Portal code', 'Listed', 'Photo']);
+  if (L.getLastRow() < 2) {
+    L.appendRow(['19917 145th St E', 'Bonney Lake (Tehaleh)', 775000, 'Active', 'Aaron and Holly', 'https://homes.ranchpnw.com/19917', 'https://claude.ai/artifact/E6iKnuAbJ77ML5sArMqhEq#desk', 'AH-QCRU9E', '2026-11-19', 'https://homes.ranchpnw.com/photos/front-dusk-800.webp']);
+    L.appendRow(['11532 SE 173rd St #53', 'Renton', 275000, 'Active', '', '', '', '', '', '']);
+  }
+  const D = tab_('Deals', ['Updated', 'Address', 'Side', 'Status', 'Price', 'Commission %', 'GCI', 'Contract date', 'Closing date', 'Notes']);
+  if (D.getLastRow() < 2) {
+    D.appendRow([new Date(), '19917 145th St E', 'Listing', 'Active', 775000, '', '', '', '', 'Listed Nov 19']);
+    D.appendRow([new Date(), '11532 SE 173rd St #53', 'Listing', 'Active', 275000, '', '', '', '', 'Price improved from $299,900']);
+  }
+  tab_('Checks', ['When', 'Site', 'URL', 'Result', 'Detail']);
+  tab_('Documents', ['Saved', 'Address', 'File', 'From', 'Email date', 'Drive link']);
+  return 'Hub tabs ready';
+}
+
 /** Run once: adds the seller-portal tabs and Aaron & Holly's access row. Safe to run again. */
 function setupPortal() {
   tab_('Sellers', SELLER_HEADERS); tab_('Seller updates', UPDATE_HEADERS); tab_('Marketing', MARKETING_HEADERS); tab_('Showings', SHOWING_HEADERS);

@@ -95,7 +95,8 @@ LLMS = {
 for site, (origin, pages) in SITES.items():
     d = f'{ROOT}/{site}'
     open(f'{d}/robots.txt', 'w').write(''.join(f'User-agent: {b}\nAllow: /\n\n' for b in BOTS) + 'User-agent: *\nAllow: /\n\nSitemap: ' + origin + '/sitemap.xml\n')
-    urls = ''.join(f'<url><loc>{origin}{path}</loc><lastmod>2026-11-19</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>' for fn, path, page, route in pages)
+    extra = '<url><loc>https://homes.ranchpnw.com/</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>' if site == 'homes' else ''
+    urls = extra + ''.join(f'<url><loc>{origin}{path}</loc><lastmod>2026-11-19</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>' for fn, path, page, route in pages)
     open(f'{d}/sitemap.xml', 'w').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
     open(f'{d}/llms.txt', 'w').write(LLMS[site])
 print('done')

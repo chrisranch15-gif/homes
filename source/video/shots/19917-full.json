@@ -3,7 +3,7 @@
  "model": "gen4_turbo",
  "ratio": "1280:720",
  "seconds": 5,
- "use": 4.4,
+ "use": 4.2,
  "style": "Photorealistic luxury real estate film. Smooth, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture or objects, no text, no warping, no flames or flickering lights.",
  "cards": "cards/19917/h",
  "out": "social/video/19917-full-tour.mp4",
@@ -27,11 +27,13 @@
   {
    "photo": "great-room.jpg",
    "move": "Slow dolly forward into the two-story great room, rising slightly. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are.",
-   "card": "c-great"
+   "card": "c-great",
+   "still": true
   },
   {
    "photo": "great-room2.jpg",
-   "move": "Slow arc across the living area toward the fireplace. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are."
+   "move": "Slow arc across the living area toward the fireplace. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are.",
+   "still": true
   },
   {
    "photo": "kitchen-wide.jpg",
@@ -47,6 +49,10 @@
    "move": "Slow push toward the dining table and window."
   },
   {
+   "photo": "mudroom.jpg",
+   "move": "Slow push toward the built-in bench and hooks in the mudroom."
+  },
+  {
    "photo": "primary-bed.jpg",
    "move": "Slow dolly forward into the primary bedroom.",
    "card": "c-suite"
@@ -54,6 +60,10 @@
   {
    "photo": "primary-bath2.jpg",
    "move": "Slow lateral slide past the double vanity toward the soaking tub."
+  },
+  {
+   "photo": "bedroom-gray.jpg",
+   "move": "Slow dolly forward into the bedroom toward the bed and windows."
   },
   {
    "photo": "mtn-alpenglow.jpg",
@@ -64,6 +74,10 @@
    "photo": "covered-deck.jpg",
    "move": "Slow push out across the covered deck toward the yard and trees.",
    "card": "c-deck"
+  },
+  {
+   "photo": "deck.jpg",
+   "move": "Slow pull back across the open deck, showing the covered patio and the house. The fire table stays off."
   },
   {
    "photo": "rear-yard.jpg",
@@ -78,10 +92,6 @@
    "photo": "teh-trail-ferns.jpg",
    "move": "Slow forward glide along the forest trail between the ferns.",
    "card": "c-trails"
-  },
-  {
-   "photo": "clubhouse-aerial.jpg",
-   "move": "Slow aerial drift past the community clubhouse."
   },
   {
    "photo": "aerial-street.jpg",

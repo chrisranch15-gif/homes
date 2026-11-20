@@ -35,9 +35,19 @@ def clip_key(plan, shot):
     k = json.dumps([plan['model'], plan['ratio'], plan['seconds'], shot['photo'], shot['move'], plan['style'], shot.get('focus', 0.5)])
     return hashlib.sha256(k.encode()).hexdigest()[:16]
 
+def still(plan, shot, dst, work, i):
+    # A real camera-style move on the actual photo: nothing invented, costs nothing.
+    rw, rh = map(int, plan['ratio'].split(':')); W, H = (1920, 1080) if rw >= rh else (1080, 1920)
+    src = os.path.join(work, f'still{i}.jpg'); urllib.request.urlretrieve(SITE + shot['photo'], src)
+    fx = float(shot.get('focus', 0.5)); n = int(plan['seconds'] * 30)
+    crop = f"crop=ih*{W}/{H}:ih:(iw-ih*{W}/{H})*{fx}:0" if W / H < 1.5 else f"crop=iw:iw*{H}/{W}:0:(ih-iw*{H}/{W})/2"
+    ff('-loop', '1', '-i', src, '-vf', f"{crop},scale={W*2}:{H*2},zoompan=z='1+0.06*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30,format=yuv420p", '-frames:v', str(n), '-c:v', 'libx264', '-crf', '18', '-preset', 'veryfast', dst)
+    return dst
+
 def clip(plan, shot, i, work):
     dst = os.path.join(work, f'raw{i}.mp4')
     if os.path.exists(dst): return dst
+    if shot.get('still'): print('shot', i, shot['photo'], 'photo move (no AI, free)', flush=True); return still(plan, shot, dst, work, i)
     cache = os.path.join(ROOT, 'clips', clip_key(plan, shot) + '.mp4')
     if os.path.exists(cache):
         import shutil; shutil.copy(cache, dst); print('shot', i, shot['photo'], 'reused (free)', flush=True); return dst
@@ -64,7 +74,7 @@ def main(path):
     work = os.path.join('/tmp', 'film-' + os.path.basename(path) + '-' + h); os.makedirs(work, exist_ok=True)
     rw, rh = map(int, plan['ratio'].split(':')); W, H = (1920, 1080) if rw >= rh else (1080, 1920)
     FPS, XF, USE = 30, 0.7, float(plan.get('use', 4.0))
-    shots = plan['shots']; fresh = sum(not os.path.exists(os.path.join(ROOT, 'clips', clip_key(plan, s) + '.mp4')) for s in shots)
+    shots = plan['shots']; fresh = sum(not s.get('still') and not os.path.exists(os.path.join(ROOT, 'clips', clip_key(plan, s) + '.mp4')) for s in shots)
     raws = [clip(plan, s, i, work) for i, s in enumerate(shots)]
     norm, dur = [], []
     for i, r in enumerate(raws):

@@ -59,7 +59,9 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
     only a changed shot is regenerated. Never delete saved clips.
 11. Shot plans live in `source/video/shots/<listing>-<cut>.json`. Saving a new or changed plan starts the film.
     The output's `.json` records model, shots, new clips and credits spent.
-12. No animated flames or flickering lights; architecture, furniture and objects must not change.
+12. No animated flames or flickering lights; architecture, furniture and objects must not change. Shots with a
+    fireplace or anything AI tends to invent use `"still": true` (a real camera move on the photo, no AI, free).
+    The rooms Chris calls out as unique (for 19917: kitchen, primary suite, charcoal bedroom, mudroom, deck) are always in the film.
     Vertical cuts are true 9:16 (each photo cropped tall), never a crop of the widescreen film.
 
 **Engineering**

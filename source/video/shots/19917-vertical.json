@@ -1,19 +1,13 @@
 {
  "listing": "19917",
- "model": "gen4.5",
+ "model": "gen4_turbo",
  "ratio": "720:1280",
  "seconds": 5,
- "use": 3.8,
- "style": "Photorealistic luxury real estate film. Smooth, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture or objects, no text, no warping, no flames or flickering lights.",
+ "use": 4.6,
+ "style": "Photorealistic luxury real estate film. Very subtle, slow, steady gimbal camera move. Natural light. Keep the architecture exactly as it is: no people, no added furniture or objects, no text, no warping, no flames or flickering lights. Move the camera only a little.",
  "cards": "cards/19917/v",
  "out": "social/video/19917-vertical-30.mp4",
  "shots": [
-  {
-   "photo": "aerial-mountains.jpg",
-   "focus": 0.55,
-   "move": "Slow aerial drift forward over the neighborhood toward the distant mountains.",
-   "card": "open"
-  },
   {
    "photo": "front.jpg",
    "focus": 0.45,
@@ -24,7 +18,8 @@
    "photo": "great-room.jpg",
    "focus": 0.55,
    "move": "Slow dolly forward into the two-story great room, tilting up slightly toward the tall windows. The fire stays small and contained inside the fireplace. Lamps, lights and every object stay exactly where they are.",
-   "card": "c-great"
+   "card": "c-great",
+   "still": true
   },
   {
    "photo": "kitchen-wide.jpg",
@@ -33,15 +28,15 @@
    "card": "c-kitchen"
   },
   {
-   "photo": "dining.jpg",
-   "focus": 0.5,
-   "move": "Slow push toward the dining table and window."
-  },
-  {
    "photo": "primary-bed.jpg",
    "focus": 0.6,
    "move": "Slow dolly forward into the primary bedroom.",
    "card": "c-suite"
+  },
+  {
+   "photo": "mudroom.jpg",
+   "focus": 0.5,
+   "move": "Slow push toward the built-in bench and hooks in the mudroom."
   },
   {
    "photo": "mtn-alpenglow.jpg",

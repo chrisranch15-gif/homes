@@ -38,11 +38,13 @@
   {
    "photo": "kitchen-wide.jpg",
    "move": "Slow push forward along the kitchen island.",
-   "card": "c-kitchen"
+   "card": "c-kitchen",
+   "still": true
   },
   {
    "photo": "kitchen-great.jpg",
-   "move": "Slow lateral slide across the kitchen toward the great room."
+   "move": "Slow lateral slide across the kitchen toward the great room.",
+   "still": true
   },
   {
    "photo": "dining.jpg",

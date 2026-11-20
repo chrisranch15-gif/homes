@@ -25,7 +25,8 @@
    "photo": "kitchen-wide.jpg",
    "focus": 0.45,
    "move": "Slow push forward along the kitchen island.",
-   "card": "c-kitchen"
+   "card": "c-kitchen",
+   "still": true
   },
   {
    "photo": "primary-bed.jpg",

@@ -14,7 +14,8 @@ if (!session.visitor) session.visitor = 'V' + Math.random().toString(36).slice(2
 function keepSession() { try { sessionStorage.setItem('lc.session', JSON.stringify(session)); } catch (e) {} }
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const M = id => LC.MEDIA.find(m => m.id === id);
+const ALL_MEDIA = LC.MEDIA.slice();
+const M = id => ALL_MEDIA.find(m => m.id === id);
 const webp = f => typeof PUBLIC_SITE !== 'undefined' && /\.jpg$/.test(f) ? ` src="${f.replace(/\.jpg$/, '.webp')}" srcset="${f.replace(/\.jpg$/, '-800.webp')} 800w, ${f.replace(/\.jpg$/, '.webp')} 1600w" sizes="(max-width: 760px) 100vw, 60vw"` : ` src="${f}"`;
 const img = (id, cls, extra) => { const m = M(id); extra = extra || ''; return `<img class="${cls || ''}"${webp(m.file)} alt="${esc(m.alt)}" ${extra.indexOf('loading=') < 0 ? 'loading="lazy"' : ''} data-act="zoom" data-id="${m.id}" ${extra}>`; };
 const L = () => E.L(LID);
@@ -192,6 +193,17 @@ async function syncDrafts() {
    PROPERTY STORY (public)
    ============================================================ */
 const FEATURED = ['kitchen-wide', 'mtn-alpenglow', 'great-room', 'primary-bed2', 'bedroom-blue', 'covered-deck', 'greenbelt-yard', 'front-dusk', 'deck-fire'];
+const DEFAULT_FEATURED = FEATURED.slice();
+/* The agent's photo layout (order, hidden, featured grid). Saved from the Desk to the Sheet; the public page reads it from the engine. Hidden photos are never deleted, only left out. */
+let LAYOUT = { order: [], hidden: [], featured: [] };
+function applyLayout(L) {
+  LAYOUT = { order: (L && L.order) || [], hidden: (L && L.hidden) || [], featured: (L && L.featured) || [] };
+  const hid = new Set(LAYOUT.hidden), pos = new Map(LAYOUT.order.map((id, i) => [id, i]));
+  const list = ALL_MEDIA.filter(m => !hid.has(m.id)).map((m, i) => ({ m, k: pos.has(m.id) ? pos.get(m.id) : 1e4 + i })).sort((a, b) => a.k - b.k).map(x => x.m);
+  LC.MEDIA.splice(0, LC.MEDIA.length, ...list);
+  const feat = (LAYOUT.featured.length ? LAYOUT.featured : DEFAULT_FEATURED).filter(id => M(id) && !hid.has(id));
+  FEATURED.splice(0, FEATURED.length, ...feat);
+}
 function remarkParas(t) { const ss = String(t || '').match(/[^.!?]+[.!?]+(\s|$)/g) || [t || '']; const out = [ss[0].trim()], rest = ss.slice(1).map(x => x.trim()); const k = Math.ceil(rest.length / 2); if (rest.length) out.push(rest.slice(0, k).join(' ')); if (rest.length > k) out.push(rest.slice(k).join(' ')); return out.filter(Boolean); }
 function story() {
   const l = L(), a = E.assets(LID), t = T(), mode = l.mode || 'editorial';
@@ -753,6 +765,7 @@ function desk() {
   <p class="say">${esc(lead)} ${n <= 3 ? words[n] : n + ' decisions are yours.'}</p>
   ${shareBar()}
   ${ohBlock()}
+  ${photoBlock()}
   ${showBlock()}
   <form data-form="tell" class="tell"><label for="tell" class="eyebrow">Tell the Concierge</label><div class="tellrow"><input id="tell" name="q" placeholder="Schedule an open house Saturday, 1–4 pm" autocomplete="off"><button class="btn" ${ui.busy === 'tell' ? 'disabled' : ''}>${ui.busy === 'tell' ? '…' : 'Go'}</button></div>
     <div class="chips" style="margin-top:10px">${['What needs me today?', 'How is the listing doing?', 'Send my seller a quick update', 'Open house next Saturday 1–4 pm'].map(q => `<button type="button" class="chip" data-act="tell-q" data-q="${q}">${q}</button>`).join('')}</div></form>
@@ -1395,6 +1408,7 @@ if (SITE) {
   dirty = false; save = async () => {}; scheduleSave = () => {};
 } else boot(loadLocal());
 render();
+if (SITE && SITE.api) fetch(SITE.api + '?api=layout&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.ok && (d.order.length || d.hidden.length || d.featured.length)) { applyLayout(d); render(); } }).catch(() => {});
 if (SITE && SITE.api) fetch(SITE.api + '?api=openhouses&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.rows) { applyOpenHouses(d.rows); render(); } }).catch(() => {});
 if (window.claude && claude.use) connect();
 }

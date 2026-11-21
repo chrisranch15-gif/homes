@@ -125,6 +125,7 @@ function doGet(e) {
   if (p.api === 'ping') return out_({ ok: true, at: new Date().toISOString() });
   if (p.api === 'seller') return out_(sellerView_(p.code));
   if (p.api === 'openhouses') return out_(openHouses_(p.page));
+  if (p.api === 'layout') return out_(photoLayout_(p.page));
   if (p.api === 'unsub' && p.e && p.t === token_(p.e)) {
     const sh = tab_('Followers', FOLLOWER_HEADERS), rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) if (String(rows[i][3]).toLowerCase() === String(p.e).toLowerCase() && !rows[i][5]) sh.getRange(i + 1, 6).setValue(new Date());
@@ -134,6 +135,15 @@ function doGet(e) {
 }
 
 /* ---------------- open houses (added from the Desk, shown on the listing page) ---------------- */
+const LAYOUT_HEADERS = ['Saved', 'Page', 'Order', 'Hidden', 'Featured', 'By'];
+function photoLayout_(page) { // the agent's photo order, hidden photos and featured grid for a listing page; last saved row wins
+  page = String(page || '').trim(); const cache = CacheService.getScriptCache(), key = 'lay:' + page, hit = cache.get(key);
+  if (hit) return JSON.parse(hit);
+  const rows = tab_('Photo layout', LAYOUT_HEADERS).getDataRange().getDisplayValues().slice(1).filter(r => String(r[1]) === page);
+  const r = rows[rows.length - 1], j = v => { try { return JSON.parse(v || '[]'); } catch (e) { return []; } };
+  const res = r ? { ok: true, order: j(r[2]), hidden: j(r[3]), featured: j(r[4]), saved: r[0] } : { ok: true, order: [], hidden: [], featured: [] };
+  cache.put(key, JSON.stringify(res), 60); return res;
+}
 function openHouses_(page) {
   page = String(page || '').trim(); const cache = CacheService.getScriptCache(), key = 'oh:' + page, hit = cache.get(key);
   if (hit) return JSON.parse(hit);

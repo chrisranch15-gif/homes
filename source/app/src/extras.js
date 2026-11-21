@@ -249,8 +249,11 @@ async function liveLoad(quiet) {
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Leads!A2:J500' }),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Open houses'!A2:G200" }).catch(() => null),
-      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Showing agents'!A2:J500" }).catch(() => null)
-    ]).then(r => { ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); try { applyOpenHouses(ui.ohRows); } catch (e) {} return r; });
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Showing agents'!A2:J500" }).catch(() => null),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Photo layout'!A2:F500" }).catch(() => null)
+    ]).then(r => { ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); try { applyOpenHouses(ui.ohRows); } catch (e) {}
+      try { const lr = liveRows(r[4]).filter(x => String(x[1]) === '19917'); const last = lr[lr.length - 1]; if (last && !ui.photoDraft) { const j = v => { try { return JSON.parse(v || '[]'); } catch (e) { return []; } }; applyLayout({ order: j(last[2]), hidden: j(last[3]), featured: j(last[4]) }); ui.layoutSaved = last[0]; } } catch (e) {}
+      return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
   } catch (e) { ui.live = { at: Date.now(), error: (e && e.message) || 'Couldn’t reach the Sheet.' }; }
   ui.liveBusy = false; render();
@@ -274,6 +277,21 @@ function shareBar() {
 
 /* ---------- open houses: add from the Desk, publishes to the listing page within a minute ---------- */
 const OH_TIMES = (() => { const out = []; for (let h = 8; h <= 20; h++) for (const m of [0, 30]) out.push([String(h).padStart(2, '0') + String(m).padStart(2, '0'), ohClock(h, m, true)]); return out; })();
+/* ---------- listing photos: order, feature, hide. Nothing is deleted; hidden photos can come back any time. ---------- */
+function photoDraft() { if (!ui.photoDraft) { const hid = new Set(LAYOUT.hidden); ui.photoDraft = { list: LC.MEDIA.map(m => m.id).concat(ALL_MEDIA.filter(m => hid.has(m.id)).map(m => m.id)), hidden: LAYOUT.hidden.slice(), featured: FEATURED.slice() }; } return ui.photoDraft; }
+function photoBlock() {
+  if (!isStaff()) return '';
+  if (!ui.photoOpen) return `<div class="sharebar" id="photos-edit"><div class="eyebrow">Listing photos</div><p class="small muted" style="margin:8px 0 12px">${LC.MEDIA.length} photos on the page · ${FEATURED.length} in the top grid${ui.layoutSaved ? ' · last arranged ' + esc(ui.layoutSaved) : ''}</p><button class="btn ghost" data-act="photo-open">Arrange photos</button></div>`;
+  const d = photoDraft(), hid = new Set(d.hidden), fe = d.featured;
+  const tile = (id, i) => { const m = M(id); if (!m) return ''; const f = fe.indexOf(id);
+    return `<div class="ptile${hid.has(id) ? ' off' : ''}"><img src="${esc(m.thumb)}" alt="${esc(m.alt)}" loading="lazy"><div class="pt-n">${hid.has(id) ? 'Hidden' : f >= 0 ? '★ ' + (f + 1) : i + 1}</div><div class="pt-r">${esc(m.room)}</div>
+      <div class="pt-a"><button data-act="photo-mv" data-id="${id}" data-d="-1" aria-label="Move earlier">↑</button><button data-act="photo-mv" data-id="${id}" data-d="1" aria-label="Move later">↓</button><button data-act="photo-top" data-id="${id}" aria-label="Move to first">⇤</button><button data-act="photo-star" data-id="${id}" aria-pressed="${f >= 0}" aria-label="${f >= 0 ? 'Remove from' : 'Add to'} the top grid">${f >= 0 ? '★' : '☆'}</button><button data-act="photo-hide" data-id="${id}" aria-label="${hid.has(id) ? 'Show' : 'Hide'}">${hid.has(id) ? 'Show' : 'Hide'}</button></div></div>`; };
+  return `<div class="sharebar" id="photos-edit"><div class="eyebrow">Arrange listing photos</div>
+    <p class="small muted" style="margin:8px 0 14px">↑ ↓ change the order on the page. ★ puts a photo in the top grid (up to 9, in star order). Hide takes it off the page; nothing is deleted, and Show brings it back.</p>
+    <div class="ptiles">${d.list.map(tile).join('')}</div>
+    <div class="chips" style="margin-top:16px"><button class="btn" data-act="photo-save" ${ui.busy === 'photos' ? 'disabled' : ''}>${ui.busy === 'photos' ? 'Publishing…' : 'Publish to the listing page'}</button><button class="chip" data-act="photo-reset">Back to the original order</button><button class="chip" data-act="photo-close">Cancel</button></div>
+    <p class="small muted" style="margin-top:10px">Shows on homes.ranchpnw.com/19917 within a minute.</p></div>`;
+}
 function ohBlock() {
   if (!isStaff()) return '';
   const up = L().openHouses.filter(o => o.status === 'scheduled');
@@ -379,6 +397,16 @@ Object.assign(A, {
   'share-copy-post': () => copy(SHARE_TEXT + '\n\nSee every room and book a private tour: ' + PUBLIC_PAGE),
   'oh-cancel': async (el) => { const id = el.dataset.id, o = ohFromId(id); if (!o) return;
     if (await liveAppend('Open houses', [id, '19917', o.label.split(' · ')[0], '', '', 'Canceled', liveNow()], 'Removed from the listing page.')) { applyOpenHouses([{ id, status: 'Canceled' }]); render(); } },
+  'photo-open': () => { ui.photoOpen = true; ui.photoDraft = null; render(); },
+  'photo-close': () => { ui.photoOpen = false; ui.photoDraft = null; render(); },
+  'photo-mv': el => { const d = photoDraft(), i = d.list.indexOf(el.dataset.id), j = i + Number(el.dataset.d); if (i < 0 || j < 0 || j >= d.list.length) return; d.list.splice(i, 1); d.list.splice(j, 0, el.dataset.id); render(); },
+  'photo-top': el => { const d = photoDraft(), i = d.list.indexOf(el.dataset.id); if (i <= 0) return; d.list.splice(i, 1); d.list.unshift(el.dataset.id); render(); },
+  'photo-star': el => { const d = photoDraft(), id = el.dataset.id, f = d.featured.indexOf(id); if (f >= 0) d.featured.splice(f, 1); else { if (d.featured.length >= 9) return toast('The top grid holds 9. Unstar one first.'); d.featured.push(id); d.hidden = d.hidden.filter(x => x !== id); } render(); },
+  'photo-hide': el => { const d = photoDraft(), id = el.dataset.id; if (d.hidden.includes(id)) d.hidden = d.hidden.filter(x => x !== id); else { d.hidden.push(id); d.featured = d.featured.filter(x => x !== id); } render(); },
+  'photo-reset': () => { ui.photoDraft = { list: ALL_MEDIA.map(m => m.id), hidden: [], featured: DEFAULT_FEATURED.slice() }; render(); },
+  'photo-save': async () => { const d = photoDraft(); ui.busy = 'photos'; render();
+    const ok = await liveAppend('Photo layout', [liveNow(), '19917', JSON.stringify(d.list), JSON.stringify(d.hidden), JSON.stringify(d.featured), T().agent.name], 'Published. The listing page updates within a minute.');
+    ui.busy = null; if (ok) { applyLayout({ order: d.list, hidden: d.hidden, featured: d.featured }); ui.layoutSaved = liveNow(); ui.photoOpen = false; ui.photoDraft = null; } render(); },
   'show-fb': async (el) => {
     const x = showList().find(s => s.key === el.dataset.k); if (!x || !x.email) return;
     const first = String(x.agent || '').split(' ')[0] || 'there';

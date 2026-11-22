@@ -232,7 +232,7 @@ async function post(type, extra) {
   const send = b => fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(b) }).then(r => r.json());
   let r = await send(body);
   // engine not updated yet: still reaches Chris as a message with every detail
-  if (!r.ok && type !== 'open-house-feedback' && /Unknown request/.test(r.reason || '')) r = await send(Object.assign({}, body, { type: 'question', question: fallbackNote(type, extra) }));
+  if (!r.ok && !/^open-house-(feedback|notes)$/.test(type) && /Unknown request/.test(r.reason || '')) r = await send(Object.assign({}, body, { type: 'question', question: fallbackNote(type, extra) }));
   if (!r.ok) throw new Error(r.reason || 'That didn’t go through.');
   return r;
 }
@@ -259,7 +259,7 @@ function render() {
     ${GUEST ? `<p>The sellers ask that every guest sign in before touring.</p><button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>`
     : `<p>The sellers ask that every guest sign in before touring.*</p>
     <div class="glass">${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}</div>
-    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><button class="cta light" id="go">Continue ${I.arrow}</button><p class="promise">*Your info goes only to Chris. Signing in won’t sign you up for automated texts or calls, and it’s never shared or sold.</p>`}
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><button class="cta light" id="go">Continue ${I.arrow}</button><p class="promise">*Signing in simply lets the sellers know who’s been through their home. No automated texts, no repeated calls, and your info goes only to Chris, never shared or sold.</p>`}
     <p class="fine">Hosted by Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</p></div></section>`;
   if (S.step === 1) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(1)}</div>
     <p class="mono">Step one</p><h2>Who’s visiting today?</h2><p class="lede">So the sellers know who has been through their home.</p>
@@ -304,7 +304,7 @@ function renderDone(app) {
       <div class="more vin" id="cp">${consultPicker()}<button class="cta dark" id="cs" style="margin-top:18px">Request my consult ${I.arrow}</button>
       <p class="fine" style="color:rgba(22,25,27,.6);text-align:left">For buyers not currently working with an agent.</p></div>`}</div></div>`}
 
-    <div class="sect"><p class="mono" style="color:var(--gold)">As you tour</p><h4>Which room won you over?</h4><p class="s">Tap your favorite. The sellers love hearing it.</p>
+    <div class="sect"><p class="mono" style="color:var(--gold)">As you tour</p><h4>Which room won you over?</h4><p class="s">Tap your favorite. I’ll let the sellers know.</p>
       <div class="rooms">${H.rooms.map(([n, f]) => `<button class="room${S.room===n?' sel':S.room?' dim':''}" data-room="${esc(n)}"><img src="photos/${f}-800.webp" alt="${esc(n)}" loading="lazy"><i class="h">${I.heart}</i><span>${esc(n)}</span></button>`).join('')}</div></div>
 
     <div class="sect"><p class="mono" style="color:var(--gold)">Honestly</p><h4>Is this the one?</h4>
@@ -314,7 +314,7 @@ function renderDone(app) {
       <p class="thanks" id="ty"></p></div>
 
     <div class="sect"><p class="mono" style="color:var(--gold)">In your words</p><h4>Anything else the sellers should hear?</h4>
-      <p class="s">Type it, or tap the mic and just talk. Shared with the sellers without your name.</p>
+      <p class="s">Type it, or tap the mic and just talk. It comes straight to me, and I pass it along to the sellers without your name.</p>
       <div class="note"><textarea id="fbt" rows="3" placeholder="Loved the kitchen, wished the yard was bigger…">${esc(S.note || '')}</textarea>
         ${SR ? `<button class="mic" id="mic" aria-label="Speak your feedback">${I.mic}</button>` : ''}</div>
       <button class="cta light" id="fbs" style="margin-top:12px">${S.noteSent ? 'Sent. Thank you' : 'Send my thoughts'} ${S.noteSent ? I.check.replace('currentColor', '#16191B') : I.arrow}</button></div>
@@ -357,7 +357,7 @@ function renderOffer(app) {
       <div class="more" id="ao">${field('ot','Which area or neighborhood?','text','off','')}</div></div>`
       : addrFields()}
     <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er" style="color:#E3A08F"></p>
-    <button class="cta light" id="sb">${off ? 'Request my consult' : 'Send my value report'} ${I.arrow}</button><p class="promise" style="text-align:left">Your info goes only to Chris. No automated texts or calls, and it’s never shared or sold.</p></div>
+    <button class="cta light" id="sb">${off ? 'Request my consult' : 'Send my value report'} ${I.arrow}</button><p class="promise" style="text-align:left">Your info goes only to Chris. No automated texts, no repeated calls, never shared or sold.</p></div>
     <div class="sig"><img src="photos/chris-ranch.jpg" alt="Chris Ranch"><div><b>Chris Ranch</b>The Ranch Real Estate Group · Keller Williams Realty Puget Sound · Call or text ${PHONE}</div></div></section>`;
   wireChips(app);
   if (off) $('#ag').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { const yes = c.dataset.w === 'Yes';
@@ -438,7 +438,7 @@ function sendFeedback() {
   clearTimeout(fbTimer); keep();
   fbTimer = setTimeout(() => {
     const fb = [S.room && 'Favorite room: ' + S.room, S.verdict && 'Is this the one: ' + S.verdict, S.missing.length && 'Would make it the one: ' + S.missing.join(', '), S.note && 'In their words: ' + S.note].filter(Boolean).join(' · ');
-    if (fb) post('open-house-feedback', { interest: S.verdict || '', feedback: fb, question: fb }).catch(() => {});
+    if (fb) post('open-house-notes', { interest: S.verdict || '', feedback: fb, question: fb }).catch(() => {});
   }, 1800);
 }
 
@@ -446,7 +446,7 @@ function wireDone() {
   const t = $('#fbt');
   if (t) {
     t.oninput = () => { S.note = t.value.trim(); if (S.noteSent) { S.noteSent = false; $('#fbs').innerHTML = 'Send my thoughts ' + I.arrow; } };
-    $('#fbs').onclick = () => { S.note = t.value.trim(); if (!S.note) return toast('Type or say a few words first.'); S.noteSent = true; sendFeedback(); $('#fbs').innerHTML = 'Sent. Thank you ' + I.check.replace('currentColor', '#16191B'); toast('The sellers will hear it.'); };
+    $('#fbs').onclick = () => { S.note = t.value.trim(); if (!S.note) return toast('Type or say a few words first.'); S.noteSent = true; sendFeedback(); $('#fbs').innerHTML = 'Sent. Thank you ' + I.check.replace('currentColor', '#16191B'); toast('Thank you. I’ll pass it along.'); };
     if ($('#mic')) {
       let rec = null;
       $('#mic').onclick = () => {
@@ -462,7 +462,7 @@ function wireDone() {
   }
   document.querySelectorAll('.room').forEach(r => r.onclick = () => {
     S.room = r.dataset.room; document.querySelectorAll('.room').forEach(x => { x.classList.toggle('sel', x === r); x.classList.toggle('dim', x !== r); });
-    toast('The sellers will love that.'); sendFeedback();
+    toast('Noted. Thank you.'); sendFeedback();
   });
   document.querySelectorAll('.v').forEach(v => v.onclick = () => {
     S.verdict = v.dataset.v; document.querySelectorAll('.v').forEach(x => x.classList.toggle('sel', x === v));

@@ -87,13 +87,15 @@ function doPost(e) {
     return out_({ ok: true, saved: rows.length });
   }
   if (d.website) return out_({ ok: true });               // hidden field: bots only
-  if (type === 'open-house-feedback') {                     // anonymous room/verdict taps; shows in the seller portal's feedback
-    const home = clean_(d.listing, 80), fb = clean_(d.feedback, 400);
+  if (type === 'open-house-notes' || type === 'open-house-feedback') {   // guest feedback: private to Chris; he decides what the sellers see
+    const home = clean_(d.listing, 80), fb = clean_(d.feedback, 1200);
     if (!home || !fb) return out_({ ok: false, reason: 'Nothing to save' });
-    const key = 'fb:' + clean_(d.email, 120).toLowerCase() + ':' + home, cache = CacheService.getScriptCache(), sh = tab_('Showings', SHOWING_HEADERS);
+    const key = 'fb:' + clean_(d.email, 120).toLowerCase() + ':' + home, cache = CacheService.getScriptCache();
+    const sh = tab_('Open house feedback', ['When', 'Home', 'Name', 'Email', 'Is this the one', 'Feedback', 'Shared with sellers']);
+    const vals = [[new Date(), home, clean_(d.name, 80), clean_(d.email, 120), clean_(d.interest, 20), fb]];
     const row = Number(cache.get(key) || 0);                // the same guest changing answers updates one row
-    if (row) sh.getRange(row, 1, 1, 4).setValues([[new Date(), home, 'Open house \u00b7 ' + (clean_(d.interest, 20) || 'feedback'), fb]]);
-    else { sh.appendRow([new Date(), home, 'Open house \u00b7 ' + (clean_(d.interest, 20) || 'feedback'), fb]); cache.put(key, String(sh.getLastRow()), 21600); }
+    if (row) sh.getRange(row, 1, 1, 6).setValues(vals);
+    else { sh.appendRow(vals[0].concat(['No'])); cache.put(key, String(sh.getLastRow()), 21600); }
     return out_({ ok: true });
   }
   const t = TYPES[type];

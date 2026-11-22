@@ -270,7 +270,7 @@ function renderDone(app) {
         <div class="chips">${missingOpts.map(m => `<button class="chip${S.missing.includes(m)?' sel':''}" data-m="${m}">${m}</button>`).join('')}</div></div>
       <p class="thanks" id="ty"></p></div>
 
-    <div class="sect"><p class="mono" style="color:var(--gold)">Before you go</p><h4>The market has changed.</h4>
+    <div class="sect"><p class="mono" style="color:var(--gold)">Before you go</p><h4>Own a home nearby?</h4>
       <button class="offer${S.valSent?' ok':''}" id="o2"><span class="ic">${S.valSent?I.check.replace('currentColor','#16191B'):I.chart}</span><span><b>${S.valSent?'Your value report is on its way':'The market has changed.'}</b><small>${S.valSent?'I prepare every one personally from real recent sales.':'Need an updated value report on your home? I’ll prepare it personally.'}</small></span></button>
       <div class="more dark-in" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}<button class="cta light save" id="vs" style="margin-top:4px">Send my value report ${I.arrow}</button></div></div>
 

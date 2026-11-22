@@ -103,6 +103,10 @@ footer{padding:36px 0 60px;font-size:13px;color:var(--muted)}
 
 details{border-top:1px solid var(--line);padding:16px 0}details summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none}details summary::-webkit-details-marker{display:none}details summary:after{content:" +";color:var(--muted)}details[open] summary:after{content:" –"}
 .prep{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 40px;margin-top:18px}.pg h3{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#8C6A43;margin:0 0 6px;font-weight:600}
+.pprog{margin:4px 0 16px}.pbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;max-width:520px}.pbar i{display:block;height:100%;background:#8C6A43;transition:width .3s}.pprog p{margin:10px 0 0;font-size:15px}
+.chk li{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.chk label{flex:1}.pa{display:flex;gap:6px;flex:none}.ask{border:0;background:none;padding:3px 0;font:inherit;font-size:12px;color:#8C6A43;cursor:pointer;opacity:.75}.ask:hover{opacity:1;text-decoration:underline}
+.padd{display:flex;gap:8px;margin-top:10px}.padd input{flex:1;min-width:0}
+.facts{display:grid;gap:18px;max-width:720px;margin-top:20px}.facts label{display:grid;gap:8px}.facts label span{font-weight:500;font-size:15px}.facts textarea{width:100%;font:inherit;font-size:15px;padding:12px;border:1px solid var(--line);background:#fff;border-radius:2px;resize:vertical}
 .chk{list-style:none;margin:0;padding:0}.chk li{padding:6px 0}.chk label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.45}.chk input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:#1E2327}.chk input:checked+span{color:var(--muted);text-decoration:line-through}
 .pn{font-size:14px;color:var(--muted);font-style:italic;margin:8px 0 0}
 @media(max-width:760px){.prep{grid-template-columns:1fr}}
@@ -142,15 +146,55 @@ function load(code,fresh){
 }
 
 var PREP=__PREP__;
-function prepHtml(si){
-  var key='ranch.prep.'+(window.CODE||''),done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
-  var closingNow=si>=3, groups=function(when){return PREP.groups.filter(function(g){return g.when===when})};
-  var box=function(g){return '<div class="pg"><h3>'+esc(g.name)+'</h3><ul class="chk">'+g.items.map(function(t,n){var id=g.id+'-'+n;return '<li><label><input type="checkbox" data-prep="'+id+'"'+(done[id]?' checked':'')+'><span>'+esc(t)+'</span></label></li>'}).join('')+'</ul>'+(g.note?'<p class="pn">'+esc(g.note)+'</p>':'')+'</div>'};
-  var before='<details'+(si<=1?' open':'')+'><summary>Before we list · '+groups('before').reduce(function(n,g){return n+g.items.length},0)+' small things buyers notice</summary><p class="muted" style="margin:10px 0 0">'+esc(PREP.lede)+'</p><div class="prep">'+groups('before').map(box).join('')+'</div></details>';
-  var closing='<details'+(closingNow?' open':'')+'><summary>As closing gets close</summary><div class="prep">'+groups('closing').map(box).join('')+'</div></details>';
-  return '<section><div class="wrap"><p class="eyebrow">Your checklist</p><h2>Getting ready</h2><p class="muted" style="margin:0 0 14px">Tick things off as you go. Only you see your ticks, on this device.</p>'+(closingNow?closing+before:before+closing)+'</div></section>';
+function hk(t){var h=5381;for(var i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36).slice(0,6)}
+var PD={code:'',home:'',rows:[]};
+function pdone(k){return PD.rows.some(function(r){return r.key===k&&r.done})}
+function prepHtml(si,d,code){
+  PD={code:code,home:d.home,rows:d.prep||[]};
+  return '<section id="prep"><div class="wrap"><p class="eyebrow">Your checklist</p><h2>Getting ready</h2><div id="prepbody">'+prepBody(si,d)+'</div></div></section>';
 }
-document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||!t.dataset.prep)return;var key='ranch.prep.'+(window.CODE||''),d={};try{d=JSON.parse(localStorage.getItem(key)||'{}')}catch(x){}if(t.checked)d[t.dataset.prep]=1;else delete d[t.dataset.prep];try{localStorage.setItem(key,JSON.stringify(d))}catch(x){}});
+function prepBody(si,d){
+  var closingNow=si>=3, groups=function(when){return PREP.groups.filter(function(g){return g.when===when})};
+  var li=function(k,t,own){return '<li><label><input type="checkbox" data-prep="'+k+'"'+(pdone(k)?' checked':'')+'><span>'+esc(t)+'</span></label><span class="pa"><button type="button" class="ask" data-ask="'+esc(t)+'" aria-label="Ask Chris about this">Ask</button>'+(own?'<button type="button" class="ask" data-rm="'+k+'" aria-label="Remove">Remove</button>':'')+'</span></li>'};
+  var box=function(name,items,note,extra){return '<div class="pg"><h3>'+esc(name)+'</h3><ul class="chk">'+items.join('')+'</ul>'+(note?'<p class="pn">'+esc(note)+'</p>':'')+(extra||'')+'</div>'};
+  var mine=PD.rows.filter(function(r){return r.from==='Chris'}), own=PD.rows.filter(function(r){return r.from==='Seller'});
+  var keysBefore=[];groups('before').forEach(function(g){g.items.forEach(function(t){keysBefore.push(g.id+'-'+hk(t))})});
+  mine.concat(own).forEach(function(r){keysBefore.push(r.key)});
+  var left=keysBefore.filter(function(k){return !pdone(k)}).length, total=keysBefore.length, doneN=total-left;
+  var head='<div class="pprog"><div class="pbar"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div><p><b>'+doneN+' of '+total+'</b> done before we list'+(function(){if(!d.photoDay)return '';var pd=new Date(d.photoDay),days=Math.ceil((new Date(pd.toDateString())-new Date(new Date().toDateString()))/864e5);if(days<0)return '';return ' · <b>Photos '+(days===0?'today':days===1?'tomorrow':pd.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))+'</b>, '+left+' to go'})()+'</p></div>';
+  var cards=[];
+  if(mine.length)cards.push(box('From Chris, for your home',mine.map(function(r){return li(r.key,r.text)})));
+  groups('before').forEach(function(g){cards.push(box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note))});
+  cards.push(box('Your own list',own.map(function(r){return li(r.key,r.text,1)}),'','<form class="padd" id="padd"><input id="paddt" maxlength="160" placeholder="Add something, like “fix the gate latch”" aria-label="Add your own item"><button class="btn line">Add</button></form>'));
+  var before='<details'+(si<=1?' open':'')+'><summary>Before we list</summary><p class="muted" style="margin:10px 0 0">'+esc(PREP.lede)+'</p><div class="prep">'+cards.join('')+'</div></details>';
+  var closing='<details'+(closingNow?' open':'')+'><summary>As closing gets close</summary><div class="prep">'+groups('closing').map(function(g){return box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note)}).join('')+'</div></details>';
+  return head+'<p class="muted" style="margin:0 0 14px">Tick things off as you go. Your ticks save to your portal, so they’re there on any device.</p>'+(closingNow?closing+before:before+closing);
+}
+var PSI=0,PDD=null;
+function prepPost(body,ok){fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'seller-prep',code:PD.code},body))}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw j;PD.rows=j.prep||PD.rows;ok&&ok()}).catch(function(j){toast((j&&j.reason)||'That didn’t save — please try again.');ok&&ok(1)})}
+function prepRedraw(){var b=document.getElementById('prepbody');if(!b)return;var open=[].map.call(b.querySelectorAll('details'),function(x){return x.open});b.innerHTML=prepBody(PSI,PDD);[].forEach.call(b.querySelectorAll('details'),function(x,i){if(open[i]!=null)x.open=open[i]})}
+document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||!t.dataset.prep)return;var k=t.dataset.prep,on=t.checked;
+  var r=PD.rows.filter(function(x){return x.key===k})[0];if(r)r.done=on;else PD.rows.push({key:k,done:on,from:'List',text:''});prepRedraw();
+  prepPost({action:'tick',key:k,done:on},function(bad){if(bad){var r=PD.rows.filter(function(x){return x.key===k})[0];if(r)r.done=!on}prepRedraw()})});
+document.addEventListener('submit',function(e){if(e.target.id!=='padd')return;e.preventDefault();var i=document.getElementById('paddt'),t=i.value.trim();if(!t)return;i.disabled=true;prepPost({action:'add',text:t},function(bad){prepRedraw();if(bad){var j=document.getElementById('paddt');j.value=t}})});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button[data-ask],button[data-rm]');if(!b)return;
+  if(b.dataset.rm){b.disabled=true;prepPost({action:'remove',key:b.dataset.rm},function(){prepRedraw()});return}
+  var m=document.getElementById('msg');if(!m)return;m.value='About “'+b.dataset.ask+'”: ';m.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){m.focus();m.setSelectionRange(m.value.length,m.value.length)},400)});
+var FACTQ=[['love','What’s your favorite thing about living here that buyers won’t know until they move in?','The spot where the sun hits in the morning, the view from the tub…'],
+ ['life','Walk me through a day here. Mornings, evenings, weekends: what’s it like?','Coffee on the deck, kids on bikes after dinner, Saturday trail loop…'],
+ ['community','What do only the locals know? Neighbors, the community, favorite spots nearby.','The block party in August, the best walk, the coffee stand nobody finds…'],
+ ['updates','What have you updated, and when?','New roof 2021, kitchen 2019, fresh paint this spring…'],
+ ['systems','Roughly how old are the roof, furnace and water heater?',''],
+ ['utilities','Who are your utility providers, and about what do you pay each month?','Power, water, sewer, garbage, internet'],
+ ['hoa','HOA name, dues and contact, if you have one',''],
+ ['know','Anything else a buyer should know?','']];
+function factsHtml(d){var f=d.facts||{};
+  return '<section id="facts"><div class="wrap"><p class="eyebrow">Things only you know</p><h2>Help me tell your home’s story</h2><p class="muted" style="max-width:640px">You know this home in ways no photo can show. A few words each is plenty, and skip anything you’re not sure of. You can come back and add more any time.</p><form id="ff" class="facts">'+
+   FACTQ.map(function(q){return '<label><span>'+esc(q[1])+'</span><textarea name="'+q[0]+'" rows="3" maxlength="1000" placeholder="'+esc(q[2])+'">'+esc(f[q[0]]||'')+'</textarea></label>'}).join('')+
+   '<div><button class="btn">Save</button> <span class="muted small" id="ffs">'+(f.at?'Last saved '+new Date(f.at).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'')+'</span></div></form></div></section>';
+}
+document.addEventListener('submit',function(e){if(e.target.id!=='ff')return;e.preventDefault();var f=e.target,b=f.querySelector('button'),o={};FACTQ.forEach(function(q){o[q[0]]=f.elements[q[0]].value.trim()});b.disabled=true;b.textContent='Saving…';
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'seller-facts',code:PD.code,facts:o})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw j;b.disabled=false;b.textContent='Save';document.getElementById('ffs').textContent='Saved. Thank you, this helps me a lot.'}).catch(function(j){b.disabled=false;b.textContent='Save';toast((j&&j.reason)||'That didn’t save — please try again.')})});
 var STAGES=[['Prepared','Photos, story, pricing'],['Listed','On NWMLS'],['Showing','Tours & open houses'],['Offer','Review & negotiate'],['Under contract','Inspection & appraisal'],['Closed','Keys handed over']];
 function stageIndex(s){s=String(s||'').toLowerCase();if(/closed|sold/.test(s))return 5;if(/contract|pending/.test(s))return 4;if(/offer/.test(s))return 3;return 2}
 
@@ -170,7 +214,7 @@ function render(d,code){
   var html='';
   html+='<div class="hero" style="background-image:url(photos/front-dusk.jpg)"><div class="wrap"><p class="eyebrow">Day '+days+' on the market · '+esc(d.status||'Active')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' · Tehaleh, Bonney Lake</p><div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div></div></div>';
   html+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your journey</h2><ol class="journey">'+STAGES.map(function(s,i){return '<li class="'+(i<si?'done':i===si?'now':'')+'"><b>'+s[0]+'</b>'+s[1]+'</li>'}).join('')+'</ol></div></section>';
-  html+=prepHtml(si);
+  PSI=si;PDD=d;html+=prepHtml(si,d,code)+factsHtml(d);
   // across the web
   var P={};(d.portals||[]).forEach(function(x){P[x.site.toLowerCase()]=x});
   var soc=d.social||[],reach=0,has=false;soc.forEach(function(x){if(x.reach!=null||x.paidReach!=null){has=true;reach+=(x.reach||0)+(x.paidReach||0)}});

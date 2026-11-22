@@ -32,7 +32,7 @@ const OFFMARKET_HEADERS = ['Requested', 'Name', 'Phone', 'Email', 'Meeting', 'Be
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
-const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status'];
+const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day'];
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
@@ -87,6 +87,8 @@ function doPost(e) {
     return out_({ ok: true, saved: rows.length });
   }
   if (d.website) return out_({ ok: true });               // hidden field: bots only
+  if (type === 'seller-prep') return out_(sellerPrep_(d));
+  if (type === 'seller-facts') return out_(sellerFacts_(d));
   if (type === 'open-house-notes' || type === 'open-house-feedback') {   // guest feedback: private to Chris; he decides what the sellers see
     const home = clean_(d.listing, 80), fb = clean_(d.feedback, 1200);
     if (!home || !fb) return out_({ ok: false, reason: 'Nothing to save' });
@@ -286,12 +288,78 @@ function schedule_(home) {
     .sort((a, b) => b.at - a.at).slice(0, 40);
 }
 
+/* ---------------- seller checklist and home facts ----------------
+   The shared list lives in the site (content/prep.json); this tab keeps each seller's ticks,
+   Chris's own items for that home (From = Chris) and items the sellers add (From = Seller). */
+const PREP_HEADERS = ['Code', 'Home', 'Key', 'Item', 'From', 'Done', 'Updated'];
+const FACT_FIELDS = [['updates', 'Updates and the year'], ['systems', 'Roof, furnace and water heater ages'], ['utilities', 'Utility providers and average monthly bills'],
+  ['hoa', 'HOA name, dues and contact'], ['love', 'Favorite thing about the home that buyers will only discover living here'],
+  ['life', 'A day here: mornings, evenings, weekends'], ['community', 'Neighborhood and community: what only locals know'], ['know', 'Anything a buyer should know']];
+const FACT_HEADERS = ['Code', 'Home', 'Updated'].concat(FACT_FIELDS.map(f => f[1]));
+function prepView_(code) {
+  return tab_('Seller prep', PREP_HEADERS).getDataRange().getValues().slice(1)
+    .filter(r => String(r[0]).toUpperCase() === code && String(r[4]) !== 'Removed')
+    .map(r => ({ key: String(r[2]), text: String(r[3] || ''), from: String(r[4] || 'List'), done: r[5] === true || /^yes$/i.test(String(r[5])), at: r[6] ? new Date(r[6]).getTime() : null }));
+}
+// one row per seller + item; only the fields in patch change. onlyFrom: refuse unless the row came from that person
+function prepSet_(code, home, key, patch, onlyFrom) {
+  if (!/^[\w-]{1,40}$/.test(key)) return false;
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(10000)) return false;
+  try {
+    const sh = tab_('Seller prep', PREP_HEADERS), rows = sh.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) if (String(rows[i][0]).toUpperCase() === code && String(rows[i][2]) === key) {
+      if (onlyFrom && String(rows[i][4]) !== onlyFrom) return false;
+      if ('item' in patch) sh.getRange(i + 1, 4).setValue(patch.item);
+      if ('from' in patch) sh.getRange(i + 1, 5).setValue(patch.from);
+      if ('done' in patch) sh.getRange(i + 1, 6).setValue(patch.done ? 'Yes' : '');
+      sh.getRange(i + 1, 7).setValue(new Date()); return true;
+    }
+    if (onlyFrom) return false;
+    sh.appendRow([code, home, key, patch.item || '', patch.from || 'List', patch.done ? 'Yes' : '', new Date()]); return true;
+  } finally { lock.releaseLock(); }
+}
+function sellerPrep_(d) {
+  const sel = seller_(d.code); if (!sel) return { ok: false, reason: 'Please sign in again.' };
+  const key = clean_(d.key, 40);
+  if (d.action === 'tick') { if (!prepSet_(sel.code, sel.home, key, { done: !!d.done })) return { ok: false, reason: 'Not saved' }; }
+  else if (d.action === 'add') {
+    const text = clean_(d.text, 160); if (!text) return { ok: false, reason: 'Type something to add.' };
+    if (prepView_(sel.code).filter(x => x.from === 'Seller').length >= 40) return { ok: false, reason: 'Your list is full.' };
+    prepSet_(sel.code, sel.home, 's-' + Date.now().toString(36), { item: text, from: 'Seller' });
+  }
+  else if (d.action === 'remove') { if (!prepSet_(sel.code, sel.home, key, { from: 'Removed' }, 'Seller')) return { ok: false, reason: 'Only your own items can be removed.' }; }
+  else return { ok: false, reason: 'Bad request' };
+  return { ok: true, prep: prepView_(sel.code) };
+}
+function factsView_(code) {
+  const r = tab_('Home facts', FACT_HEADERS).getDataRange().getValues().slice(1).filter(x => String(x[0]).toUpperCase() === code)[0];
+  if (!r) return null;
+  const o = { at: r[2] ? new Date(r[2]).getTime() : null }; FACT_FIELDS.forEach((f, i) => o[f[0]] = String(r[3 + i] || '')); return o;
+}
+function sellerFacts_(d) {
+  const sel = seller_(d.code); if (!sel) return { ok: false, reason: 'Please sign in again.' };
+  const f = d.facts || {}, vals = FACT_FIELDS.map(x => clean_(String(f[x[0]] || '').replace(/\r?\n/g, ' / '), 1000));
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(10000)) return { ok: false, reason: 'Busy for a moment \u2014 please try again.' };
+  try {
+    const sh = tab_('Home facts', FACT_HEADERS), rows = sh.getDataRange().getValues(), row = [sel.code, sel.home, new Date()].concat(vals);
+    let at = 0; for (let i = 1; i < rows.length; i++) if (String(rows[i][0]).toUpperCase() === sel.code) at = i + 1;
+    if (at) sh.getRange(at, 1, 1, row.length).setValues([row]); else sh.appendRow(row);
+  } finally { lock.releaseLock(); }
+  const cache = CacheService.getScriptCache();               // one email an hour at most, however often they save
+  if (!cache.get('facts:' + sel.code)) {
+    cache.put('facts:' + sel.code, '1', 3600);
+    const body = FACT_FIELDS.map((x, i) => vals[i] ? '<tr><td style="padding:8px 12px 8px 0;font:13px Arial;color:#8C6A43;vertical-align:top;white-space:nowrap">' + esc_(x[1]) + '</td><td style="padding:8px 0;font:15px/1.5 Arial">' + esc_(vals[i]) + '</td></tr>' : '').join('');
+    try { GmailApp.sendEmail(AGENT_EMAIL, 'Home facts from ' + sel.names + ' \u00b7 ' + sel.home, FACT_FIELDS.map((x, i) => x[1] + ': ' + (vals[i] || '\u2014')).join('\n'), { htmlBody: shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">From your seller portal</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(sel.names) + ' filled in their home facts</h1><table style="border-collapse:collapse">' + body + '</table>'), name: 'Ranch Leads' }); } catch (err) { console.error(err); }
+  }
+  return { ok: true, facts: factsView_(sel.code) };
+}
+
 /* ---------------- seller portal ---------------- */
 function seller_(code) {
   code = String(code || '').trim().toUpperCase(); if (code.length < 6) return null;
   const rows = tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1);
   const r = rows.filter(x => String(x[0]).toUpperCase() === code)[0];
-  return r ? { code: r[0], names: r[1], home: r[2], page: String(r[3]), listed: r[4] ? new Date(r[4]).getTime() : null, status: r[5] || 'Active' } : null;
+  return r ? { code: String(r[0]).toUpperCase(), names: r[1], home: r[2], page: String(r[3]), listed: r[4] ? new Date(r[4]).getTime() : null, status: r[5] || 'Active', photoDay: r[6] instanceof Date ? r[6].getTime() : (r[6] ? new Date(r[6]).getTime() || null : null) } : null;
 }
 function sellerView_(code) {
   const cache = CacheService.getScriptCache(), tries = Number(cache.get('sellerTries') || 0);
@@ -308,6 +376,7 @@ function sellerView_(code) {
   const count = label => leads.filter(r => r[1] === label).length;
   const pick = (name, headers, map) => tab_(name, headers).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home).map(map).sort((a, b) => b.at - a.at).slice(0, 25);
   return { ok: true, sellers: sel.names, home: sel.home, page: sel.page, listed: sel.listed, status: sel.status,
+    photoDay: sel.photoDay, prep: prepView_(sel.code), facts: factsView_(sel.code),
     metrics: { visitors: Object.keys(seen).length, visitors7: Object.keys(seen7).length, shared, scans, tours: count('Tour request'), following: count('Following the home'), questions: count('Question about the home') },
     updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),
     marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
@@ -506,6 +575,24 @@ function officePost_(d) {
     if (d.op === 'stories') {
       const rows = tab_('Unlisted stories', ['Added']).getDataRange().getValues().slice(1);
       return { ok: true, stories: rows.map(r => ({ at: new Date(r[0]).getTime(), area: String(r[1]), year: String(r[2]), level: String(r[11] || ''), status: String(r[12] || '') })).reverse() };
+    }
+    if (d.op === 'prep') {                                   // every seller's checklist progress, their own items and home facts
+      const rows = tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1).filter(r => r[0]);
+      return { ok: true, sellers: rows.map(r => { const sel = seller_(r[0]); return { code: sel.code, names: sel.names, home: sel.home, status: sel.status, photoDay: sel.photoDay, prep: prepView_(sel.code), facts: factsView_(sel.code) }; }) };
+    }
+    if (d.op === 'prepItem') {                               // Chris's own items for one seller: add, edit, remove
+      const sel = seller_(d.code); if (!sel) return { ok: false, reason: 'No seller with that code' };
+      const text = clean_(d.text, 200);
+      if (d.action === 'add') { if (!text) return { ok: false, reason: 'Empty item' }; prepSet_(sel.code, sel.home, 'c-' + Date.now().toString(36), { item: text, from: 'Chris' }); }
+      else if (d.action === 'edit') { if (!text) return { ok: false, reason: 'Empty item' }; prepSet_(sel.code, sel.home, clean_(d.key, 40), { item: text }, 'Chris'); }
+      else if (d.action === 'remove') prepSet_(sel.code, sel.home, clean_(d.key, 40), { from: 'Removed' }, 'Chris');
+      return { ok: true, prep: prepView_(sel.code) };
+    }
+    if (d.op === 'photoDay') {                               // the date the countdown in the seller portal points at
+      const sh = tab_('Sellers', SELLER_HEADERS), rows = sh.getDataRange().getValues(), code = String(d.code || '').toUpperCase();
+      if (sh.getRange(1, 7).getValue() !== 'Photo day') sh.getRange(1, 7).setValue('Photo day').setFontWeight('bold');
+      for (let i = 1; i < rows.length; i++) if (String(rows[i][0]).toUpperCase() === code) { sh.getRange(i + 1, 7).setValue(d.date ? new Date(d.date + 'T12:00:00') : ''); return { ok: true }; }
+      return { ok: false, reason: 'No seller with that code' };
     }
     return { ok: false, reason: 'unknown' };
   } catch (err) { return { ok: false, reason: String(err && err.message || err).slice(0, 300) }; }

@@ -409,6 +409,7 @@ function listingSheet(a) {
     ${l.code ? `<a class="lrow" href="https://homes.ranchpnw.com/sellers#code=${esc(l.code)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Seller portal · ${esc(l.sellers || '')}</span><span class="s" style="display:block">Code ${esc(l.code)}</span></span>${I.chev}</a>` : ''}
     <button class="lrow" data-act="shoot" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Photo shoot</span><span class="s" style="display:block">${(sh => sh ? esc([sh.status, sh.pkg && sh.pkg.split(':')[0], sh.total].filter(Boolean).join(' · ')) : 'Order from Rainier · text, email or book')(shootFor(a))}</span></span>${I.chev}</button>
     <button class="lrow" data-act="portals" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Update Zillow &amp; Redfin numbers</span></span>${I.chev}</button>
+    <button class="lrow" data-act="prep" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Seller checklist &amp; home facts</span><span class="s" style="display:block">Their progress, your items for this home, photo day</span></span>${I.chev}</button>
     <button class="lrow" data-act="feedback" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Open house feedback</span><span class="s" style="display:block">Review, edit and publish to the sellers</span></span>${I.chev}</button>
     ${KITS[a] ? `<a class="lrow" href="${esc(KITS[a].brochure)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Print brochure</span><span class="s" style="display:block">Two pages, letter size, with QR to the page</span></span>${I.chev}</a><button class="lrow" data-act="kit" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Social graphics</span><span class="s" style="display:block">${KITS[a].social.length} posts and stories, ready to download</span></span>${I.chev}</button>` : ''}
     <button class="lrow" data-act="market" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Market stats for the sellers</span><span class="s" style="display:block">Paste your numbers — Claude charts them on their portal</span></span>${I.chev}</button>
@@ -455,6 +456,51 @@ function portalsSheet(a) {
     try { await append('Portals', r); close(); toast('Updated. The sellers see it now.'); await loadSheet(); render(); } catch (err) { toast('Not saved — try again.'); } };
 }
 /* Open house feedback: private until Chris edits and publishes it to the sellers' portal */
+/* ---------- seller checklist: the shared list + Chris's items for this home + the sellers' own; ticks come from their portal ---------- */
+const FACTQ = [['love', 'Favorite thing buyers only discover living here'], ['life', 'A day here'], ['community', 'What only locals know'], ['updates', 'Updates'], ['systems', 'Roof, furnace, water heater'], ['utilities', 'Utilities'], ['hoa', 'HOA'], ['know', 'Anything else']];
+const prepKey = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36).slice(0, 6); };
+let PREPLIST = null;
+async function prepSheet(a, keep) {
+  if (!keep) sheet(`<p class="date">${esc(a)}</p><h3>Seller checklist</h3><p class="s">Loading…</p>`);
+  let all;
+  try { PREPLIST = PREPLIST || await (await fetch(new URL('../prep.json', location.href))).json(); all = (await engine({ op: 'prep' })).sellers; }
+  catch (e) { return sheet(`<p class="date">${esc(a)}</p><h3>Seller checklist</h3><p class="s" style="margin:-4px 0 16px">${/locked/.test(e.message) ? 'This opens in The Office at homes.ranchpnw.com/office, where your engine key is saved.' : 'Couldn’t load it — ' + esc(e.message)}</p><div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`); }
+  const mine = all.filter(x => hk(x.home) === hk(a));
+  if (!mine.length) return sheet(`<p class="date">${esc(a)}</p><h3>Seller checklist</h3><p class="s" style="margin:-4px 0 16px">No seller portal for this home yet. It appears here once their portal code is set up.</p><div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`);
+  const master = []; PREPLIST.groups.filter(g => g.when === 'before').forEach(g => g.items.forEach(t => master.push({ key: g.id + '-' + prepKey(t), text: t, group: g.name })));
+  const box = 'border:1px solid rgba(128,120,108,.3);border-radius:16px;padding:14px;margin-bottom:12px';
+  const one = sl => {
+    const done = k => sl.prep.some(r => r.key === k && r.done), chris = sl.prep.filter(r => r.from === 'Chris'), own = sl.prep.filter(r => r.from === 'Seller');
+    const keys = master.map(m => m.key).concat(chris.map(r => r.key), own.map(r => r.key)), n = keys.filter(done).length;
+    const left = master.filter(m => !done(m.key)), pd = sl.photoDay ? new Date(sl.photoDay).toISOString().slice(0, 10) : '';
+    const f = sl.facts || {};
+    return `<div data-code="${esc(sl.code)}">
+    <p class="s" style="margin:0 0 4px"><b>${esc(sl.names)}</b> · ${n} of ${keys.length} done before listing</p>
+    <div style="height:6px;border-radius:3px;background:rgba(128,120,108,.25);overflow:hidden;margin:6px 0 14px"><i style="display:block;height:100%;width:${keys.length ? Math.round(n / keys.length * 100) : 0}%;background:#8C6A43"></i></div>
+    <div style="${box}"><p class="s" style="margin:0 0 8px"><b>Photo day</b> · drives the countdown on their checklist</p>
+      <div class="acts" style="margin:0"><input type="date" class="pd" value="${pd}" style="font:inherit;padding:8px 10px;border-radius:10px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit"><button type="button" class="pill ghost" data-pp="day">Save date</button></div></div>
+    <div style="${box}"><p class="s" style="margin:0 0 8px"><b>Your items for this home</b> · they see these as “From Chris”</p>
+      ${chris.map(r => `<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px"><span style="flex:none;width:18px">${r.done ? '✓' : '○'}</span><textarea rows="2" data-k="${esc(r.key)}" style="flex:1;font:15px/1.45 inherit;border:1px solid rgba(128,120,108,.35);border-radius:10px;padding:8px;background:transparent;color:inherit">${esc(r.text)}</textarea><button type="button" class="pill ghost" data-pp="edit" data-k="${esc(r.key)}">Save</button><button type="button" class="xbtn" data-pp="rm" data-k="${esc(r.key)}" aria-label="Remove">✕</button></div>`).join('')}
+      <div style="display:flex;gap:8px"><input class="pnew" placeholder="Add an item for their home, like “Touch up the hallway by the garage door”" style="flex:1;font:inherit;padding:9px 12px;border-radius:10px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit"><button type="button" class="pill" data-pp="add">Add</button></div></div>
+    ${own.length ? `<div style="${box}"><p class="s" style="margin:0 0 8px"><b>Their own list</b></p>${own.map(r => `<p style="margin:4px 0">${r.done ? '✓' : '○'} ${esc(r.text)}</p>`).join('')}</div>` : ''}
+    <details style="${box}"><summary class="s"><b>Still to do from the checklist</b> · ${left.length}</summary>${left.map(m => `<p style="margin:6px 0;font-size:14px">○ ${esc(m.text)}</p>`).join('') || '<p class="s">All done.</p>'}</details>
+    <div style="${box}"><p class="s" style="margin:0 0 8px"><b>Home facts</b>${f.at ? ' · saved ' + new Date(f.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ' · not filled in yet'}</p>
+      ${FACTQ.filter(q => f[q[0]]).map(q => `<p style="margin:8px 0 0"><span class="s">${esc(q[1])}</span><br>${esc(f[q[0]])}</p>`).join('')}</div></div>`;
+  };
+  sheet(`<p class="date">${esc(a)}</p><h3>Seller checklist &amp; home facts</h3>${mine.map(one).join('<hr style="border:0;border-top:1px solid rgba(128,120,108,.3);margin:18px 0">')}<div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`);
+  const card = $('#sheet');
+  card.addEventListener('click', async e => {
+    const b = e.target.closest('[data-pp]'); if (!b) return;
+    const wrap = b.closest('[data-code]'), code = wrap.dataset.code, act = b.dataset.pp; b.disabled = true;
+    try {
+      if (act === 'day') { await engine({ op: 'photoDay', code, date: wrap.querySelector('.pd').value }); toast('Photo day saved. Their countdown updates on their next visit.'); }
+      else if (act === 'add') { const t = wrap.querySelector('.pnew').value.trim(); if (!t) { b.disabled = false; return; } await engine({ op: 'prepItem', code, action: 'add', text: t }); toast('Added to their checklist.'); }
+      else if (act === 'edit') { await engine({ op: 'prepItem', code, action: 'edit', key: b.dataset.k, text: wrap.querySelector(`textarea[data-k="${b.dataset.k}"]`).value.trim() }); toast('Saved.'); }
+      else if (act === 'rm') { await engine({ op: 'prepItem', code, action: 'remove', key: b.dataset.k }); toast('Removed from their checklist.'); }
+      if (act !== 'day') prepSheet(a, true); else b.disabled = false;
+    } catch (err) { b.disabled = false; toast('Didn’t save — ' + (err.message || 'try again')); }
+  });
+}
 async function feedbackSheet(a) {
   sheet(`<p class="date">${esc(a)}</p><h3>Open house feedback</h3><p class="s">Loading…</p>`);
   let all;
@@ -604,6 +650,7 @@ document.addEventListener('click', async e => {
   else if (a === 'listing') listingSheet(x);
   else if (a === 'portals') portalsSheet(x);
   else if (a === 'feedback') feedbackSheet(x);
+  else if (a === 'prep') prepSheet(x);
   else if (a === 'files') filesSheet(x);
   else if (a === 'launch') launchSheet(x);
   else if (a === 'deal') dealSheet();

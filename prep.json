@@ -1,0 +1,82 @@
+{
+ "title": "Before you list",
+ "lede": "None of these cost much, but together they make your home look cared for in photos and at every showing.",
+ "groups": [
+  {
+   "id": "declutter",
+   "name": "Declutter first",
+   "when": "before",
+   "items": [
+    "Clear the clutter from counters, shelves and tabletops. Less stuff makes every room feel bigger.",
+    "Put away most personal photos. Buyers want to picture their home, not yours."
+   ]
+  },
+  {
+   "id": "inside",
+   "name": "Inside",
+   "when": "before",
+   "items": [
+    "Dust light fixtures and ceiling fans. Light catches dust, and photos show it.",
+    "Wipe down trim boards and baseboards.",
+    "Dust and wipe the furnace grates and heat vents. They get gnarly, and buyers notice.",
+    "Clear out closets. When they look packed, buyers notice you're running out of room and are likely to think the home lacks storage. Leave some bare floor and back wall showing in each one."
+   ]
+  },
+  {
+   "id": "touchups",
+   "name": "Touch-ups, carefully",
+   "when": "before",
+   "items": [
+    "Putty and touch up trim, especially outside corners and separated joints.",
+    "Touch up scuffs on walls.",
+    "Re-caulk tubs, showers and sinks where it has yellowed or cracked. Small things done tell buyers the whole home is well maintained."
+   ],
+   "note": "If it has been years since the last paint job, touch-up paint often won't match and can look worse than the scuff. Test a hidden spot first, or ask me."
+  },
+  {
+   "id": "outside",
+   "name": "Outside",
+   "when": "before",
+   "items": [
+    "Get the windows washed, inside and out.",
+    "Mow the lawn and pull weeds.",
+    "Rake the bark, or add fresh bark to the beds.",
+    "Rake any gravel, or add a few new bags.",
+    "Pressure wash the patio, walkways and front steps.",
+    "Clean off the deck: sweep, wash, and clear between the boards.",
+    "Set out the patio furniture, clean.",
+    "Sweep the garage and clear cobwebs from entry lights and eaves."
+   ]
+  },
+  {
+   "id": "small",
+   "name": "Sometimes it's the small things",
+   "when": "before",
+   "lede": "Each of these takes minutes. Buyers may not notice when they're done, but they notice when they're not.",
+   "items": [
+    "Make every light bulb match: the same color in each room (warm white or daylight, not both).",
+    "Replace any burned-out bulbs, including closets, ovens and range hoods.",
+    "Replace the furnace filter.",
+    "Clean the slider tracks if you have a sliding door.",
+    "WD-40 any squeaky doors.",
+    "Tighten loose cabinet knobs and handles.",
+    "Put the window screens back in.",
+    "Check the doorbell works and the house numbers are easy to see from the street.",
+    "Keep every remote handy and labeled: fireplace, fans, lights, blinds.",
+    "Label leftover paint by room. The cans ideally stay with the home."
+   ]
+  },
+  {
+   "id": "closing",
+   "name": "As closing gets close",
+   "when": "closing",
+   "items": [
+    "Forward your mail with the official USPS change of address at usps.com/move (skip look-alike sites that charge more).",
+    "Change your delivery address on Amazon and other accounts.",
+    "Take your Ring doorbell, cameras and security devices off your accounts. They're fixtures and stay with the home.",
+    "Plan to leave your TV wall mounts. Most sellers do: take the TVs, leave the mounts.",
+    "Be ready to take utilities out of your name as of closing: power, water, sewer, garbage, internet."
+   ]
+  }
+ ]
+}

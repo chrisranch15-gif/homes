@@ -495,6 +495,16 @@ function officePost_(d) {
     if (d.op === 'ping') return { ok: true, me: Session.getEffectiveUser().getEmail(), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') };
     if (d.op === 'tool') return { ok: true, result: officeCall_(d.server, d.name, d.input) };
     if (d.op === 'ai') return { ok: true, result: officeAi_(d.prompt, d.opts) };
+    if (d.op === 'story') {                                  // Unlisted hunt stories from past off-market deals
+      const f = d.story || {}, c = k => clean_(f[k], 600);
+      tab_('Unlisted stories', ['Added', 'Neighborhood', 'Year', 'Address (private)', 'They wanted', 'How we found it', 'Consult to keys', 'Why it never listed', 'Client quote', 'Can share', 'Photo', 'Level', 'Status'])
+        .appendRow([new Date(), c('area'), c('year'), c('address'), c('wanted'), c('found'), c('timeline'), c('why'), c('quote'), c('share'), c('photo'), c('level'), 'Draft']);
+      return { ok: true };
+    }
+    if (d.op === 'stories') {
+      const rows = tab_('Unlisted stories', ['Added']).getDataRange().getValues().slice(1);
+      return { ok: true, stories: rows.map(r => ({ at: new Date(r[0]).getTime(), area: String(r[1]), year: String(r[2]), level: String(r[11] || ''), status: String(r[12] || '') })).reverse() };
+    }
     return { ok: false, reason: 'unknown' };
   } catch (err) { return { ok: false, reason: String(err && err.message || err).slice(0, 300) }; }
 }

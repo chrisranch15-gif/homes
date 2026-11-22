@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Unlisted stories · The Office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1E2327;--night:#16191B;--ground:#F7F5F1;--soft:#EFEBE4;--line:#D9D2C6;--muted:#5E584E;--accent:#8C6A43;--gold:#C9A877;--serif:"Playfair Display",Georgia,serif;--sans:Inter,system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--ground);color:var(--ink);-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:640px;margin:0 auto;padding:calc(26px + env(safe-area-inset-top)) 22px 60px}
+.mono{font:600 11px var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+h1{font:400 38px/1.1 var(--serif);margin:10px 0 8px}
+.lede{color:var(--muted);font-size:16px;line-height:1.55;margin-bottom:26px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:16px}
+.q{margin-bottom:20px}
+.q label,.q .l{display:block;font-weight:500;font-size:15px;margin-bottom:8px}
+.q small{display:block;color:var(--muted);font-size:13px;margin:-4px 0 8px}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;background:var(--ground);outline:none}
+input:focus,textarea:focus{border-color:var(--ink);background:#fff}
+textarea{min-height:84px;resize:vertical;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:10px 14px;font-size:14px;cursor:pointer}
+.chip.sel{background:var(--night);border-color:var(--night);color:var(--gold)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cta{width:100%;border:0;border-radius:14px;padding:18px;background:var(--night);color:#fff;font-weight:500;font-size:16px;cursor:pointer}
+.cta[disabled]{opacity:.4}
+.err{color:#9A3B2E;font-size:14px;min-height:20px;margin:8px 0}
+.list .it{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--soft);font-size:14.5px}
+.list .it:first-child{border-top:0}
+.list .it span{color:var(--muted)}
+.pv{background:var(--night);color:#fff;border-radius:20px;padding:24px;margin-bottom:16px}
+.pv .stamp{display:inline-block;font:600 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--gold);color:var(--gold);padding:6px 10px;border-radius:99px}
+.pv h3{font:400 24px/1.2 var(--serif);margin:14px 0 10px}
+.pv p{color:rgba(255,255,255,.72);font-size:14.5px;line-height:1.55;margin-top:8px}
+.pv b{color:var(--gold);font-weight:500}
+.pv q{display:block;font:italic 400 17px/1.45 var(--serif);color:#E9DCC6;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:var(--night);color:#fff;padding:13px 20px;border-radius:99px;font-size:14.5px;transition:all .3s}
+.toast.on{transform:translate(-50%,0);opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mono">Unlisted · Hunt stories</p>
+  <h1>Add a past off-market deal</h1>
+  <p class="lede">About two minutes each. Saved as a draft in your Sheet; nothing is published until you approve the story.</p>
+
+  <div class="card" id="f">
+    <div class="row">
+      <div class="q"><label for="area">Neighborhood</label><input id="area" placeholder="e.g. Fox Island, Canterwood"></div>
+      <div class="q"><label for="year">Year</label><input id="year" inputmode="numeric" placeholder="2024"></div>
+    </div>
+    <div class="q"><label for="address">Address <span style="color:var(--muted);font-weight:400">(private, never shown)</span></label><input id="address" placeholder="For your records and the public sale record"></div>
+    <div class="q"><label for="wanted">What did they want?</label><small>Home, lot, area, price, timing</small><textarea id="wanted" placeholder="Single level, waterfront, under $1.4M, before school started"></textarea></div>
+    <div class="q"><span class="l">How did we find it?</span><div class="chips" data-k="found" data-multi="1">
+      <button class="chip">Called someone we know nearby</button><button class="chip">Owner outreach / mailer</button><button class="chip">Agent in our offices</button><button class="chip">Past client</button><button class="chip">Expired or withdrawn</button><button class="chip">Published buyer need</button></div>
+      <textarea id="found2" style="margin-top:10px;min-height:64px" placeholder="The short version of what happened (optional)"></textarea></div>
+    <div class="row">
+      <div class="q"><label for="timeline">Consult to keys</label><input id="timeline" placeholder="41 days"></div>
+      <div class="q"><span class="l">Level</span><div class="chips" data-k="level"><button class="chip">Inside Track</button><button class="chip">By Invitation</button></div></div>
+    </div>
+    <div class="q"><label for="why">Why did it never list?</label><input id="why" placeholder="Owners wanted a quiet sale before relocating"></div>
+    <div class="q"><label for="quote">Client quote <span style="color:var(--muted);font-weight:400">(if you have one)</span></label><textarea id="quote" style="min-height:64px"></textarea></div>
+    <div class="q"><span class="l">What can we share?</span><div class="chips" data-k="share"><button class="chip">Full names</button><button class="chip">First names only</button><button class="chip sel">Anonymous</button><button class="chip">Ask them first</button></div></div>
+    <div class="q"><span class="l">Photos</span><div class="chips" data-k="photo" data-multi="1"><button class="chip">None</button><button class="chip">Client photos</button><button class="chip">Neighborhood photos</button><button class="chip">Pro photos</button><button class="chip">Offer Anthony a shoot</button></div></div>
+
+    <p class="mono" style="margin:6px 0 10px">Preview</p>
+    <div class="pv" id="pv"></div>
+    <p class="err" id="er"></p>
+    <button class="cta" id="save">Save draft story</button>
+  </div>
+
+  <div class="card list" id="list"><p style="color:var(--muted);font-size:14.5px">Your saved stories will appear here.</p></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const key = () => { try { return localStorage.getItem('ranch.officeKey'); } catch (e) { return null; } };
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2400); };
+async function engine(body) {
+  const k = key(); if (!k) { location.href = '/office/?next=stories'; throw new Error('Open The Office first to unlock.'); }
+  const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ type: 'office', key: k }, body)) });
+  const j = await r.json(); if (!j.ok) throw new Error(j.reason === 'locked' ? 'The Office is locked. Open it and sign in again.' : (j.reason || 'Not saved')); return j;
+}
+document.querySelectorAll('.chips').forEach(g => g.querySelectorAll('.chip').forEach(c => c.onclick = () => {
+  if (!g.dataset.multi) g.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', x === c)); else c.classList.toggle('sel'); preview(); }));
+const chips = k => [...document.querySelectorAll(`[data-k="${k}"] .chip.sel`)].map(c => c.textContent).join(', ');
+const val = id => $('#' + id).value.trim();
+function preview() {
+  const found = [chips('found'), val('found2')].filter(Boolean).join('. ');
+  $('#pv').innerHTML = `<span class="stamp">Never listed · ${esc(val('area') || 'Neighborhood')}${val('year') ? ' · ' + esc(val('year')) : ''}</span>
+    <h3>${esc(val('wanted') || 'What they wanted')}</h3>
+    <p><b>The hunt.</b> ${esc(found || 'How we found it')}</p>
+    <p><b>The result.</b> ${val('timeline') ? 'Keys in ' + esc(val('timeline')) + '. ' : ''}It never hit the market.${val('why') ? ' ' + esc(val('why')) + '.' : ''}</p>
+    ${val('quote') ? `<q>${esc(val('quote'))}</q><p style="margin-top:6px">— Unlisted member</p>` : ''}`;
+}
+document.querySelectorAll('input,textarea').forEach(i => i.oninput = preview); preview();
+async function load() {
+  try { const j = await engine({ op: 'stories' }); if (!j.stories.length) return;
+    $('#list').innerHTML = `<p class="mono" style="margin-bottom:8px">Saved · ${j.stories.length}</p>` + j.stories.map(s => `<div class="it"><b>${esc(s.area || '—')} ${esc(s.year)}</b><span>${esc(s.level || '')} · ${esc(s.status)}</span></div>`).join('');
+  } catch (e) {}
+}
+$('#save').onclick = async () => {
+  if (!val('area') || !val('wanted')) { $('#er').textContent = 'Add at least the neighborhood and what they wanted.'; return; }
+  const b = $('#save'); b.disabled = true; $('#er').textContent = '';
+  try {
+    await engine({ op: 'story', story: { area: val('area'), year: val('year'), address: val('address'), wanted: val('wanted'), found: [chips('found'), val('found2')].filter(Boolean).join(' · '),
+      timeline: val('timeline'), why: val('why'), quote: val('quote'), share: chips('share'), photo: chips('photo'), level: chips('level') } });
+    toast('Saved. Add the next one.'); document.querySelectorAll('input,textarea').forEach(i => i.value = ''); document.querySelectorAll('.chip.sel').forEach(c => c.classList.remove('sel'));
+    document.querySelector('[data-k="share"] .chip:nth-child(3)').classList.add('sel'); preview(); window.scrollTo({ top: 0, behavior: 'smooth' }); load();
+  } catch (e) { $('#er').textContent = e.message; }
+  b.disabled = false;
+};
+load();
+</script>
+</body>
+</html>

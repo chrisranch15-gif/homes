@@ -143,6 +143,10 @@ button,input{font:inherit;color:inherit}
 .glass .f input:focus+label,.glass .f input:not(:placeholder-shown)+label{color:var(--gold)}
 .hero .err{color:#F2B8A8;min-height:18px;margin:2px 0 0;text-shadow:none}
 .hero .in.form .cta.light{margin-top:10px}
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+#vm.open{max-height:380px}
+.hero .addr{font:500 19px/1.3 var(--sans);color:#fff;letter-spacing:.01em;display:inline-flex;flex-direction:column;gap:4px;padding:10px 14px;border-radius:12px;background:rgba(22,25,27,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);max-width:none}
+.hero .addr span{font:500 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
 .alt{display:block;width:100%;background:none;border:0;color:rgba(255,255,255,.7);font-size:14px;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .me{display:flex;align-items:center;gap:14px;background:#20252A;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px;margin-bottom:6px}
 .me .av{width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--night);display:grid;place-items:center;font:500 15px var(--sans);flex:none}
@@ -226,6 +230,14 @@ async function post(type, extra) {
 
 const dots = n => '<div class="dots">' + [1,2,3].map(i => '<span class="' + (i <= n ? 'f' : '') + '"></span>').join('') + '</div>';
 const field = (id, label, type, ac, val) => `<div class="f"><input id="${id}" type="${type}" autocomplete="${ac}" placeholder=" " value="${esc(val||'')}"${type==='tel'?' inputmode="tel"':''}${type==='email'?' autocapitalize="off"':''}><label for="${id}">${label}</label></div>`;
+// full address with city and ZIP (phones autofill each part); combined into one line for the engine
+const addrFields = () => field('ad','Street address','text','address-line1',S.street||'') + `<div class="two">${field('acy','City','text','address-level2',S.city||'')}${field('azp','ZIP','text','postal-code',S.zip||'')}</div>`;
+function readAddr() {
+  const v = id => ($('#' + id) ? $('#' + id).value.trim() : '');
+  S.street = v('ad'); S.city = v('acy'); S.zip = v('azp');
+  if (!S.street || !(S.city || S.zip)) return '';
+  return [S.street, [S.city, 'WA', S.zip].filter(Boolean).join(' ').replace(' WA', ', WA')].join(', ');
+}
 const tile = (k, v, ic, b, sm, sel) => `<button class="tile${sel?' sel':''}" data-${k}="${v}">${ic?'<span class="ic">'+I[ic]+'</span>':''}<span><b>${b}</b>${sm?'<small>'+sm+'</small>':''}</span><span class="ck"></span></button>`;
 
 function render() {
@@ -233,7 +245,7 @@ function render() {
   if (MODE === 'offmarket' || MODE === 'value') return renderOffer(app);
   if (S.step === 0) app.innerHTML = `<section class="screen hero on"><div class="bg" style="background-image:url('${H.hero}')"></div>
     <div class="top"><div class="brand"><b>The Ranch</b>Real Estate Group</div><div class="live"><i></i>Open house</div></div>
-    <div class="in${GUEST ? '' : ' form'}"><p class="mono">${esc(H.address)} · ${esc(H.area)}</p><h1>Welcome <em>in.</em></h1>
+    <div class="in${GUEST ? '' : ' form'}"><p class="addr">${esc(H.address)}<span>${esc(H.area)}</span></p><h1>Welcome <em>in.</em></h1>
     ${GUEST ? `<p>The sellers ask that every guest sign in before touring.</p><button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>`
     : `<p>The sellers ask that every guest sign in before touring.</p>
     <div class="glass">${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}</div>
@@ -252,7 +264,7 @@ function render() {
     <p class="mono">Last step</p><h2>Anything we can do for you?</h2><p class="lede">Tap any that interest you, or skip right to the tour.</p>
     <div class="tiles">${S.agent === 'Yes' ? '' : `<div class="feat">Most requested</div>${tile('of','1','key','Unlisted, our off-market buyer program','Most agents wait for the right home to come on the market. We go hunting for it. It starts with a consult.',S.off)}`}
     ${tile('va','1','chart','What’s my home worth now?','The market has changed. Get an updated value report.',S.val)}</div>
-    <div class="more${S.val?' open':''}" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}</div>
+    <div class="more${S.val?' open':''}" id="vm">${addrFields()}</div>
     <div class="grow"></div><p class="err" id="er"></p><button class="cta dark" id="nx">${S.off||S.val?'Sign in':'Sign in and tour'} ${I.arrow}</button></section>`;
   if (S.step === 9) renderDone(app);
   wire();
@@ -293,7 +305,7 @@ function renderDone(app) {
 
     <div class="sect"><p class="mono" style="color:var(--gold)">Before you go</p><h4>Own a home nearby?</h4>
       <button class="offer${S.valSent?' ok':''}" id="o2"><span class="ic">${S.valSent?I.check.replace('currentColor','#16191B'):I.chart}</span><span><b>${S.valSent?'Your value report is on its way':'The market has changed.'}</b><small>${S.valSent?'I prepare every one personally from real recent sales.':'Need an updated value report on your home? I’ll prepare it personally.'}</small></span></button>
-      <div class="more dark-in" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}<button class="cta light save" id="vs" style="margin-top:4px">Send my value report ${I.arrow}</button></div></div>
+      <div class="more dark-in" id="vm">${addrFields()}<button class="cta light save" id="vs" style="margin-top:4px">Send my value report ${I.arrow}</button></div></div>
 
     <div class="sect"><p class="mono" style="color:var(--gold)">Take it with you</p>
       <div class="links"><a class="lk" href="${H.page}">${I.photos}See every photo<small>Floor plans and the full story</small></a>
@@ -327,7 +339,7 @@ function renderOffer(app) {
       <p class="s" style="margin-top:18px">What are you looking for? <span style="opacity:.6">(helps us prepare)</span></p><div class="chips" id="wc">${wants.map(w=>`<button class="chip" data-w="${w}">${w}</button>`).join('')}</div>
       <p class="s" style="margin-top:18px">Where?</p><div class="chips" id="ac">${areas.map(w=>`<button class="chip" data-w="${w}">${w}</button>`).join('')}</div>
       <div class="more" id="ao">${field('ot','Which area or neighborhood?','text','off','')}</div></div>`
-      : field('ad','Your home’s address','text','street-address',S.address)}
+      : addrFields()}
     <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er" style="color:#E3A08F"></p>
     <button class="cta light" id="sb">${off ? 'Request my consult' : 'Send my value report'} ${I.arrow}</button></div>
     <div class="sig"><img src="photos/chris-ranch.jpg" alt="Chris Ranch"><div><b>Chris Ranch</b>The Ranch Real Estate Group · Keller Williams Realty Puget Sound · Call or text ${PHONE}</div></div></section>`;
@@ -340,7 +352,7 @@ function renderOffer(app) {
   $('#sb').onclick = async () => {
     if (!readContact()) return;
     if (off && !picked('#ag')) return err('Please let us know if you’re working with an agent.');
-    if (!off) { S.address = $('#ad').value.trim(); if (!S.address) return err('Please add your home’s address.'); }
+    if (!off) { S.address = readAddr(); if (!S.address) return err('Please add your street address and city or ZIP.'); }
     const sel = id => [...document.querySelectorAll(id + ' .chip.sel')].map(c => c.dataset.w).join(', ');
     const b = $('#sb'); b.disabled = true;
     try {
@@ -393,8 +405,8 @@ function wire() {
 }
 
 async function submit() {
-  S.address = S.val ? $('#ad').value.trim() : '';
-  if (S.val && !S.address) return err('Please add your home’s address for the value report.');
+  S.address = S.val ? readAddr() : '';
+  if (S.val && !S.address) return err('Please add your street address and city or ZIP for the value report.');
   const b = $('#nx'); b.disabled = true; b.textContent = 'Signing you in…';
   const agent = S.agent === 'Yes' ? 'Yes' + (S.agentName ? ' · ' + S.agentName : '') : S.agent;
   const wants = [S.off && 'Wants an Unlisted consult', S.val && 'Updated value report for ' + S.address].filter(Boolean);
@@ -439,7 +451,7 @@ function wireDone() {
   $('#fix').onclick = () => { S.step = 1; S.editing = true; render(); window.scrollTo(0, 0); };
   $('#o2').onclick = () => { if (!S.valSent) { $('#vm').classList.add('open'); setTimeout(() => $('#ad').focus(), 300); } };
   $('#vs').onclick = async () => {
-    S.address = $('#ad').value.trim(); if (!S.address) return toast('Please add your home’s address.');
+    S.address = readAddr(); if (!S.address) return toast('Please add your street address and city or ZIP.');
     try { await post('valuation', { address: S.address }); S.valSent = true; keep(); renderDone($('#app')); toast('It’s on its way.'); } catch (e) { toast(e.message); }
   };
   $('#vc').onclick = e => {

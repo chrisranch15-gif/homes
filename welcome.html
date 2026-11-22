@@ -147,6 +147,14 @@ button,input{font:inherit;color:inherit}
 #vm.open{max-height:380px}
 .hero .addr{font:500 19px/1.3 var(--sans);color:#fff;letter-spacing:.01em;display:inline-flex;flex-direction:column;gap:4px;padding:10px 14px;border-radius:12px;background:rgba(22,25,27,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);max-width:none}
 .hero .addr span{font:500 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.note{position:relative;margin-top:14px}
+.note textarea{width:100%;min-height:96px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:#20252A;color:#fff;padding:14px 58px 14px 16px;font:16px/1.5 var(--sans);outline:none;resize:vertical}
+.note textarea:focus{border-color:var(--gold)}
+.note textarea::placeholder{color:rgba(255,255,255,.4)}
+.mic{position:absolute;right:10px;bottom:12px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(201,168,119,.5);background:transparent;color:var(--gold);display:grid;place-items:center;cursor:pointer}
+.mic svg{width:20px;height:20px}
+.mic.on{background:var(--gold);color:var(--night);animation:pulse 1.6s infinite}
+.hero .promise,.promise{font:400 12.5px/1.5 var(--sans);color:rgba(255,255,255,.62);margin-top:12px;max-width:none;text-shadow:none}
 .alt{display:block;width:100%;background:none;border:0;color:rgba(255,255,255,.7);font-size:14px;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .me{display:flex;align-items:center;gap:14px;background:#20252A;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px;margin-bottom:6px}
 .me .av{width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--night);display:grid;place-items:center;font:500 15px var(--sans);flex:none}
@@ -197,6 +205,7 @@ const I = {
   chart:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 20h18M6 16l4-5 3 3 5-7"/><path d="M15 7h3v3"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   heart:'<svg width="15" height="15" viewBox="0 0 24 24" fill="#16191B"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.6 0 6 3.5 4.5 7.2C19.5 16.4 12 21 12 21z"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
   photos:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg>',
   card:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16.5c.7-1.6 2-2.5 3.5-2.5s2.8.9 3.5 2.5M15 10h4M15 13.5h3"/></svg>'
 };
@@ -238,6 +247,7 @@ function readAddr() {
   if (!S.street || !(S.city || S.zip)) return '';
   return [S.street, [S.city, 'WA', S.zip].filter(Boolean).join(' ').replace(' WA', ', WA')].join(', ');
 }
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const tile = (k, v, ic, b, sm, sel) => `<button class="tile${sel?' sel':''}" data-${k}="${v}">${ic?'<span class="ic">'+I[ic]+'</span>':''}<span><b>${b}</b>${sm?'<small>'+sm+'</small>':''}</span><span class="ck"></span></button>`;
 
 function render() {
@@ -247,9 +257,9 @@ function render() {
     <div class="top"><div class="brand"><b>The Ranch</b>Real Estate Group</div><div class="live"><i></i>Open house</div></div>
     <div class="in${GUEST ? '' : ' form'}"><p class="addr">${esc(H.address)}<span>${esc(H.area)}</span></p><h1>Welcome <em>in.</em></h1>
     ${GUEST ? `<p>The sellers ask that every guest sign in before touring.</p><button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>`
-    : `<p>The sellers ask that every guest sign in before touring.</p>
+    : `<p>The sellers ask that every guest sign in before touring.*</p>
     <div class="glass">${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}</div>
-    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><button class="cta light" id="go">Continue ${I.arrow}</button>`}
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><button class="cta light" id="go">Continue ${I.arrow}</button><p class="promise">*Your info goes only to Chris. Signing in won’t sign you up for automated texts or calls, and it’s never shared or sold.</p>`}
     <p class="fine">Hosted by Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</p></div></section>`;
   if (S.step === 1) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(1)}</div>
     <p class="mono">Step one</p><h2>Who’s visiting today?</h2><p class="lede">So the sellers know who has been through their home.</p>
@@ -303,6 +313,12 @@ function renderDone(app) {
         <div class="chips">${missingOpts.map(m => `<button class="chip${S.missing.includes(m)?' sel':''}" data-m="${m}">${m}</button>`).join('')}</div></div>
       <p class="thanks" id="ty"></p></div>
 
+    <div class="sect"><p class="mono" style="color:var(--gold)">In your words</p><h4>Anything else the sellers should hear?</h4>
+      <p class="s">Type it, or tap the mic and just talk. Shared with the sellers without your name.</p>
+      <div class="note"><textarea id="fbt" rows="3" placeholder="Loved the kitchen, wished the yard was bigger…">${esc(S.note || '')}</textarea>
+        ${SR ? `<button class="mic" id="mic" aria-label="Speak your feedback">${I.mic}</button>` : ''}</div>
+      <button class="cta light" id="fbs" style="margin-top:12px">${S.noteSent ? 'Sent. Thank you' : 'Send my thoughts'} ${S.noteSent ? I.check.replace('currentColor', '#16191B') : I.arrow}</button></div>
+
     <div class="sect"><p class="mono" style="color:var(--gold)">Before you go</p><h4>Own a home nearby?</h4>
       <button class="offer${S.valSent?' ok':''}" id="o2"><span class="ic">${S.valSent?I.check.replace('currentColor','#16191B'):I.chart}</span><span><b>${S.valSent?'Your value report is on its way':'The market has changed.'}</b><small>${S.valSent?'I prepare every one personally from real recent sales.':'Need an updated value report on your home? I’ll prepare it personally.'}</small></span></button>
       <div class="more dark-in" id="vm">${addrFields()}<button class="cta light save" id="vs" style="margin-top:4px">Send my value report ${I.arrow}</button></div></div>
@@ -341,7 +357,7 @@ function renderOffer(app) {
       <div class="more" id="ao">${field('ot','Which area or neighborhood?','text','off','')}</div></div>`
       : addrFields()}
     <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er" style="color:#E3A08F"></p>
-    <button class="cta light" id="sb">${off ? 'Request my consult' : 'Send my value report'} ${I.arrow}</button></div>
+    <button class="cta light" id="sb">${off ? 'Request my consult' : 'Send my value report'} ${I.arrow}</button><p class="promise" style="text-align:left">Your info goes only to Chris. No automated texts or calls, and it’s never shared or sold.</p></div>
     <div class="sig"><img src="photos/chris-ranch.jpg" alt="Chris Ranch"><div><b>Chris Ranch</b>The Ranch Real Estate Group · Keller Williams Realty Puget Sound · Call or text ${PHONE}</div></div></section>`;
   wireChips(app);
   if (off) $('#ag').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { const yes = c.dataset.w === 'Yes';
@@ -392,7 +408,7 @@ function wire() {
     document.querySelectorAll('[data-ag]').forEach(t => t.onclick = () => {
       S.agent = t.dataset.ag; document.querySelectorAll('[data-ag]').forEach(x => x.classList.toggle('sel', x === t));
       $('#am').classList.toggle('open', S.agent === 'Yes'); $('#nx').disabled = false;
-      if (S.agent === 'Yes') setTimeout(() => $('#an').focus(), 300);
+      if (S.agent === 'Yes') setTimeout(() => $('#an') && $('#an').focus(), 300);
     });
     $('#nx').onclick = () => { S.agentName = ($('#an').value || '').trim(); go(3); };
   }
@@ -421,12 +437,29 @@ let fbTimer;
 function sendFeedback() {
   clearTimeout(fbTimer); keep();
   fbTimer = setTimeout(() => {
-    const fb = [S.room && 'Favorite room: ' + S.room, S.verdict && 'Is this the one: ' + S.verdict, S.missing.length && 'Would make it the one: ' + S.missing.join(', ')].filter(Boolean).join(' · ');
+    const fb = [S.room && 'Favorite room: ' + S.room, S.verdict && 'Is this the one: ' + S.verdict, S.missing.length && 'Would make it the one: ' + S.missing.join(', '), S.note && 'In their words: ' + S.note].filter(Boolean).join(' · ');
     if (fb) post('open-house-feedback', { interest: S.verdict || '', feedback: fb, question: fb }).catch(() => {});
   }, 1800);
 }
 
 function wireDone() {
+  const t = $('#fbt');
+  if (t) {
+    t.oninput = () => { S.note = t.value.trim(); if (S.noteSent) { S.noteSent = false; $('#fbs').innerHTML = 'Send my thoughts ' + I.arrow; } };
+    $('#fbs').onclick = () => { S.note = t.value.trim(); if (!S.note) return toast('Type or say a few words first.'); S.noteSent = true; sendFeedback(); $('#fbs').innerHTML = 'Sent. Thank you ' + I.check.replace('currentColor', '#16191B'); toast('The sellers will hear it.'); };
+    if ($('#mic')) {
+      let rec = null;
+      $('#mic').onclick = () => {
+        if (rec) { rec.stop(); return; }
+        rec = new SR(); rec.lang = 'en-US'; rec.interimResults = true; rec.continuous = true;
+        const base = t.value ? t.value.replace(/\s*$/, ' ') : '';
+        rec.onresult = e => { let txt = ''; for (const r of e.results) txt += r[0].transcript; t.value = base + txt; S.note = t.value.trim(); };
+        rec.onend = () => { rec = null; $('#mic').classList.remove('on'); };
+        rec.onerror = () => toast('Mic not available. Tap the mic on your keyboard instead.');
+        $('#mic').classList.add('on'); try { rec.start(); toast('Listening… tap again to stop.'); } catch (err) { rec = null; $('#mic').classList.remove('on'); }
+      };
+    }
+  }
   document.querySelectorAll('.room').forEach(r => r.onclick = () => {
     S.room = r.dataset.room; document.querySelectorAll('.room').forEach(x => { x.classList.toggle('sel', x === r); x.classList.toggle('dim', x !== r); });
     toast('The sellers will love that.'); sendFeedback();

@@ -41,7 +41,7 @@ def signs(key, L):
         dict(id='signin', url=base, eyebrow='PLEASE SIGN IN', title='Welcome in.',
              sub='The sellers ask that every guest\nsign in before touring.', foot='Scan with your phone camera · about 20 seconds', photo=L['signin']),
         dict(id='offmarket', url=base + '#offmarket', eyebrow='OFF-MARKET BUYER PROGRAM', title='Not quite the one?', gold=True,
-             sub='We don’t wait for the right home to come online.\nWe go hunting for it.', foot='Scan to join the program · tell us what you want', photo=L['offmarket']),
+             sub='We don’t wait for the right home to come online.\nWe go hunting for it.', foot='Scan to book your consult · for buyers not yet working with an agent', photo=L['offmarket']),
         dict(id='value', url=base + '#value', eyebrow='HOME VALUE REPORT', title='The market has changed.',
              sub='Has your home’s value? Get an updated\nreport, prepared personally.', foot='Scan for your free value report', photo=L['value']),
     ]
@@ -152,7 +152,7 @@ def tent(c, L, key, style, qs):
     c.setFillColor(CREAM if style == 'daylight' else NIGHT); c.rect(0, 0, W, H, fill=1, stroke=0)
     light = style == 'daylight'
     for i, (sid, title, sub, gold) in enumerate([('signin', 'Please sign in', 'The sellers ask every guest to sign in.', False),
-                                                  ('offmarket', 'Not quite the one?', 'We don’t wait. We go hunting.', True)]):
+                                                  ('offmarket', 'Not quite the one?', 'We don’t wait. We go hunting. Book your consult.', True)]):
         y0 = H / 2 if i == 0 else 0; panel = H / 2
         if gold: c.setFillColor(GOLD); c.rect(0, y0, W, panel, fill=1, stroke=0)
         fg = NIGHT if (gold or light) else WHITE

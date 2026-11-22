@@ -26,9 +26,9 @@ const TYPES = {
   'home-edit':           { label: 'Home Edit introduction',     needs: ['name', 'phone', 'email', 'category'] },
   'seller-message':      { label: 'Message from your sellers',  needs: ['name', 'question'] },
   'open-house':          { label: 'Open house sign-in',         needs: ['name', 'phone', 'email', 'agent'] },
-  'off-market':          { label: 'Off-market buyer program',      needs: ['name', 'phone', 'email'] }
+  'off-market':          { label: 'Off-market program consult',      needs: ['name', 'phone', 'email'] }
 };
-const OFFMARKET_HEADERS = ['Joined', 'Name', 'Phone', 'Email', 'Wants', 'Areas', 'Came from', 'Home'];
+const OFFMARKET_HEADERS = ['Requested', 'Name', 'Phone', 'Email', 'Meeting', 'Best times', 'Wants', 'Areas', 'Came from', 'Home', 'Status'];
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
@@ -103,7 +103,7 @@ function doPost(e) {
     agent: clean_(d.agent, 80), financing: clean_(d.financing, 20), when: clean_(d.when, 120),
     address: clean_(d.address, 160), question: clean_(d.question, 600), category: clean_(d.category, 40),
     listing: clean_(d.listing, 80), page: clean_(d.page, 30), source: clean_(d.source, 40),
-    wants: clean_(d.wants, 300), areas: clean_(d.areas, 200), offmarket: !!d.offmarket, value: !!d.value
+    wants: clean_(d.wants, 300), areas: clean_(d.areas, 200), meeting: clean_(d.meeting, 40), offmarket: !!d.offmarket, value: !!d.value
   };
   for (const k of t.needs) if (!v[k]) return out_({ ok: false, reason: 'Please fill in every field.' });
   if (type === 'seller-message') {
@@ -126,7 +126,7 @@ function doPost(e) {
     const details = details_(type, v);
     tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, v.name, v.phone, v.email, details, v.listing, v.page, v.source, 'New']);
     if (type === 'follow') tab_('Followers', FOLLOWER_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.listing, '']);
-    if (type === 'off-market' || (type === 'open-house' && v.offmarket)) tab_('Off-market buyers', OFFMARKET_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.wants, v.areas, v.source, v.listing]);
+    if (type === 'off-market') tab_('Off-market buyers', OFFMARKET_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.meeting || '—', v.when || '—', v.wants, v.areas, v.source, v.listing, 'Consult to schedule']);
     if (type === 'open-house' && v.value && v.address) tab_('Leads', LEAD_HEADERS).appendRow([new Date(), 'Home value request', v.name, v.phone, v.email, 'Home: ' + v.address + ' (from open house sign-in)', v.listing, v.page, v.source, 'New']);
   } finally { lock.releaseLock(); }
 
@@ -330,8 +330,8 @@ function notifyAgent_(type, label, v) {
   const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;·&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
-  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market buyer program', 'Yes, wants us searching']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
-  if (type === 'off-market') { if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
+  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market program', 'Interested in a consult']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
+  if (type === 'off-market') { rows.push(['Meet', esc_(v.meeting || 'In person')]); if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
   if (v.when) rows.push(['Preferred time', esc_(v.when)]);
   if (v.address) rows.push(['Their home', esc_(v.address)]);
   if (v.question && type !== 'open-house' && type !== 'off-market') rows.push(['Question', esc_(v.question)]);
@@ -358,8 +358,8 @@ function confirm_(type, v) {
     'updates': ['The Retreat at Glacier Pointe', 'I’ll write when there’s real news on the clubhouse opening — and only then.'],
     'community-tour': ['Your Tehaleh tour', 'I’d love to show you around — trails, parks and neighborhoods. I’ll reach out to plan a time.'],
     'open-house-reminder': ['Open house reminder', 'You’re set. I’ll send one reminder before the open house.'],
-    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' You’re in our off-market buyer program. We don’t wait for the right home to come online; we go hunting, and I’ll reach out personally when we find one that fits.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
-    'off-market': ['Welcome to our off-market buyer program', 'We don’t wait for the right home to come online. We go hunting for it, investing our own time and funds, and every year we help clients secure their dream homes before anyone else knows they’re available. I’ll reach out personally when we find one that fits what you told me.'],
+    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' I’ll also reach out about a consult for our off-market buyer program. We don’t wait for the right home to come online; we go hunting for it.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
+    'off-market': ['Your off-market program consult', 'Thank you for reaching out. We don’t wait for the right home to come online. We go hunting for it, investing our own time and funds, and every year we help clients secure their dream homes before anyone else knows they’re available. It starts with our consult, where we map out exactly what you want. I’ll reach out personally to set a time.'],
     'home-edit': ['Your introduction', 'I’ll introduce you to one trusted ' + v.category.toLowerCase() + ' professional. Referral relationships and any fees are always disclosed before you engage anyone.']
   }[type];
   const unsub = type === 'follow' ? '<p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + ScriptApp.getService().getUrl() + '?api=unsub&e=' + encodeURIComponent(v.email) + '&t=' + token_(v.email) + '">Stop following this home</a></p>' : '';
@@ -395,8 +395,8 @@ function details_(type, v) {
   if (type === 'valuation') return 'Home: ' + v.address;
   if (type === 'question') return v.question;
   if (type === 'home-edit') return 'Help with: ' + v.category;
-  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Off-market buyer program' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
-  if (type === 'off-market') return 'Wants: ' + (v.wants || '—') + ' · Areas: ' + (v.areas || '—');
+  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Wants off-market consult' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
+  if (type === 'off-market') return 'Consult · ' + (v.meeting || 'In person') + (v.when ? ' · ' + v.when : '') + ' · Wants: ' + (v.wants || '—') + ' · Areas: ' + (v.areas || '—');
   return '';
 }
 function book_() {

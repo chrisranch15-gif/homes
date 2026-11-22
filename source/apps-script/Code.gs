@@ -119,6 +119,9 @@ function doPost(e) {
   if (v.phone.replace(/\D/g, '').length < 10) return out_({ ok: false, reason: 'Please add a phone number with area code.' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email)) return out_({ ok: false, reason: 'Please add a valid email.' });
 
+  // a guest who already signed in and changes anything (details, Unlisted, value report): fix their row, don't add a new one
+  if (type === 'open-house' && d.update) { const u = openHouseUpdate_(v, d); if (u) return out_(u); }
+
   // the same person pressing twice within two minutes counts once
   const cache = CacheService.getScriptCache(), key = 'dup:' + type + ':' + v.email;
   if (cache.get(key) && !d.update) return out_({ ok: true, duplicate: true });   // a guest correcting their details always goes through
@@ -135,7 +138,7 @@ function doPost(e) {
   } finally { lock.releaseLock(); }
 
   try { notifyAgent_(type, t.label, v); } catch (err) { console.error('agent email', err); }
-  try { confirm_(type, v); } catch (err) { console.error('confirmation', err); }
+  try { if (type === 'open-house') queueConfirm_(type, v); else confirm_(type, v); } catch (err) { console.error('confirmation', err); }
   return out_({ ok: true });
 }
 
@@ -401,7 +404,7 @@ function notifyAgent_(type, label, v) {
   const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;\u00b7&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
-  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Unlisted', 'Interested in a consult']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
+  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket || /Updated/.test(label)) rows.push(['Unlisted', v.offmarket ? 'Interested in a consult' : 'Not interested now']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
   if (type === 'off-market') { rows.push(['Meet', esc_(v.meeting || 'In person')]); rows.push(['Likely fit', /Under \$750K/.test(v.wants) ? 'Inside Track (under $750K)' : /\$/.test(v.wants) ? 'By Invitation candidate ($750K+, owner outreach)' : 'Price not given yet']); if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
   if (v.when) rows.push(['Preferred time', esc_(v.when)]);
   if (v.address) rows.push(['Their home', esc_(v.address)]);
@@ -437,6 +440,66 @@ function confirm_(type, v) {
   const html = shell_('<h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 16px">Thank you, ' + esc_(first) + '.</h1><p style="font:16px/1.65 Arial;margin:0 0 16px">' + esc_(copy[1]) + '</p>' +
     '<p style="font:16px/1.65 Arial;margin:0">\u2014 ' + AGENT_NAME + '</p>' + unsub);
   GmailApp.sendEmail(v.email, copy[0], copy[1] + '\n\n\u2014 ' + AGENT_NAME + '\n' + BRAND + ' \u00b7 ' + AFFILIATION, { htmlBody: html, replyTo: AGENT_EMAIL, name: AGENT_NAME + ' \u00b7 ' + BRAND });
+}
+
+/* ---------------- open house sign-in: changes after signing in ----------------
+   The guest's thank-you waits two minutes, so if they change their mind (say, untick Unlisted)
+   the one email they get matches what they finally chose. A change after it went out gets one short note. */
+function queueConfirm_(type, v) {
+  const p = PropertiesService.getScriptProperties();
+  p.setProperty('pend:' + v.email, JSON.stringify({ type: type, v: v, at: Date.now() }));
+  try {
+    if (!ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === 'flushConfirms_')) ScriptApp.newTrigger('flushConfirms_').timeBased().after(2 * 60 * 1000).create();
+  } catch (err) { console.error('timer', err); flushConfirms_(true); }   // no timer allowed: send now rather than never
+}
+function flushConfirms_(all) {
+  const p = PropertiesService.getScriptProperties(), props = p.getProperties(), now = Date.now(); let left = 0;
+  try { ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'flushConfirms_').forEach(t => ScriptApp.deleteTrigger(t)); } catch (e) {}
+  Object.keys(props).filter(k => k.indexOf('pend:') === 0).forEach(k => {
+    let x; try { x = JSON.parse(props[k]); } catch (e) { p.deleteProperty(k); return; }
+    if (all !== true && now - x.at < 100000) { left++; return; }
+    p.deleteProperty(k);
+    try { confirm_(x.type, x.v); CacheService.getScriptCache().put('sent:' + x.v.email, JSON.stringify({ offmarket: !!x.v.offmarket, value: !!x.v.value }), 21600); } catch (err) { console.error('confirmation', err); }
+  });
+  if (left) try { ScriptApp.newTrigger('flushConfirms_').timeBased().after(60 * 1000).create(); } catch (e) { flushConfirms_(true); }
+}
+function openHouseUpdate_(v, d) {
+  const prev = clean_(d.prevEmail, 120).toLowerCase() || v.email, emails = [prev, v.email], day = 864e5, now = Date.now();
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(15000)) return { ok: false, reason: 'Busy for a moment \u2014 please try again.' };
+  let before = null;
+  try {
+    const sh = tab_('Leads', LEAD_HEADERS), rows = sh.getDataRange().getValues();
+    const find = label => { for (let i = rows.length - 1; i > 0; i--) if (rows[i][1] === label && emails.indexOf(String(rows[i][4]).toLowerCase()) > -1 && String(rows[i][6]) === v.listing && now - new Date(rows[i][0]).getTime() < day) return i + 1; return 0; };
+    const at = find('Open house sign-in'); if (!at) return null;              // nothing to fix: treat it as a new sign-in
+    const old = String(rows[at - 1][5]);
+    before = { offmarket: /Unlisted/.test(old), value: !!find('Home value request') && !/Withdrawn/.test(String(rows[find('Home value request') - 1][9])) };
+    sh.getRange(at, 3, 1, 4).setValues([[v.name, v.phone, v.email, details_('open-house', v)]]);
+    const va = find('Home value request');
+    if (v.value && v.address) { if (va) sh.getRange(va, 3, 1, 4).setValues([[v.name, v.phone, v.email, 'Home: ' + v.address + ' (from open house sign-in)']]), sh.getRange(va, 10).setValue('New');
+      else sh.appendRow([new Date(), 'Home value request', v.name, v.phone, v.email, 'Home: ' + v.address + ' (from open house sign-in)', v.listing, v.page, v.source, 'New']); }
+    else if (va) sh.getRange(va, 10).setValue('Withdrawn');
+  } finally { lock.releaseLock(); }
+  const p = PropertiesService.getScriptProperties(), pend = p.getProperty('pend:' + prev);
+  if (pend) {                                                          // thank-you not sent yet: it goes out with what they chose now
+    p.deleteProperty('pend:' + prev); queueConfirm_('open-house', v);
+  } else {
+    const sent = JSON.parse(CacheService.getScriptCache().get('sent:' + prev) || 'null') || before;
+    if (sent && (sent.offmarket !== !!v.offmarket || sent.value !== !!(v.value && v.address))) { try { changeNote_(v, sent); } catch (err) { console.error(err); } }
+    CacheService.getScriptCache().put('sent:' + v.email, JSON.stringify({ offmarket: !!v.offmarket, value: !!(v.value && v.address) }), 21600);   // what their emails now say
+  }
+  try { notifyAgent_('open-house', 'Updated open house sign-in', v); } catch (err) { console.error(err); }
+  return { ok: true, updated: true };
+}
+function changeNote_(v, was) {
+  const first = v.name.split(' ')[0], lines = [];
+  if (was.offmarket && !v.offmarket) lines.push('No problem \u2014 I won\u2019t reach out about Unlisted. If you ever want to talk about it, just reply.');
+  if (!was.offmarket && v.offmarket) lines.push('I\u2019ll reach out about a consult for Unlisted, our off-market buyer program.');
+  if (was.value && !(v.value && v.address)) lines.push('I\u2019ve taken you off the list for a home value report.');
+  if (!was.value && v.value && v.address) lines.push('I\u2019ll put together an updated value report for ' + v.address + '.');
+  if (!lines.length) return;
+  const text = 'Thanks for updating your details. ' + lines.join(' ');
+  GmailApp.sendEmail(v.email, 'Your details are updated', text + '\n\n\u2014 ' + AGENT_NAME + '\n' + BRAND + ' \u00b7 ' + AFFILIATION,
+    { htmlBody: shell_('<h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 16px">Got it, ' + esc_(first) + '.</h1><p style="font:16px/1.65 Arial;margin:0 0 16px">' + esc_(text) + '</p><p style="font:16px/1.65 Arial;margin:0">\u2014 ' + AGENT_NAME + '</p>'), replyTo: AGENT_EMAIL, name: AGENT_NAME + ' \u00b7 ' + BRAND });
 }
 
 /* Run from the editor when something changes, e.g. notifyFollowers('New price', '19917 145th St E is now $760,000.') */

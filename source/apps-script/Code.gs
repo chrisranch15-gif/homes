@@ -1,18 +1,18 @@
 /**
- * RANCH LEADS — the email engine behind homes.ranchpnw.com
+ * RANCH LEADS \u2014 the email engine behind homes.ranchpnw.com
  * Same setup as the Adopt a Senior site: runs on Chris's Google account,
  * sends from his address, and logs every request to a Google Sheet.
  *
- * Deploy: Deploy → New deployment → Web app → Execute as: Me · Who has access: Anyone.
+ * Deploy: Deploy \u2192 New deployment \u2192 Web app \u2192 Execute as: Me \u00b7 Who has access: Anyone.
  * First time: run setup() once from the editor to create the Sheet and send a test email.
  */
-const AGENT_EMAIL = Session.getEffectiveUser().getEmail();   // the Google account that runs this script — yours
+const AGENT_EMAIL = Session.getEffectiveUser().getEmail();   // the Google account that runs this script \u2014 yours
 const AGENT_NAME = 'Chris Ranch';
 const BRAND = 'The Ranch Real Estate Group';
 const AFFILIATION = 'Keller Williams Puget Sound';
 const SITE_URL = 'https://homes.ranchpnw.com';
 const ALSO_NOTIFY = [];            // add teammates' emails here to copy them on every new lead
-const SHEET_NAME = 'Ranch Leads · homes.ranchpnw.com';
+const SHEET_NAME = 'Ranch Leads \u00b7 homes.ranchpnw.com';
 
 const TYPES = {
   'tour':                { label: 'Tour request',               needs: ['name', 'phone', 'email', 'agent', 'financing'] },
@@ -76,7 +76,7 @@ function doPost(e) {
   const type = String(d.type || '');
   if (type === 'office') return out_(officePost_(d));
   if (type === 'visit' || type === 'scan') {
-    tab_('Activity', ACTIVITY_HEADERS).appendRow([new Date(), type === 'scan' ? 'Sign scan' : 'Visit · ' + clean_(d.view, 20), clean_(d.page, 30), clean_(d.source, 40), clean_(d.visitor, 20), clean_(d.sign, 20)]);
+    tab_('Activity', ACTIVITY_HEADERS).appendRow([new Date(), type === 'scan' ? 'Sign scan' : 'Visit \u00b7 ' + clean_(d.view, 20), clean_(d.page, 30), clean_(d.source, 40), clean_(d.visitor, 20), clean_(d.sign, 20)]);
     return out_({ ok: true });
   }
   if (type === 'check') {                                  // nightly website check from GitHub Actions
@@ -92,8 +92,8 @@ function doPost(e) {
     if (!home || !fb) return out_({ ok: false, reason: 'Nothing to save' });
     const key = 'fb:' + clean_(d.email, 120).toLowerCase() + ':' + home, cache = CacheService.getScriptCache(), sh = tab_('Showings', SHOWING_HEADERS);
     const row = Number(cache.get(key) || 0);                // the same guest changing answers updates one row
-    if (row) sh.getRange(row, 1, 1, 4).setValues([[new Date(), home, 'Open house · ' + (clean_(d.interest, 20) || 'feedback'), fb]]);
-    else { sh.appendRow([new Date(), home, 'Open house · ' + (clean_(d.interest, 20) || 'feedback'), fb]); cache.put(key, String(sh.getLastRow()), 21600); }
+    if (row) sh.getRange(row, 1, 1, 4).setValues([[new Date(), home, 'Open house \u00b7 ' + (clean_(d.interest, 20) || 'feedback'), fb]]);
+    else { sh.appendRow([new Date(), home, 'Open house \u00b7 ' + (clean_(d.interest, 20) || 'feedback'), fb]); cache.put(key, String(sh.getLastRow()), 21600); }
     return out_({ ok: true });
   }
   const t = TYPES[type];
@@ -109,7 +109,7 @@ function doPost(e) {
   if (type === 'seller-message') {
     const sel = seller_(d.code); if (!sel) return out_({ ok: false, reason: 'Please sign in again.' });
     tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, sel.names, '', '', v.question, sel.home, sel.page, 'seller portal', 'New']);
-    try { GmailApp.sendEmail(AGENT_EMAIL, 'Message from ' + sel.names + ' · ' + sel.home, v.question, { htmlBody: shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">From your seller portal</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(sel.names) + '</h1><p style="font:16px/1.65 Arial">' + esc_(v.question) + '</p>'), name: 'Ranch Leads' }); } catch (err) { console.error(err); }
+    try { GmailApp.sendEmail(AGENT_EMAIL, 'Message from ' + sel.names + ' \u00b7 ' + sel.home, v.question, { htmlBody: shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">From your seller portal</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(sel.names) + '</h1><p style="font:16px/1.65 Arial">' + esc_(v.question) + '</p>'), name: 'Ranch Leads' }); } catch (err) { console.error(err); }
     return out_({ ok: true });
   }
   if (v.phone.replace(/\D/g, '').length < 10) return out_({ ok: false, reason: 'Please add a phone number with area code.' });
@@ -121,12 +121,12 @@ function doPost(e) {
   cache.put(key, '1', 120);
 
   const lock = LockService.getScriptLock();
-  if (!lock.tryLock(15000)) return out_({ ok: false, reason: 'Busy for a moment — please try again.' });
+  if (!lock.tryLock(15000)) return out_({ ok: false, reason: 'Busy for a moment \u2014 please try again.' });
   try {
     const details = details_(type, v);
     tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, v.name, v.phone, v.email, details, v.listing, v.page, v.source, 'New']);
     if (type === 'follow') tab_('Followers', FOLLOWER_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.listing, '']);
-    if (type === 'off-market') tab_('Unlisted buyers', OFFMARKET_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.meeting || '—', v.when || '—', v.wants, v.areas, v.source, v.listing, 'Consult to schedule']);
+    if (type === 'off-market') tab_('Unlisted buyers', OFFMARKET_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.meeting || '\u2014', v.when || '\u2014', v.wants, v.areas, v.source, v.listing, 'Consult to schedule']);
     if (type === 'open-house' && v.value && v.address) tab_('Leads', LEAD_HEADERS).appendRow([new Date(), 'Home value request', v.name, v.phone, v.email, 'Home: ' + v.address + ' (from open house sign-in)', v.listing, v.page, v.source, 'New']);
   } finally { lock.releaseLock(); }
 
@@ -144,7 +144,7 @@ function doGet(e) {
   if (p.api === 'unsub' && p.e && p.t === token_(p.e)) {
     const sh = tab_('Followers', FOLLOWER_HEADERS), rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) if (String(rows[i][3]).toLowerCase() === String(p.e).toLowerCase() && !rows[i][5]) sh.getRange(i + 1, 6).setValue(new Date());
-    return HtmlService.createHtmlOutput('<div style="font:17px/1.6 Georgia,serif;max-width:480px;margin:80px auto;padding:0 24px;color:#1E2327"><p style="letter-spacing:.2em;font:12px Arial;color:#8C6A43">' + BRAND.toUpperCase() + '</p><h1 style="font-weight:400">You’re unsubscribed.</h1><p>You won’t get any more updates about this home. Thank you for following it.</p></div>');
+    return HtmlService.createHtmlOutput('<div style="font:17px/1.6 Georgia,serif;max-width:480px;margin:80px auto;padding:0 24px;color:#1E2327"><p style="letter-spacing:.2em;font:12px Arial;color:#8C6A43">' + BRAND.toUpperCase() + '</p><h1 style="font-weight:400">You\u2019re unsubscribed.</h1><p>You won\u2019t get any more updates about this home. Thank you for following it.</p></div>');
   }
   return out_({ ok: true });
 }
@@ -256,7 +256,7 @@ function syncPhotos() {
       const addr = am ? am[1].trim() : '';
       console.log('order ' + o[1] + ' address: ' + (addr || 'NOT FOUND'));
       if (!addr) return;
-      const pkg = ((/Packages\s+(.+?)\s+\$[\d,]+\.\d\d/.exec(flat) || [])[1] || '').replace(/\s*\*\s*/g, ' · ').replace(/^·\s*/, '').trim();
+      const pkg = ((/Packages\s+(.+?)\s+\$[\d,]+\.\d\d/.exec(flat) || [])[1] || '').replace(/\s*\*\s*/g, ' \u00b7 ').replace(/^\u00b7\s*/, '').trim();
       const total = (/(?<!SUB-)TOTAL\s*\|?\s*(\$[\d,]+\.\d\d)/.exec(flat) || [])[1] || '';
       const key = homeKey_(addr); const r = row[key];
       put(key, { 1: addr, 2: r && shoots.getRange(r, 3).getValue() === 'Ready' ? '' : 'Ordered', 3: o[1], 4: pkg.slice(0, 200), 5: total, 6: when, 8: id ? RAINIER + '/d/' + id : '' });
@@ -295,7 +295,7 @@ function sellerView_(code) {
   const cache = CacheService.getScriptCache(), tries = Number(cache.get('sellerTries') || 0);
   if (tries > 60) return { ok: false, reason: 'Too many attempts. Try again in a few minutes.' };
   const sel = seller_(code);
-  if (!sel) { cache.put('sellerTries', String(tries + 1), 600); return { ok: false, reason: 'That code didn’t match.' }; }
+  if (!sel) { cache.put('sellerTries', String(tries + 1), 600); return { ok: false, reason: 'That code didn\u2019t match.' }; }
   const now = Date.now(), week = 7 * 864e5;
   const act = tab_('Activity', ACTIVITY_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[2]) === sel.page);
   const visits = act.filter(r => /^Visit/.test(r[1])), seen = {}, seen7 = {};
@@ -327,7 +327,7 @@ function latest_(rows, keyCol, map) {
 /* ---------------- emails ---------------- */
 function notifyAgent_(type, label, v) {
   const first = v.name.split(' ')[0];
-  const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;·&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
+  const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;\u00b7&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
   if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Unlisted', 'Interested in a consult']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
@@ -336,36 +336,36 @@ function notifyAgent_(type, label, v) {
   if (v.address) rows.push(['Their home', esc_(v.address)]);
   if (v.question && type !== 'open-house' && type !== 'off-market') rows.push(['Question', esc_(v.question)]);
   if (v.category) rows.push(['Help with', esc_(v.category)]);
-  rows.push(['Home', esc_(v.listing || '—')], ['Came from', esc_(v.source || 'direct') + ' · ' + esc_(v.page || '')]);
+  rows.push(['Home', esc_(v.listing || '\u2014')], ['Came from', esc_(v.source || 'direct') + ' \u00b7 ' + esc_(v.page || '')]);
   const html = shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">' + esc_(label) + '</p>' +
     '<h1 style="font:400 30px/1.15 Georgia,serif;margin:0 0 18px">' + esc_(v.name) + '</h1>' +
     '<table style="border-collapse:collapse;width:100%;font:15px/1.5 Arial">' + rows.map(r => '<tr><td style="padding:9px 12px 9px 0;color:#5E584E;vertical-align:top;white-space:nowrap">' + r[0] + '</td><td style="padding:9px 0;border-bottom:1px solid #EFEBE4">' + r[1] + '</td></tr>').join('') + '</table>' +
-    '<p style="font:14px/1.6 Arial;color:#5E584E;margin:22px 0 0">Reply to this email to reach ' + esc_(first) + ' directly. It’s also logged in your “' + SHEET_NAME + '” Google Sheet.</p>');
-  const subject = label + ' — ' + v.name + (v.listing ? ' · ' + v.listing : '');
+    '<p style="font:14px/1.6 Arial;color:#5E584E;margin:22px 0 0">Reply to this email to reach ' + esc_(first) + ' directly. It\u2019s also logged in your \u201c' + SHEET_NAME + '\u201d Google Sheet.</p>');
+  const subject = label + ' \u2014 ' + v.name + (v.listing ? ' \u00b7 ' + v.listing : '');
   const opts = { htmlBody: html, replyTo: v.email, name: 'Ranch Leads' };
   if (ALSO_NOTIFY.length) opts.cc = ALSO_NOTIFY.join(',');
-  GmailApp.sendEmail(AGENT_EMAIL, subject, label + ': ' + v.name + ' · ' + v.phone + ' · ' + v.email, opts);
+  GmailApp.sendEmail(AGENT_EMAIL, subject, label + ': ' + v.name + ' \u00b7 ' + v.phone + ' \u00b7 ' + v.email, opts);
 }
 
 function confirm_(type, v) {
   const first = v.name.split(' ')[0], home = v.listing || 'the home';
   const copy = {
-    'tour': ['Your tour of ' + home, 'Thank you for asking to see ' + home + '. I’ll confirm a time with you personally' + (v.when ? ' — you mentioned ' + v.when + '.' : '.') + ' If anything changes, just reply to this email.'],
-    'valuation': ['Your home value request', 'Thank you for asking. I prepare every valuation personally — real recent sales, your home’s upgrades and today’s buyers, never an automated estimate. I’ll be in touch shortly about ' + v.address + '.'],
-    'follow': ['You’re following ' + home, 'You’ll hear from me the moment the price changes, an open house is set, or the status changes. Nothing else.'],
-    'question': ['Your question about ' + home, 'Thanks for asking: “' + v.question + '” I’ll reply personally, usually the same day.'],
-    'alerts': ['New Tehaleh listings', 'You’re on the list for new homes in Tehaleh — you’ll hear before the weekend rush.'],
-    'updates': ['The Retreat at Glacier Pointe', 'I’ll write when there’s real news on the clubhouse opening — and only then.'],
-    'community-tour': ['Your Tehaleh tour', 'I’d love to show you around — trails, parks and neighborhoods. I’ll reach out to plan a time.'],
-    'open-house-reminder': ['Open house reminder', 'You’re set. I’ll send one reminder before the open house.'],
-    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' I’ll also reach out about a consult for Unlisted, our off-market buyer program. Most agents wait for the right home to come on the market; we go hunting for it.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
-    'off-market': ['Your Unlisted consult', 'Thank you for reaching out. Most agents wait for the right home to come on the market. We don’t. We go hunting, investing our own time and funds, and every year we help clients secure their dream homes before anyone else knows they’re available. It starts with an in-person consult (or video if that’s easier) to get very clear on what you want, where, and how you’re buying. I’ll reach out personally to set a time.'],
-    'home-edit': ['Your introduction', 'I’ll introduce you to one trusted ' + v.category.toLowerCase() + ' professional. Referral relationships and any fees are always disclosed before you engage anyone.']
+    'tour': ['Your tour of ' + home, 'Thank you for asking to see ' + home + '. I\u2019ll confirm a time with you personally' + (v.when ? ' \u2014 you mentioned ' + v.when + '.' : '.') + ' If anything changes, just reply to this email.'],
+    'valuation': ['Your home value request', 'Thank you for asking. I prepare every valuation personally \u2014 real recent sales, your home\u2019s upgrades and today\u2019s buyers, never an automated estimate. I\u2019ll be in touch shortly about ' + v.address + '.'],
+    'follow': ['You\u2019re following ' + home, 'You\u2019ll hear from me the moment the price changes, an open house is set, or the status changes. Nothing else.'],
+    'question': ['Your question about ' + home, 'Thanks for asking: \u201c' + v.question + '\u201d I\u2019ll reply personally, usually the same day.'],
+    'alerts': ['New Tehaleh listings', 'You\u2019re on the list for new homes in Tehaleh \u2014 you\u2019ll hear before the weekend rush.'],
+    'updates': ['The Retreat at Glacier Pointe', 'I\u2019ll write when there\u2019s real news on the clubhouse opening \u2014 and only then.'],
+    'community-tour': ['Your Tehaleh tour', 'I\u2019d love to show you around \u2014 trails, parks and neighborhoods. I\u2019ll reach out to plan a time.'],
+    'open-house-reminder': ['Open house reminder', 'You\u2019re set. I\u2019ll send one reminder before the open house.'],
+    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' I\u2019ll also reach out about a consult for Unlisted, our off-market buyer program. Most agents wait for the right home to come on the market; we go hunting for it.' : '') + (v.value && v.address ? ' I\u2019ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
+    'off-market': ['Your Unlisted consult', 'Thank you for reaching out. Most agents wait for the right home to come on the market. We don\u2019t. We go hunting, investing our own time and funds, and every year we help clients secure their dream homes before anyone else knows they\u2019re available. It starts with an in-person consult (or video if that\u2019s easier) to get very clear on what you want, where, and how you\u2019re buying. I\u2019ll reach out personally to set a time.'],
+    'home-edit': ['Your introduction', 'I\u2019ll introduce you to one trusted ' + v.category.toLowerCase() + ' professional. Referral relationships and any fees are always disclosed before you engage anyone.']
   }[type];
   const unsub = type === 'follow' ? '<p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + ScriptApp.getService().getUrl() + '?api=unsub&e=' + encodeURIComponent(v.email) + '&t=' + token_(v.email) + '">Stop following this home</a></p>' : '';
   const html = shell_('<h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 16px">Thank you, ' + esc_(first) + '.</h1><p style="font:16px/1.65 Arial;margin:0 0 16px">' + esc_(copy[1]) + '</p>' +
-    '<p style="font:16px/1.65 Arial;margin:0">— ' + AGENT_NAME + '</p>' + unsub);
-  GmailApp.sendEmail(v.email, copy[0], copy[1] + '\n\n— ' + AGENT_NAME + '\n' + BRAND + ' · ' + AFFILIATION, { htmlBody: html, replyTo: AGENT_EMAIL, name: AGENT_NAME + ' · ' + BRAND });
+    '<p style="font:16px/1.65 Arial;margin:0">\u2014 ' + AGENT_NAME + '</p>' + unsub);
+  GmailApp.sendEmail(v.email, copy[0], copy[1] + '\n\n\u2014 ' + AGENT_NAME + '\n' + BRAND + ' \u00b7 ' + AFFILIATION, { htmlBody: html, replyTo: AGENT_EMAIL, name: AGENT_NAME + ' \u00b7 ' + BRAND });
 }
 
 /* Run from the editor when something changes, e.g. notifyFollowers('New price', '19917 145th St E is now $760,000.') */
@@ -375,8 +375,8 @@ function notifyFollowers(title, message) {
   rows.forEach(r => {
     const email = String(r[3]).toLowerCase(); if (seen[email]) return; seen[email] = 1;
     const link = ScriptApp.getService().getUrl() + '?api=unsub&e=' + encodeURIComponent(email) + '&t=' + token_(email);
-    const html = shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">' + esc_(r[4] || 'The home you follow') + '</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(title) + '</h1><p style="font:16px/1.65 Arial;margin:0 0 16px">' + esc_(message) + '</p><p style="font:16px/1.65 Arial;margin:0"><a href="' + SITE_URL + '/19917">See the home →</a></p><p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + link + '">Stop following this home</a></p>');
-    GmailApp.sendEmail(email, title + ' · ' + (r[4] || ''), message + '\n\nStop following: ' + link, { htmlBody: html, replyTo: AGENT_EMAIL, name: AGENT_NAME + ' · ' + BRAND });
+    const html = shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">' + esc_(r[4] || 'The home you follow') + '</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(title) + '</h1><p style="font:16px/1.65 Arial;margin:0 0 16px">' + esc_(message) + '</p><p style="font:16px/1.65 Arial;margin:0"><a href="' + SITE_URL + '/19917">See the home \u2192</a></p><p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + link + '">Stop following this home</a></p>');
+    GmailApp.sendEmail(email, title + ' \u00b7 ' + (r[4] || ''), message + '\n\nStop following: ' + link, { htmlBody: html, replyTo: AGENT_EMAIL, name: AGENT_NAME + ' \u00b7 ' + BRAND });
   });
   return Object.keys(seen).length + ' followers told';
 }
@@ -385,18 +385,18 @@ function notifyFollowers(title, message) {
 function setup() {
   tab_('Leads', LEAD_HEADERS); tab_('Followers', FOLLOWER_HEADERS); tab_('Activity', ACTIVITY_HEADERS);
   tab_('Sellers', SELLER_HEADERS); tab_('Seller updates', UPDATE_HEADERS); tab_('Marketing', MARKETING_HEADERS); tab_('Showings', SHOWING_HEADERS);
-  notifyAgent_('tour', 'TEST — Tour request', { name: 'Test Buyer', phone: '(253) 555-0100', email: AGENT_EMAIL, agent: 'No', financing: 'Pre-approved', when: 'Saturday morning', listing: '19917 145th St E', page: 'setup', source: 'test' });
+  notifyAgent_('tour', 'TEST \u2014 Tour request', { name: 'Test Buyer', phone: '(253) 555-0100', email: AGENT_EMAIL, agent: 'No', financing: 'Pre-approved', when: 'Saturday morning', listing: '19917 145th St E', page: 'setup', source: 'test' });
   return 'Sheet ready: ' + book_().getUrl();
 }
 
 /* ---------------- helpers ---------------- */
 function details_(type, v) {
-  if (type === 'tour') return 'Agent: ' + v.agent + ' · Buying: ' + v.financing + (v.when ? ' · When: ' + v.when : '');
+  if (type === 'tour') return 'Agent: ' + v.agent + ' \u00b7 Buying: ' + v.financing + (v.when ? ' \u00b7 When: ' + v.when : '');
   if (type === 'valuation') return 'Home: ' + v.address;
   if (type === 'question') return v.question;
   if (type === 'home-edit') return 'Help with: ' + v.category;
-  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Wants Unlisted consult' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
-  if (type === 'off-market') return 'Unlisted consult · ' + (v.meeting || 'In person') + (v.when ? ' · ' + v.when : '') + ' · Wants: ' + (v.wants || '—') + ' · Areas: ' + (v.areas || '—');
+  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' \u00b7 Wants Unlisted consult' : '') + (v.value ? ' \u00b7 Value report' + (v.address ? ': ' + v.address : '') : '');
+  if (type === 'off-market') return 'Unlisted consult \u00b7 ' + (v.meeting || 'In person') + (v.when ? ' \u00b7 ' + v.when : '') + ' \u00b7 Wants: ' + (v.wants || '\u2014') + ' \u00b7 Areas: ' + (v.areas || '\u2014');
   return '';
 }
 function book_() {
@@ -433,7 +433,7 @@ function setupOffice() { // run once from the editor; copy the key from the log 
   const props = PropertiesService.getScriptProperties();
   let key = props.getProperty('OFFICE_KEY');
   if (!key) { key = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '').slice(0, 8); props.setProperty('OFFICE_KEY', key); }
-  console.log('Your office password is in Project Settings → Script properties → OFFICE_KEY. Change it there to any password you like (10+ characters).');
+  console.log('Your office password is in Project Settings \u2192 Script properties \u2192 OFFICE_KEY. Change it there to any password you like (10+ characters).');
   console.log(props.getProperty('ANTHROPIC_API_KEY') ? 'AI key: set' : 'AI key: not set yet. Project Settings, Script properties, add ANTHROPIC_API_KEY.');
   CalendarApp.getDefaultCalendar(); GmailApp.getAliases();
 }
@@ -477,7 +477,7 @@ function officeCall_(server, name, a) {
     if (name === 'create_event') { const ev = cal(a.calendarId).createEvent(String(a.summary || 'Event'), new Date(a.startTime), new Date(a.endTime), { location: a.location || '' }); return { id: ev.getId() }; }
     if (name === 'respond_to_event') { const ev = cal(a.calendarId).getEventById(a.eventId); ev.setMyStatus(a.responseStatus === 'accepted' ? CalendarApp.GuestStatus.YES : CalendarApp.GuestStatus.NO); return { ok: true }; }
   }
-  throw new Error(server + ' isn’t connected in the office yet.');
+  throw new Error(server + ' isn\u2019t connected in the office yet.');
 }
 function officeAi_(prompt, opts) {
   const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');

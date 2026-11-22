@@ -21,7 +21,7 @@ button,input{font:inherit;color:inherit}
 .hero{color:#fff;background:var(--night);justify-content:flex-end;overflow:hidden}
 .hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08);animation:kb 18s ease-out forwards}
 @keyframes kb{to{transform:scale(1)}}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,25,27,.25) 0%,rgba(22,25,27,.1) 22%,rgba(22,25,27,.7) 42%,rgba(22,25,27,.94) 58%,#16191B 100%)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,25,27,.3) 0%,rgba(22,25,27,.15) 14%,rgba(22,25,27,.82) 30%,rgba(22,25,27,.95) 46%,#16191B 100%)}
 .hero .in{text-shadow:0 1px 14px rgba(0,0,0,.35);position:relative;z-index:1;padding:0 28px calc(34px + env(safe-area-inset-bottom))}
 .mono{font:500 11px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase}
 .hero .mono{color:var(--gold)}
@@ -133,6 +133,16 @@ button,input{font:inherit;color:inherit}
 .toast.on{transform:translate(-50%,0);opacity:1}
 .hp{position:absolute;left:-9999px}
 
+.hero .in.form .fine{font-size:12px;max-width:none}
+.hero .in.form h1{font-size:clamp(40px,11vw,52px);margin:10px 0 8px}
+.hero .in.form > p:not(.mono):not(.fine):not(.err){font-size:16px;margin-bottom:16px}
+.glass .f{margin-bottom:10px;text-shadow:none}
+.glass .f input{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.28);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.glass .f input:focus{border-color:var(--gold);box-shadow:none;background:rgba(255,255,255,.14)}
+.glass .f label{color:rgba(255,255,255,.7)}
+.glass .f input:focus+label,.glass .f input:not(:placeholder-shown)+label{color:var(--gold)}
+.hero .err{color:#F2B8A8;min-height:18px;margin:2px 0 0;text-shadow:none}
+.hero .in.form .cta.light{margin-top:10px}
 .alt{display:block;width:100%;background:none;border:0;color:rgba(255,255,255,.7);font-size:14px;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .me{display:flex;align-items:center;gap:14px;background:#20252A;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px;margin-bottom:6px}
 .me .av{width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--night);display:grid;place-items:center;font:500 15px var(--sans);flex:none}
@@ -190,7 +200,7 @@ let S = { step: 0, name: '', phone: '', email: '', agent: '', agentName: '', off
 try { const saved = JSON.parse(sessionStorage.getItem('oh.' + KEY) || 'null'); if (saved && !KIOSK && !MODE) S = Object.assign(S, saved, { step: 9 }); } catch (e) {}
 const keep = () => { if (!KIOSK) try { sessionStorage.setItem('oh.' + KEY, JSON.stringify(S)); remember(); } catch (e) {} };
 // the guest's contact details, kept on their own phone for 30 days so the next sign scanned is one tap
-const GUEST = (() => { if (KIOSK) return null; try { const g = JSON.parse(localStorage.getItem('ranch.guest') || 'null'); return g && Date.now() - g.at < 2592e6 ? g : null; } catch (e) { return null; } })();
+let GUEST = (() => { if (KIOSK) return null; try { const g = JSON.parse(localStorage.getItem('ranch.guest') || 'null'); return g && Date.now() - g.at < 2592e6 ? g : null; } catch (e) { return null; } })();
 function remember() { if (KIOSK || !S.email) return; try { localStorage.setItem('ranch.guest', JSON.stringify({ name: S.name, phone: S.phone, email: S.email, at: Date.now() })); } catch (e) {} }
 if (GUEST && !S.email) Object.assign(S, { name: GUEST.name, phone: GUEST.phone, email: GUEST.email });
 let EDIT = !GUEST;
@@ -215,9 +225,12 @@ function render() {
   if (MODE === 'offmarket' || MODE === 'value') return renderOffer(app);
   if (S.step === 0) app.innerHTML = `<section class="screen hero on"><div class="bg" style="background-image:url('${H.hero}')"></div>
     <div class="top"><div class="brand"><b>The Ranch</b>Real Estate Group</div><div class="live"><i></i>Open house</div></div>
-    <div class="in"><p class="mono">${esc(H.address)} · ${esc(H.area)}</p><h1>Welcome <em>in.</em></h1>
-    <p>The sellers ask that every guest sign in before touring. It takes about twenty seconds.</p>
-    ${GUEST ? `<button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>` : `<button class="cta light" id="go">Sign in ${I.arrow}</button>`}<p class="fine">Hosted by Chris Ranch · Keller Williams Realty Puget Sound</p></div></section>`;
+    <div class="in${GUEST ? '' : ' form'}"><p class="mono">${esc(H.address)} · ${esc(H.area)}</p><h1>Welcome <em>in.</em></h1>
+    ${GUEST ? `<p>The sellers ask that every guest sign in before touring.</p><button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>`
+    : `<p>The sellers ask that every guest sign in before touring.</p>
+    <div class="glass">${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}</div>
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><button class="cta light" id="go">Continue ${I.arrow}</button>`}
+    <p class="fine">Hosted by Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</p></div></section>`;
   if (S.step === 1) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(1)}</div>
     <p class="mono">Step one</p><h2>Who’s visiting today?</h2><p class="lede">So the sellers know who has been through their home.</p>
     ${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}
@@ -344,9 +357,11 @@ function readContact() {
 
 function wire() {
   const go = n => { S.step = n; render(); window.scrollTo(0, 0); const i = document.querySelector('.step input'); if (i && n === 1 && !KIOSK) setTimeout(() => i.focus(), 350); };
-  if ($('#go')) $('#go').onclick = () => go(GUEST && S.step === 0 ? 2 : 1);
-  if ($('#notme')) $('#notme').onclick = () => { Object.assign(S, { name: '', phone: '', email: '' }); try { localStorage.removeItem('ranch.guest'); } catch (e) {} go(1); };
-  if ($('#bk')) $('#bk').onclick = () => go(S.step - 1);
+  if ($('#go')) $('#go').onclick = () => { if (GUEST || readContact()) { remember(); go(2); } };
+  if (S.step === 0 && $('#nm')) document.querySelectorAll('.hero .f input').forEach(i => i.oninput = () => err(''));
+  if (S.step === 0 && $('#nm')) document.querySelectorAll('.hero .f input').forEach(i => i.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); const n = i.closest('.f').nextElementSibling; n && n.querySelector('input') ? n.querySelector('input').focus() : $('#go').click(); } });
+  if ($('#notme')) $('#notme').onclick = () => { Object.assign(S, { name: '', phone: '', email: '' }); GUEST = null; try { localStorage.removeItem('ranch.guest'); } catch (e) {} go(0); };
+  if ($('#bk')) $('#bk').onclick = () => go(S.step === 2 || S.step === 1 ? 0 : S.step - 1);
   if (S.step === 1) {
     $('#nx').onclick = async () => { if (!readContact()) return;
       if (S.editing) { S.editing = false; try { await post('open-house', { agent: S.agent || 'Not given', update: true, question: 'Corrected their details after signing in' }); } catch (e) {} S.step = 9; keep(); render(); toast('Updated. Thank you.'); return; }

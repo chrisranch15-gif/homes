@@ -5,7 +5,7 @@
 
 Every listing gets the same set of signs, each with its own QR code (scan-tested on build):
     1. Please sign in              → homes.ranchpnw.com/welcome?home=<key>
-    2. Private buyer list (gold)   → …#offmarket   (always the standout sign)
+    2. Off-market buyer program (gold)   → …#offmarket   (always the standout sign)
     3. The market has changed      → …#value
     4. Table tent (two per page, fold in half): sign in + private list
 
@@ -40,8 +40,8 @@ def signs(key, L):
     return [
         dict(id='signin', url=base, eyebrow='PLEASE SIGN IN', title='Welcome in.',
              sub='The sellers ask that every guest\nsign in before touring.', foot='Scan with your phone camera · about 20 seconds', photo=L['signin']),
-        dict(id='offmarket', url=base + '#offmarket', eyebrow='PRIVATE BUYER LIST', title='Not quite the one?', gold=True,
-             sub='The right home may not be on Zillow yet.\nMembers hear about off-market homes first.', foot='Scan to join · tell us what you’re looking for', photo=L['offmarket']),
+        dict(id='offmarket', url=base + '#offmarket', eyebrow='OFF-MARKET BUYER PROGRAM', title='Not quite the one?', gold=True,
+             sub='We don’t wait for the right home to come online.\nWe go find it, often before it’s ever listed.', foot='Scan to join the program · tell us what you want', photo=L['offmarket']),
         dict(id='value', url=base + '#value', eyebrow='HOME VALUE REPORT', title='The market has changed.',
              sub='Has your home’s value? Get an updated\nreport, prepared personally.', foot='Scan for your free value report', photo=L['value']),
     ]
@@ -100,7 +100,7 @@ def noir(c, S, L, q):
     ph = 4.3 * 72; photo(c, S['photo'], 0, H - ph, W, ph); fade(c, H - ph - 1, ph * .55, bg)
     c.setFillColor(WHITE); c.setFont('SansM', 8.5); c.drawString(.6 * 72, H - .55 * 72, AGENT['team'].upper())
     y = H - ph + .15 * 72
-    if gold: badge(c, 'MEMBERS HEAR FIRST', y + 4, NIGHT, GOLD)
+    if gold: badge(c, 'OFF-MARKET BUYER PROGRAM', y + 4, NIGHT, GOLD)
     else: c.setFillColor(GOLD); c.setFont('SansM', 10); c.drawCentredString(W / 2, y, spaced(S['eyebrow']))
     c.setFillColor(NIGHT if gold else WHITE); c.setFont('Serif', 40); c.drawCentredString(W / 2, y - 50, S['title'])
     lines(c, S['sub'], y - 80, 'SansL' if not gold else 'Sans', 13.5, HexColor('#3A3125') if gold else DIM, 19)
@@ -120,7 +120,7 @@ def daylight(c, S, L, q):
     y = H - m - ph - .5 * 72
     if gold:
         c.setFillColor(GOLD); c.rect(0, 0, W, y + .32 * 72, fill=1, stroke=0)
-        badge(c, 'MEMBERS HEAR FIRST', y - 2, NIGHT, GOLD)
+        badge(c, 'OFF-MARKET BUYER PROGRAM', y - 2, NIGHT, GOLD)
     else: c.setFillColor(BRONZE); c.setFont('SansM', 10); c.drawCentredString(W / 2, y, spaced(S['eyebrow']))
     c.setFillColor(INK); c.setFont('Serif', 38); c.drawCentredString(W / 2, y - 48, S['title'])
     lines(c, S['sub'], y - 76, 'Sans', 13, HexColor('#3A3125') if gold else MUTED, 18)
@@ -137,7 +137,7 @@ def gallery(c, S, L, q):
     c.saveState(); c.setFillColor(GOLD if gold else Color(.09, .1, .11)); c.setFillAlpha(.97 if gold else .82)
     c.roundRect(cx, cy, cw, ch, 22, fill=1, stroke=0); c.restoreState()
     top = cy + ch - .55 * 72
-    if gold: badge(c, 'PRIVATE · MEMBERS HEAR FIRST', top, NIGHT, GOLD)
+    if gold: badge(c, 'OFF-MARKET BUYER PROGRAM', top, NIGHT, GOLD)
     else: c.setFillColor(GOLD); c.setFont('SansM', 10); c.drawCentredString(W / 2, top, spaced(S['eyebrow']))
     c.setFillColor(NIGHT if gold else WHITE); c.setFont('Serif', 34); c.drawCentredString(W / 2, top - 46, S['title'])
     lines(c, S['sub'], top - 72, 'Sans', 12, HexColor('#3A3125') if gold else HexColor('#D8D2C8'), 17)
@@ -152,7 +152,7 @@ def tent(c, L, key, style, qs):
     c.setFillColor(CREAM if style == 'daylight' else NIGHT); c.rect(0, 0, W, H, fill=1, stroke=0)
     light = style == 'daylight'
     for i, (sid, title, sub, gold) in enumerate([('signin', 'Please sign in', 'The sellers ask every guest to sign in.', False),
-                                                  ('offmarket', 'Private buyer list', 'Off-market homes. Members hear first.', True)]):
+                                                  ('offmarket', 'Not quite the one?', 'We find homes before they’re ever listed.', True)]):
         y0 = H / 2 if i == 0 else 0; panel = H / 2
         if gold: c.setFillColor(GOLD); c.rect(0, y0, W, panel, fill=1, stroke=0)
         fg = NIGHT if (gold or light) else WHITE
@@ -163,7 +163,7 @@ def tent(c, L, key, style, qs):
             s = 1.55 * 72; x = 1.0 * 72; qy = hy + (panel / 2 - s) / 2
             c.setFillColor(WHITE); c.roundRect(x - 8, qy - 8, s + 16, s + 16, 10, fill=1, stroke=0); c.drawImage(qs[sid], x, qy, s, s)
             c.setFillColor(GOLD if not (gold or light) else (NIGHT if gold else BRONZE)); c.setFont('SansM', 8)
-            c.drawString(x + s + .45 * 72, qy + s - 14, spaced('MEMBERS HEAR FIRST' if gold else 'WELCOME'))
+            c.drawString(x + s + .45 * 72, qy + s - 14, spaced('OFF-MARKET BUYER PROGRAM' if gold else 'WELCOME'))
             c.setFillColor(fg); c.setFont('Serif', 28); c.drawString(x + s + .45 * 72, qy + s / 2 + 4, title)
             c.setFont('Sans', 11.5); c.drawString(x + s + .45 * 72, qy + s / 2 - 20, sub)
             c.setFont('Sans', 8.5); c.drawString(x + s + .45 * 72, qy + 6, f"{AGENT['name']} · {AGENT['phone']} · {AGENT['team']}")

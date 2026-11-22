@@ -26,7 +26,7 @@ const TYPES = {
   'home-edit':           { label: 'Home Edit introduction',     needs: ['name', 'phone', 'email', 'category'] },
   'seller-message':      { label: 'Message from your sellers',  needs: ['name', 'question'] },
   'open-house':          { label: 'Open house sign-in',         needs: ['name', 'phone', 'email', 'agent'] },
-  'off-market':          { label: 'Off-market buyer list',      needs: ['name', 'phone', 'email'] }
+  'off-market':          { label: 'Off-market buyer program',      needs: ['name', 'phone', 'email'] }
 };
 const OFFMARKET_HEADERS = ['Joined', 'Name', 'Phone', 'Email', 'Wants', 'Areas', 'Came from', 'Home'];
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
@@ -330,7 +330,7 @@ function notifyAgent_(type, label, v) {
   const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;·&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
-  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market list', 'Yes, wants matches']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
+  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market buyer program', 'Yes, wants us searching']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
   if (type === 'off-market') { if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
   if (v.when) rows.push(['Preferred time', esc_(v.when)]);
   if (v.address) rows.push(['Their home', esc_(v.address)]);
@@ -358,8 +358,8 @@ function confirm_(type, v) {
     'updates': ['The Retreat at Glacier Pointe', 'I’ll write when there’s real news on the clubhouse opening — and only then.'],
     'community-tour': ['Your Tehaleh tour', 'I’d love to show you around — trails, parks and neighborhoods. I’ll reach out to plan a time.'],
     'open-house-reminder': ['Open house reminder', 'You’re set. I’ll send one reminder before the open house.'],
-    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' You’re on my off-market list, and I’ll reach out personally when a home fits what you’re after.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
-    'off-market': ['You’re on the off-market list', 'Some of the best homes sell quietly, before they ever reach Zillow. I’ll reach out personally when one fits what you told me.'],
+    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' You’re in our off-market buyer program. We don’t wait for the right home to come online; we go looking, and I’ll reach out personally when we find one that fits.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
+    'off-market': ['Welcome to our off-market buyer program', 'We don’t wait for the right home to come online. We go searching for it, and every year we help clients secure their dream homes before anyone else knows they’re available. I’ll reach out personally when we find one that fits what you told me.'],
     'home-edit': ['Your introduction', 'I’ll introduce you to one trusted ' + v.category.toLowerCase() + ' professional. Referral relationships and any fees are always disclosed before you engage anyone.']
   }[type];
   const unsub = type === 'follow' ? '<p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + ScriptApp.getService().getUrl() + '?api=unsub&e=' + encodeURIComponent(v.email) + '&t=' + token_(v.email) + '">Stop following this home</a></p>' : '';
@@ -395,7 +395,7 @@ function details_(type, v) {
   if (type === 'valuation') return 'Home: ' + v.address;
   if (type === 'question') return v.question;
   if (type === 'home-edit') return 'Help with: ' + v.category;
-  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Off-market list' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
+  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Off-market buyer program' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
   if (type === 'off-market') return 'Wants: ' + (v.wants || '—') + ' · Areas: ' + (v.areas || '—');
   return '';
 }

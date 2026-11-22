@@ -24,8 +24,11 @@ const TYPES = {
   'community-tour':      { label: 'Tehaleh community tour',     needs: ['name', 'phone', 'email'] },
   'open-house-reminder': { label: 'Open house reminder',        needs: ['name', 'phone', 'email'] },
   'home-edit':           { label: 'Home Edit introduction',     needs: ['name', 'phone', 'email', 'category'] },
-  'seller-message':      { label: 'Message from your sellers',  needs: ['name', 'question'] }
+  'seller-message':      { label: 'Message from your sellers',  needs: ['name', 'question'] },
+  'open-house':          { label: 'Open house sign-in',         needs: ['name', 'phone', 'email', 'agent'] },
+  'off-market':          { label: 'Off-market buyer list',      needs: ['name', 'phone', 'email'] }
 };
+const OFFMARKET_HEADERS = ['Joined', 'Name', 'Phone', 'Email', 'Wants', 'Areas', 'Came from', 'Home'];
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
@@ -84,13 +87,23 @@ function doPost(e) {
     return out_({ ok: true, saved: rows.length });
   }
   if (d.website) return out_({ ok: true });               // hidden field: bots only
+  if (type === 'open-house-feedback') {                     // anonymous room/verdict taps; shows in the seller portal's feedback
+    const home = clean_(d.listing, 80), fb = clean_(d.feedback, 400);
+    if (!home || !fb) return out_({ ok: false, reason: 'Nothing to save' });
+    const key = 'fb:' + clean_(d.email, 120).toLowerCase() + ':' + home, cache = CacheService.getScriptCache(), sh = tab_('Showings', SHOWING_HEADERS);
+    const row = Number(cache.get(key) || 0);                // the same guest changing answers updates one row
+    if (row) sh.getRange(row, 1, 1, 4).setValues([[new Date(), home, 'Open house · ' + (clean_(d.interest, 20) || 'feedback'), fb]]);
+    else { sh.appendRow([new Date(), home, 'Open house · ' + (clean_(d.interest, 20) || 'feedback'), fb]); cache.put(key, String(sh.getLastRow()), 21600); }
+    return out_({ ok: true });
+  }
   const t = TYPES[type];
   if (!t) return out_({ ok: false, reason: 'Unknown request' });
   const v = {
     name: clean_(d.name, 80), phone: clean_(d.phone, 30), email: clean_(d.email, 120).toLowerCase(),
-    agent: clean_(d.agent, 10), financing: clean_(d.financing, 20), when: clean_(d.when, 120),
+    agent: clean_(d.agent, 80), financing: clean_(d.financing, 20), when: clean_(d.when, 120),
     address: clean_(d.address, 160), question: clean_(d.question, 600), category: clean_(d.category, 40),
-    listing: clean_(d.listing, 80), page: clean_(d.page, 30), source: clean_(d.source, 40)
+    listing: clean_(d.listing, 80), page: clean_(d.page, 30), source: clean_(d.source, 40),
+    wants: clean_(d.wants, 300), areas: clean_(d.areas, 200), offmarket: !!d.offmarket, value: !!d.value
   };
   for (const k of t.needs) if (!v[k]) return out_({ ok: false, reason: 'Please fill in every field.' });
   if (type === 'seller-message') {
@@ -104,7 +117,7 @@ function doPost(e) {
 
   // the same person pressing twice within two minutes counts once
   const cache = CacheService.getScriptCache(), key = 'dup:' + type + ':' + v.email;
-  if (cache.get(key)) return out_({ ok: true, duplicate: true });
+  if (cache.get(key) && !d.update) return out_({ ok: true, duplicate: true });   // a guest correcting their details always goes through
   cache.put(key, '1', 120);
 
   const lock = LockService.getScriptLock();
@@ -113,6 +126,8 @@ function doPost(e) {
     const details = details_(type, v);
     tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, v.name, v.phone, v.email, details, v.listing, v.page, v.source, 'New']);
     if (type === 'follow') tab_('Followers', FOLLOWER_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.listing, '']);
+    if (type === 'off-market' || (type === 'open-house' && v.offmarket)) tab_('Off-market buyers', OFFMARKET_HEADERS).appendRow([new Date(), v.name, v.phone, v.email, v.wants, v.areas, v.source, v.listing]);
+    if (type === 'open-house' && v.value && v.address) tab_('Leads', LEAD_HEADERS).appendRow([new Date(), 'Home value request', v.name, v.phone, v.email, 'Home: ' + v.address + ' (from open house sign-in)', v.listing, v.page, v.source, 'New']);
   } finally { lock.releaseLock(); }
 
   try { notifyAgent_(type, t.label, v); } catch (err) { console.error('agent email', err); }
@@ -315,9 +330,11 @@ function notifyAgent_(type, label, v) {
   const rows = [['Phone', '<a href="tel:' + v.phone.replace(/[^\d+]/g, '') + '">' + esc_(v.phone) + '</a> &nbsp;·&nbsp; <a href="sms:' + v.phone.replace(/[^\d+]/g, '') + '">Text</a>'],
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
+  if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market list', 'Yes, wants matches']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
+  if (type === 'off-market') { if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
   if (v.when) rows.push(['Preferred time', esc_(v.when)]);
   if (v.address) rows.push(['Their home', esc_(v.address)]);
-  if (v.question) rows.push(['Question', esc_(v.question)]);
+  if (v.question && type !== 'open-house' && type !== 'off-market') rows.push(['Question', esc_(v.question)]);
   if (v.category) rows.push(['Help with', esc_(v.category)]);
   rows.push(['Home', esc_(v.listing || '—')], ['Came from', esc_(v.source || 'direct') + ' · ' + esc_(v.page || '')]);
   const html = shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">' + esc_(label) + '</p>' +
@@ -341,6 +358,8 @@ function confirm_(type, v) {
     'updates': ['The Retreat at Glacier Pointe', 'I’ll write when there’s real news on the clubhouse opening — and only then.'],
     'community-tour': ['Your Tehaleh tour', 'I’d love to show you around — trails, parks and neighborhoods. I’ll reach out to plan a time.'],
     'open-house-reminder': ['Open house reminder', 'You’re set. I’ll send one reminder before the open house.'],
+    'open-house': ['Thanks for visiting ' + home, 'Thank you for stopping by the open house today.' + (v.offmarket ? ' You’re on my off-market list, and I’ll reach out personally when a home fits what you’re after.' : '') + (v.value && v.address ? ' I’ll prepare your updated value report for ' + v.address + ' personally.' : '') + ' If a question comes up about the home, just reply here.'],
+    'off-market': ['You’re on the off-market list', 'Some of the best homes sell quietly, before they ever reach Zillow. I’ll reach out personally when one fits what you told me.'],
     'home-edit': ['Your introduction', 'I’ll introduce you to one trusted ' + v.category.toLowerCase() + ' professional. Referral relationships and any fees are always disclosed before you engage anyone.']
   }[type];
   const unsub = type === 'follow' ? '<p style="font:12px Arial;color:#8A8378;margin:18px 0 0"><a style="color:#8A8378" href="' + ScriptApp.getService().getUrl() + '?api=unsub&e=' + encodeURIComponent(v.email) + '&t=' + token_(v.email) + '">Stop following this home</a></p>' : '';
@@ -376,6 +395,8 @@ function details_(type, v) {
   if (type === 'valuation') return 'Home: ' + v.address;
   if (type === 'question') return v.question;
   if (type === 'home-edit') return 'Help with: ' + v.category;
+  if (type === 'open-house') return 'Agent: ' + v.agent + (v.offmarket ? ' · Off-market list' : '') + (v.value ? ' · Value report' + (v.address ? ': ' + v.address : '') : '');
+  if (type === 'off-market') return 'Wants: ' + (v.wants || '—') + ' · Areas: ' + (v.areas || '—');
   return '';
 }
 function book_() {

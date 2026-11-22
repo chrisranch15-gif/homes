@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16191B">
+<title>Welcome · Open house · The Ranch Real Estate Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1E2327;--night:#16191B;--ground:#F7F5F1;--soft:#EFEBE4;--line:#D9D2C6;--muted:#5E584E;--accent:#8C6A43;--gold:#C9A877;--serif:"Playfair Display",Georgia,serif;--sans:Inter,system-ui,-apple-system,sans-serif;--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--night)}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input{font:inherit;color:inherit}
+.app{position:relative;min-height:100%;max-width:560px;margin:0 auto;background:var(--ground)}
+.screen{position:absolute;inset:0;min-height:100dvh;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .5s var(--ease),transform .6s var(--ease)}
+.screen.on{position:relative;opacity:1;pointer-events:auto;transform:none}
+/* hero */
+.hero{color:#fff;background:var(--night);justify-content:flex-end;overflow:hidden}
+.hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08);animation:kb 18s ease-out forwards}
+@keyframes kb{to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,25,27,.25) 0%,rgba(22,25,27,.1) 22%,rgba(22,25,27,.7) 42%,rgba(22,25,27,.94) 58%,#16191B 100%)}
+.hero .in{text-shadow:0 1px 14px rgba(0,0,0,.35);position:relative;z-index:1;padding:0 28px calc(34px + env(safe-area-inset-bottom))}
+.mono{font:500 11px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase}
+.hero .mono{color:var(--gold)}
+.hero h1{font:400 clamp(44px,13vw,64px)/1.02 var(--serif);margin:16px 0 14px;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:#E9DCC6}
+.hero p{font:300 17px/1.55 var(--sans);color:rgba(255,255,255,.82);max-width:30ch}
+.top{position:absolute;z-index:2;top:calc(18px + env(safe-area-inset-top));left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;color:#fff}
+.brand{font:500 10.5px/1.3 var(--sans);letter-spacing:.24em;text-transform:uppercase}
+.brand b{display:block;font:400 15px/1 var(--serif);letter-spacing:.02em;text-transform:none;margin-bottom:4px}
+.live{display:flex;align-items:center;gap:8px;font:500 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:8px 12px;border-radius:99px}
+.live i{width:7px;height:7px;border-radius:50%;background:#7BC48A;box-shadow:0 0 0 0 rgba(123,196,138,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(123,196,138,0)}100%{box-shadow:0 0 0 0 rgba(123,196,138,0)}}
+.cta{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;border-radius:16px;padding:20px 22px;font:500 17px var(--sans);cursor:pointer;transition:transform .15s,background .2s,opacity .2s}
+.cta:active{transform:scale(.98)}
+.cta.light{background:#fff;color:var(--night);margin-top:28px}
+.cta.dark{background:var(--night);color:#fff}
+.cta[disabled]{opacity:.35}
+.cta svg{width:20px;height:20px}
+.fine{font:400 12.5px/1.5 var(--sans);color:rgba(255,255,255,.55);margin-top:14px;text-align:center}
+/* steps */
+.step{padding:calc(22px + env(safe-area-inset-top)) 26px calc(26px + env(safe-area-inset-bottom))}
+.bar{display:flex;align-items:center;gap:14px;margin-bottom:38px}
+.back{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer}
+.dots{display:flex;gap:6px;flex:1}
+.dots span{height:3px;flex:1;border-radius:3px;background:var(--line);transition:background .4s}
+.dots span.f{background:var(--ink)}
+.step .mono{color:var(--accent)}
+.step h2{font:400 clamp(32px,9vw,40px)/1.1 var(--serif);margin:12px 0 10px;letter-spacing:-.01em}
+.step .lede{font:400 16px/1.55 var(--sans);color:var(--muted);margin-bottom:28px}
+.grow{flex:1}
+.f{position:relative;margin-bottom:14px}
+.f input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:26px 18px 10px;font-size:17px;outline:none;transition:border .2s,box-shadow .2s}
+.f label{position:absolute;left:19px;top:19px;font-size:16px;color:var(--muted);pointer-events:none;transition:all .18s var(--ease)}
+.f input:focus{border-color:var(--ink);box-shadow:0 0 0 4px rgba(30,35,39,.06)}
+.f input:focus+label,.f input:not(:placeholder-shown)+label{top:9px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.tiles{display:grid;gap:12px}
+.tile{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;transition:border .2s,background .2s,transform .15s}
+.tile:active{transform:scale(.985)}
+.tile .ic{width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex:none;transition:background .2s}
+.tile .ic svg{width:22px;height:22px;stroke:var(--ink)}
+.tile b{display:block;font:500 16.5px var(--sans)}
+.tile small{display:block;font:400 13.5px/1.4 var(--sans);color:var(--muted);margin-top:3px}
+.tile .ck{margin-left:auto;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;transition:all .2s}
+.tile.sel{border-color:var(--ink);background:#FCFBF9}
+.tile.sel .ic{background:var(--night)}
+.tile.sel .ic svg{stroke:#fff}
+.tile.sel .ck{background:var(--ink);border-color:var(--ink)}
+.tile.sel .ck::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.more{max-height:0;overflow:hidden;transition:max-height .4s var(--ease),margin .4s}
+.more.open{max-height:220px;margin-top:12px}
+.err{color:#9A3B2E;font-size:14px;min-height:20px;margin:6px 0 10px}
+/* signed in pass */
+.done{background:var(--night);color:#fff}
+.pass{margin:calc(22px + env(safe-area-inset-top)) 22px 0;border-radius:22px;overflow:hidden;background:#20252A;box-shadow:0 30px 60px -30px rgba(0,0,0,.8);transform:translateY(20px) rotateX(8deg);opacity:0;transition:all .9s var(--ease) .1s}
+.done.on .pass{transform:none;opacity:1}
+.pass .ph{height:170px;background-size:cover;background-position:center;position:relative}
+.pass .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,#20252A)}
+.pass .body{padding:4px 22px 22px;position:relative}
+.pass .mono{color:var(--gold)}
+.pass h3{font:400 30px/1.1 var(--serif);margin:10px 0 6px}
+.pass .meta{display:flex;justify-content:space-between;border-top:1px dashed rgba(255,255,255,.18);margin-top:18px;padding-top:14px;font-size:13px;color:rgba(255,255,255,.6)}
+.pass .meta b{display:block;color:#fff;font-weight:500;font-size:14.5px;margin-top:3px}
+.seal{position:absolute;right:20px;top:-30px;width:60px;height:60px;border-radius:50%;background:var(--gold);color:var(--night);display:grid;place-items:center;transform:scale(0) rotate(-30deg);transition:transform .6s cubic-bezier(.3,1.6,.5,1) .7s}
+.done.on .seal{transform:none}
+.seal svg{width:26px;height:26px}
+.sect{padding:32px 22px 0}
+.sect h4{font:400 26px/1.15 var(--serif);margin:10px 0 6px}
+.sect p.s{color:rgba(255,255,255,.62);font-size:15px;line-height:1.5}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.room{position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;border:0;padding:0;cursor:pointer;background:#2A3035}
+.room img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease),filter .3s}
+.room span{z-index:1;position:absolute;left:12px;bottom:10px;font:500 13.5px var(--sans);color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.room::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.55));pointer-events:none}
+.room.sel{outline:2.5px solid var(--gold);outline-offset:-2.5px}
+.room.sel img{transform:scale(1.06)}
+.room.dim img{filter:grayscale(.7) brightness(.6)}
+.room .h{position:absolute;right:10px;top:10px;z-index:1;width:30px;height:30px;border-radius:50%;background:var(--gold);display:grid;place-items:center;transform:scale(0);transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.room.sel .h{transform:none}
+.verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.v{border:1px solid rgba(255,255,255,.16);background:transparent;color:#fff;border-radius:14px;padding:16px 6px;font:500 14px/1.25 var(--sans);cursor:pointer;transition:all .2s}
+.v em{display:block;font:italic 400 22px var(--serif);margin-bottom:4px;color:var(--gold)}
+.v.sel{background:#fff;color:var(--night);border-color:#fff}
+.v.sel em{color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;border-radius:99px;padding:10px 15px;font-size:14px;cursor:pointer;transition:all .2s}
+.chip.sel{background:var(--gold);border-color:var(--gold);color:var(--night)}
+.offer{display:flex;gap:16px;align-items:center;width:100%;text-align:left;margin-top:12px;border-radius:18px;padding:20px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,#252B30,#1C2024);color:#fff;cursor:pointer}
+.offer .ic{width:46px;height:46px;border-radius:50%;border:1px solid rgba(201,168,119,.5);display:grid;place-items:center;flex:none}
+.offer .ic svg{width:21px;height:21px;stroke:var(--gold)}
+.offer b{display:block;font:400 19px/1.2 var(--serif)}
+.offer small{display:block;color:rgba(255,255,255,.6);font-size:13.5px;margin-top:4px;line-height:1.4}
+.offer.ok{border-color:var(--gold)}
+.offer.ok .ic{background:var(--gold)}
+.offer.ok .ic svg{stroke:var(--night)}
+.dark-in .f input{background:#20252A;border-color:rgba(255,255,255,.16);color:#fff}
+.dark-in .f input:focus{border-color:var(--gold);box-shadow:none}
+.dark-in .f label{color:rgba(255,255,255,.55)}
+.save{margin-top:16px}
+.thanks{font:italic 400 17px var(--serif);color:var(--gold);margin-top:14px;min-height:22px}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.lk{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:16px;background:#20252A;color:#fff;text-decoration:none;font-size:14.5px;font-weight:500}
+.lk svg{width:22px;height:22px;stroke:var(--gold)}
+.lk small{font-weight:400;color:rgba(255,255,255,.55);font-size:12.5px}
+.sig{display:flex;gap:14px;align-items:center;padding:34px 22px calc(40px + env(safe-area-inset-bottom));color:rgba(255,255,255,.6);font-size:12.5px;line-height:1.5}
+.sig img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.sig b{color:#fff;font:400 17px var(--serif);display:block}
+.next{margin:28px 22px 0}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;background:#fff;color:var(--night);padding:13px 20px;border-radius:99px;font-size:14.5px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:all .4s var(--ease);z-index:9;white-space:nowrap}
+.toast.on{transform:translate(-50%,0);opacity:1}
+.hp{position:absolute;left:-9999px}
+
+.alt{display:block;width:100%;background:none;border:0;color:rgba(255,255,255,.7);font-size:14px;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.me{display:flex;align-items:center;gap:14px;background:#20252A;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px;margin-bottom:6px}
+.me .av{width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--night);display:grid;place-items:center;font:500 15px var(--sans);flex:none}
+.me b{display:block;color:#fff;font-weight:500;font-size:15.5px}
+.me span{color:rgba(255,255,255,.6);font-size:13px;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.me .edit{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer}
+.vip{position:relative;display:block;width:100%;text-align:left;border:0;cursor:pointer;border-radius:22px;padding:26px 22px 22px;color:var(--night);background:linear-gradient(140deg,#E8D6B5 0%,#C9A877 55%,#A9854F 100%);box-shadow:0 24px 50px -24px rgba(201,168,119,.6);overflow:hidden}
+.vip::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);animation:shine 4.5s 1.2s infinite}
+@keyframes shine{40%,100%{transform:translateX(120%)}}
+.vip .badge{display:inline-block;font:600 10.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;background:var(--night);color:var(--gold);padding:7px 11px;border-radius:99px}
+.vip b{display:block;font:400 25px/1.15 var(--serif);margin:14px 0 8px}
+.vip small{display:block;font-size:14.5px;line-height:1.5;color:rgba(22,25,27,.78)}
+.vip .go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font:600 15px var(--sans)}
+.vip .go svg{width:18px;height:18px}
+.feat{font:600 10.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:-4px}
+.tile[data-of]{border-color:var(--gold);background:linear-gradient(180deg,#FFFDF8,#FBF5EA)}
+.tile[data-of] .ic{background:var(--gold)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec';
+const PHONE = '(253) 335-5630', TEL = '+12533355630';
+const HOMES = {
+  '19917': { address: '19917 145th St E', area: 'Tehaleh · Bonney Lake', page: 'https://homes.ranchpnw.com/19917',
+    hero: 'photos/great-room.jpg', pass: 'photos/front-dusk-800.webp',
+    rooms: [['Kitchen','kitchen-island'],['Great room','great-room'],['Primary suite','primary-bed'],['Covered deck','deck'],['Blue bedroom','bedroom-blue'],['Mudroom','mudroom']] }
+};
+const q = new URLSearchParams(location.search);
+const KEY = q.get('home') || '19917', H = HOMES[KEY] || HOMES['19917'];
+const KIOSK = q.has('kiosk');
+const MODE = (location.hash || '').replace('#', '');            // '', 'offmarket', 'value'
+const SRC = KIOSK ? 'open-house-ipad' : (q.get('src') || 'open-house-qr');
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const I = {
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 6l-6 6 6 6"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  people:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9.5" r="2.5"/><path d="M2.5 20c1-3.5 3.5-5.5 6.5-5.5s5.5 2 6.5 5.5M15.5 14.5c2.5 0 4.5 1.5 5.5 4.5"/></svg>',
+  compass:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
+  key:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 20h18M6 16l4-5 3 3 5-7"/><path d="M15 7h3v3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  heart:'<svg width="15" height="15" viewBox="0 0 24 24" fill="#16191B"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.6 0 6 3.5 4.5 7.2C19.5 16.4 12 21 12 21z"/></svg>',
+  photos:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg>',
+  card:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16.5c.7-1.6 2-2.5 3.5-2.5s2.8.9 3.5 2.5M15 10h4M15 13.5h3"/></svg>'
+};
+let S = { step: 0, name: '', phone: '', email: '', agent: '', agentName: '', off: false, val: false, address: '', room: '', verdict: '', missing: [] };
+try { const saved = JSON.parse(sessionStorage.getItem('oh.' + KEY) || 'null'); if (saved && !KIOSK && !MODE) S = Object.assign(S, saved, { step: 9 }); } catch (e) {}
+const keep = () => { if (!KIOSK) try { sessionStorage.setItem('oh.' + KEY, JSON.stringify(S)); remember(); } catch (e) {} };
+// the guest's contact details, kept on their own phone for 30 days so the next sign scanned is one tap
+const GUEST = (() => { if (KIOSK) return null; try { const g = JSON.parse(localStorage.getItem('ranch.guest') || 'null'); return g && Date.now() - g.at < 2592e6 ? g : null; } catch (e) { return null; } })();
+function remember() { if (KIOSK || !S.email) return; try { localStorage.setItem('ranch.guest', JSON.stringify({ name: S.name, phone: S.phone, email: S.email, at: Date.now() })); } catch (e) {} }
+if (GUEST && !S.email) Object.assign(S, { name: GUEST.name, phone: GUEST.phone, email: GUEST.email });
+let EDIT = !GUEST;
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); };
+
+async function post(type, extra) {
+  const body = Object.assign({ type, name: S.name, phone: S.phone, email: S.email, listing: H.address, page: KEY, source: SRC }, extra);
+  const send = b => fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(b) }).then(r => r.json());
+  let r = await send(body);
+  // engine not updated yet: still reaches Chris as a message with every detail
+  if (!r.ok && type !== 'open-house-feedback' && /Unknown request/.test(r.reason || '')) r = await send(Object.assign({}, body, { type: 'question', question: '[' + type + '] ' + (extra.question || extra.feedback || '') }));
+  if (!r.ok) throw new Error(r.reason || 'That didn’t go through.');
+  return r;
+}
+
+const dots = n => '<div class="dots">' + [1,2,3].map(i => '<span class="' + (i <= n ? 'f' : '') + '"></span>').join('') + '</div>';
+const field = (id, label, type, ac, val) => `<div class="f"><input id="${id}" type="${type}" autocomplete="${ac}" placeholder=" " value="${esc(val||'')}"${type==='tel'?' inputmode="tel"':''}${type==='email'?' autocapitalize="off"':''}><label for="${id}">${label}</label></div>`;
+const tile = (k, v, ic, b, sm, sel) => `<button class="tile${sel?' sel':''}" data-${k}="${v}">${ic?'<span class="ic">'+I[ic]+'</span>':''}<span><b>${b}</b>${sm?'<small>'+sm+'</small>':''}</span><span class="ck"></span></button>`;
+
+function render() {
+  const app = $('#app');
+  if (MODE === 'offmarket' || MODE === 'value') return renderOffer(app);
+  if (S.step === 0) app.innerHTML = `<section class="screen hero on"><div class="bg" style="background-image:url('${H.hero}')"></div>
+    <div class="top"><div class="brand"><b>The Ranch</b>Real Estate Group</div><div class="live"><i></i>Open house</div></div>
+    <div class="in"><p class="mono">${esc(H.address)} · ${esc(H.area)}</p><h1>Welcome <em>in.</em></h1>
+    <p>The sellers ask that every guest sign in before touring. It takes about twenty seconds.</p>
+    ${GUEST ? `<button class="cta light" id="go">Sign in as ${esc(GUEST.name.split(' ')[0])} ${I.arrow}</button><button class="alt" id="notme">Not ${esc(GUEST.name.split(' ')[0])}? Sign in here</button>` : `<button class="cta light" id="go">Sign in ${I.arrow}</button>`}<p class="fine">Hosted by Chris Ranch · Keller Williams Realty Puget Sound</p></div></section>`;
+  if (S.step === 1) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(1)}</div>
+    <p class="mono">Step one</p><h2>Who’s visiting today?</h2><p class="lede">So the sellers know who has been through their home.</p>
+    ${field('nm','Full name','text','name',S.name)}${field('ph','Mobile number','tel','tel',S.phone)}${field('em','Email','email','email',S.email)}
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er"></p><div class="grow"></div><button class="cta dark" id="nx">Continue ${I.arrow}</button></section>`;
+  if (S.step === 2) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(2)}</div>
+    <p class="mono">Step two</p><h2>Are you working with an agent?</h2><p class="lede">Either answer is perfectly fine.</p>
+    <div class="tiles">${tile('ag','Yes','people','Yes, I have an agent','',S.agent==='Yes')}${tile('ag','No','user','No, not yet','',S.agent==='No')}${tile('ag','Just looking','compass','Just looking for now','Neighbor, curious, or early days','')}</div>
+    <div class="more${S.agent==='Yes'?' open':''}" id="am">${field('an','Your agent’s name','text','off',S.agentName)}</div>
+    <div class="grow"></div><p class="err" id="er"></p><button class="cta dark" id="nx"${S.agent?'':' disabled'}>Continue ${I.arrow}</button></section>`;
+  if (S.step === 3) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(3)}</div>
+    <p class="mono">Last step</p><h2>Anything we can do for you?</h2><p class="lede">Tap any that interest you, or skip right to the tour.</p>
+    <div class="tiles"><div class="feat">Most requested</div>${tile('of','1','key','Join my private buyer list','Off-market homes, often before they’re listed anywhere. Members hear first.',S.off)}
+    ${tile('va','1','chart','What’s my home worth now?','The market has changed. Get an updated value report.',S.val)}</div>
+    <div class="more${S.val?' open':''}" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}</div>
+    <div class="grow"></div><p class="err" id="er"></p><button class="cta dark" id="nx">${S.off||S.val?'Sign in':'Sign in and tour'} ${I.arrow}</button></section>`;
+  if (S.step === 9) renderDone(app);
+  wire();
+}
+
+function renderDone(app) {
+  const first = esc(S.name.split(' ')[0] || 'friend');
+  const now = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  if (KIOSK) {
+    app.innerHTML = `<section class="screen done on" style="justify-content:center"><div class="pass"><div class="ph" style="background-image:url('${H.pass}')"></div><div class="body"><div class="seal">${I.check}</div>
+      <p class="mono">You’re signed in</p><h3>Enjoy the home, ${first}.</h3><div class="meta"><span>Home<b>${esc(H.address)}</b></span><span style="text-align:right">Arrived<b>${now}</b></span></div></div></div>
+      <div class="next"><button class="cta light" id="reset">Next guest ${I.arrow}</button></div></section>`;
+    $('#reset').onclick = reset; clearTimeout(reset.t); reset.t = setTimeout(reset, 9000); return;
+  }
+  const missingOpts = ['More space', 'Single level', 'Bigger yard', 'A view', 'Lower price', 'Different area', 'Newer', 'More character'];
+  app.innerHTML = `<section class="screen done on">
+    <div class="pass"><div class="ph" style="background-image:url('${H.pass}')"></div><div class="body"><div class="seal">${I.check}</div>
+      <p class="mono">You’re signed in</p><h3>Enjoy the home, ${first}.</h3><p style="color:rgba(255,255,255,.65);font-size:14.5px;line-height:1.5">Keep this page open while you look around.</p>
+      <div class="meta"><span>Home<b>${esc(H.address)}</b></span><span style="text-align:right">Arrived<b>${now}</b></span></div>
+      <button class="alt" id="fix" style="margin-top:12px;text-align:left;padding:0">Not right? Edit your details</button></div></div>
+
+    <div class="sect"><button class="vip" id="o1">
+      <span class="badge">${S.off ? 'You’re on the list' : 'Private · Members only'}</span>
+      <b>${S.off ? 'Welcome to the private buyer list.' : 'If this isn’t the one, the right home may not be on Zillow yet.'}</b>
+      <small>${S.off ? 'I’ll reach out personally the moment a home fits what you want, often before it’s ever listed.' : 'Join my off-market buyer list. Some of the best homes sell quietly, before they ever hit the market. Members hear first.'}</small>
+      <span class="go">${S.off ? I.check.replace('currentColor','#16191B') + ' Joined' : 'Join the private list ' + I.arrow}</span></button></div>
+
+    <div class="sect"><p class="mono" style="color:var(--gold)">As you tour</p><h4>Which room won you over?</h4><p class="s">Tap your favorite. The sellers love hearing it.</p>
+      <div class="rooms">${H.rooms.map(([n, f]) => `<button class="room${S.room===n?' sel':S.room?' dim':''}" data-room="${esc(n)}"><img src="photos/${f}-800.webp" alt="${esc(n)}" loading="lazy"><i class="h">${I.heart}</i><span>${esc(n)}</span></button>`).join('')}</div></div>
+
+    <div class="sect"><p class="mono" style="color:var(--gold)">Honestly</p><h4>Is this the one?</h4>
+      <div class="verdict">${[['Yes','I could live here'],['Maybe','Thinking it over'],['Not quite','Not for me']].map(([e, t]) => `<button class="v${S.verdict===e?' sel':''}" data-v="${e}"><em>${e}</em>${t}</button>`).join('')}</div>
+      <div class="more${S.verdict && S.verdict!=='Yes'?' open':''}" id="mm"><p class="s" style="margin-top:6px">What would make it the one?</p>
+        <div class="chips">${missingOpts.map(m => `<button class="chip${S.missing.includes(m)?' sel':''}" data-m="${m}">${m}</button>`).join('')}</div></div>
+      <p class="thanks" id="ty"></p></div>
+
+    <div class="sect"><p class="mono" style="color:var(--gold)">Before you go</p><h4>The market has changed.</h4>
+      <button class="offer${S.valSent?' ok':''}" id="o2"><span class="ic">${S.valSent?I.check.replace('currentColor','#16191B'):I.chart}</span><span><b>${S.valSent?'Your value report is on its way':'The market has changed.'}</b><small>${S.valSent?'I prepare every one personally from real recent sales.':'Need an updated value report on your home? I’ll prepare it personally.'}</small></span></button>
+      <div class="more dark-in" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}<button class="cta light save" id="vs" style="margin-top:4px">Send my value report ${I.arrow}</button></div></div>
+
+    <div class="sect"><p class="mono" style="color:var(--gold)">Take it with you</p>
+      <div class="links"><a class="lk" href="${H.page}">${I.photos}See every photo<small>Floor plans and the full story</small></a>
+      <a class="lk" href="#" id="vc">${I.card}Save Chris’s number<small>Adds me to your contacts</small></a></div></div>
+
+    <div class="sig"><img src="photos/chris-ranch.jpg" alt="Chris Ranch"><div><b>Chris Ranch</b>The Ranch Real Estate Group · Keller Williams Realty Puget Sound · Call or text ${PHONE}</div></div></section>`;
+  wireDone();
+}
+
+const me = () => `<div class="me"><span class="av">${esc((S.name[0]||'')+(S.name.split(' ').slice(-1)[0][0]||''))}</span><span><b>${esc(S.name)}</b>${esc(S.phone)} · ${esc(S.email)}</span><button class="edit" id="ed">Edit</button></div>`;
+function renderOffer(app) {
+  const off = MODE === 'offmarket';
+  const wants = ['3+ bedrooms', '4+ bedrooms', 'Single level', 'Big yard', 'View', 'Waterfront', 'New construction', 'Under $700K', '$700K–$1M', '$1M+'];
+  const areas = ['Tehaleh', 'Bonney Lake', 'Lake Tapps', 'Gig Harbor', 'Fox Island', 'Tacoma', 'Puyallup', 'Federal Way', 'Anywhere nearby'];
+  app.innerHTML = `<section class="screen done on" style="padding-bottom:40px"><div class="pass" style="margin-bottom:0"><div class="ph" style="height:200px;background-image:url('${off ? 'photos/mtn-alpenglow-800.webp' : H.pass}')"></div><div class="body">
+    <p class="mono">${off ? 'Private list' : 'Home value report'}</p><h3>${off ? 'The homes you won’t find on Zillow.' : 'The market has changed. Has your home’s value?'}</h3>
+    <p style="color:rgba(255,255,255,.65);font-size:15px;line-height:1.55">${off ? 'Some of the best homes sell quietly, before they’re ever listed. Tell me what you want and I’ll reach out personally when one fits.' : 'A personal value report from real recent sales and today’s buyers, never an automated estimate.'}</p></div></div>
+    <div class="sect dark-in">${EDIT ? field('nm','Full name','text','name',S.name)+field('ph','Mobile number','tel','tel',S.phone)+field('em','Email','email','email',S.email) : me()}
+    ${off ? `<p class="s" style="margin-top:12px">What are you looking for?</p><div class="chips" id="wc">${wants.map(w=>`<button class="chip" data-w="${w}">${w}</button>`).join('')}</div>
+      <p class="s" style="margin-top:18px">Where?</p><div class="chips" id="ac">${areas.map(w=>`<button class="chip" data-w="${w}">${w}</button>`).join('')}</div>`
+      : field('ad','Your home’s address','text','street-address',S.address)}
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off"><p class="err" id="er" style="color:#E3A08F"></p>
+    <button class="cta light" id="sb">${off ? 'Join the list' : 'Send my value report'} ${I.arrow}</button></div>
+    <div class="sig"><img src="photos/chris-ranch.jpg" alt="Chris Ranch"><div><b>Chris Ranch</b>The Ranch Real Estate Group · Keller Williams Realty Puget Sound · Call or text ${PHONE}</div></div></section>`;
+  app.querySelectorAll('.chip').forEach(c => c.onclick = () => c.classList.toggle('sel'));
+  if ($('#ed')) $('#ed').onclick = () => { EDIT = true; renderOffer(app); setTimeout(() => $('#nm').focus(), 200); };
+  $('#sb').onclick = async () => {
+    if (!readContact()) return;
+    if (!off) { S.address = $('#ad').value.trim(); if (!S.address) return err('Please add your home’s address.'); }
+    const sel = id => [...document.querySelectorAll(id + ' .chip.sel')].map(c => c.dataset.w).join(', ');
+    const b = $('#sb'); b.disabled = true;
+    try {
+      remember();
+      if (off) await post('off-market', { question: 'Wants: ' + (sel('#wc') || 'not specified') + ' · Areas: ' + (sel('#ac') || 'not specified'), wants: sel('#wc'), areas: sel('#ac') });
+      else await post('valuation', { address: S.address });
+      app.querySelector('.sect').innerHTML = `<div style="text-align:center;padding:30px 0"><div class="seal" style="position:static;margin:0 auto 18px;transform:none">${I.check}</div><h4>${off ? 'You’re on the list.' : 'It’s on its way.'}</h4><p class="s">${off ? 'I’ll be in touch personally when something fits.' : 'I’ll prepare it personally and be in touch shortly.'}</p></div>`;
+    } catch (e) { b.disabled = false; err(e.message); }
+  };
+}
+
+const err = m => { const e = $('#er'); if (e) e.textContent = m; return false; };
+function readContact() {
+  if ($('#hp') && $('#hp').value) return false;
+  if (!$('#nm')) return true;   // already known on this phone
+  S.name = $('#nm').value.trim(); S.phone = $('#ph').value.trim(); S.email = $('#em').value.trim();
+  if (S.name.split(/\s+/).length < 2) return err('Please add your first and last name.');
+  if (S.phone.replace(/\D/g, '').length < 10) return err('Please add a mobile number with area code.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(S.email)) return err('Please add a valid email.');
+  return true;
+}
+
+function wire() {
+  const go = n => { S.step = n; render(); window.scrollTo(0, 0); const i = document.querySelector('.step input'); if (i && n === 1 && !KIOSK) setTimeout(() => i.focus(), 350); };
+  if ($('#go')) $('#go').onclick = () => go(GUEST && S.step === 0 ? 2 : 1);
+  if ($('#notme')) $('#notme').onclick = () => { Object.assign(S, { name: '', phone: '', email: '' }); try { localStorage.removeItem('ranch.guest'); } catch (e) {} go(1); };
+  if ($('#bk')) $('#bk').onclick = () => go(S.step - 1);
+  if (S.step === 1) {
+    $('#nx').onclick = async () => { if (!readContact()) return;
+      if (S.editing) { S.editing = false; try { await post('open-house', { agent: S.agent || 'Not given', update: true, question: 'Corrected their details after signing in' }); } catch (e) {} S.step = 9; keep(); render(); toast('Updated. Thank you.'); return; }
+      go(2); };
+    document.querySelectorAll('.f input').forEach(i => i.onkeydown = e => { if (e.key === 'Enter') $('#nx').click(); });
+  }
+  if (S.step === 2) {
+    document.querySelectorAll('[data-ag]').forEach(t => t.onclick = () => {
+      S.agent = t.dataset.ag; document.querySelectorAll('[data-ag]').forEach(x => x.classList.toggle('sel', x === t));
+      $('#am').classList.toggle('open', S.agent === 'Yes'); $('#nx').disabled = false;
+      if (S.agent === 'Yes') setTimeout(() => $('#an').focus(), 300);
+    });
+    $('#nx').onclick = () => { S.agentName = ($('#an').value || '').trim(); go(3); };
+  }
+  if (S.step === 3) {
+    const label = () => $('#nx').innerHTML = (S.off || S.val ? 'Sign in' : 'Sign in and tour') + ' ' + I.arrow;
+    document.querySelector('[data-of]').onclick = e => { S.off = !S.off; e.currentTarget.classList.toggle('sel', S.off); label(); };
+    document.querySelector('[data-va]').onclick = e => { S.val = !S.val; e.currentTarget.classList.toggle('sel', S.val); $('#vm').classList.toggle('open', S.val); label(); if (S.val) setTimeout(() => $('#ad').focus(), 300); };
+    $('#nx').onclick = submit;
+  }
+}
+
+async function submit() {
+  S.address = S.val ? $('#ad').value.trim() : '';
+  if (S.val && !S.address) return err('Please add your home’s address for the value report.');
+  const b = $('#nx'); b.disabled = true; b.textContent = 'Signing you in…';
+  const agent = S.agent === 'Yes' ? 'Yes' + (S.agentName ? ' · ' + S.agentName : '') : S.agent;
+  const wants = [S.off && 'Join off-market buyer list', S.val && 'Updated value report for ' + S.address].filter(Boolean);
+  try {
+    await post('open-house', { agent, agentName: S.agentName, offmarket: S.off, value: S.val, address: S.address,
+      question: 'Agent: ' + agent + (wants.length ? ' · Wants: ' + wants.join(' · ') : '') });
+    S.valSent = S.val; S.step = 9; keep(); render(); window.scrollTo(0, 0);
+  } catch (e) { b.disabled = false; b.innerHTML = 'Try again ' + I.arrow; err(e.message); }
+}
+
+let fbTimer;
+function sendFeedback() {
+  clearTimeout(fbTimer); keep();
+  fbTimer = setTimeout(() => {
+    const fb = [S.room && 'Favorite room: ' + S.room, S.verdict && 'Is this the one: ' + S.verdict, S.missing.length && 'Would make it the one: ' + S.missing.join(', ')].filter(Boolean).join(' · ');
+    if (fb) post('open-house-feedback', { interest: S.verdict || '', feedback: fb, question: fb }).catch(() => {});
+  }, 1800);
+}
+
+function wireDone() {
+  document.querySelectorAll('.room').forEach(r => r.onclick = () => {
+    S.room = r.dataset.room; document.querySelectorAll('.room').forEach(x => { x.classList.toggle('sel', x === r); x.classList.toggle('dim', x !== r); });
+    toast('The sellers will love that.'); sendFeedback();
+  });
+  document.querySelectorAll('.v').forEach(v => v.onclick = () => {
+    S.verdict = v.dataset.v; document.querySelectorAll('.v').forEach(x => x.classList.toggle('sel', x === v));
+    $('#mm').classList.toggle('open', S.verdict !== 'Yes');
+    $('#ty').textContent = S.verdict === 'Yes' ? 'Wonderful. Chris is here, so come find him.' : S.verdict === 'Maybe' ? 'Take your time. Questions? Chris is right here.' : 'Thank you for being honest.';
+    sendFeedback();
+  });
+  document.querySelectorAll('[data-m]').forEach(c => c.onclick = () => {
+    const m = c.dataset.m; S.missing = S.missing.includes(m) ? S.missing.filter(x => x !== m) : S.missing.concat(m); c.classList.toggle('sel'); sendFeedback();
+  });
+  $('#o1').onclick = async () => {
+    if (S.off) return; const o = $('#o1'); o.style.opacity = .6;
+    try { await post('off-market', { question: 'From the open house at ' + H.address + (S.missing.length ? ' · Wants: ' + S.missing.join(', ') : ''), wants: S.missing.join(', ') }); S.off = true; keep(); renderDone($('#app')); toast('You’re on the list.'); }
+    catch (e) { o.style.opacity = 1; toast(e.message); }
+  };
+  $('#fix').onclick = () => { S.step = 1; S.editing = true; render(); window.scrollTo(0, 0); };
+  $('#o2').onclick = () => { if (!S.valSent) { $('#vm').classList.add('open'); setTimeout(() => $('#ad').focus(), 300); } };
+  $('#vs').onclick = async () => {
+    S.address = $('#ad').value.trim(); if (!S.address) return toast('Please add your home’s address.');
+    try { await post('valuation', { address: S.address }); S.valSent = true; keep(); renderDone($('#app')); toast('It’s on its way.'); } catch (e) { toast(e.message); }
+  };
+  $('#vc').onclick = e => {
+    e.preventDefault();
+    const v = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Ranch;Chris;;;', 'FN:Chris Ranch', 'ORG:The Ranch Real Estate Group · Keller Williams Realty Puget Sound', 'TITLE:Real estate broker', 'TEL;TYPE=CELL:' + TEL, 'URL:https://homes.ranchpnw.com', 'NOTE:Met at the open house, ' + H.address, 'END:VCARD'].join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([v], { type: 'text/vcard' })); a.download = 'Chris-Ranch.vcf'; a.click();
+  };
+}
+
+function reset() { clearTimeout(reset.t); S = { step: 0, name: '', phone: '', email: '', agent: '', agentName: '', off: false, val: false, address: '', room: '', verdict: '', missing: [] }; render(); }
+render();
+try { fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ type: 'scan', page: KEY, source: SRC, sign: MODE || 'sign-in', visitor: '' }), keepalive: true }); } catch (e) {}
+</script>
+</body>
+</html>

@@ -206,12 +206,20 @@ if (GUEST && !S.email) Object.assign(S, { name: GUEST.name, phone: GUEST.phone, 
 let EDIT = !GUEST;
 const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); };
 
+// Until the email engine is updated, sign-ins still reach Chris as a message, written so the guest's copy reads naturally
+function fallbackNote(type, x) {
+  if (type === 'open-house') return 'I signed in at today’s open house. Working with an agent: ' + (x.agent || 'not given') + '.' +
+    (x.offmarket ? ' I’d like to talk about Unlisted, your off-market buyer program.' : '') + (x.value && x.address ? ' I’d also like an updated value report for ' + x.address + '.' : '');
+  if (type === 'off-market') return 'I’d like to book a consult for Unlisted, your off-market buyer program. Best way to meet: ' + (x.meeting || 'in person') + (x.when ? ', ' + x.when.toLowerCase() : '') + '.' +
+    (x.wants ? ' Looking for: ' + x.wants + '.' : '') + (x.areas ? ' Areas: ' + x.areas + '.' : '');
+  return x.question || x.feedback || 'Open house visit';
+}
 async function post(type, extra) {
   const body = Object.assign({ type, name: S.name, phone: S.phone, email: S.email, listing: H.address, page: KEY, source: SRC }, extra);
   const send = b => fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(b) }).then(r => r.json());
   let r = await send(body);
   // engine not updated yet: still reaches Chris as a message with every detail
-  if (!r.ok && type !== 'open-house-feedback' && /Unknown request/.test(r.reason || '')) r = await send(Object.assign({}, body, { type: 'question', question: '[' + type + '] ' + (extra.question || extra.feedback || '') }));
+  if (!r.ok && type !== 'open-house-feedback' && /Unknown request/.test(r.reason || '')) r = await send(Object.assign({}, body, { type: 'question', question: fallbackNote(type, extra) }));
   if (!r.ok) throw new Error(r.reason || 'That didn’t go through.');
   return r;
 }

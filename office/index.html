@@ -409,6 +409,7 @@ function listingSheet(a) {
     ${l.code ? `<a class="lrow" href="https://homes.ranchpnw.com/sellers#code=${esc(l.code)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Seller portal · ${esc(l.sellers || '')}</span><span class="s" style="display:block">Code ${esc(l.code)}</span></span>${I.chev}</a>` : ''}
     <button class="lrow" data-act="shoot" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Photo shoot</span><span class="s" style="display:block">${(sh => sh ? esc([sh.status, sh.pkg && sh.pkg.split(':')[0], sh.total].filter(Boolean).join(' · ')) : 'Order from Rainier · text, email or book')(shootFor(a))}</span></span>${I.chev}</button>
     <button class="lrow" data-act="portals" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Update Zillow &amp; Redfin numbers</span></span>${I.chev}</button>
+    <button class="lrow" data-act="feedback" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Open house feedback</span><span class="s" style="display:block">Review, edit and publish to the sellers</span></span>${I.chev}</button>
     ${KITS[a] ? `<a class="lrow" href="${esc(KITS[a].brochure)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Print brochure</span><span class="s" style="display:block">Two pages, letter size, with QR to the page</span></span>${I.chev}</a><button class="lrow" data-act="kit" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Social graphics</span><span class="s" style="display:block">${KITS[a].social.length} posts and stories, ready to download</span></span>${I.chev}</button>` : ''}
     <button class="lrow" data-act="market" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Market stats for the sellers</span><span class="s" style="display:block">Paste your numbers — Claude charts them on their portal</span></span>${I.chev}</button>
     <button class="lrow" data-act="files" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Deal documents</span><span class="s" style="display:block">${(S.sheet && S.sheet.docs || []).filter(r => r[1] === a).length} filed in Drive</span></span>${I.chev}</button>
@@ -444,13 +445,42 @@ function shootSheet(a) {
 }
 async function shootLog(d, how) { try { await append('Photo shoots', [[hk(d.address), d.address, 'Requested', '', d.pkg, '', new Date().toISOString().slice(0, 10), '', '', '', nowStamp() + ' · ' + how]]); } catch (e) { } }
 function portalsSheet(a) {
-  sheet(`<p class="date">${esc(a)}</p><h3>Zillow &amp; Redfin today</h3><p class="s" style="margin:-4px 0 16px">Copy the views and saves from each listing page. The sellers see them at the top of their portal.</p>
+  sheet(`<p class="date">${esc(a)}</p><h3>Zillow &amp; Redfin today</h3><p class="s" style="margin:-4px 0 12px">Copy the views and saves from each listing page. The sellers see them at the top of their portal.</p>
+  ${(l => { const q = encodeURIComponent(a + (l.city ? ' ' + l.city : '') + ' WA'); return `<div class="acts" style="margin:0 0 14px"><a class="pill ghost" href="https://www.zillow.com/homes/${q}_rb/" target="_blank" rel="noopener">Open on Zillow</a><a class="pill ghost" href="https://www.google.com/search?q=${encodeURIComponent('site:redfin.com ' + a + (l.city ? ' ' + l.city : ''))}" target="_blank" rel="noopener">Find on Redfin</a></div>`; })(listings().find(x => x.address === a) || {})}
   <form id="pf"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="field"><label for="zv">Zillow views</label><input id="zv" name="zv" inputmode="numeric"></div><div class="field"><label for="zs">Zillow saves</label><input id="zs" name="zs" inputmode="numeric"></div><div class="field"><label for="rv">Redfin views</label><input id="rv" name="rv" inputmode="numeric"></div><div class="field"><label for="rs">Redfin favorites</label><input id="rs" name="rs" inputmode="numeric"></div></div>
   <div class="acts"><button class="pill">Update their portal</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
   $('#pf').onsubmit = async e => { e.preventDefault(); const f = e.target, v = n => f[n].value.replace(/\D/g, ''), r = [];
     if (v('zv') || v('zs')) r.push([nowStamp(), a, 'Zillow', v('zv'), v('zs'), '']); if (v('rv') || v('rs')) r.push([nowStamp(), a, 'Redfin', v('rv'), v('rs'), '']);
     if (!r.length) return toast('Add at least one number.');
     try { await append('Portals', r); close(); toast('Updated. The sellers see it now.'); await loadSheet(); render(); } catch (err) { toast('Not saved — try again.'); } };
+}
+/* Open house feedback: private until Chris edits and publishes it to the sellers' portal */
+async function feedbackSheet(a) {
+  sheet(`<p class="date">${esc(a)}</p><h3>Open house feedback</h3><p class="s">Loading…</p>`);
+  let all;
+  try { all = rows(await tool('Google Sheets', 'get_values', { spreadsheetId: SHEET, range: "'Open house feedback'!A1:G500" })); }
+  catch (e) { return sheet(`<p class="date">${esc(a)}</p><h3>Open house feedback</h3><p class="s" style="margin:-4px 0 16px">Nothing yet. Feedback from guests shows up here after your next open house.</p><div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`); }
+  const items = all.slice(1).map((r, i) => ({ row: i + 2, when: r[0], home: r[1], name: r[2], verdict: r[4] || '', text: r[5] || '', shared: /^yes/i.test(r[6] || '') })).filter(x => x.home === a).reverse();
+  const open = items.filter(x => !x.shared);
+  const card = x => `<div class="fbi" data-row="${x.row}" style="border:1px solid rgba(128,120,108,.3);border-radius:16px;padding:14px;margin-bottom:12px;${x.shared ? 'opacity:.55' : ''}">
+    <p class="s" style="margin:0 0 8px">${esc(x.name || 'Guest')} · ${esc(String(x.when).slice(0, 16))}${x.verdict ? ' · ' + esc(x.verdict) : ''}${x.shared ? ' · <b>Published</b>' : ''}</p>
+    <textarea name="t${x.row}" rows="3" style="width:100%;font:15px/1.5 inherit;border:1px solid rgba(128,120,108,.35);border-radius:12px;padding:10px;background:transparent;color:inherit">${esc(x.text)}</textarea>
+    ${x.shared ? '' : `<div class="acts" style="margin-top:8px"><button type="button" class="pill" data-fb="one" data-row="${x.row}">Publish</button></div>`}</div>`;
+  sheet(`<p class="date">${esc(a)} · private to you</p><h3>Open house feedback</h3>
+  <p class="s" style="margin:-4px 0 14px">Edit anything first. Published feedback shows on the sellers’ portal without the guest’s name.</p>
+  ${open.length > 1 ? `<div class="acts" style="margin:0 0 14px"><button type="button" class="pill" data-fb="all">Publish all ${open.length}</button></div>` : ''}
+  <form id="fbf">${items.length ? items.map(card).join('') : '<p class="s">No feedback yet for this home.</p>'}</form>
+  <div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`);
+  const publish = async list => {
+    const f = $('#fbf'), out = list.map(x => ({ x, text: (f['t' + x.row].value || '').trim() })).filter(o => o.text);
+    if (!out.length) return toast('Nothing to publish.');
+    try {
+      await append('Showings', out.map(o => [nowStamp(), a, 'Open house' + (o.x.verdict ? ' · ' + o.x.verdict : ''), o.text]));
+      await Promise.all(out.map(o => tool('Google Sheets', 'update_values', { spreadsheetId: SHEET, range: `'Open house feedback'!F${o.x.row}:G${o.x.row}`, values: [[o.text, 'Yes ' + nowStamp()]] })));
+      toast(out.length > 1 ? `Published ${out.length}. The sellers see them now.` : 'Published. The sellers see it now.'); feedbackSheet(a);
+    } catch (err) { toast('Not published — ' + (err.message || 'try again')); }
+  };
+  document.querySelectorAll('[data-fb]').forEach(b => b.onclick = () => { b.disabled = true; publish(b.dataset.fb === 'all' ? open : items.filter(x => String(x.row) === b.dataset.row)); });
 }
 function dealSheet() {
   const ls = listings().map(l => l.address);
@@ -573,6 +603,7 @@ document.addEventListener('click', async e => {
   else if (a === 'reply') { const m = (S.inbox || []).find(t => t.id === b.dataset.id); if (m) replySheet(m); }
   else if (a === 'listing') listingSheet(x);
   else if (a === 'portals') portalsSheet(x);
+  else if (a === 'feedback') feedbackSheet(x);
   else if (a === 'files') filesSheet(x);
   else if (a === 'launch') launchSheet(x);
   else if (a === 'deal') dealSheet();

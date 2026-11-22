@@ -331,7 +331,7 @@ function notifyAgent_(type, label, v) {
     ['Email', '<a href="mailto:' + esc_(v.email) + '">' + esc_(v.email) + '</a>']];
   if (type === 'tour') rows.push(['Working with an agent', esc_(v.agent)], ['Buying', esc_(v.financing)]);
   if (type === 'open-house') { rows.push(['Working with an agent', esc_(v.agent)]); if (v.offmarket) rows.push(['Off-market program', 'Interested in a consult']); if (v.value) rows.push(['Value report', 'Yes' + (v.address ? '' : ' (no address yet)')]); }
-  if (type === 'off-market') { rows.push(['Meet', esc_(v.meeting || 'In person')]); if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
+  if (type === 'off-market') { rows.push(['Meet', esc_(v.meeting || 'In person')]); rows.push(['Likely fit', /Under \$750K/.test(v.wants) ? 'Network search (no mailers): under $750K' : /\$/.test(v.wants) ? 'Full program, including owner outreach' : 'Price not given yet']); if (v.wants) rows.push(['Looking for', esc_(v.wants)]); if (v.areas) rows.push(['Areas', esc_(v.areas)]); }
   if (v.when) rows.push(['Preferred time', esc_(v.when)]);
   if (v.address) rows.push(['Their home', esc_(v.address)]);
   if (v.question && type !== 'open-house' && type !== 'off-market') rows.push(['Question', esc_(v.question)]);

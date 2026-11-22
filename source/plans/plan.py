@@ -46,6 +46,22 @@ def comp_card(c):
 <p class="pr">{money(c.get('price'))}</p><p class="fx">{E(facts)}</p>{f'<p class="fx">{E(meta)}</p>' if meta else ''}{f'<p class="nt">{E(c["note"])}</p>' if c.get('note') else ''}</div></article>'''
 
 
+PREP = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content', 'prep.json')))
+
+
+def prep_html():
+    cards = ''
+    for g in PREP['groups']:
+        if g['when'] != 'before':
+            continue
+        items = ''.join('<li>' + E(i) + '</li>' for i in g['items'])
+        note = '<p class="pn">' + E(g['note']) + '</p>' if g.get('note') else ''
+        cards += '<div class="pg"><h3>' + E(g['name']) + '</h3><ul>' + items + '</ul>' + note + '</div>'
+    return ('<section class="s stone"><div class="wrap"><p class="eyebrow">Before we list</p><h2>' + E(PREP['title']) + '.</h2>'
+            '<p class="lede">' + E(PREP['lede']) + ' The same checklist is in your seller portal, where you can tick things off.</p>'
+            '<div class="prep">' + cards + '</div></div></section>')
+
+
 def build(d):
     comps = d['comps']
     groups = [(s, [c for c in comps if c['status'] == s]) for s in ['Sold', 'Pending', 'Active']]
@@ -106,6 +122,8 @@ ol.tl .w{{margin:0;font-family:var(--serif);font-size:20px}}ol.tl p{{margin:4px 
 .portal{{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}}.portal .ph{{display:flex;gap:14px;justify-content:center}}.portal .ph img{{width:46%;max-width:230px}}
 .chris{{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(24px,5vw,56px);align-items:center}}.chris img{{width:100%;aspect-ratio:4/5;object-fit:cover}}
 .btns{{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}}.btn{{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:500;font-size:15px}}.btn.line{{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor}}
+.prep{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 40px;margin-top:34px}}.pg{{border-top:2px solid var(--brass);padding-top:14px}}.pg ul{{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:15px}}.pg li{{margin:6px 0}}.pn{{font-size:14px;color:var(--muted);margin:10px 0 0;font-style:italic}}
+@media (max-width:820px){{.prep{{grid-template-columns:1fr}}}}
 .fine{{font-size:12.5px;color:#6B655C;margin-top:22px;max-width:760px}}
 .foot{{padding:40px 0 60px;font-size:13px;color:#5F5950;border-top:1px solid var(--line)}}.foot p{{margin:8px 0 0;max-width:820px}}
 @media (max-width:820px){{.price,.portal,.chris{{grid-template-columns:1fr}}.buyers,.steps{{grid-template-columns:1fr}}.step{{border-bottom:1px solid #33393D;padding:16px 0}}.hl{{columns:1}}ol.tl li{{grid-template-columns:1fr;gap:4px}}.stats{{grid-template-columns:1fr 1fr 1fr}}}}
@@ -133,6 +151,7 @@ ol.tl .w{{margin:0;font-family:var(--serif);font-size:20px}}ol.tl p{{margin:4px 
 <div class="step"><p class="n">4</p><h3>Report</h3><p>Your private seller portal: views, posts, showings and feedback, live.</p></div>
 <div class="step"><p class="n">5</p><h3>Run</h3><p>Pages checked every morning, paperwork filed, every message approved by Chris.</p></div></div></div></section>
 <section class="s"><div class="wrap"><p class="eyebrow">From here</p><h2>Your timeline.</h2><ol class="tl">{tl}</ol></div></section>
+{prep_html()}
 <section class="s stone"><div class="wrap portal"><div><p class="eyebrow">You'll see everything</p><h2>Your seller portal.</h2>
 <p class="lede">The day you list, you get a private link and a code. Showings, feedback, online views, your social posts and the competition, all in one place, always current.</p></div>
 <div class="ph"><img src="../marketing/ph-portal-2.webp" alt="Seller portal: your home across the web" loading="lazy"><img src="../marketing/ph-portal-5.webp" alt="Seller portal: market charts" loading="lazy"></div></div></section>

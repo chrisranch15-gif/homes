@@ -101,6 +101,11 @@ footer{padding:36px 0 60px;font-size:13px;color:var(--muted)}
 .pm{display:grid;gap:4px;margin-top:8px;font-size:14px}.pm b{font-family:var(--serif);font-weight:400;font-size:20px}
 .timeline .what a{text-decoration:underline;text-underline-offset:4px}
 
+details{border-top:1px solid var(--line);padding:16px 0}details summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none}details summary::-webkit-details-marker{display:none}details summary:after{content:" +";color:var(--muted)}details[open] summary:after{content:" –"}
+.prep{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 40px;margin-top:18px}.pg h3{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#8C6A43;margin:0 0 6px;font-weight:600}
+.chk{list-style:none;margin:0;padding:0}.chk li{padding:6px 0}.chk label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.45}.chk input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:#1E2327}.chk input:checked+span{color:var(--muted);text-decoration:line-through}
+.pn{font-size:14px;color:var(--muted);font-style:italic;margin:8px 0 0}
+@media(max-width:760px){.prep{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -129,12 +134,64 @@ function login(msg){
 
 function load(code,fresh){
   if(fresh){var b=app.querySelector('#lf button');if(b){b.disabled=true;b.textContent='Opening…'}}
+  window.CODE=code;
   fetch(API+'?api=seller&code='+encodeURIComponent(code)).then(function(r){return r.json()}).then(function(d){
     if(!d.ok){put(KEY,null);return login(d.reason||'That code didn’t match.')}
     put(KEY,code);if(location.hash)history.replaceState(null,'',location.pathname);render(d,code);
   }).catch(function(e){console.error(e);if(fresh)login('We couldn’t reach the portal. Please try again.');else login()});
 }
 
+var PREP={
+  "title": "The small things buyers notice",
+  "lede": "None of these cost much, but together they make your home look cared for in photos and at every showing.",
+  "groups": [
+    {"id": "declutter", "name": "Declutter first", "when": "before", "items": [
+      "Clear the clutter from counters, shelves and tabletops. Less stuff makes every room feel bigger.",
+      "Put away most personal photos. Buyers want to picture their home, not yours."]},
+    {"id": "inside", "name": "Inside", "when": "before", "items": [
+      "Make every light bulb match: the same color in each room (warm white or daylight, not both).",
+      "Replace any burned-out bulbs, including closets, ovens and range hoods.",
+      "Dust light fixtures and ceiling fans.",
+      "Wipe down trim boards and baseboards.",
+      "Dust and wipe the furnace grates and heat vents.",
+      "Replace the furnace filter.",
+      "Clear out closets so buyers see bare floor and back wall in at least one area of each. It makes the storage feel bigger.",
+      "Clean the slider tracks if you have a sliding door.",
+      "WD-40 any squeaky doors.",
+      "Keep every remote handy and labeled: fireplace, fans, lights, blinds."]},
+    {"id": "touchups", "name": "Touch-ups, carefully", "when": "before", "items": [
+      "Putty and touch up trim, especially outside corners and separated joints.",
+      "Touch up scuffs on walls.",
+      "Re-caulk tubs, showers and sinks where it has yellowed or cracked. Small things done tell buyers the whole home is well maintained.",
+      "Label leftover paint by room. The cans ideally stay with the home."],
+     "note": "If it has been years since the last paint job, touch-up paint often won't match and can look worse than the scuff. Test a hidden spot first, or ask me."},
+    {"id": "outside", "name": "Outside", "when": "before", "items": [
+      "Get the windows washed, inside and out.",
+      "Mow the lawn and pull weeds.",
+      "Rake the bark, or add fresh bark to the beds.",
+      "Rake any gravel, or add a few new bags.",
+      "Pressure wash the patio, walkways and front steps.",
+      "Clean off the deck: sweep, wash, and clear between the boards.",
+      "Set out the patio furniture, clean.",
+      "Sweep the garage and clear cobwebs from entry lights and eaves."]},
+    {"id": "closing", "name": "As closing gets close", "when": "closing", "items": [
+      "Forward your mail with the official USPS change of address at usps.com/move (skip look-alike sites that charge more).",
+      "Change your delivery address on Amazon and other accounts.",
+      "Take your Ring doorbell, cameras and security devices off your accounts. They're fixtures and stay with the home.",
+      "Plan to leave your TV wall mounts. Most sellers do: take the TVs, leave the mounts.",
+      "Be ready to take utilities out of your name as of closing: power, water, sewer, garbage, internet."]}
+  ]
+}
+;
+function prepHtml(si){
+  var key='ranch.prep.'+(window.CODE||''),done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+  var closingNow=si>=3, groups=function(when){return PREP.groups.filter(function(g){return g.when===when})};
+  var box=function(g){return '<div class="pg"><h3>'+esc(g.name)+'</h3><ul class="chk">'+g.items.map(function(t,n){var id=g.id+'-'+n;return '<li><label><input type="checkbox" data-prep="'+id+'"'+(done[id]?' checked':'')+'><span>'+esc(t)+'</span></label></li>'}).join('')+'</ul>'+(g.note?'<p class="pn">'+esc(g.note)+'</p>':'')+'</div>'};
+  var before='<details'+(si<=1?' open':'')+'><summary>Before we list · '+groups('before').reduce(function(n,g){return n+g.items.length},0)+' small things buyers notice</summary><p class="muted" style="margin:10px 0 0">'+esc(PREP.lede)+'</p><div class="prep">'+groups('before').map(box).join('')+'</div></details>';
+  var closing='<details'+(closingNow?' open':'')+'><summary>As closing gets close</summary><div class="prep">'+groups('closing').map(box).join('')+'</div></details>';
+  return '<section><div class="wrap"><p class="eyebrow">Your checklist</p><h2>Getting ready</h2><p class="muted" style="margin:0 0 14px">Tick things off as you go. Only you see your ticks, on this device.</p>'+(closingNow?closing+before:before+closing)+'</div></section>';
+}
+document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||!t.dataset.prep)return;var key='ranch.prep.'+(window.CODE||''),d={};try{d=JSON.parse(localStorage.getItem(key)||'{}')}catch(x){}if(t.checked)d[t.dataset.prep]=1;else delete d[t.dataset.prep];try{localStorage.setItem(key,JSON.stringify(d))}catch(x){}});
 var STAGES=[['Prepared','Photos, story, pricing'],['Listed','On NWMLS'],['Showing','Tours & open houses'],['Offer','Review & negotiate'],['Under contract','Inspection & appraisal'],['Closed','Keys handed over']];
 function stageIndex(s){s=String(s||'').toLowerCase();if(/closed|sold/.test(s))return 5;if(/contract|pending/.test(s))return 4;if(/offer/.test(s))return 3;return 2}
 
@@ -154,6 +211,7 @@ function render(d,code){
   var html='';
   html+='<div class="hero" style="background-image:url(photos/front-dusk.jpg)"><div class="wrap"><p class="eyebrow">Day '+days+' on the market · '+esc(d.status||'Active')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' · Tehaleh, Bonney Lake</p><div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div></div></div>';
   html+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your journey</h2><ol class="journey">'+STAGES.map(function(s,i){return '<li class="'+(i<si?'done':i===si?'now':'')+'"><b>'+s[0]+'</b>'+s[1]+'</li>'}).join('')+'</ol></div></section>';
+  html+=prepHtml(si);
   // across the web
   var P={};(d.portals||[]).forEach(function(x){P[x.site.toLowerCase()]=x});
   var soc=d.social||[],reach=0,has=false;soc.forEach(function(x){if(x.reach!=null||x.paidReach!=null){has=true;reach+=(x.reach||0)+(x.paidReach||0)}});

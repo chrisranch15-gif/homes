@@ -47,7 +47,7 @@ for m in PAGES:
     body = ''.join(f'<script>\n{j}\n</script>\n' for j in libs + [app.replace('__ARTIFACT_URL__', HOMES + '/19917')])
     open(f"{ROOT}/{m['site']}/{m['file']}", 'w').write(head + body + '</body></html>')
 open(f'{ROOT}/live/index.html', 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'live-index.template.html')).read())
-open(f'{ROOT}/homes/index.html', 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'collection.template.html')).read().replace('__API__', API))
+open(f'{ROOT}/homes/index.html', 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'collection.template.html')).read().replace('__API__', API).replace('__PREP__', open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content', 'prep.json')).read()))
 print('built', {s: sorted(x for x in os.listdir(f'{ROOT}/{s}') if '.' in x) for s in ['homes', 'gotehaleh', 'live']})
 
 # seller portal (static, noindex) — reads live numbers from the email engine

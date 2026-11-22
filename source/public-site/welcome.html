@@ -229,7 +229,7 @@ function render() {
     <div class="grow"></div><p class="err" id="er"></p><button class="cta dark" id="nx"${S.agent?'':' disabled'}>Continue ${I.arrow}</button></section>`;
   if (S.step === 3) app.innerHTML = `<section class="screen step on"><div class="bar"><button class="back" id="bk" aria-label="Back">${I.back}</button>${dots(3)}</div>
     <p class="mono">Last step</p><h2>Anything we can do for you?</h2><p class="lede">Tap any that interest you, or skip right to the tour.</p>
-    <div class="tiles">${S.agent === 'Yes' ? '' : `<div class="feat">Most requested</div>${tile('of','1','key','Our off-market buyer program','We don’t wait for the right home to come online. We go hunting for it. It starts with a consult.',S.off)}`}
+    <div class="tiles">${S.agent === 'Yes' ? '' : `<div class="feat">Most requested</div>${tile('of','1','key','Our off-market buyer program','Most agents wait for the right home to come on the market. We go hunting for it. It starts with a consult.',S.off)}`}
     ${tile('va','1','chart','What’s my home worth now?','The market has changed. Get an updated value report.',S.val)}</div>
     <div class="more${S.val?' open':''}" id="vm">${field('ad','Your home’s address','text','street-address',S.address)}</div>
     <div class="grow"></div><p class="err" id="er"></p><button class="cta dark" id="nx">${S.off||S.val?'Sign in':'Sign in and tour'} ${I.arrow}</button></section>`;
@@ -256,7 +256,7 @@ function renderDone(app) {
     ${S.agent === 'Yes' ? '' : `<div class="sect"><div class="vip" id="o1" role="button" tabindex="0">
       <span class="badge">${S.consult ? 'Consult requested' : 'Off-market buyer program'}</span>
       <b>${S.consult ? 'I’ll be in touch to set your consult.' : 'If this isn’t the one, we’ll go hunting for the one.'}</b>
-      <small>${S.consult ? 'We’ll sit down, ideally in person, and map out exactly what you want. Then we start hunting.' : 'We don’t wait for the right home to hit Zillow. We invest our own time and funds to find it, matched to exactly what you’re after, and every year we help clients secure their dream homes before anyone else knows they’re available. It starts with a consult.'}</small>
+      <small>${S.consult ? 'We’ll sit down, ideally in person, and get very clear on what you want, where, and how you’re buying. Then we start hunting.' : 'Most agents wait for the right home to come on the market. We don’t. We go hunting, investing our own time and funds to find it, and every year we help clients secure their dream homes before anyone else knows they’re available. It’s deliberate and selective, and it starts with an in-person consult to get very clear on what you want, where, and how you’re buying.'}</small>
       ${S.consult ? `<span class="go">${I.check.replace('currentColor','#16191B')} Requested</span>` : `<span class="go" id="o1go">Book your consult ${I.arrow}</span>
       <div class="more vin" id="cp">${consultPicker()}<button class="cta dark" id="cs" style="margin-top:18px">Request my consult ${I.arrow}</button>
       <p class="fine" style="color:rgba(22,25,27,.6);text-align:left">For buyers not currently working with an agent.</p></div>`}</div></div>`}
@@ -282,7 +282,7 @@ function renderDone(app) {
   wireDone();
 }
 
-const MEET = ['In person', 'Video call', 'Phone call'], WHEN = ['Weekday daytime', 'Weekday evening', 'Weekend'];
+const MEET = ['In person', 'Video call'], WHEN = ['Weekday daytime', 'Weekday evening', 'Weekend'];
 const consultPicker = () => `<p class="s" style="margin-top:14px">How should we meet? <span style="color:var(--gold)">In person is best.</span></p>
   <div class="chips" id="mt">${MEET.map((m, i) => `<button class="chip${i ? '' : ' sel'}" data-one="1" data-w="${m}">${m}</button>`).join('')}</div>
   <p class="s" style="margin-top:16px">Best times for you</p><div class="chips" id="wt">${WHEN.map(m => `<button class="chip" data-w="${m}">${m}</button>`).join('')}</div>`;
@@ -297,7 +297,7 @@ function renderOffer(app) {
   const areas = ['Tehaleh', 'Bonney Lake', 'Lake Tapps', 'Gig Harbor', 'Fox Island', 'Tacoma', 'Puyallup', 'Federal Way', 'Anywhere nearby'];
   app.innerHTML = `<section class="screen done on" style="padding-bottom:40px"><div class="pass" style="margin-bottom:0"><div class="ph" style="height:200px;background-image:url('${off ? 'photos/mtn-alpenglow-800.webp' : H.pass}')"></div><div class="body">
     <p class="mono">${off ? 'Off-market buyer program' : 'Home value report'}</p><h3>${off ? 'We don’t wait. We go hunting.' : 'The market has changed. Has your home’s value?'}</h3>
-    <p style="color:rgba(255,255,255,.65);font-size:15px;line-height:1.55">${off ? 'We don’t wait for the right home to come online. We invest our own time and funds to find it, matched to exactly what you’re after, and every year we help clients secure their dream homes before anyone else knows they’re available. It starts with a consult, ideally in person.' : 'A personal value report from real recent sales and today’s buyers, never an automated estimate.'}</p></div></div>
+    <p style="color:rgba(255,255,255,.65);font-size:15px;line-height:1.55">${off ? 'Most agents wait for the right home to come on the market. We don’t. We go hunting, investing our own time and funds to find it, and every year we help clients secure their dream homes before anyone else knows they’re available. It’s deliberate and selective, and it starts with an in-person consult to get very clear on what you want, where, and how you’re buying.' : 'A personal value report from real recent sales and today’s buyers, never an automated estimate.'}</p></div></div>
     <div class="sect dark-in">${EDIT ? field('nm','Full name','text','name',S.name)+field('ph','Mobile number','tel','tel',S.phone)+field('em','Email','email','email',S.email) : me()}
     ${off ? `<p class="s" style="margin-top:14px">Are you currently working with an agent?</p><div class="chips" id="ag">${['No', 'Yes'].map(a => `<button class="chip${S.agent === a || (a === 'No' && S.agent === 'Just looking') ? ' sel' : ''}" data-one="1" data-w="${a}">${a === 'No' ? 'No' : 'Yes, I have an agent'}</button>`).join('')}</div>
       <div class="more${S.agent === 'Yes' ? ' open' : ''}" id="agn"><p class="s" style="margin-top:12px;color:#E9DCC6">Our program is for buyers who work with us, so we’d never step on your agent’s toes. They’re the right person to help you hunt.</p></div>

@@ -41,7 +41,7 @@ def signs(key, L):
         dict(id='signin', url=base, eyebrow='PLEASE SIGN IN', title='Welcome in.',
              sub='The sellers ask that every guest\nsign in before touring.', foot='Scan with your phone camera · about 20 seconds', photo=L['signin']),
         dict(id='offmarket', url=base + '#offmarket', eyebrow='OFF-MARKET BUYER PROGRAM', title='Not quite the one?', gold=True,
-             sub='We don’t wait for the right home to come online.\nWe go hunting for it.', foot='Scan to book your consult · for buyers not yet working with an agent', photo=L['offmarket']),
+             sub='Most agents wait for the right home to hit the market.\nWe don’t. We go hunting for it.', foot='Scan to book your consult · for buyers not yet working with an agent', photo=L['offmarket']),
         dict(id='value', url=base + '#value', eyebrow='HOME VALUE REPORT', title='The market has changed.',
              sub='Has your home’s value? Get an updated\nreport, prepared personally.', foot='Scan for your free value report', photo=L['value']),
     ]

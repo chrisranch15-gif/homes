@@ -45,8 +45,9 @@ def curate(photos, cap=16):
     """The print set: one front, one rear, kitchen, great room, living, deck, every bedroom, every bath.
     photos: [{"u": url, "r": "kitchen"}] in listing order. Untagged photos only fill leftover room."""
     tagged = [p for p in photos if p.get('r')]
-    if not tagged:
-        return photos[:12]
+    if not tagged:                                    # no room tags yet: the front photo, then an even spread through the tour
+        n = len(photos); k = min(n, 16 if n >= 24 else 12)
+        return [photos[round(i * (n - 1) / (k - 1))] for i in range(k)] if k > 1 else photos[:1]
     pick, seen = [], set()
     multi = ('bedroom', 'bath')                       # every bedroom and bathroom, one photo each
     for room in ROOM_ORDER:

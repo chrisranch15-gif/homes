@@ -17,3 +17,12 @@ address stays the same (it publishes a new version of the existing deployment).
 4. In GitHub: same page → **Secrets** tab → New repository secret `CLASPRC_JSON` → paste.
    This is a key to your account: it goes only into GitHub Secrets, never in chat, email or code.
 5. Repo → Actions → "Deploy the email engine" → Run workflow. A green check = live.
+
+# Concierge API key (one time)
+
+1. console.anthropic.com → sign in with your business account → Billing: add a card, set a **monthly limit of $25**.
+2. API Keys → Create key → name it "Ranch Concierge" → copy it.
+3. Apps Script ("Ranch Leads") → Project Settings (gear) → Script Properties → Add property:
+   `ANTHROPIC_API_KEY` = the key. Save. (Only here. Never in chat, email or code.)
+4. Optional settings in the same place: `AI_DAILY_CAP_CENTS` (default 100 = $1 a day per agent),
+   `AI_PROVIDER` (default `anthropic`; another provider is one adapter function in Code.gs).

@@ -291,6 +291,165 @@ function schedule_(home) {
     .sort((a, b) => b.at - a.at).slice(0, 40);
 }
 
+/* ================= Concierge gateway =================
+   Lean by design:
+   1. Lookups answer from the Sheet with no AI at all.
+   2. Otherwise the smallest model that fits: Haiku for short answers, Sonnet for drafting and actions.
+   3. The rules and business context are sent first and unchanged, so the provider caches them
+      (tools -> system -> messages; nothing that changes sits in the cached part).
+   4. Every request is logged (agent, question, route, tokens, cache, cost) in "Concierge log".
+   5. A daily cost ceiling per agent; past it, only lookups.
+   The key lives in Script Properties (ANTHROPIC_API_KEY), pasted by Chris. Never in code or chat.
+   Swap providers with the AI_PROVIDER property; each provider is one adapter function. */
+const AI_MODELS = { quick: 'claude-haiku-5-5', standard: 'claude-sonnet-5-5' };
+// USD per million tokens: input, output, cache read, cache write (5 min). Update here if prices change.
+const AI_PRICES = { 'claude-haiku-5-5': [0.10, 0.50, 0.01, 0.125], 'claude-sonnet-5-5': [2, 10, 0.10, 2.5] };
+const ASK_LOG_HEADERS = ['When', 'Agent', 'Question', 'Route', 'Model', 'Input tokens', 'Output tokens', 'Cache read', 'Cache write', 'Cost (cents)', 'Answer'];
+const CONCIERGE_RULES = [
+  'You are the Concierge for ' + AGENT_NAME + ', ' + BRAND + ' (' + AFFILIATION + '). You help the agent run their real estate business.',
+  'Rules, always:',
+  '- Nothing goes out without the agent. Emails, texts and posts are drafts the agent sends. You never contact a client.',
+  '- Sellers never see buyer\'s-agent names or details, and buyer\'s agents never see seller information.',
+  '- Every fact comes from the data you are given or a tool. If you do not have it, say so in one line. Never guess prices, dates or features.',
+  '- Client-facing drafts speak as the agent ("I"), warm, direct, specific and human. Never mention AI, a system or automation in them.',
+  '- Be brief. Lead with the answer. Use a short list only when it helps.',
+  '- If the same kind of question would be better as a saved answer, a button or a scheduled task, say so in one line at the end.'
+].join('\n');
+
+function ask_(d) {
+  const q = clean_(d.q, 1500), agent = clean_(d.agent, 60) || AGENT_NAME;
+  if (!q) return { ok: false, reason: 'Ask me something.' };
+  const quick = quickAnswer_(q);                                  // 1. no AI
+  if (quick) { askLog_(agent, q, 'lookup', '', {}, 0, quick); return { ok: true, route: 'lookup', text: quick }; }
+  const props = PropertiesService.getScriptProperties();
+  const cap = Number(props.getProperty('AI_DAILY_CAP_CENTS') || 100);
+  if (askSpentToday_(agent) >= cap) return { ok: true, route: 'capped', text: 'I have reached today\'s limit for written answers. Lookups still work, and I will be back to full speed tomorrow.' };
+  const tier = /\b(draft|write|email|text|message|reply|post|caption|publish|plan|compare|summari[sz]e|explain why|rewrite|soften|letter|script|remarks|description)\b/i.test(q) || q.length > 280 ? 'standard' : 'quick';
+  const provider = props.getProperty('AI_PROVIDER') || 'anthropic';
+  const adapter = { anthropic: anthropicChat_ }[provider];
+  if (!adapter) return { ok: false, reason: 'The Concierge provider "' + provider + '" is not set up.' };
+  const history = (Array.isArray(d.history) ? d.history : []).slice(-6)
+    .map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: clean_(m.content, 2000) })).filter(m => m.content);
+  try {
+    const r = adapter(tier, history.concat([{ role: 'user', content: q }]), d);
+    const model = AI_MODELS[tier], cents = askCost_(model, r.usage);
+    askLog_(agent, q, tier === 'quick' ? 'quick' : 'standard', model, r.usage, cents, r.text);
+    return { ok: true, route: tier, text: r.text, proposals: r.proposals || [], cents: Math.round(cents * 100) / 100 };
+  } catch (err) {
+    askLog_(agent, q, 'error', AI_MODELS[tier], {}, 0, String(err && err.message || err));
+    return { ok: false, reason: /key/i.test(String(err)) ? 'The Concierge is not connected yet (no API key).' : 'The Concierge could not answer just now. Try again in a minute.' };
+  }
+}
+
+// Answers that need no AI: read straight from the Sheet.
+function quickAnswer_(q) {
+  const t = q.toLowerCase();
+  const sellers = tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1).filter(r => r[0]);
+  const which = sellers.filter(r => { const names = String(r[1]).toLowerCase().split(/ and | & |,\s*/); const num = String(r[2]).split(' ')[0];
+    return names.some(n => n && t.indexOf(n.trim()) > -1) || (num && t.indexOf(num) > -1); });
+  const one = which.length === 1 ? which[0] : null;
+  if (one && /portal code|their code|login code/.test(t)) return one[1] + '\u2019s portal code is ' + one[0] + '.';
+  if (one && /photo ?day|photo shoot|photos (on|when)|when are (the )?photos/.test(t))
+    return one[6] ? one[1] + '\u2019s photo day is ' + Utilities.formatDate(new Date(one[6]), 'America/Los_Angeles', 'EEEE, MMM d') + '.' : 'No photo day is set for ' + one[1] + ' yet. Set it in The Office under their listing.';
+  if (/how many (new )?leads|new leads (today|this week)|leads today/.test(t)) {
+    const since = Date.now() - (/week/.test(t) ? 7 : 1) * 864e5;
+    const rows = tab_('Leads', LEAD_HEADERS).getDataRange().getValues().slice(1).filter(r => new Date(r[0]).getTime() >= since && String(r[4]).toLowerCase() !== AGENT_EMAIL);
+    return rows.length ? rows.length + ' new lead' + (rows.length === 1 ? '' : 's') + (/week/.test(t) ? ' this week' : ' in the last day') + ': ' + rows.slice(-5).map(r => r[2] + ' (' + r[1] + ')').join(', ') + '.' : 'No new leads ' + (/week/.test(t) ? 'this week' : 'in the last day') + '.';
+  }
+  if (/who signed in|sign.?ins/.test(t)) {
+    const rows = tab_('Leads', LEAD_HEADERS).getDataRange().getValues().slice(1).filter(r => r[1] === 'Open house sign-in' && Date.now() - new Date(r[0]).getTime() < 3 * 864e5 && String(r[4]).toLowerCase() !== AGENT_EMAIL);
+    return rows.length ? 'Open house sign-ins in the last 3 days: ' + rows.map(r => r[2] + ' (' + r[6] + ')').join(', ') + '.' : 'No open house sign-ins in the last 3 days.';
+  }
+  return '';
+}
+
+// Anthropic adapter. Order is tools -> system -> messages; the two system blocks never change between calls, so they cache.
+function anthropicChat_(tier, messages, d) {
+  const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
+  if (!key) throw new Error('No API key');
+  const tools = conciergeTools_();
+  const system = [
+    { type: 'text', text: CONCIERGE_RULES },
+    { type: 'text', text: conciergeContext_(), cache_control: { type: 'ephemeral' } }
+  ];
+  const usage = { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 };
+  let msgs = messages.slice(), proposals = [];
+  for (let step = 0; step < 4; step++) {
+    const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify({ model: AI_MODELS[tier], max_tokens: tier === 'quick' ? 600 : 1500, tools: tools, system: system, messages: msgs })
+    });
+    const j = JSON.parse(res.getContentText() || '{}');
+    if (res.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + res.getResponseCode()));
+    Object.keys(usage).forEach(k => usage[k] += (j.usage && j.usage[k]) || 0);
+    const calls = (j.content || []).filter(b => b.type === 'tool_use');
+    if (j.stop_reason !== 'tool_use' || !calls.length)
+      return { text: (j.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim(), usage: usage, proposals: proposals };
+    msgs.push({ role: 'assistant', content: j.content });
+    msgs.push({ role: 'user', content: calls.map(c => { const out = runConciergeTool_(c.name, c.input || {}, proposals);
+      return { type: 'tool_result', tool_use_id: c.id, content: JSON.stringify(out).slice(0, 12000) }; }) });
+  }
+  return { text: 'That took more steps than I allow for one question. Could you narrow it down?', usage: usage, proposals: proposals };
+}
+
+// The business context: stable for hours, so it caches. Changing data comes from tools instead.
+function conciergeContext_() {
+  const listings = tab_('Listings', ['Address']).getDataRange().getDisplayValues();
+  const sellers = tab_('Sellers', SELLER_HEADERS).getDataRange().getDisplayValues().slice(1).map(r => [r[1], r[2], r[5], r[6] ? 'photo day ' + r[6] : ''].filter(Boolean).join(' | '));
+  return 'Listings (address, city, price, status, sellers, page):\n' + listings.slice(1).filter(r => r[0]).map(r => [r[0], r[1], r[2], r[3], r[4], r[5]].filter(Boolean).join(' | ')).join('\n')
+    + '\n\nSellers with portals:\n' + sellers.join('\n')
+    + '\n\nSheet tabs you can read with read_tab: Leads, Listings, Sellers, Showings, Showing schedule, Open house feedback, Seller prep, Home facts, Unlisted buyers, Unlisted stories, Photo shoots, Seller updates.';
+}
+
+function conciergeTools_() {
+  return [
+    { name: 'read_tab', description: 'Read recent rows of one tab of the business Sheet. Use for leads, showings, feedback, checklists, Unlisted buyers and stories.',
+      input_schema: { type: 'object', properties: { tab: { type: 'string' }, rows: { type: 'integer', description: 'How many of the newest rows (max 40)' } }, required: ['tab'] } },
+    { name: 'propose', description: 'Propose an action for the agent to approve with one tap: a drafted email or text, a seller update, a checklist item, publishing feedback. Nothing happens until they approve.',
+      input_schema: { type: 'object', properties: { kind: { type: 'string', enum: ['email_draft', 'text_draft', 'seller_update', 'checklist_item', 'publish_feedback', 'other'] },
+        to: { type: 'string' }, subject: { type: 'string' }, body: { type: 'string' }, listing: { type: 'string' } }, required: ['kind', 'body'] } }
+  ];
+}
+const CONCIERGE_TABS = ['Leads', 'Listings', 'Sellers', 'Showings', 'Showing schedule', 'Open house feedback', 'Seller prep', 'Home facts', 'Unlisted buyers', 'Unlisted stories', 'Photo shoots', 'Seller updates'];
+function runConciergeTool_(name, input, proposals) {
+  if (name === 'read_tab') {
+    const tabName = String(input.tab || ''), n = Math.min(40, Math.max(1, Number(input.rows) || 15));
+    if (CONCIERGE_TABS.indexOf(tabName) < 0) return { error: 'Not a tab I can read. Choose one of: ' + CONCIERGE_TABS.join(', ') };
+    const sh = book_().getSheetByName(tabName); if (!sh) return { rows: [] };
+    const v = sh.getDataRange().getDisplayValues(); return { header: v[0], rows: v.slice(1).slice(-n) };
+  }
+  if (name === 'propose') { proposals.push({ kind: clean_(input.kind, 30), to: clean_(input.to, 200), subject: clean_(input.subject, 200), body: String(input.body || '').slice(0, 4000), listing: clean_(input.listing, 120) });
+    return { ok: true, note: 'Shown to the agent for approval.' }; }
+  return { error: 'Unknown tool' };
+}
+
+function askCost_(model, u) {
+  const p = AI_PRICES[model]; if (!p || !u) return 0;
+  return ((u.input_tokens || 0) * p[0] + (u.output_tokens || 0) * p[1] + (u.cache_read_input_tokens || 0) * p[2] + (u.cache_creation_input_tokens || 0) * p[3]) / 1e6 * 100;
+}
+function askLog_(agent, q, route, model, u, cents, answer) {
+  try { tab_('Concierge log', ASK_LOG_HEADERS).appendRow([new Date(), agent, q, route, model, (u && u.input_tokens) || 0, (u && u.output_tokens) || 0,
+    (u && u.cache_read_input_tokens) || 0, (u && u.cache_creation_input_tokens) || 0, Math.round(cents * 1000) / 1000, String(answer || '').slice(0, 300)]); } catch (err) { console.error(err); }
+}
+function askSpentToday_(agent) {
+  const day = Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd');
+  return tab_('Concierge log', ASK_LOG_HEADERS).getDataRange().getValues().slice(1)
+    .filter(r => r[1] === agent && r[0] && Utilities.formatDate(new Date(r[0]), 'America/Los_Angeles', 'yyyy-MM-dd') === day)
+    .reduce((a, r) => a + (Number(r[9]) || 0), 0);
+}
+// Questions that keep coming back: candidates for a saved answer, a button or a scheduled task.
+function askReport_() {
+  const rows = tab_('Concierge log', ASK_LOG_HEADERS).getDataRange().getValues().slice(1).filter(r => Date.now() - new Date(r[0]).getTime() < 30 * 864e5);
+  const norm = q => String(q).toLowerCase().replace(/[0-9]+/g, '#').replace(/[^a-z# ]/g, ' ').split(/\s+/).filter(w => w.length > 3).sort().slice(0, 6).join(' ');
+  const groups = {};
+  rows.forEach(r => { const k = norm(r[2]); if (!k) return; (groups[k] = groups[k] || { example: r[2], count: 0, cents: 0, routes: {} }); groups[k].count++; groups[k].cents += Number(r[9]) || 0; groups[k].routes[r[3]] = 1; });
+  const repeats = Object.keys(groups).map(k => groups[k]).filter(g => g.count >= 3).sort((a, b) => b.count - a.count).slice(0, 10)
+    .map(g => ({ example: g.example, count: g.count, cents: Math.round(g.cents * 100) / 100, alreadyFree: !!g.routes.lookup && Object.keys(g.routes).length === 1 }));
+  return { ok: true, month: { questions: rows.length, cents: Math.round(rows.reduce((a, r) => a + (Number(r[9]) || 0), 0) * 100) / 100,
+    free: rows.filter(r => r[3] === 'lookup').length }, repeats: repeats };
+}
+
 /* ---------------- seller checklist and home facts ----------------
    The shared list lives in the site (content/prep.json); this tab keeps each seller's ticks,
    Chris's own items for that home (From = Chris) and items the sellers add (From = Seller). */
@@ -628,6 +787,8 @@ function officePost_(d) {
   try {
     if (d.op === 'ping') return { ok: true, me: Session.getEffectiveUser().getEmail(), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') };
     if (d.op === 'tool') return { ok: true, result: officeCall_(d.server, d.name, d.input) };
+    if (d.op === 'ask') return ask_(d);                       // the Concierge: lookup first, cheapest model that fits, every call logged
+    if (d.op === 'askReport') return askReport_();            // repeated questions worth turning into an answer, a button or a workflow
     if (d.op === 'ai') return { ok: true, result: officeAi_(d.prompt, d.opts) };
     if (d.op === 'story') {                                  // Unlisted hunt stories from past off-market deals
       const f = d.story || {}, c = k => clean_(f[k], 600);

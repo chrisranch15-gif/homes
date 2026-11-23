@@ -95,6 +95,13 @@ section[data-tone=need] .group{background:linear-gradient(180deg,color-mix(in sr
 .timecol{color:var(--tone)!important;font-weight:500}
 .brand{display:flex;flex-direction:column;line-height:1.1}.brand .sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.cg{max-height:min(56vh,520px);overflow:auto;display:flex;flex-direction:column;gap:10px;margin:6px 0 12px;padding:2px}
+.cgu{align-self:flex-end;max-width:85%;background:var(--ink,#16191B);color:#fff;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:15px;line-height:1.45}
+.cga{align-self:flex-start;max-width:92%;background:rgba(128,120,108,.12);padding:12px 14px;border-radius:16px 16px 16px 4px;font-size:15px;line-height:1.55}
+.cgp{margin-top:10px;padding:10px;border:1px solid rgba(128,120,108,.35);border-radius:12px;background:rgba(255,255,255,.5)}
+.cgin{width:100%;box-sizing:border-box;margin-top:6px;font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit}
+.cgtag{margin-top:6px;font-size:11px;letter-spacing:.06em;opacity:.65}
+.cgf{display:flex;gap:8px}.cgf input{flex:1;min-width:0;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit}
 </style>
 </head>
 <body>
@@ -383,7 +390,7 @@ function render() {
     ${biz.soon.length ? `<div class="group" style="margin-top:12px">${biz.soon.map(x => `<div class="row plain"><div class="body"><div class="t">${esc(x.address)}</div><div class="s">${esc(x.side)} · closes ${new Date(x.closing).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div></div></div>`).join('')}</div>` : ''}
     <p class="note">${biz.missingPct ? `Add your commission on ${biz.missingPct} deal${biz.missingPct > 1 ? 's' : ''} to see GCI. ` : ''}Deals live in your Ranch Sheet until KW Command is connected.</p></section>
   </div>
-  <div class="dock"><form id="tell" autocomplete="off"><input id="tellq" placeholder="Tell Ranch… “open house Saturday 1–4 at 19917”" aria-label="Tell Ranch what to do"><button aria-label="Go">${I.up}</button></form></div>`;
+  <div class="dock"><form id="tell" autocomplete="off"><input id="tellq" placeholder="${S.officeMode ? 'Ask your Concierge… “who should I call today?”' : 'Tell Ranch… “open house Saturday 1–4 at 19917”'}" aria-label="Ask your Concierge"><button aria-label="Go">${I.up}</button></form></div>`;
 }
 function tile(cls, live, k, s) { return `<div class="tile"><span class="live ${cls}">${esc(live)}</span><span style="font-size:16px;font-weight:500">${esc(k)}</span><span style="font-size:13px;color:var(--muted);line-height:1.4">${esc(s)}</span></div>`; }
 
@@ -659,9 +666,58 @@ document.addEventListener('click', async e => {
   else if (a === 'market') marketSheet(x);
   else if (a === 'sent-network') { try { await append('Marketing', [[nowStamp(), x, 'Agent network email — all 10 offices', '~600 agents', '']]); toast('Logged on the sellers’ portal.'); await loadSheet(); render(); } catch (err) { toast('Not saved — try again.'); } }
 });
-document.addEventListener('submit', e => { if (e.target.id === 'tell') { e.preventDefault(); const q = $('#tellq').value.trim(); if (q) { $('#tellq').value = ''; tell(q); } } });
+document.addEventListener('submit', e => { if (e.target.id === 'tell') { e.preventDefault(); const q = $('#tellq').value.trim(); if (q) { $('#tellq').value = ''; S.officeMode ? concierge(q) : tell(q); } } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 
+
+/* ---------- Concierge (office mode): a conversation with Claude through Chris's engine.
+   Lookups answer free; drafts and changes come back as proposals he approves with one tap. ---------- */
+const CHAT = [];
+function concierge(q) {
+  if (!$('#cg')) {
+    sheet(`<p class="date">Your Concierge</p><h3>How can I help?</h3><div id="cg" class="cg" aria-live="polite"></div>
+    <form id="cgf" class="cgf" autocomplete="off"><input id="cgq" placeholder="Ask, or tell me what to do" aria-label="Message your Concierge"><button type="button" id="cgm" class="pill ghost" aria-label="Talk instead of typing">Talk</button><button class="pill">Send</button></form>
+    <p class="s" style="margin:10px 0 0;font-size:12px">Drafts wait for your OK. Nothing goes to a client until you send it.</p>`);
+    const card = $('#sheet .card'); card.style.maxWidth = '640px';
+    $('#cgf').onsubmit = e => { e.preventDefault(); const v = $('#cgq').value.trim(); if (v) { $('#cgq').value = ''; concierge(v); } };
+    const SRc = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SRc) $('#cgm').remove(); else $('#cgm').onclick = () => { const r = new SRc(); r.lang = 'en-US'; r.interimResults = true; $('#cgm').textContent = 'Listening…';
+      r.onresult = ev => { $('#cgq').value = [...ev.results].map(x => x[0].transcript).join(''); }; r.onend = () => { $('#cgm').textContent = 'Talk'; if ($('#cgq').value.trim()) $('#cgf').requestSubmit(); }; r.start(); };
+    drawChat();
+  }
+  if (!q) return;
+  CHAT.push({ role: 'user', content: q }); CHAT.push({ role: 'assistant', content: '', busy: true }); drawChat();
+  const history = CHAT.slice(0, -2).filter(m => !m.busy && m.content).map(m => ({ role: m.role, content: m.content }));
+  engine({ op: 'ask', q, history, agent: AGENT_NAME_OFFICE }).then(r => {
+    const m = CHAT[CHAT.length - 1]; m.busy = false; m.content = r.text || ''; m.proposals = r.proposals || []; m.route = r.route; drawChat();
+  }).catch(err => { const m = CHAT[CHAT.length - 1]; m.busy = false; m.content = /locked/.test(err.message) ? 'Please sign in to your office again.' : err.message; drawChat(); });
+}
+const AGENT_NAME_OFFICE = 'Chris Ranch';
+function drawChat() {
+  const box = $('#cg'); if (!box) return;
+  box.innerHTML = CHAT.map((m, i) => m.role === 'user' ? `<div class="cgu">${esc(m.content)}</div>`
+    : `<div class="cga">${m.busy ? '<span class="s">Thinking…</span>' : esc(m.content).replace(/\n/g, '<br>')}${(m.proposals || []).map((p, j) => proposalCard(p, i, j)).join('')}${m.route === 'lookup' ? '<div class="cgtag">Answered from your Sheet · free</div>' : ''}</div>`).join('');
+  box.scrollTop = box.scrollHeight;
+  box.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => runProposal(+b.dataset.i, +b.dataset.j, b.dataset.pa, b));
+}
+const PLABEL = { email_draft: 'Save to Gmail drafts', text_draft: 'Copy text', seller_update: 'Post to their portal', checklist_item: 'Copy item', publish_feedback: 'Open feedback to publish', other: 'Copy' };
+function proposalCard(p, i, j) {
+  return `<div class="cgp"><div class="s" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px">${esc((p.kind || 'other').replace('_', ' '))}${p.to ? ' · to ' + esc(p.to) : ''}${p.listing ? ' · ' + esc(p.listing) : ''}</div>
+  ${p.subject ? `<input class="cgin" data-f="subject" data-i="${i}" data-j="${j}" value="${esc(p.subject)}" aria-label="Subject">` : ''}
+  <textarea class="cgin" data-f="body" data-i="${i}" data-j="${j}" rows="5" aria-label="Draft">${esc(p.body)}</textarea>
+  <div class="acts" style="margin-top:8px">${p.done ? `<span class="s">${esc(p.done)}</span>` : `<button type="button" class="pill" data-pa="${esc(p.kind)}" data-i="${i}" data-j="${j}">${PLABEL[p.kind] || 'Copy'}</button>${p.kind === 'text_draft' ? `<a class="pill ghost" href="sms:?&body=${encodeURIComponent(p.body)}">Open in Messages</a>` : ''}`}</div></div>`;
+}
+async function runProposal(i, j, kind, btn) {
+  const p = CHAT[i].proposals[j], val = f => { const el = document.querySelector(`.cgin[data-f="${f}"][data-i="${i}"][data-j="${j}"]`); return el ? el.value : (p[f] || ''); };
+  p.body = val('body'); p.subject = val('subject'); btn.disabled = true;
+  try {
+    if (kind === 'email_draft') { await engine({ op: 'tool', server: 'Gmail', name: 'create_draft', input: { to: /@/.test(p.to) ? [p.to] : [], subject: p.subject, body: p.body } }); p.done = 'Saved to your Gmail drafts. Review and send it from Gmail.'; }
+    else if (kind === 'seller_update') { if (!p.listing) throw new Error('Which listing? Ask me again with the address.'); await append('Seller updates', [[nowStamp(), p.listing, p.subject || 'An update from Chris', p.body, 'Chris']]); p.done = 'Posted to their portal.'; }
+    else if (kind === 'publish_feedback') { close(); return feedbackSheet(p.listing || ''); }
+    else { await navigator.clipboard.writeText(p.body); p.done = 'Copied.'; }
+  } catch (err) { btn.disabled = false; return toast(err.message || 'That didn’t work. Try again.'); }
+  drawChat();
+}
 
 /* ---------- office mode: outside Claude, the same Hub talks to Chris's own Google engine ---------- */
 const ENGINE = 'https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec';

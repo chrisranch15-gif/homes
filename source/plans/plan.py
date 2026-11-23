@@ -91,8 +91,19 @@ def tour_pages(comps):
         facts = ' · '.join(x for x in [c['status'], money(c.get('price')), f'{c["beds"]} bd' if c.get('beds') else '', f'{c["baths"]} ba' if c.get('baths') else '', f'{c["sqft"]:,} sq ft' if c.get('sqft') else '', c.get('date', '')] if x)
         cells = ''.join(f'<figure><img src="{E(p["u"])}" alt=""><figcaption>{E((p.get("r") or "").capitalize())}</figcaption></figure>' for p in ph)
         out += (f'<section class="tour"><p class="eyebrow">Comparable · {E(c["status"])}</p><h2>{E(c["address"])}</h2><p class="tf">{E(facts)}</p>'
-                f'<div class="tg n{min(len(ph), 16)}">{cells}</div>' + (f'<p class="rm">{E(c["remarks"])}</p>' if c.get('remarks') else '') + '</section>')
+                f'<div class="tg n{min(len(ph), 16)}">{cells}</div>' + (f'<p class="rm">{E(trim_remarks(c["remarks"]))}</p>' if c.get('remarks') else '') + '</section>')
     return out
+
+
+PRINT_CSS = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'print.css')).read()
+
+
+def trim_remarks(t, n=820):
+    t = ' '.join(str(t or '').split())
+    if len(t) <= n:
+        return t
+    cut = t[:n]; k = max(cut.rfind('. '), cut.rfind('! '))
+    return (cut[:k + 1] if k > n * 0.5 else cut.rsplit(' ', 1)[0]) + ' …'
 
 
 PREP = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content', 'prep.json')))
@@ -193,16 +204,7 @@ dialog.gal{{border:0;padding:0;width:min(1100px,100vw);max-width:100vw;max-heigh
 .gal .rm{{padding:4px 18px 24px;color:#CFC9C0;font-size:15px;max-width:820px}}
 .pbar{{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted)}}.pbar label{{display:flex;gap:8px;align-items:center}}
 .tour{{display:none}}
-@media print{{
-  @page{{size:letter;margin:.45in}}
-  body{{background:#fff;font-size:11pt}}.hero{{min-height:0;height:4.2in}}section.s{{padding:26px 0;break-inside:auto}}.btns,.pbar,.more,.open .cnt,dialog{{display:none!important}}
-  .comps{{grid-template-columns:repeat(3,1fr);gap:10px}}.comp{{break-inside:avoid}}
-  body.with-photos .tour{{display:block;break-before:page;padding:0 .1in}}
-  .tour h2{{font-size:22pt;margin:4px 0 0}}.tour .tf{{margin:4px 0 10px;font-size:10pt;color:#5F5950}}
-  .tg{{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}}.tg.n1,.tg.n2,.tg.n3,.tg.n4,.tg.n5,.tg.n6,.tg.n7,.tg.n8,.tg.n9{{grid-template-columns:repeat(3,1fr)}}
-  .tg figure{{margin:0}}.tg img{{width:100%;aspect-ratio:4/3;object-fit:cover}}.tg figcaption{{font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#6B655C;margin-top:2px}}
-  .tour .rm{{font-size:9pt;line-height:1.45;color:#3B3A36;margin:10px 0 0;max-height:2.2in;overflow:hidden}}
-}}
+{PRINT_CSS}
 </style></head><body>
 <header class="hero"><img src="../{E(d['photo'])}" alt="{E(d['address'])}">
 <div class="top"><span>The Ranch Real Estate Group</span><span>Prepared for you · {E(d['prepared'])}</span></div>
@@ -236,7 +238,8 @@ dialog.gal{{border:0;padding:0;width:min(1100px,100vw);max-width:100vw;max-heigh
 <p class="lede">Questions about the price, the timing or anything in this plan? Call or text me directly.</p>
 <p style="margin:14px 0 0"><b>Chris Ranch</b> · The Ranch Real Estate Group · Keller Williams Realty Puget Sound · KW Luxury</p>
 <div class="btns"><a class="btn" href="tel:+12533355630">Call (253) 335-5630</a><a class="btn line" href="sms:+12533355630">Text Chris</a></div>
-<p class="fine">This comparative market analysis is a broker's opinion of price based on available market data. It is not an appraisal.</p></div></div></section>
+<p class="fine">This comparative market analysis is a broker's opinion of price based on available market data. It is not an appraisal.</p>
+<p class="printfoot">The Ranch Real Estate Group · Keller Williams Realty Puget Sound · 33434 8th Ave S, Suite 103, Federal Way, WA 98003 · Each Office Is Independently Owned and Operated. Equal Housing Opportunity. Prepared privately for {E(d['sellers'])}.</p></div></div></section>
 {tours}
 </main>
 <dialog class="gal" id="gal" aria-label="Photos"><div class="gh2"><h3 id="gt"></h3><button class="x" onclick="gal.close()">Close</button></div><div class="main"><img id="gm" alt=""><button class="nav p" aria-label="Previous photo" onclick="step(-1)">‹</button><button class="nav n" aria-label="Next photo" onclick="step(1)">›</button><span class="ct" id="gc"></span></div><div class="strip" id="gs"></div><p class="rm" id="gr"></p></dialog>

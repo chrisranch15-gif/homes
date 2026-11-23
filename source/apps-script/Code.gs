@@ -799,6 +799,12 @@ function officePost_(d) {
   try {
     if (d.op === 'ping') return { ok: true, me: Session.getEffectiveUser().getEmail(), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') };
     if (d.op === 'tool') return { ok: true, result: officeCall_(d.server, d.name, d.input) };
+    if (d.op === 'listingStatus') {                       // remove (or restore) a listing: the row stays, only Status changes
+      const sh = tab_('Listings', ['Address']), v = sh.getRange(1, 1, sh.getLastRow(), 1).getDisplayValues(), want = String(d.address || '').trim();
+      let row = -1; v.forEach((r, i) => { if (i && String(r[0]).trim() === want) row = i + 1; });
+      if (row < 2) return { ok: false, reason: 'Listing not found' };
+      sh.getRange(row, 4).setValue(clean_(d.status, 20) || 'Removed'); return { ok: true, row: row };
+    }
     if (d.op === 'ask') return ask_(d);                       // the Concierge: lookup first, cheapest model that fits, every call logged
     if (d.op === 'askReport') return askReport_();            // repeated questions worth turning into an answer, a button or a workflow
     if (d.op === 'ai') return { ok: true, result: officeAi_(d.prompt, d.opts) };

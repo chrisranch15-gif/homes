@@ -171,6 +171,7 @@ async function loadSheet() {
   const out = {};
   await Promise.all(Object.keys(tabs).map(async k => { try { out[k] = await sheetRows(tabs[k]); } catch (e) { out[k] = null; S.err.sheet = e.message || String(e); } }));
   S.sheet = out; S.at = Date.now();
+  try { store('sheet', JSON.stringify({ at: S.at, out })); } catch (e) { }
 }
 async function loadPosts() {
   try {
@@ -247,7 +248,7 @@ function hk(s) { const m = String(s || '').toLowerCase().replace(/street/g, 'st'
 function shoots() { const by = {}; ((S.sheet && S.sheet.shoots) || []).slice(1).forEach(r => { if (r[0]) by[r[0]] = { address: r[1], status: r[2], order: r[3], pkg: r[4], total: r[5], ordered: r[6], ready: r[7], page: r[8], photos: r[9] }; }); return by; }
 function shootFor(a) { return shoots()[hk(a)]; }
 const KNOWN = { '19917 145th st': { sqft: 2772, beds: 5, baths: 2.75, city: 'Bonney Lake', zip: '98391' } };
-function listings() { return (S.sheet && S.sheet.listings || []).filter(r => r[0]).map(r => ({ address: r[0], city: r[1], price: r[2], status: r[3] || 'Active', sellers: r[4], page: r[5], desk: r[6], code: r[7], listed: toDate(r[8]), photo: r[9] })); }
+function listings() { return (S.sheet && S.sheet.listings || []).filter(r => r[0] && !/^removed$/i.test(r[3] || '')).map(r => ({ address: r[0], city: r[1], price: r[2], status: r[3] || 'Active', sellers: r[4], page: r[5], desk: r[6], code: r[7], listed: toDate(r[8]), photo: r[9] })); }
 function deals() { return latestBy(S.sheet && S.sheet.deals, 1).map(r => ({ address: r[1], side: r[2], status: r[3], price: Number(String(r[4]).replace(/[^\d.]/g, '')) || 0, pct: Number(String(r[5]).replace(/[^\d.]/g, '')) || 0, gci: Number(String(r[6]).replace(/[^\d.]/g, '')) || 0, contract: toDate(r[7]), closing: toDate(r[8]), notes: r[9] })); }
 function business() {
   const ds = deals(), y = new Date().getFullYear(), gci = d => d.gci || (d.price && d.pct ? d.price * d.pct / 100 : 0);
@@ -349,7 +350,7 @@ function render() {
   <nav class="jump" aria-label="Jump to">${[['listings','Listings'],['kit','Presentations'],['needs','Needs you'],['today','Today'],['inbox','Inbox']].map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
   ${!caps.mcp && S.ready && !S.officeMode ? `<section><div class="group"><div class="row"><div class="ico">${I.globe}</div><div class="body"><div class="t">Open Ranch on claude.ai</div><div class="s">Your Gmail, Sheet and social accounts connect there. This view is a preview.</div></div></div></div></section>` : ''}
 
-  <section aria-label="Listings" data-tone="list" id="listings"><div class="h2row"><h2>Listings</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="pill ghost launch" data-act="shoot">${I.cal}<span>Order photos</span></button><button class="pill launch" data-act="launch">${I.plus}<span>Launch a listing</span></button></span></div>
+  <section aria-label="Listings" data-tone="list" id="listings"><div class="h2row"><h2>Listings</h2><span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="linkbtn" data-act="refresh" ${S.busy.all ? 'disabled' : ''}>${S.busy.all ? 'Updating…' : (S.at ? 'Updated ' + new Date(S.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + ' · Refresh' : 'Refresh')}</button><button class="pill ghost launch" data-act="shoot">${I.cal}<span>Order photos</span></button><button class="pill launch" data-act="launch">${I.plus}<span>Launch a listing</span></button></span></div>
     <div class="group">${listings().length ? '' : '<div class="empty">No listings yet. Launch your first one.</div>'}${listings().map(l => `<button class="lrow" data-act="listing" data-a="${esc(l.address)}">${l.photo ? `<img class="thumb" src="${esc(localPhoto(l.photo))}" alt="" onerror="this.onerror=null;this.src='${esc(l.photo)}'">` : '<span class="thumb" aria-hidden="true"></span>'}<span class="body"><span class="t" style="display:block">${esc(l.address)}</span><span class="s" style="display:block">${esc([l.city, money(l.price), l.listed ? 'Day ' + (Math.floor((Date.now() - l.listed) / 864e5) + 1) : l.page ? '' : 'needs a page', (shootFor(l.address) || {}).status ? 'Photos: ' + shootFor(l.address).status.toLowerCase() : ''].filter(Boolean).join(' · '))}</span></span>${I.chev}</button>`).join('')}</div></section>
 
 
@@ -422,7 +423,24 @@ function listingSheet(a) {
     <button class="lrow" data-act="market" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Market stats for the sellers</span><span class="s" style="display:block">Paste your numbers — Claude charts them on their portal</span></span>${I.chev}</button>
     <button class="lrow" data-act="files" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Deal documents</span><span class="s" style="display:block">${(S.sheet && S.sheet.docs || []).filter(r => r[1] === a).length} filed in Drive</span></span>${I.chev}</button>
     ${!l.page ? `<button class="lrow" data-act="launch" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Launch this listing</span><span class="s" style="display:block">Page, Desk, seller portal, social posts, agent email</span></span>${I.chev}</button>` : ''}
-  </div><div class="acts" style="margin-top:18px"><button class="pill ghost" data-act="close">Done</button></div>`);
+  </div><div class="acts" style="margin-top:18px;justify-content:space-between"><button class="pill ghost" data-act="close">Done</button><button class="linkbtn" data-act="rmask" data-a="${esc(a)}" style="color:var(--warn)">Remove listing…</button></div>`);
+}
+function removeAsk(a) {
+  sheet(`<p class="date">Remove listing</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">It disappears from The Office. The row stays in your Sheet marked “Removed,” so nothing is lost and you can bring it back by changing the status.</p>
+  <div class="acts"><button class="pill" id="rmgo" style="background:var(--warn);color:#fff">Remove</button><button class="pill ghost" data-act="close">Keep it</button></div>`);
+  $('#rmgo').onclick = async () => { const b = $('#rmgo'); b.disabled = true; b.textContent = 'Removing…';
+    try { await removeListing(a); close(); toast('Removed.'); render(); } catch (err) { b.disabled = false; b.textContent = 'Remove'; toast('Not removed — ' + (err.message || 'try again')); } };
+}
+async function removeListing(a) {
+  if (S.officeMode) await engine({ op: 'listingStatus', address: a, status: 'Removed' });
+  else {
+    const col = rows(await tool('Google Sheets', 'get_values', { spreadsheetId: SHEET, range: 'Listings!A1:A80' }));
+    let row = -1; col.forEach((r, i) => { if (String(r[0] || '').trim() === a.trim()) row = i + 1; });
+    if (row < 2) throw new Error('Couldn’t find it in the Sheet');
+    await tool('Google Sheets', 'update_values', { spreadsheetId: SHEET, range: 'Listings!D' + row, values: [['Removed']] });
+  }
+  (S.sheet.listings || []).forEach(r => { if (r[0] === a) r[3] = 'Removed'; });
+  loadSheet().then(render);
 }
 function shootText(f) {
   const d = Object.fromEntries(new FormData(f).entries()), adds = [...f.querySelectorAll('input[name=addon]:checked')].map(x => x.value);
@@ -669,6 +687,7 @@ document.addEventListener('click', async e => {
   else if (a === 'prep') prepSheet(x);
   else if (a === 'files') filesSheet(x);
   else if (a === 'launch') launchSheet(x);
+  else if (a === 'rmask') removeAsk(x);
   else if (a === 'deal') dealSheet();
   else if (a === 'kit') kitSheet(x);
   else if (a === 'rsvp') { b.disabled = true; try { await tool('Google Calendar', 'respond_to_event', { calendarId: b.dataset.c, eventId: b.dataset.id, responseStatus: b.dataset.v }); toast(b.dataset.v === 'accepted' ? 'Accepted.' : 'Declined.'); await loadCalendar(); render(); } catch (err) { b.disabled = false; toast('Didn’t go through — ' + (err.message || 'try again')); } }
@@ -748,7 +767,12 @@ function unlockSheet(msg) {
 
 /* ---------- start ---------- */
 S.theme = store('theme') || 'daylight';
+try { const c = JSON.parse(store('sheet') || 'null'); if (c && c.out && Date.now() - c.at < 7 * 864e5) { S.sheet = c.out; S.at = c.at; } } catch (e) { }
 render();
+async function quietRefresh() { if (!caps.mcp || S.busy.all || S.busy.quiet) return; S.busy.quiet = true; try { await loadSheet(); render(); } finally { S.busy.quiet = false; } }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - (S.at || 0) > 45e3) quietRefresh(); });
+window.addEventListener('pageshow', e => { if (e.persisted) quietRefresh(); });
+setInterval(() => { if (document.visibilityState === 'visible' && Date.now() - (S.at || 0) > 150e3) quietRefresh(); }, 30e3);
 (async () => {
   if (window.claude && claude.use) {
     const [m, s, d] = await Promise.all(['mcp', 'sample', 'db'].map(n => claude.use(n).catch(() => null)));

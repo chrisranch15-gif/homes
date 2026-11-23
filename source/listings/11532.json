@@ -1,0 +1,87 @@
+{
+ "key": "11532",
+ "address": "11532 SE 173rd St #53",
+ "city": "Renton",
+ "state": "WA",
+ "price": 275000,
+ "beds": 2,
+ "baths": "1.5",
+ "sqft": 1132,
+ "mls": "2583514",
+ "status": "Active",
+ "credit": "",
+ "hero": "19-main-exterior",
+ "lede": "Two bedrooms, a brick fireplace and a private patio backing to the trees, in a community with a pool, clubhouse and sauna.",
+ "features": [
+  [
+   "Brick fireplace in the living room",
+   "09-living-room"
+  ],
+  [
+   "Sliders to a private patio and wooded backyard",
+   "14-back-patio"
+  ],
+  [
+   "Garage with a workbench and storage",
+   "18-garage"
+  ],
+  [
+   "Community pool",
+   "34-community-pool"
+  ],
+  [
+   "Clubhouse with a kitchen and sauna",
+   "28-clubhouse"
+  ],
+  [
+   "Sport court",
+   "23-basketball-court"
+  ]
+ ],
+ "groups": [
+  [
+   "The home",
+   [
+    "19-main-exterior",
+    "20-front-exterior",
+    "15-front-door",
+    "07-living-room",
+    "08-living-room",
+    "09-living-room",
+    "06-dining-to-living-room",
+    "05-dining-area",
+    "04-kitchen-dining",
+    "02-kitchen-1",
+    "03-kitchen-2",
+    "11-main-bedroom",
+    "12-main-bedroom",
+    "10-bedroom-1",
+    "13-main-bathroom",
+    "01-bathroom-1",
+    "14-back-patio",
+    "16-backyard",
+    "17-garage",
+    "18-garage"
+   ]
+  ],
+  [
+   "The community",
+   [
+    "34-community-pool",
+    "21-aerial-pool",
+    "22-aerial-clubhouse",
+    "28-clubhouse",
+    "29-clubhouse",
+    "27-clubhouse-dining",
+    "32-clubhouse-kitchen",
+    "33-clubhouse-sauna",
+    "23-basketball-court",
+    "30-aerial-front",
+    "31-aerial-front",
+    "24-aerial-pin",
+    "25-aerial-view",
+    "26-aerial-view"
+   ]
+  ]
+ ]
+}

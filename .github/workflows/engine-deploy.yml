@@ -1,0 +1,53 @@
+name: Deploy the email engine (Apps Script)
+# Every change to source/apps-script/Code.gs goes live on its own: pushed to the
+# "Ranch Leads" script and published as a new version of the existing web app
+# deployment, so the engine's address never changes.
+# One-time setup by Chris (see source/apps-script/DEPLOY.md):
+#   secret CLASPRC_JSON  = the contents of ~/.clasprc.json after "clasp login"
+#   variable SCRIPT_ID   = the script's ID (Project Settings > IDs; not a secret)
+on:
+  push:
+    branches: [main]
+    paths: ['source/apps-script/Code.gs']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: engine-deploy, cancel-in-progress: false }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DEPLOYMENT_ID: AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu
+      SCRIPT_ID: ${{ vars.SCRIPT_ID }}
+      CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check setup
+        id: setup
+        run: |
+          if [ -z "$CLASPRC_JSON" ] || [ -z "$SCRIPT_ID" ]; then
+            echo "::warning::Engine not deployed: add the CLASPRC_JSON secret and SCRIPT_ID variable (source/apps-script/DEPLOY.md)."
+            echo "ready=no" >> $GITHUB_OUTPUT
+          else echo "ready=yes" >> $GITHUB_OUTPUT; fi
+      - uses: actions/setup-node@v4
+        if: steps.setup.outputs.ready == 'yes'
+        with: { node-version: '20' }
+      - name: Code.gs must be plain ASCII and valid JavaScript
+        if: steps.setup.outputs.ready == 'yes'
+        run: |
+          if LC_ALL=C grep -nP '[^\x00-\x7F]' source/apps-script/Code.gs; then echo "::error::Non-ASCII characters in Code.gs"; exit 1; fi
+          node -e "new Function(require('fs').readFileSync('source/apps-script/Code.gs','utf8'))"
+      - name: Push and publish a new version
+        if: steps.setup.outputs.ready == 'yes'
+        run: |
+          npm install -g @google/clasp@2 >/dev/null 2>&1
+          printf '%s' "$CLASPRC_JSON" > ~/.clasprc.json
+          mkdir -p /tmp/engine && cd /tmp/engine
+          printf '{"scriptId":"%s","rootDir":"."}' "$SCRIPT_ID" > .clasp.json
+          clasp pull                       # brings the project's manifest (appsscript.json) and file list
+          ls
+          cp "$GITHUB_WORKSPACE/source/apps-script/Code.gs" Code.js
+          clasp push --force
+          clasp deploy --deploymentId "$DEPLOYMENT_ID" --description "From GitHub ${GITHUB_SHA::7}"
+          rm -f ~/.clasprc.json

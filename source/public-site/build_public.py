@@ -51,4 +51,4 @@ open(f'{ROOT}/homes/index.html', 'w').write(open(os.path.join(os.path.dirname(os
 print('built', {s: sorted(x for x in os.listdir(f'{ROOT}/{s}') if '.' in x) for s in ['homes', 'gotehaleh', 'live']})
 
 # seller portal (static, noindex) — reads live numbers from the email engine
-open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sites/homes/sellers.html'), 'w').write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sellers.template.html')).read().replace('__API__', API))
+import subprocess; subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_sellers.py')], check=True)   # writes sellers.html at the site root

@@ -1,0 +1,29 @@
+name: Listing photos from Drive
+on:
+  push:
+    branches: [main]
+    paths: ['source/photos/*.json']
+  workflow_dispatch:
+    inputs:
+      plan: { description: 'Photo list (e.g. source/photos/11532.json)', required: true }
+permissions:
+  contents: write
+concurrency: { group: listing-photos, cancel-in-progress: false }
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - run: pip install -q pillow
+      - name: Download and size the photos
+        run: |
+          if [ -n "${{ github.event.inputs.plan }}" ]; then plans="${{ github.event.inputs.plan }}";
+          else plans=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'source/photos/*.json'); fi
+          python3 source/photos/fetch.py $plans
+      - name: Save to the site
+        run: |
+          git config user.name "Ranch photos"; git config user.email "actions@users.noreply.github.com"
+          git add photos
+          git diff --cached --quiet || (git commit -m "Listing photos from Drive" && git pull --rebase -X ours && git push)

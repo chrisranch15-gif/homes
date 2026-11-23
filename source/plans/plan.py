@@ -37,13 +37,61 @@ def chart(d):
 <figcaption><span class="lg">{legend}<span><i class="you"></i>Your home · recommended range</span></span></figcaption></figure>'''
 
 
-def comp_card(c):
+ROOM_ORDER = ['front', 'rear', 'kitchen', 'great room', 'living', 'family', 'dining', 'deck', 'patio', 'yard', 'view',
+              'primary bedroom', 'bedroom', 'primary bath', 'bath', 'office', 'bonus', 'laundry', 'garage']
+
+
+def curate(photos, cap=16):
+    """The print set: one front, one rear, kitchen, great room, living, deck, every bedroom, every bath.
+    photos: [{"u": url, "r": "kitchen"}] in listing order. Untagged photos only fill leftover room."""
+    tagged = [p for p in photos if p.get('r')]
+    if not tagged:
+        return photos[:12]
+    pick, seen = [], set()
+    multi = ('bedroom', 'bath')                       # every bedroom and bathroom, one photo each
+    for room in ROOM_ORDER:
+        for p in tagged:
+            r = p['r'].lower()
+            if r != room or p in pick:
+                continue
+            key = r + (p.get('n') or '')                 # "n" tells two bedrooms apart (e.g. "2", "3")
+            if key in seen:
+                continue
+            if r not in multi and r in {k.rstrip('0123456789') for k in seen}:
+                continue
+            seen.add(key); pick.append(p)
+    return pick[:cap]
+
+
+def comp_card(c, i):
     ppsf = round(c['price'] / c['sqft']) if c.get('price') and c.get('sqft') else None
-    img = f'<img src="{E(c["photo"])}" alt="{E(c["address"])}" loading="lazy">' if c.get('photo') else ''
+    photos = c.get('photos') or ([{'u': c['photo']}] if c.get('photo') else [])
+    first = c.get('photo') or (photos[0]['u'] if photos else '')
+    more = len(photos) > 1 or c.get('remarks')
+    img = ''
+    if first:
+        img = f'<img src="{E(first)}" alt="{E(c["address"])}" loading="lazy">'
+        if more:
+            img = f'<button class="open" data-i="{i}" aria-label="See photos of {E(c["address"])}">{img}<span class="cnt">{len(photos)} photos</span></button>'
     facts = ' · '.join(x for x in [f'{c["beds"]} bd' if c.get('beds') else '', f'{c["baths"]} ba' if c.get('baths') else '', f'{c["sqft"]:,} sq ft' if c.get('sqft') else '', f'${ppsf}/sq ft' if ppsf else ''] if x)
     meta = ' · '.join(x for x in [c.get('date', ''), f'{c["dom"]} days on market' if c.get('dom') is not None else ''] if x)
+    link = f'<button class="more" data-i="{i}">Photos and remarks</button>' if more else ''
     return f'''<article class="comp {c['status'].lower()}">{img}<div class="cb"><p class="st">{E(c['status'])}</p><h3>{E(c['address'])}</h3>
-<p class="pr">{money(c.get('price'))}</p><p class="fx">{E(facts)}</p>{f'<p class="fx">{E(meta)}</p>' if meta else ''}{f'<p class="nt">{E(c["note"])}</p>' if c.get('note') else ''}</div></article>'''
+<p class="pr">{money(c.get('price'))}</p><p class="fx">{E(facts)}</p>{f'<p class="fx">{E(meta)}</p>' if meta else ''}{f'<p class="nt">{E(c["note"])}</p>' if c.get('note') else ''}{link}</div></article>'''
+
+
+def tour_pages(comps):
+    """Print only: one page per comparable with its curated photos (12-16) and the remarks."""
+    out = ''
+    for c in comps:
+        ph = curate(c.get('photos') or [])
+        if not ph and not c.get('remarks'):
+            continue
+        facts = ' · '.join(x for x in [c['status'], money(c.get('price')), f'{c["beds"]} bd' if c.get('beds') else '', f'{c["baths"]} ba' if c.get('baths') else '', f'{c["sqft"]:,} sq ft' if c.get('sqft') else '', c.get('date', '')] if x)
+        cells = ''.join(f'<figure><img src="{E(p["u"])}" alt=""><figcaption>{E((p.get("r") or "").capitalize())}</figcaption></figure>' for p in ph)
+        out += (f'<section class="tour"><p class="eyebrow">Comparable · {E(c["status"])}</p><h2>{E(c["address"])}</h2><p class="tf">{E(facts)}</p>'
+                f'<div class="tg n{min(len(ph), 16)}">{cells}</div>' + (f'<p class="rm">{E(c["remarks"])}</p>' if c.get('remarks') else '') + '</section>')
+    return out
 
 
 PREP = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content', 'prep.json')))
@@ -73,11 +121,15 @@ def build(d):
     hi = ''.join(f'<li>{E(h)}</li>' for h in d['home'].get('highlights', []))
     buyer = ''.join(f'<div class="b"><h3>{E(b["t"])}</h3><p>{E(b["d"])}</p></div>' for b in d['buyer'])
     story = ''.join(f'<p>{E(p)}</p>' for p in d['price']['story'])
-    comp_html = ''.join(f'<h3 class="gh">{s} <span>{len(g)}</span></h3><div class="comps">{"".join(comp_card(c) for c in g)}</div>' for s, g in groups if g)
+    order = [c for _, g in groups for c in g]
+    idx = {id(c): k for k, c in enumerate(order)}
+    comp_html = ''.join(f'<h3 class="gh">{s} <span>{len(g)}</span></h3><div class="comps">{"".join(comp_card(c, idx[id(c)]) for c in g)}</div>' for s, g in groups if g)
+    gal = json.dumps([{'a': c['address'], 's': c['status'], 'p': [p['u'] for p in (c.get('photos') or ([{'u': c['photo']}] if c.get('photo') else []))], 'r': c.get('remarks', '')} for c in order]).replace('</', '<\\/')
+    tours = tour_pages(order)
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive"><meta name="referrer" content="no-referrer">
-<title>Your launch plan · {E(d['address'])} · The Ranch Real Estate Group</title>
+<title>CMA & launch plan · {E(d['address'])} · The Ranch Real Estate Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap">
 <style>
@@ -127,11 +179,33 @@ ol.tl .w{{margin:0;font-family:var(--serif);font-size:20px}}ol.tl p{{margin:4px 
 .fine{{font-size:12.5px;color:#6B655C;margin-top:22px;max-width:760px}}
 .foot{{padding:40px 0 60px;font-size:13px;color:#5F5950;border-top:1px solid var(--line)}}.foot p{{margin:8px 0 0;max-width:820px}}
 @media (max-width:820px){{.price,.portal,.chris{{grid-template-columns:1fr}}.buyers,.steps{{grid-template-columns:1fr}}.step{{border-bottom:1px solid #33393D;padding:16px 0}}.hl{{columns:1}}ol.tl li{{grid-template-columns:1fr;gap:4px}}.stats{{grid-template-columns:1fr 1fr 1fr}}}}
-@media print{{.hero{{min-height:520px}}section.s{{padding:40px 0;break-inside:avoid}}.btns{{display:none}}}}
+.open{{all:unset;display:block;position:relative;cursor:pointer;width:100%}}.open .cnt{{position:absolute;right:10px;bottom:10px;background:rgba(22,25,27,.78);color:#F7F5F1;font-size:12px;letter-spacing:.08em;padding:5px 10px}}
+.more{{all:unset;cursor:pointer;margin-top:12px;font-size:13px;letter-spacing:.06em;color:var(--brass);border-bottom:1px solid currentColor}}
+dialog.gal{{border:0;padding:0;width:min(1100px,100vw);max-width:100vw;max-height:100dvh;height:100dvh;background:var(--night);color:var(--paper)}}dialog.gal::backdrop{{background:rgba(10,12,14,.85)}}
+@media(min-width:900px){{dialog.gal{{height:92vh;max-height:92vh}}}}
+.gal .gh2{{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px}}.gal .gh2 h3{{font-family:var(--serif);font-weight:400;font-size:20px}}
+.gal .x{{all:unset;cursor:pointer;font-size:14px;letter-spacing:.1em;padding:10px 14px;border:1px solid #3A4045}}
+.gal .main{{position:relative;background:#0E1012}}.gal .main img{{width:100%;height:min(62vh,640px);object-fit:contain}}
+.gal .nav{{all:unset;cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);font-size:28px;padding:14px 16px;background:rgba(22,25,27,.6)}}.gal .nav.p{{left:6px}}.gal .nav.n{{right:6px}}
+.gal .ct{{position:absolute;left:12px;bottom:10px;font-size:12px;color:#CFC9C0}}
+.gal .strip{{display:flex;gap:6px;overflow-x:auto;padding:10px 18px}}.gal .strip img{{height:64px;width:96px;object-fit:cover;opacity:.55;cursor:pointer;flex:none}}.gal .strip img.on{{opacity:1;outline:2px solid var(--sand)}}
+.gal .rm{{padding:4px 18px 24px;color:#CFC9C0;font-size:15px;max-width:820px}}
+.pbar{{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted)}}.pbar label{{display:flex;gap:8px;align-items:center}}
+.tour{{display:none}}
+@media print{{
+  @page{{size:letter;margin:.45in}}
+  body{{background:#fff;font-size:11pt}}.hero{{min-height:0;height:4.2in}}section.s{{padding:26px 0;break-inside:auto}}.btns,.pbar,.more,.open .cnt,dialog{{display:none!important}}
+  .comps{{grid-template-columns:repeat(3,1fr);gap:10px}}.comp{{break-inside:avoid}}
+  body.with-photos .tour{{display:block;break-before:page;padding:0 .1in}}
+  .tour h2{{font-size:22pt;margin:4px 0 0}}.tour .tf{{margin:4px 0 10px;font-size:10pt;color:#5F5950}}
+  .tg{{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}}.tg.n1,.tg.n2,.tg.n3,.tg.n4,.tg.n5,.tg.n6,.tg.n7,.tg.n8,.tg.n9{{grid-template-columns:repeat(3,1fr)}}
+  .tg figure{{margin:0}}.tg img{{width:100%;aspect-ratio:4/3;object-fit:cover}}.tg figcaption{{font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#6B655C;margin-top:2px}}
+  .tour .rm{{font-size:9pt;line-height:1.45;color:#3B3A36;margin:10px 0 0;max-height:2.2in;overflow:hidden}}
+}}
 </style></head><body>
 <header class="hero"><img src="../{E(d['photo'])}" alt="{E(d['address'])}">
 <div class="top"><span>The Ranch Real Estate Group</span><span>Prepared for you · {E(d['prepared'])}</span></div>
-<div class="wrap c"><p class="eyebrow">Your launch plan · {E(d['community'])}</p><h1>{E(d['address'])}</h1>
+<div class="wrap c"><p class="eyebrow">CMA & launch plan · {E(d['community'])}</p><h1>{E(d['address'])}</h1>
 <p class="sub">{E(d['sellers'])}, here's how we'll introduce your home: what it's worth, who will buy it, and exactly what happens from here.</p></div></header>
 <main>
 <section class="s"><div class="wrap"><p class="eyebrow">Where your home fits</p><h2>Pricing to win the right buyer.</h2>
@@ -141,7 +215,8 @@ ol.tl .w{{margin:0;font-family:var(--serif);font-size:20px}}ol.tl p{{margin:4px 
 {chart(d)}</div></section>
 <section class="s stone"><div class="wrap"><p class="eyebrow">The homes buyers will compare</p><h2>Your competition, side by side.</h2>
 <p class="lede">The nearby homes that matter most to your price: what's sold, what's under contract, and what buyers can tour today.</p>{comp_html}
-<p class="fine">Comparables from {E(d.get('source','NWMLS'))} as of {E(d['prepared'])}. While you're on the market, new listings, pendings and price changes appear in your seller portal.</p></div></section>
+<p class="fine">Comparables as of {E(d['prepared'])}. Tap a home to see its photos and listing remarks. While you're on the market, new listings, pendings and price changes appear in your seller portal.</p>
+<div class="pbar"><button class="btn line" onclick="printPlan()">Print or save as PDF</button><label><input type="checkbox" id="wp" checked> Include a photo page for each home</label></div></div></section>
 <section class="s"><div class="wrap"><p class="eyebrow">What makes it different</p><h2>What we'll lead with.</h2><ul class="hl">{hi}</ul></div></section>
 <section class="s stone"><div class="wrap"><p class="eyebrow">Your likely buyer</p><h2>Who we're marketing to.</h2><div class="buyers">{buyer}</div></div></section>
 <section class="s dark"><div class="wrap"><p class="eyebrow">How we launch it</p><h2>Five things we do for your home.</h2>
@@ -161,9 +236,24 @@ ol.tl .w{{margin:0;font-family:var(--serif);font-size:20px}}ol.tl p{{margin:4px 
 <p style="margin:14px 0 0"><b>Chris Ranch</b> · The Ranch Real Estate Group · Keller Williams Realty Puget Sound · KW Luxury</p>
 <div class="btns"><a class="btn" href="tel:+12533355630">Call (253) 335-5630</a><a class="btn line" href="sms:+12533355630">Text Chris</a></div>
 <p class="fine">This comparative market analysis is a broker's opinion of price based on available market data. It is not an appraisal.</p></div></div></section>
+{tours}
 </main>
+<dialog class="gal" id="gal" aria-label="Photos"><div class="gh2"><h3 id="gt"></h3><button class="x" onclick="gal.close()">Close</button></div><div class="main"><img id="gm" alt=""><button class="nav p" aria-label="Previous photo" onclick="step(-1)">‹</button><button class="nav n" aria-label="Next photo" onclick="step(1)">›</button><span class="ct" id="gc"></span></div><div class="strip" id="gs"></div><p class="rm" id="gr"></p></dialog>
 <footer class="foot"><div class="wrap"><p><strong>The Ranch Real Estate Group</strong> · Keller Williams Realty Puget Sound · 33434 8th Ave S, Suite 103, Federal Way, WA 98003 · Each Office Is Independently Owned and Operated. Equal Housing Opportunity.</p>
 <p>Prepared privately for {E(d['sellers'])}. Please don't forward this link.</p></div></footer>
+<script>
+var G={gal},cur=0,pi=0,gal=document.getElementById('gal');
+function show(){{var c=G[cur];document.getElementById('gm').src=c.p[pi]||'';document.getElementById('gc').textContent=c.p.length?(pi+1)+' / '+c.p.length:'';
+[].forEach.call(document.querySelectorAll('#gs img'),function(t,k){{t.className=k===pi?'on':''}});}}
+function step(d){{var n=G[cur].p.length;if(n){{pi=(pi+d+n)%n;show()}}}}
+function openGal(i){{cur=i;pi=0;var c=G[i];document.getElementById('gt').textContent=c.a+' · '+c.s;
+document.getElementById('gs').innerHTML=c.p.map(function(u,k){{return '<img loading="lazy" src="'+u+'" alt="Photo '+(k+1)+'" onclick="pi='+k+';show()">'}}).join('');
+document.getElementById('gr').textContent=c.r||'';show();gal.showModal()}}
+document.addEventListener('click',function(e){{var b=e.target.closest('.open,.more');if(b)openGal(+b.dataset.i)}});
+document.addEventListener('keydown',function(e){{if(gal.open){{if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)}}}});
+var sx=0;gal.addEventListener('touchstart',function(e){{sx=e.touches[0].clientX}},{{passive:true}});gal.addEventListener('touchend',function(e){{var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)step(dx<0?1:-1)}});
+function printPlan(){{document.body.classList.toggle('with-photos',document.getElementById('wp').checked);window.print()}}
+</script>
 <script>try{{fetch('{API}',{{method:'POST',headers:{{'Content-Type':'text/plain'}},body:JSON.stringify({{type:'visit',view:'plan',page:'plan-{E(d['token'])}',source:'plan'}})}})}}catch(e){{}}</script>
 </body></html>'''
 

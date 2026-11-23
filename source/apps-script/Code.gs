@@ -323,7 +323,13 @@ function ask_(d) {
   if (quick) { askLog_(agent, q, 'lookup', '', {}, 0, quick); return { ok: true, route: 'lookup', text: quick }; }
   const props = PropertiesService.getScriptProperties();
   const cap = Number(props.getProperty('AI_DAILY_CAP_CENTS') || 100);
-  if (askSpentToday_(agent) >= cap) return { ok: true, route: 'capped', text: 'I have reached today\'s limit for written answers. Lookups still work, and I will be back to full speed tomorrow.' };
+  const spent = askSpentToday_(agent);
+  if (spent >= cap) {                                            // tell the agent plainly, and tell Chris once a day
+    const c = CacheService.getScriptCache(), k = 'capmail:' + agent + ':' + Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyyMMdd');
+    if (!c.get(k)) { c.put(k, '1', 21600); try { GmailApp.sendEmail(AGENT_EMAIL, 'Concierge daily budget reached: ' + agent, agent + ' reached the Concierge daily budget ($' + (cap / 100).toFixed(2) + '). Written answers pause until midnight; lookups keep working. Change AI_DAILY_CAP_CENTS in Script Properties to adjust.', { name: 'Ranch Concierge' }); } catch (e) {} }
+    return { ok: true, route: 'capped', spentCents: Math.round(spent * 100) / 100, capCents: cap,
+      text: 'You have used today\'s Concierge budget ($' + (spent / 100).toFixed(2) + ' of $' + (cap / 100).toFixed(2) + '). Written answers and drafts pause until midnight. Quick lookups (codes, photo days, leads, sign-ins) still work.' };
+  }
   const tier = /\b(draft|write|email|text|message|reply|post|caption|publish|plan|compare|summari[sz]e|explain why|rewrite|soften|letter|script|remarks|description)\b/i.test(q) || q.length > 280 ? 'standard' : 'quick';
   const provider = props.getProperty('AI_PROVIDER') || 'anthropic';
   const adapter = { anthropic: anthropicChat_ }[provider];

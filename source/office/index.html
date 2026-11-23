@@ -587,17 +587,24 @@ ${f.txt.value.slice(0, 8000)}`, { modelTier: 'default', cache: false });
       $('#msave').onclick = async () => { try { await append('Market', rowsM.map(r => [r.month, a, area, r.median, r.sold, r.active, r.dom, r.moi, r.stl, src])); close(); toast('Charted on the sellers’ portal.'); } catch (err) { toast('Not saved — try again.'); } };
     } catch (err) { b.disabled = false; b.textContent = 'Read with Claude'; toast('Couldn’t read those numbers — ' + (err.message || 'try again')); } };
 }
-function launchSheet(a) {
-  sheet(`<p class="date">Launch a listing</p><h3>Four questions.</h3><p class="s" style="margin:-4px 0 16px">Ranch builds the page, The Desk, the seller portal, three social posts and the agent-network email. Nothing goes public until you approve it.</p>
-  <form id="lf"><div class="field"><label for="la">Address</label><input id="la" name="a" value="${esc(a || '')}" required></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="field"><label for="lc">City or community</label><input id="lc" name="city"></div><div class="field"><label for="lp">Price</label><input id="lp" name="price" inputmode="numeric"></div></div>
-  <div class="field"><label for="lph">Photos (Google Drive folder link)</label><input id="lph" name="photos"></div>
-  <div class="field"><label for="lse">Sellers’ first names</label><input id="lse" name="sellers" placeholder="Aaron and Holly"></div>
-  <div class="acts"><button class="pill">Start the launch</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
-  $('#lf').onsubmit = async e => { e.preventDefault(); const f = e.target;
-    try { await append('Listings', [[f.a.value.trim(), f.city.value.trim(), String(f.price.value).replace(/[^\d]/g, ''), 'Preparing', f.sellers.value.trim(), '', '', '', '', '']]);
-      await append('Marketing', [[nowStamp(), f.a.value.trim(), 'Launch requested', '', 'Photos: ' + f.photos.value.trim()]]);
-      close(); toast('Queued. The launch kit is built in your next Claude session.'); await loadSheet(); render(); } catch (err) { toast('Not saved — try again.'); } };
+function launchSheet(a, pre) {
+  pre = pre || {}; const v = k => esc(pre[k] || '');
+  sheet(`<p class="date">Launch a listing</p><h3>${pre.address ? esc(pre.address) : 'A few details.'}</h3><p class="s" style="margin:-4px 0 16px">Ranch builds the page, The Desk, the seller portal, three social posts and the agent-network email. Nothing goes public until you approve it. Leave anything you don’t know yet blank.</p>
+  <form id="lf"><div class="field"><label for="la">Address</label><input id="la" name="a" value="${esc(a || pre.address || '')}" required></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="field"><label for="lc">City or community</label><input id="lc" name="city" value="${v('city')}"></div><div class="field"><label for="lp">Price</label><input id="lp" name="price" inputmode="numeric" value="${v('price')}"></div></div>
+  <div class="field"><label for="lse">Sellers</label><input id="lse" name="sellers" placeholder="Aaron and Holly" value="${v('sellers')}"></div>
+  <div class="field"><label for="lph">Photos (Google Drive folder link)</label><input id="lph" name="photos" value="${v('photos')}"></div>
+  <div class="field"><label for="lno">Anything else</label><textarea id="lno" name="notes" placeholder="Photo day, list date, what makes it special…">${v('notes')}</textarea></div>
+  <div class="acts"><button class="pill" id="lgo">Start the launch</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
+  $('#lf').onsubmit = async e => { e.preventDefault(); const f = e.target, btn = $('#lgo'); if (btn.disabled) return;
+    btn.disabled = true; btn.textContent = 'Starting…';
+    const addr = f.a.value.trim();
+    try { await append('Listings', [[addr, f.city.value.trim(), String(f.price.value).replace(/[^\d]/g, ''), 'Preparing', f.sellers.value.trim(), '', '', '', '', '']]);
+      await append('Marketing', [[nowStamp(), addr, 'Launch requested', '', ['Photos: ' + (f.photos.value.trim() || 'not yet'), f.notes.value.trim()].filter(Boolean).join(' · ')]]);
+      sheet(`<p class="date">Launch started</p><h3>${esc(addr)}</h3><p style="font-size:17px;line-height:1.6;margin:0 0 14px">It’s in your Listings now as <b>Preparing</b>.</p>
+      <ul class="s" style="margin:0 0 16px;padding-left:18px;line-height:1.7"><li>Next time you open a Claude session, I build the page, The Desk, the seller portal, three posts and the agent email.</li><li>Each piece waits for your approval before anything goes public.</li><li>Missing photos or price? Add them any time; the launch waits for them.</li></ul>
+      <div class="acts"><button class="pill" data-act="close">Done</button></div>`);
+      loadSheet().then(render); } catch (err) { btn.disabled = false; btn.textContent = 'Start the launch'; toast('Not saved — ' + (err.message || 'try again')); } };
 }
 
 /* ---------- Tell Ranch ---------- */
@@ -613,11 +620,13 @@ Actions:
 - "seller_update": {"address","title","message"} (a note on the sellers' portal)
 - "marketing": {"address","what","reach","notes"} (log something done to market a listing)
 - "deal": {"address","status","price","pct","closing" YYYY-MM-DD}
+- "launch": {"address","city","price","sellers","photos","notes"} (he wants to launch, list or set up a NEW listing; fill only what he said, "" for the rest)
 - "answer": {"text"} (a question about his business you can answer from: LISTINGS ${JSON.stringify(listings().map(l => [l.address, l.price, l.status]))} DEALS ${JSON.stringify(deals().map(d => [d.address, d.status, d.price, d.pct, d.closing && new Date(d.closing).toDateString()]))})
 Return JSON {"action": one of the names, "summary": "<= 14 words describing what will happen", "data": {...}}.
 REQUEST: ${q}`, { modelTier: 'default', cache: false });
     if (!out || !out.action) throw new Error('No action');
     const dd = out.data || {};
+    if (out.action === 'launch') return launchSheet(dd.address || '', dd);
     if (out.action === 'answer') return sheet(`<p class="date">Ranch</p><h3>${esc(q)}</h3><p style="font-size:17px;line-height:1.6">${esc(dd.text)}</p><div class="acts"><button class="pill ghost" data-act="close">Done</button></div>`);
     const fields = Object.keys(dd).map(k => `<div class="field"><label for="tf-${k}">${esc(k)}</label>${k === 'body' || k === 'message' ? `<textarea id="tf-${k}" name="${esc(k)}">${esc(dd[k])}</textarea>` : `<input id="tf-${k}" name="${esc(k)}" value="${esc(dd[k])}">`}</div>`).join('');
     sheet(`<p class="date">Ready when you are</p><h3>${esc(out.summary || q)}</h3><form id="tf">${fields}<div class="acts"><button class="pill">${{ event: 'Add to calendar', email: 'Save to Gmail drafts', seller_update: 'Post to their portal', marketing: 'Log it', deal: 'Save deal' }[out.action] || 'Do it'}</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
@@ -700,7 +709,7 @@ function drawChat() {
   box.scrollTop = box.scrollHeight;
   box.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => runProposal(+b.dataset.i, +b.dataset.j, b.dataset.pa, b));
 }
-const PLABEL = { email_draft: 'Save to Gmail drafts', text_draft: 'Copy text', seller_update: 'Post to their portal', checklist_item: 'Copy item', publish_feedback: 'Open feedback to publish', other: 'Copy' };
+const PLABEL = { launch_listing: 'Review and launch', email_draft: 'Save to Gmail drafts', text_draft: 'Copy text', seller_update: 'Post to their portal', checklist_item: 'Copy item', publish_feedback: 'Open feedback to publish', other: 'Copy' };
 function proposalCard(p, i, j) {
   return `<div class="cgp"><div class="s" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px">${esc((p.kind || 'other').replace('_', ' '))}${p.to ? ' · to ' + esc(p.to) : ''}${p.listing ? ' · ' + esc(p.listing) : ''}</div>
   ${p.subject ? `<input class="cgin" data-f="subject" data-i="${i}" data-j="${j}" value="${esc(p.subject)}" aria-label="Subject">` : ''}
@@ -714,6 +723,7 @@ async function runProposal(i, j, kind, btn) {
     if (kind === 'email_draft') { await engine({ op: 'tool', server: 'Gmail', name: 'create_draft', input: { to: /@/.test(p.to) ? [p.to] : [], subject: p.subject, body: p.body } }); p.done = 'Saved to your Gmail drafts. Review and send it from Gmail.'; }
     else if (kind === 'seller_update') { if (!p.listing) throw new Error('Which listing? Ask me again with the address.'); await append('Seller updates', [[nowStamp(), p.listing, p.subject || 'An update from Chris', p.body, 'Chris']]); p.done = 'Posted to their portal.'; }
     else if (kind === 'publish_feedback') { close(); return feedbackSheet(p.listing || ''); }
+    else if (kind === 'launch_listing') { let d = {}; try { d = JSON.parse(p.body); } catch (e) { d = { notes: p.body }; } close(); return launchSheet(p.listing || d.address || '', Object.assign({ address: p.listing }, d)); }
     else { await navigator.clipboard.writeText(p.body); p.done = 'Copied.'; }
   } catch (err) { btn.disabled = false; return toast(err.message || 'That didn’t work. Try again.'); }
   drawChat();

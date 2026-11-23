@@ -309,6 +309,7 @@ const CONCIERGE_RULES = [
   'You are the Concierge for ' + AGENT_NAME + ', ' + BRAND + ' (' + AFFILIATION + '). You help the agent run their real estate business.',
   'Rules, always:',
   '- Nothing goes out without the agent. Emails, texts and posts are drafts the agent sends. You never contact a client.',
+  '- When the agent asks to launch, list or set up a new listing, never say you cannot: propose launch_listing with whatever details they gave. The launch form opens for them to check, and missing details can be added later.',
   '- Sellers never see buyer\'s-agent names or details, and buyer\'s agents never see seller information.',
   '- Every fact comes from the data you are given or a tool. If you do not have it, say so in one line. Never guess prices, dates or features.',
   '- Client-facing drafts speak as the agent ("I"), warm, direct, specific and human. Never mention AI, a system or automation in them.',
@@ -417,8 +418,8 @@ function conciergeTools_() {
   return [
     { name: 'read_tab', description: 'Read recent rows of one tab of the business Sheet. Use for leads, showings, feedback, checklists, Unlisted buyers and stories.',
       input_schema: { type: 'object', properties: { tab: { type: 'string' }, rows: { type: 'integer', description: 'How many of the newest rows (max 40)' } }, required: ['tab'] } },
-    { name: 'propose', description: 'Propose an action for the agent to approve with one tap: a drafted email or text, a seller update, a checklist item, publishing feedback. Nothing happens until they approve.',
-      input_schema: { type: 'object', properties: { kind: { type: 'string', enum: ['email_draft', 'text_draft', 'seller_update', 'checklist_item', 'publish_feedback', 'other'] },
+    { name: 'propose', description: 'Propose an action for the agent to approve with one tap: a drafted email or text, a seller update, a checklist item, publishing feedback, or launching a new listing. For launch_listing put the address in listing and a JSON object in body with any of address, city, price, sellers, photos, notes that the agent gave (leave out what they did not say). Nothing happens until they approve.',
+      input_schema: { type: 'object', properties: { kind: { type: 'string', enum: ['email_draft', 'text_draft', 'seller_update', 'checklist_item', 'publish_feedback', 'launch_listing', 'other'] },
         to: { type: 'string' }, subject: { type: 'string' }, body: { type: 'string' }, listing: { type: 'string' } }, required: ['kind', 'body'] } }
   ];
 }

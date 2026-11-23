@@ -6,5 +6,29 @@
  "price": 450000,
  "status": "Preparing",
  "sellers": "Stephanie and Charles",
- "photo_day": "2026-11-24"
+ "photo_day": "2026-11-24",
+ "zip": "98391",
+ "community": "Discovery Park at Tehaleh",
+ "area": "Tehaleh, Bonney Lake",
+ "beds": 3,
+ "baths": "2.5",
+ "sqft": 1579,
+ "lot_sqft": 4075,
+ "year_built": 2021,
+ "garage_sqft": 469,
+ "style": "Townhouse, 2 stories",
+ "builder": "Lennar",
+ "heat": "Forced air",
+ "cooling": "Central A/C",
+ "roof": "Composition",
+ "parcel": "901069-012-0",
+ "tax_annual": "3,952.28",
+ "tax_year": 2026,
+ "school_district": "Orting",
+ "schools": {
+  "middle": "Orting Middle",
+  "high": "Orting High",
+  "elementary": "check: Orting Elementary or Ptarmigan Ridge"
+ },
+ "source": "Realist public record, 2026-11-23"
 }

@@ -24,7 +24,7 @@ def build(key):
     feats = ''.join(f'<li><button type="button" class="ft" data-i="{order.index(s) if s in order else 0}"><img loading="lazy" src="{ph(s, 1)}" alt=""><span>{E(t)}</span></button></li>' for t, s in L['features'])
     credit = f'<p class="credit">Photos: {E(L["credit"])}</p>' if L.get('credit') else ''
     cfg = json.dumps({'api': API, 'key': key, 'listing': addr, 'photos': [{'src': ph(s), 'alt': title_of(s)} for s in order]})
-    ld = json.dumps({'@context': 'https://schema.org', '@type': 'SingleFamilyResidence', 'name': addr, 'url': url,
+    ld = json.dumps({'@context': 'https://schema.org', '@type': L.get('type', 'SingleFamilyResidence'), 'name': addr, 'url': url,
                      'address': {'@type': 'PostalAddress', 'streetAddress': addr, 'addressLocality': L['city'], 'addressRegion': L['state']},
                      'numberOfRooms': L['beds'], 'floorSize': {'@type': 'QuantitativeValue', 'value': L['sqft'], 'unitCode': 'FTK'},
                      'image': f"{A['origin']}/photos/{key}/{L['hero']}.jpg"})

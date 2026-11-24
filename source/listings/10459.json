@@ -1,0 +1,69 @@
+{
+ "key": "10459",
+ "address": "10459 Des Moines Memorial Dr S #303",
+ "city": "Seattle",
+ "state": "WA",
+ "price": 199900,
+ "beds": 2,
+ "baths": "2",
+ "sqft": 999,
+ "mls": "2537939",
+ "status": "Active",
+ "credit": "",
+ "hero": "10457-des-moines-memorial-dr-5",
+ "lede": "A bright two-bedroom condo with a white kitchen, wood-look floors and a deck that looks out into the trees.",
+ "features": [
+  [
+   "Living room and deck",
+   "10457-des-moines-memorial-dr-5"
+  ],
+  [
+   "The kitchen",
+   "10457-des-moines-memorial-dr-2"
+  ],
+  [
+   "A bedroom",
+   "10457-des-moines-memorial-dr-7"
+  ],
+  [
+   "The building",
+   "10457-des-moines-memorial-dr-12"
+  ]
+ ],
+ "groups": [
+  [
+   "Living",
+   [
+    "10457-des-moines-memorial-dr-5",
+    "10457-des-moines-memorial-dr-4",
+    "10457-des-moines-memorial-dr-3"
+   ]
+  ],
+  [
+   "Kitchen",
+   [
+    "10457-des-moines-memorial-dr-2",
+    "10457-des-moines-memorial-dr-1"
+   ]
+  ],
+  [
+   "Bedrooms and bath",
+   [
+    "10457-des-moines-memorial-dr-7",
+    "10457-des-moines-memorial-dr-8",
+    "10457-des-moines-memorial-dr-9",
+    "10457-des-moines-memorial-dr-6",
+    "10457-des-moines-memorial-dr-10"
+   ]
+  ],
+  [
+   "Outside",
+   [
+    "10457-des-moines-memorial-dr-12",
+    "10457-des-moines-memorial-dr-13",
+    "10457-des-moines-memorial-dr-11"
+   ]
+  ]
+ ],
+ "type": "Apartment"
+}

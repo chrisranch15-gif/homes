@@ -1,0 +1,124 @@
+{
+ "key": "10707",
+ "address": "10707 47th St E",
+ "city": "Edgewood",
+ "state": "WA",
+ "price": 749900,
+ "beds": 3,
+ "baths": "3",
+ "sqft": 2572,
+ "mls": "2584107",
+ "status": "Active",
+ "credit": "",
+ "hero": "01-10707-47th-st-e-36",
+ "lede": "Three levels on a big, park-like lot in Edgewood, with a wide deck, a lawn that runs to the trees and room for everyone.",
+ "features": [
+  [
+   "The front of the home",
+   "01-10707-47th-st-e-36"
+  ],
+  [
+   "The deck",
+   "25-10707-47th-st-e-24"
+  ],
+  [
+   "The kitchen",
+   "09-10707-47th-st-e-11"
+  ],
+  [
+   "From above",
+   "38-10707-47th-st-e-42"
+  ]
+ ],
+ "groups": [
+  [
+   "Outside",
+   [
+    "01-10707-47th-st-e-36",
+    "24-10707-47th-st-e-37",
+    "38-10707-47th-st-e-42",
+    "39-10707-47th-st-e-38",
+    "40-10707-47th-st-e-40",
+    "41-10707-47th-st-e-41"
+   ]
+  ],
+  [
+   "Living",
+   [
+    "02-10707-47th-st-e-6",
+    "03-10707-47th-st-e-7",
+    "04-10707-47th-st-e-8",
+    "05-10707-47th-st-e-22",
+    "06-10707-47th-st-e-5"
+   ]
+  ],
+  [
+   "Kitchen and dining",
+   [
+    "07-10707-47th-st-e-9",
+    "08-10707-47th-st-e-10",
+    "09-10707-47th-st-e-11",
+    "10-10707-47th-st-e-12"
+   ]
+  ],
+  [
+   "Bedrooms and baths",
+   [
+    "17-10707-47th-st-e-16",
+    "18-10707-47th-st-e-17",
+    "20-10707-47th-st-e-18",
+    "21-10707-47th-st-e-19",
+    "13-10707-47th-st-e-3",
+    "14-10707-47th-st-e-14",
+    "15-10707-47th-st-e-15",
+    "16-10707-47th-st-e-13",
+    "19-10707-47th-st-e-4",
+    "23-10707-47th-st-e-21"
+   ]
+  ],
+  [
+   "The lower level",
+   [
+    "11-10707-47th-st-e-2",
+    "12-10707-47th-st-e-1",
+    "22-10707-47th-st-e-20"
+   ]
+  ],
+  [
+   "The deck and yard",
+   [
+    "25-10707-47th-st-e-24",
+    "26-10707-47th-st-e-25",
+    "27-10707-47th-st-e-26",
+    "28-10707-47th-st-e-27",
+    "29-10707-47th-st-e-28",
+    "30-10707-47th-st-e-29",
+    "31-10707-47th-st-e-30",
+    "32-10707-47th-st-e-31",
+    "33-10707-47th-st-e-32",
+    "34-10707-47th-st-e-34",
+    "35-10707-47th-st-e-33",
+    "36-10707-47th-st-e-23",
+    "37-10707-47th-st-e-35"
+   ]
+  ],
+  [
+   "The area",
+   [
+    "42-10707-47th-st-e-39",
+    "43-10707-47th-st-e-43",
+    "44-10707-47th-st-e-44",
+    "45-10707-47th-st-e-45"
+   ]
+  ],
+  [
+   "Floor plans",
+   [
+    "01-all-floors-10707-47th-street-east-edgewood-with-dim",
+    "03-2nd-floor-10707-47th-street-east-edgewood-with-dim",
+    "02-3rd-floor-10707-47th-street-east-edgewood-with-dim",
+    "04-1st-floor-10707-47th-street-east-edgewood-with-dim"
+   ]
+  ]
+ ]
+}

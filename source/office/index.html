@@ -335,10 +335,10 @@ function needs() {
   const out = [], sh = S.sheet || {};
   (sh.showings || []).forEach(r => {
     const at = toDate(r[2]), ph = String(r[5] || '').replace(/[^\d]/g, '').replace(/^1?(\d{10})$/, '+1$1');
-    if (!at || !ph || /cancel|declin/i.test(r[7] || '') || Date.now() - at < 3600e3 || Date.now() - at > 3 * 864e5) return;
+    if (!at || !ph || /cancel|declin/i.test(r[7] || '') || Date.now() - at < 3600e3 || Date.now() - at > 3 * 864e5 || doneIds().has('fb:' + r[0])) return;
     const first = String(r[3] || '').split(' ')[0] || 'there', street = String(r[1] || '').replace(/ Unit#.*$/, '');
     const body = showText('fb', first, showAddr(r[1]), at);
-    out.push({ ico: I.phone, t: `Feedback · ${street}`, s: `${r[3] || 'Buyer’s agent'}${r[4] ? ' · ' + r[4] : ''} · showed ${new Date(at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`, acts: `<a class="pill" href="sms:${esc(ph)}?&body=${encodeURIComponent(body)}">Text for feedback</a><a class="pill ghost" href="tel:${esc(ph)}">Call</a>` });
+    out.push({ ico: I.phone, t: `Feedback · ${street}`, s: `${r[3] || 'Buyer’s agent'}${r[4] ? ' · ' + r[4] : ''} · showed ${new Date(at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`, acts: `<a class="pill" href="sms:${esc(ph)}?&body=${encodeURIComponent(body)}">Text for feedback</a><a class="pill ghost" href="tel:${esc(ph)}">Call</a><button class="pill ghost" data-act="fbok" data-k="${esc(r[0])}" data-a="${esc(street + ' · ' + (r[3] || 'Agent'))}">Got feedback</button>` });
   });
   (sh.leads || []).filter(r => r[9] === 'New' && r[8] !== 'test' && Date.now() - toDate(r[0]) < 7 * 864e5).slice(-6).reverse().forEach(r => {
     const tel = String(r[3] || '').replace(/[^\d+]/g, '');
@@ -397,8 +397,9 @@ function showingRow(x, d) {
   const r = x.r, t = new Date(x.at), first = String(r[3] || '').split(' ')[0] || 'there', street = showAddr(r[1]);
   const ph = String(r[5] || '').replace(/[^\d]/g, '').replace(/^1?(\d{10})$/, '+1$1'), day = t.toDateString() === d.toDateString() ? 'today' : t.toLocaleDateString('en-US', { weekday: 'long' });
   const when = t.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }), past = Date.now() > x.at + 30 * 60e3;
-  const msg = showText(past ? 'fb' : 'pre', first, showAddr(r[1]), x.at);
-  const sms = ph ? `<a class="pill" href="sms:${esc(ph)}?&body=${encodeURIComponent(msg)}">${past ? 'Text for feedback' : 'Text agent'}</a><a class="pill ghost" href="tel:${esc(ph)}">Call</a>`
+  const msg = showText(past ? 'fb' : 'pre', first, showAddr(r[1]), x.at), fbIn = past && doneIds().has('fb:' + r[0]);
+  if (fbIn) return `<div class="row plain faded"><div class="timecol" style="width:64px;flex:none;font-size:14px;color:var(--muted)">${when}</div><div class="body"><div class="t">Showing · ${esc(street)}</div><div class="s">${esc([r[3] || 'Buyer’s agent', r[4], 'feedback in'].filter(Boolean).join(' · '))}</div></div></div>`;
+  const sms = ph ? `<a class="pill" href="sms:${esc(ph)}?&body=${encodeURIComponent(msg)}">${past ? 'Text for feedback' : 'Text agent'}</a><a class="pill ghost" href="tel:${esc(ph)}">Call</a>${past ? `<button class="pill ghost" data-act="fbok" data-k="${esc(r[0])}" data-a="${esc(street + ' · ' + (r[3] || 'Agent'))}">Got feedback</button>` : ''}`
     : r[6] ? `<a class="pill ghost" href="mailto:${esc(r[6])}?subject=${encodeURIComponent(street)}&body=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Email agent</a><span class="s" style="align-self:center">No phone in ShowingTime</span>` : '';
   return `<div class="row plain"><div class="timecol" style="width:64px;flex:none;font-size:14px;color:var(--muted)">${when}${t.toDateString() !== d.toDateString() ? '<br>' + t.toLocaleDateString('en-US', { weekday: 'short' }) : ''}</div><div class="body"><div class="t">Showing · ${esc(street)}</div><div class="s">${esc([r[3] || 'Buyer’s agent', r[4], r[7]].filter(Boolean).join(' · '))}</div></div><div class="acts">${sms}</div></div>`;
 }
@@ -879,6 +880,7 @@ document.addEventListener('click', async e => {
   else if (a === 'title') titleSheet(x);
   else if (a === 'deal') dealSheet();
   else if (a === 'tc') tcSheet(x);
+  else if (a === 'fbok') { const id = 'fb:' + b.dataset.k; try { const l = JSON.parse(store('done') || '[]'); l.push(id); store('done', JSON.stringify(l.slice(-300))); } catch (err) { } render(); toast('Removed. Feedback is in.'); append('Hub done', [[nowStamp(), id, 'Feedback received', x || '']]).catch(() => { }); }
   else if (a === 'tccall') { b.disabled = true; tcCall(b.dataset.k, b.dataset.v); }
   else if (a === 'tccopy') { const r = ((S.sheet && S.sheet.shadow) || []).find(r => shadowKey(r) === b.dataset.k); try { await navigator.clipboard.writeText(r ? r[5] : ''); toast('Draft copied.'); } catch (err) { toast('Couldn’t copy on this device.'); } }
   else if (a === 'tcfix') { const box = document.createElement('div'); box.className = 'form'; box.innerHTML = `<textarea rows="3" placeholder="What would you change, or say instead?" style="width:100%"></textarea><div class="acts" style="margin-top:8px"><button class="pill" type="button">Save</button></div>`; b.parentElement.replaceWith(box); box.querySelector('textarea').focus(); box.querySelector('button').onclick = () => { const t = box.querySelector('textarea').value.trim(); if (t) tcCall(b.dataset.k, 'Change it', t); }; }

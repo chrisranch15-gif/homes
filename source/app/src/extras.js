@@ -250,8 +250,9 @@ async function liveLoad(quiet) {
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Marketing!A2:E200' }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Open houses'!A2:G200" }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Showing agents'!A2:J500" }).catch(() => null),
-      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Photo layout'!A2:F500" }).catch(() => null)
-    ]).then(r => { ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); try { applyOpenHouses(ui.ohRows); } catch (e) {}
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Photo layout'!A2:F500" }).catch(() => null),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Hub done'!B2:B3000" }).catch(() => null)
+    ]).then(r => { ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); ui.fbOk = Object.assign({}, ui.fbOk); liveRows(r[5]).forEach(x => { if (/^fb:/.test(x[0])) ui.fbOk[String(x[0]).slice(3)] = 1; }); try { applyOpenHouses(ui.ohRows); } catch (e) {}
       try { const lr = liveRows(r[4]).filter(x => String(x[1]) === '19917'); const last = lr[lr.length - 1]; if (last && !ui.photoDraft) { const j = v => { try { return JSON.parse(v || '[]'); } catch (e) { return []; } }; applyLayout({ order: j(last[2]), hidden: j(last[3]), featured: j(last[4]) }); ui.layoutSaved = last[0]; } } catch (e) {}
       return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
@@ -319,7 +320,7 @@ function showBlock() {
   const all = showList(), now = Date.now();
   if (!ui.live) return '';
   const up = all.filter(x => x.at >= now - 1800e3 && !/cancel|declin/i.test(x.status)).sort((a, b) => a.at - b.at);
-  const done = all.filter(x => x.at < now - 1800e3 && !/cancel|declin/i.test(x.status)).slice(0, 8);
+  const done = all.filter(x => x.at < now - 1800e3 && !/cancel|declin/i.test(x.status) && !(ui.fbOk || {})[x.key]).slice(0, 8);
   const tel = p => String(p || '').replace(/[^\d]/g, '').replace(/^1?(\d{10})$/, '+1$1');
   const sms = (x, body) => `sms:${tel(x.phone)}?&body=${encodeURIComponent(body)}`;
   const first = x => String(x.agent || '').split(' ')[0] || 'there';
@@ -331,7 +332,7 @@ function showBlock() {
   const fbText = x => `Hi ${first(x)}, this is ${me()}, following up on your ${timeOf(x)} showing at ${place()} ${dayWord(x)}. Thanks again for showing it! Do you or your buyers have any questions, feedback or interest I can pass along to my sellers? Thank you!`;
   const preText = x => `Hi ${first(x)}, this is ${me()}. Thanks for booking ${place()} ${dayWord(x)} at ${timeOf(x)}. If you have any questions or need help with access, just reach out. I'm here to help! I'll follow up afterward for feedback. Thank you!`;
   const row = (x, fb) => `<div style="display:block;padding:14px 0"><div><b>${esc(new Date(x.at).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>${x.type === 'Agent preview' ? ' · Agent preview' : ''} · ${esc(x.status)}<br><span class="small muted">${esc(x.agent || 'Agent')}${x.firm ? ' · ' + esc(x.firm) : ''}${x.phone ? ' · ' + esc(x.phone) : ''}</span></div>
-    <div class="chips" style="margin:10px 0 0">${x.phone ? (fb ? `<a class="btn" style="min-height:40px;padding:0 16px" href="${sms(x, fbText(x))}">Text for feedback</a>` : `<a class="chip" href="${sms(x, preText(x))}">Text before showing</a>`) + `<a class="chip" href="tel:${tel(x.phone)}">Call</a>` : ''}${fb && x.email ? `<button class="chip" data-act="show-fb" data-k="${esc(x.key)}">${ui.fbDone && ui.fbDone[x.key] ? 'Email draft saved' : 'Email instead'}</button>` : ''}</div></div>`;
+    <div class="chips" style="margin:10px 0 0">${x.phone ? (fb ? `<a class="btn" style="min-height:40px;padding:0 16px" href="${sms(x, fbText(x))}">Text for feedback</a>` : `<a class="chip" href="${sms(x, preText(x))}">Text before showing</a>`) + `<a class="chip" href="tel:${tel(x.phone)}">Call</a>` : ''}${fb && x.email ? `<button class="chip" data-act="show-fb" data-k="${esc(x.key)}">${ui.fbDone && ui.fbDone[x.key] ? 'Email draft saved' : 'Email instead'}</button>` : ''}${fb ? `<button class="chip" data-act="show-fbok" data-k="${esc(x.key)}">Got feedback · remove</button>` : ''}</div></div>`;
   return `<div class="sharebar" id="showings"><div class="eyebrow">Showings</div>
     ${all.length ? `${up.length ? `<p class="small" style="margin:10px 0 0">Coming up</p><div>${up.map(x => row(x, false)).join('<hr style="border:0;border-top:1px solid var(--line);margin:0">')}</div>` : ''}
     ${done.length ? `<p class="small" style="margin:16px 0 0">Shown · ask for feedback</p><div>${done.map(x => row(x, true)).join('<hr style="border:0;border-top:1px solid var(--line);margin:0">')}</div>` : ''}`
@@ -407,6 +408,11 @@ Object.assign(A, {
   'photo-save': async () => { const d = photoDraft(); ui.busy = 'photos'; render();
     const ok = await liveAppend('Photo layout', [liveNow(), '19917', JSON.stringify(d.list), JSON.stringify(d.hidden), JSON.stringify(d.featured), T().agent.name], 'Published. The listing page updates within a minute.');
     ui.busy = null; if (ok) { applyLayout({ order: d.list, hidden: d.hidden, featured: d.featured }); ui.layoutSaved = liveNow(); ui.photoOpen = false; ui.photoDraft = null; } render(); },
+  'show-fbok': async (el) => {
+    const x = showList().find(s => s.key === el.dataset.k); if (!x) return;
+    ui.fbOk = Object.assign({}, ui.fbOk, { [x.key]: 1 }); render();
+    await liveAppend('Hub done', [liveNow(), 'fb:' + x.key, 'Feedback received', street() + ' · ' + (x.agent || 'Agent')], 'Removed. Feedback is in.');
+  },
   'show-fb': async (el) => {
     const x = showList().find(s => s.key === el.dataset.k); if (!x || !x.email) return;
     const first = String(x.agent || '').split(' ')[0] || 'there';

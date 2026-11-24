@@ -768,6 +768,11 @@ function officeCall_(server, name, a) {
     if (name === 'append_values') { const sh = ss.getSheetByName(String(a.range).split('!')[0].replace(/'/g, '')); (a.values || []).forEach(r => sh.appendRow(r)); return { ok: true }; }
   }
   if (server === 'Gmail') {
+    if (name === 'send_message') {                        // only ever called by the agent's own Send tap in the Office
+      const to = (a.to || []).filter(x => /@/.test(x)).join(','); if (!to) throw new Error('No recipient');
+      GmailApp.sendEmail(to, String(a.subject || ''), String(a.body || '') + '\n\n' + AGENT_NAME + '\n' + BRAND + '\n(253) 335-5630');
+      return { ok: true, viewUrl: 'https://mail.google.com/mail/u/0/#sent' };
+    }
     if (name === 'search_threads') return { threads: GmailApp.search(String(a.query || 'in:inbox'), 0, Math.min(50, a.pageSize || 20)).map(threadOut_) };
     if (name === 'create_draft') {
       const body = String(a.body || ''); let d;

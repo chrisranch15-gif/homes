@@ -447,16 +447,19 @@ async function removeListing(a) {
 function titleSheet(a) {
   const l = listings().find(x => x.address === a) || { address: a };
   const draft = (addr, sellers) => ['Hi team,', '', `Could you please open title for ${addr}?` + (sellers ? `\nSeller${/ and |&|,/.test(sellers) ? 's' : ''}: ${sellers}` : ''), '', 'Thank you so much. Looking forward to working with you!'].join('\n');
-  sheet(`<p class="date">Open title · ${esc(TITLE.name)}</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Edit anything below, then save it to your Gmail drafts and send.</p>
+  sheet(`<p class="date">Open title · ${esc(TITLE.name)}</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Edit anything below, then send it from here.</p>
   <form id="ttf"><div class="field"><label for="ttsu">Subject</label><input id="ttsu" name="subject" value="${esc('Open title · ' + a)}" required></div>
   <div class="field"><label for="ttb">Email</label><textarea id="ttb" name="body" rows="9" style="min-height:200px">${esc(draft(a, l.sellers || ''))}</textarea></div>
   <p class="s" style="margin:-6px 0 14px;font-size:13px">Your Gmail signature is added at the end.</p>
-  <div class="acts"><button class="pill" id="ttgo">Save to Gmail drafts</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
-  $('#ttf').onsubmit = async e => { e.preventDefault(); const f = e.target, b = $('#ttgo'); if (b.disabled) return; b.disabled = true; b.textContent = 'Saving…';
-    try { const r = await tool('Gmail', 'create_draft', { to: [TITLE.email], subject: f.subject.value.trim(), body: f.body.value, includeSignature: true });
-      try { await append('Marketing', [[nowStamp(), a, 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
-      sheet(`<p class="date">Saved to your Gmail drafts</p><h3>${esc(f.subject.value)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
-    } catch (err) { b.disabled = false; b.textContent = 'Save to Gmail drafts'; toast('Not saved — ' + (err.message || 'try again')); } };
+  <div class="acts"><button class="pill" id="ttgo" data-how="send">Send</button><button type="button" class="pill ghost" id="ttdr">Save to drafts</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
+  const go = async how => { const f = $('#ttf'); if (!f.reportValidity()) return; const b = $('#ttgo'), d = $('#ttdr'); if (b.disabled) return; b.disabled = d.disabled = true; (how === 'send' ? b : d).textContent = how === 'send' ? 'Sending…' : 'Saving…';
+    const msg = { to: [TITLE.email], subject: f.subject.value.trim(), body: f.body.value, includeSignature: true };
+    try { const r = await tool('Gmail', how === 'send' ? 'send_message' : 'create_draft', msg);
+      try { await append('Marketing', [[nowStamp(), a, how === 'send' ? 'Title opened (email sent)' : 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
+      sheet(how === 'send' ? `<p class="date">Sent</p><h3>${esc(msg.subject)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. It’s in your Gmail Sent folder, and replies come to your inbox.</p><div class="acts"><button type="button" class="pill" data-act="close">Done</button></div>`
+        : `<p class="date">Saved to your Gmail drafts</p><h3>${esc(msg.subject)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
+    } catch (err) { b.disabled = d.disabled = false; b.textContent = 'Send'; d.textContent = 'Save to drafts'; toast((how === 'send' ? 'Not sent — ' : 'Not saved — ') + (err.message || 'try again')); } };
+  $('#ttf').onsubmit = e => { e.preventDefault(); go('send'); }; $('#ttdr').onclick = () => go('draft');
 }
 function shootText(f) {
   const d = Object.fromEntries(new FormData(f).entries()), adds = [...f.querySelectorAll('input[name=addon]:checked')].map(x => x.value);

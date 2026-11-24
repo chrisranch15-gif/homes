@@ -446,17 +446,17 @@ async function removeListing(a) {
 }
 function titleSheet(a) {
   const l = listings().find(x => x.address === a) || { address: a };
-  sheet(`<p class="date">Open title · ${esc(TITLE.name)}</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">Saves an email to your Gmail drafts, addressed to ${esc(TITLE.email)}. Give it a look and send.</p>
-  <form id="ttf"><div class="field"><label for="tta">Property address</label><input id="tta" name="a" value="${esc(a)}" required></div>
-  <div class="field"><label for="tts">Sellers</label><input id="tts" name="sellers" value="${esc(l.sellers || '')}"></div>
-  <div class="field"><label for="ttn">Anything else for them (optional)</label><textarea id="ttn" name="notes" placeholder="Buyer’s names, sale price, escrow company, closing date…"></textarea></div>
-  <div class="acts"><button class="pill" id="ttgo">Create the email</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
+  const draft = (addr, sellers) => ['Hi team,', '', `Could you please open title for ${addr}?` + (sellers ? `\nSeller${/ and |&|,/.test(sellers) ? 's' : ''}: ${sellers}` : ''), '', 'Thank you so much. Looking forward to working with you!'].join('\n');
+  sheet(`<p class="date">Open title · ${esc(TITLE.name)}</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Edit anything below, then save it to your Gmail drafts and send.</p>
+  <form id="ttf"><div class="field"><label for="ttsu">Subject</label><input id="ttsu" name="subject" value="${esc('Open title · ' + a)}" required></div>
+  <div class="field"><label for="ttb">Email</label><textarea id="ttb" name="body" rows="9" style="min-height:200px">${esc(draft(a, l.sellers || ''))}</textarea></div>
+  <p class="s" style="margin:-6px 0 14px;font-size:13px">Your Gmail signature is added at the end.</p>
+  <div class="acts"><button class="pill" id="ttgo">Save to Gmail drafts</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
   $('#ttf').onsubmit = async e => { e.preventDefault(); const f = e.target, b = $('#ttgo'); if (b.disabled) return; b.disabled = true; b.textContent = 'Saving…';
-    const addr = f.a.value.trim(), body = ['Hi team,', '', `Could you please open title for ${addr}?`, f.sellers.value.trim() ? `Seller${/ and |&|,/.test(f.sellers.value) ? 's' : ''}: ${f.sellers.value.trim()}` : '', f.notes.value.trim(), '', 'Thank you so much. Looking forward to working with you!'].filter((x, i, arr) => x !== '' || (arr[i - 1] !== '' && i > 0)).join('\n');
-    try { const r = await tool('Gmail', 'create_draft', { to: [TITLE.email], subject: 'Open title · ' + addr, body, includeSignature: true });
-      try { await append('Marketing', [[nowStamp(), addr, 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
-      sheet(`<p class="date">Saved to your Gmail drafts</p><h3>Open title · ${esc(addr)}</h3><p class="s" style="margin:-4px 0 16px">Addressed to ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
-    } catch (err) { b.disabled = false; b.textContent = 'Create the email'; toast('Not saved — ' + (err.message || 'try again')); } };
+    try { const r = await tool('Gmail', 'create_draft', { to: [TITLE.email], subject: f.subject.value.trim(), body: f.body.value, includeSignature: true });
+      try { await append('Marketing', [[nowStamp(), a, 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
+      sheet(`<p class="date">Saved to your Gmail drafts</p><h3>${esc(f.subject.value)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
+    } catch (err) { b.disabled = false; b.textContent = 'Save to Gmail drafts'; toast('Not saved — ' + (err.message || 'try again')); } };
 }
 function shootText(f) {
   const d = Object.fromEntries(new FormData(f).entries()), adds = [...f.querySelectorAll('input[name=addon]:checked')].map(x => x.value);

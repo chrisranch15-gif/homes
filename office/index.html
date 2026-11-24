@@ -340,7 +340,7 @@ function render() {
   const n = S.sheet ? needs() : [], ck = checks(), biz = business();
   const statusLine = !S.sheet ? 'Getting your day ready…' : n.length === 0 ? 'Everything is running. Nothing needs you.' : `Everything is running. ${n.length === 1 ? 'One thing needs' : (n.length < 10 ? ['', '', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][n.length] : n.length) + ' things need'} a tap.`;
   $('#root').innerHTML = `<div class="wrap">
-  <header class="top"><span class="brand"><span class="mark">The Hub</span><span class="sub">Your whole business</span></span>
+  <header class="top"><span class="brand"><span class="mark">The Office</span><span class="sub">Your whole business</span></span>
     <div style="display:flex;align-items:center;gap:10px">
       <div class="seg" role="group" aria-label="Look">${[['daylight', 'Daylight'], ['evening', 'Evening'], ['heritage', 'Heritage']].map(([k, l]) => `<button type="button" data-act="theme" data-v="${k}" aria-pressed="${S.theme === k}">${l}</button>`).join('')}</div>
       <span class="avatar" aria-hidden="true">CR</span></div></header>

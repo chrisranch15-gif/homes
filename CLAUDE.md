@@ -24,7 +24,8 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
 ## Standing rules
 
 **Approval and honesty**
-1. Nothing goes out without Chris: emails and texts are drafts or prefilled messages he sends himself;
+1. Nothing goes out without Chris: emails and texts are drafts or prefilled messages he sends himself (a Send button
+   in the Office counts: he sees the exact message and recipient and taps Send; nothing ever sends on a schedule or on its own);
    social posts are drafts until he schedules them; photo shoots and anything paid are confirmed by him first.
 2. Never claim something is connected or automatic when it is manual.
 3. Never put passwords, API keys or tokens in code or chat. Keys live in GitHub Secrets

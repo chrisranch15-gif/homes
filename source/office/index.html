@@ -59,6 +59,8 @@ h2{margin:0;font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:u
 .thumb{width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--ph);flex:none}
 .chev{color:var(--chev);flex:none}
 .empty{padding:18px 20px;color:var(--muted);font-size:15px}
+.mini{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:18px 4px 8px}
+.draftbox{white-space:pre-wrap;margin-top:8px;padding:12px 14px;border-radius:12px;background:var(--raised);font-size:14px;line-height:1.5;color:var(--text)}
 .note{margin:12px 4px 0;font-size:13px;color:var(--muted)}
 .tag{display:inline-block;font-size:12px;font-weight:500;letter-spacing:.04em;padding:3px 9px;border-radius:10px;background:var(--raised);color:var(--text2);margin-right:6px}
 .tag.now{background:var(--iconbg);color:var(--accent)}
@@ -168,7 +170,7 @@ const I = {
 
 /* ---------- loading ---------- */
 async function loadSheet() {
-  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200", offers: 'Offers!A1:M300' };
+  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200", offers: 'Offers!A1:M300', shadow: "'TC shadow'!A1:L1500", tcfb: "'TC feedback'!A1:E3000" };
   const out = {};
   await Promise.all(Object.keys(tabs).map(async k => { try { out[k] = await sheetRows(tabs[k]); } catch (e) { out[k] = null; S.err.sheet = e.message || String(e); } }));
   S.sheet = out; S.at = Date.now();
@@ -280,6 +282,40 @@ function dealFor(a) { const n = (String(a).match(/^\d{3,6}/) || [])[0]; return n
 function offersFor(a) { const n = (String(a).match(/^\d{3,6}/) || [])[0]; return ((S.sheet && S.sheet.offers) || []).filter(r => n && String(r[1]).indexOf(n) === 0 && !/withdrawn|rejected|expired/i.test(r[9] || '')); }
 function listings() { return (S.sheet && S.sheet.listings || []).filter(r => r[0] && !/^removed$/i.test(r[3] || '')).map(r => ({ address: r[0], city: r[1], price: r[2], status: r[3] || 'Active', sellers: r[4], page: r[5], desk: r[6], code: r[7], listed: toDate(r[8]), photo: r[9] })); }
 function deals() { return latestBy(S.sheet && S.sheet.deals, 1).map(r => ({ address: r[1], side: r[2], status: r[3], price: Number(String(r[4]).replace(/[^\d.]/g, '')) || 0, pct: Number(String(r[5]).replace(/[^\d.]/g, '')) || 0, gci: Number(String(r[6]).replace(/[^\d.]/g, '')) || 0, contract: toDate(r[7]), closing: toDate(r[8]), notes: r[9] })); }
+/* ---------- TC shadow mode: what the TC would have done, side by side with what happened. Nothing here sends. ---------- */
+function shadowKey(r) { return [r[0], r[1], String(r[2] || '').slice(0, 60)].join(' · '); }
+function shadowRows(a) { const n = (String(a || '').match(/^\d{3,6}/) || [])[0]; return ((S.sheet && S.sheet.shadow) || []).filter(r => r[1] && (!a || (n ? String(r[1]).indexOf(n) === 0 : r[1] === a))); }
+function tcCalls() { const m = {}; ((S.sheet && S.sheet.tcfb) || []).forEach(r => { if (r[2]) m[r[2]] = { call: r[3], note: r[4] }; }); return m; }
+function dueAt(v) { if (!v) return null; v = String(v).trim(); if (/^\d{4}-\d{2}-\d{2}$/.test(v)) v += 'T12:00'; let t = Date.parse(v); if (isNaN(t)) t = Date.parse(String(v).replace(/(\d)(am|pm)/i, '$1 $2') + ' ' + new Date().getFullYear()); return isNaN(t) ? null : t; }
+function liveDeals() {
+  const out = {}, add = (a, from) => { const k = (String(a).match(/^\d{3,6}/) || [a])[0]; if (!out[k]) out[k] = { address: a, from }; };
+  deals().filter(d => /pending|mutual|under contract/i.test(d.status || '')).forEach(d => add(d.address, 'deal'));
+  listings().filter(l => /pending/i.test(l.status || '')).forEach(l => add(l.address, 'listing'));
+  shadowRows().forEach(r => add(r[1], 'shadow'));
+  return Object.values(out).map(d => { const rs = shadowRows(d.address), calls = tcCalls(), now = Date.now() - 864e5 / 2;
+    const next = rs.map(r => ({ r, t: dueAt(r[3]) })).filter(x => x.t && x.t >= now).sort((x, y) => x.t - y.t)[0];
+    return Object.assign(d, { rows: rs, next, waiting: rs.filter(r => r[5] && !calls[shadowKey(r)]).length, urgent: rs.filter(r => /urgent/i.test(r[2] + ' ' + r[4]) && !calls[shadowKey(r)]).length }); });
+}
+function tcSheet(a) {
+  const rs = shadowRows(a), calls = tcCalls(), now = Date.now() - 864e5 / 2;
+  const time = rs.map(r => ({ r, t: dueAt(r[3]) })).filter(x => x.t).sort((x, y) => x.t - y.t);
+  const log = rs.slice().reverse().slice(0, 40);
+  const day = t => new Date(t).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  sheet(`<p class="date">Deal · shadow mode</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">Your TC is learning. It reads the deal email every hour and writes what it would do and say. Nothing is sent to anyone. Tell it where it's right and where you'd change it.</p>
+  <h4 class="mini">Timeline</h4><div class="group">${time.length ? time.map(x => `<div class="row plain${x.t < now ? ' faded' : ''}"><div class="timecol" style="width:92px;flex:none;font-size:13px;color:var(--muted)">${esc(day(x.t))}</div><div class="body"><div class="t">${esc(x.r[2])}</div>${x.r[4] ? `<div class="s">${esc(x.r[4])}</div>` : ''}</div></div>`).join('') : '<div class="empty">The timeline fills in the hour mutual acceptance shows up in your email.</div>'}</div>
+  <h4 class="mini">What the TC would have done</h4><div class="group">${log.length ? log.map(r => { const k = shadowKey(r), c = calls[k];
+    return `<div class="row" style="align-items:flex-start"><div class="body"><div class="t">${r[7] ? `<span class="tag">${esc(r[7])}</span>` : ''}${r[9] ? `<span class="tag${/missed|worse/i.test(r[9]) ? ' now' : ''}">${esc(r[9])}</span>` : ''}${esc(r[2])}</div>
+      <div class="s">${esc([r[0], r[4]].filter(Boolean).join(' · '))}</div>
+      ${r[5] ? `<details style="margin-top:8px"><summary class="s" style="cursor:pointer">Draft it would send${r[6] ? ' · ' + esc(r[6]) : ''}</summary><div class="draftbox">${esc(r[5])}</div></details>` : ''}
+      ${r[8] ? `<div class="s" style="margin-top:6px"><b>What really happened:</b> ${esc(r[8])}</div>` : ''}
+      ${r[10] ? `<div class="s" style="margin-top:6px"><b>Lesson:</b> ${esc(r[10])}</div>` : ''}
+      ${c ? `<div class="s" style="margin-top:6px"><b>Your call:</b> ${esc(c.call)}${c.note ? ' · ' + esc(c.note) : ''}</div>` : r[5] || r[4] ? `<div class="acts" style="margin-top:10px">${r[5] ? `<button class="pill ghost" data-act="tccopy" data-k="${esc(k)}">Copy draft</button>` : ''}<button class="pill ghost" data-act="tccall" data-k="${esc(k)}" data-v="Right call">Right call</button><button class="pill ghost" data-act="tcfix" data-k="${esc(k)}">I'd change it</button></div>` : ''}
+    </div></div>`; }).join('') : '<div class="empty">Nothing logged yet. The first entries appear after the next hourly read.</div>'}</div>
+  <div class="acts" style="margin-top:18px"><button class="pill ghost" data-act="close">Done</button></div>`);
+  const el = $('#sheet'); if (el) el.dataset.tc = a;
+}
+async function tcCall(k, call, note) { const r = ((S.sheet && S.sheet.shadow) || []).find(x => shadowKey(x) === k); if (!r) return;
+  try { await append('TC feedback', [[nowStamp(), r[1], k, call, note || '']]); toast('Saved. Your TC reads this on its next run.'); await loadSheet(); render(); tcSheet(r[1]); } catch (e) { toast('Not saved — try again.'); } }
 function business() {
   const ds = deals(), y = new Date().getFullYear(), gci = d => d.gci || (d.price && d.pct ? d.price * d.pct / 100 : 0);
   const closed = ds.filter(d => /closed|sold/i.test(d.status) && d.closing && new Date(d.closing).getFullYear() === y);
@@ -310,6 +346,7 @@ function needs() {
   });
   ((S.sheet && S.sheet.offers) || []).filter(r => /^received|^countered/i.test(r[9] || '')).forEach(r => out.unshift({ ico: I.doc, t: `Offer on ${r[1]} · ${money(r[5])}`, s: [r[6], r[8] ? 'asks ' + money(r[8]) + ' toward closing' : '', r[3], r[10] ? 'respond by ' + r[10] : 'waiting on your sellers'].filter(Boolean).join(' · '), acts: `${r[12] ? `<a class="pill ghost" href="${esc(r[12])}" target="_blank" rel="noopener">Open email</a>` : ''}` }));
   inboxView().open.filter(m => m.kind === 'deal' && m.urgency === 'now').slice(0, 4).forEach(m => out.unshift({ ico: I.doc, t: `Deal · ${m.subject}`, s: `${m.from.replace(/<.*>/, '').replace(/"/g, '').trim()}${m.why ? ' · ' + m.why : ''}`, acts: `${m.url ? `<a class="pill" href="${esc(m.url)}" target="_blank" rel="noopener">Open in Gmail</a>` : ''}<button class="pill ghost" data-act="goinbox">Reply from inbox</button>` }));
+  liveDeals().filter(d => d.urgent).forEach(d => out.unshift({ ico: I.doc, t: `Deal · ${d.address}`, s: `${d.urgent} urgent item${d.urgent > 1 ? 's' : ''} from your TC`, acts: `<button class="pill" data-act="tc" data-a="${esc(d.address)}">Open deal</button>` }));
   { const nw = inboxView().open.filter(m => m.urgency === 'now' && m.kind !== 'deal'); if (nw.length) out.push({ ico: I.mail, t: `${nw.length} email${nw.length > 1 ? 's' : ''} need${nw.length > 1 ? '' : 's'} you today`, s: nw.slice(0, 3).map(m => m.from.replace(/<.*>/, '').replace(/"/g, '').trim()).join(' · '), acts: `<button class="pill ghost" data-act="goinbox">See inbox</button>` }); }
   (S.cal || []).filter(e => e.invite).forEach(e => out.push({ ico: I.cal, t: 'Invitation · ' + e.title, s: new Date(e.start).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }) + (e.from ? ' · from ' + e.from : ''), acts: `<button class="pill" data-act="rsvp" data-id="${esc(e.id)}" data-c="${esc(e.cal)}" data-v="accepted">Accept</button><button class="pill ghost" data-act="rsvp" data-id="${esc(e.id)}" data-c="${esc(e.cal)}" data-v="declined">Decline</button>` }));
   Object.values(shoots()).filter(x => /ready/i.test(x.status) && x.ready && Date.now() - toDate(x.ready) < 4 * 864e5).forEach(x => out.push({ ico: I.check, t: `Photos ready · ${x.address}`, s: 'From Rainier · download all, or ask Claude to bring them into the listing', acts: `<a class="pill" href="${esc(x.page)}" target="_blank" rel="noopener">Open photos</a>` }));
@@ -379,12 +416,15 @@ function render() {
   <div class="hello"><p class="date">${d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
     <h1>${hi}, Chris.</h1>
     <p class="status"><span class="dot${n.length ? '' : ''}"></span>${esc(statusLine)}</p></div>
-  <nav class="jump" aria-label="Jump to">${[['listings','Listings'],['kit','Presentations'],['needs','Needs you'],['today','Today'],['inbox','Inbox']].map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
+  <nav class="jump" aria-label="Jump to">${[['listings','Listings'],['deals','Deals'],['kit','Presentations'],['needs','Needs you'],['today','Today'],['inbox','Inbox']].map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
   ${!caps.mcp && S.ready && !S.officeMode ? `<section><div class="group"><div class="row"><div class="ico">${I.globe}</div><div class="body"><div class="t">Open Ranch on claude.ai</div><div class="s">Your Gmail, Sheet and social accounts connect there. This view is a preview.</div></div></div></div></section>` : ''}
 
   <section aria-label="Listings" data-tone="list" id="listings"><div class="h2row"><h2>Listings</h2><span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="linkbtn" data-act="refresh" ${S.busy.all ? 'disabled' : ''}>${S.busy.all ? 'Updating…' : (S.at ? 'Updated ' + new Date(S.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + ' · Refresh' : 'Refresh')}</button><button class="pill ghost launch" data-act="shoot">${I.cal}<span>Order photos</span></button><button class="pill launch" data-act="launch">${I.plus}<span>Launch a listing</span></button></span></div>
     <div class="group">${listings().length ? '' : '<div class="empty">No listings yet. Launch your first one.</div>'}${listings().map(l => `<button class="lrow" data-act="listing" data-a="${esc(l.address)}">${l.photo ? `<img class="thumb" src="${esc(localPhoto(l.photo))}" alt="" onerror="this.onerror=null;this.src='${esc(l.photo)}'">` : '<span class="thumb" aria-hidden="true"></span>'}<span class="body"><span class="t" style="display:block">${esc(l.address)}</span><span class="s" style="display:block">${esc([l.city, money(l.price), l.listed ? 'Day ' + (Math.floor((Date.now() - l.listed) / 864e5) + 1) : l.page ? '' : 'needs a page', offersFor(l.address).length ? offersFor(l.address).length + ' offer' + (offersFor(l.address).length > 1 ? 's' : '') + ' · best ' + money(Math.max(...offersFor(l.address).map(r => +r[5] || 0))) : dealFor(l.address) ? 'Offer / deal email waiting' : '', (shootFor(l.address) || {}).status ? 'Photos: ' + shootFor(l.address).status.toLowerCase() : ''].filter(Boolean).join(' · '))}</span></span>${I.chev}</button>`).join('')}</div></section>
 
+
+  <section aria-label="Deals" data-tone="need" id="deals"><div class="h2row"><h2>Deals</h2><span class="note" style="margin:0">Shadow mode · nothing sends</span></div>
+    <div class="group">${!S.sheet ? '<div class="empty"><div class="skel"></div></div>' : liveDeals().length ? liveDeals().map(d => `<button class="lrow" data-act="tc" data-a="${esc(d.address)}"><span class="body"><span class="t" style="display:block">${d.urgent ? '<span class="tag now">Urgent</span>' : ''}${esc(d.address)}</span><span class="s" style="display:block">${esc([d.next ? 'Next: ' + String(d.next.r[2]).slice(0, 60) + ' · ' + new Date(d.next.t).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : d.rows.length ? '' : 'Waiting on mutual acceptance', d.waiting ? d.waiting + ' draft' + (d.waiting > 1 ? 's' : '') + ' for your call' : '', d.rows.length ? d.rows.length + ' logged' : ''].filter(Boolean).join(' · '))}</span></span>${I.chev}</button>`).join('') : '<div class="empty">No live deals. When one goes pending, its timeline and your TC’s drafts show up here.</div>'}</div></section>
 
   <section aria-label="Presentations" data-tone="biz" id="kit"><div class="h2row"><h2>Presentations &amp; print</h2></div>
     <div class="group">${KIT.map(k => `<div class="row"><div class="ico">${I[k.ico] || I.check}</div><div class="body"><div class="t">${esc(k.t)}</div><div class="s">${esc(k.s)}</div></div><div class="acts">${k.links.map((l, i) => `<a class="pill${i ? ' ghost' : ''}" href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join('')}</div></div>`).join('')}</div>
@@ -838,6 +878,10 @@ document.addEventListener('click', async e => {
   else if (a === 'rmask') removeAsk(x);
   else if (a === 'title') titleSheet(x);
   else if (a === 'deal') dealSheet();
+  else if (a === 'tc') tcSheet(x);
+  else if (a === 'tccall') { b.disabled = true; tcCall(b.dataset.k, b.dataset.v); }
+  else if (a === 'tccopy') { const r = ((S.sheet && S.sheet.shadow) || []).find(r => shadowKey(r) === b.dataset.k); try { await navigator.clipboard.writeText(r ? r[5] : ''); toast('Draft copied.'); } catch (err) { toast('Couldn’t copy on this device.'); } }
+  else if (a === 'tcfix') { const box = document.createElement('div'); box.className = 'form'; box.innerHTML = `<textarea rows="3" placeholder="What would you change, or say instead?" style="width:100%"></textarea><div class="acts" style="margin-top:8px"><button class="pill" type="button">Save</button></div>`; b.parentElement.replaceWith(box); box.querySelector('textarea').focus(); box.querySelector('button').onclick = () => { const t = box.querySelector('textarea').value.trim(); if (t) tcCall(b.dataset.k, 'Change it', t); }; }
   else if (a === 'kit') kitSheet(x);
   else if (a === 'rsvp') { b.disabled = true; try { await tool('Google Calendar', 'respond_to_event', { calendarId: b.dataset.c, eventId: b.dataset.id, responseStatus: b.dataset.v }); toast(b.dataset.v === 'accepted' ? 'Accepted.' : 'Declined.'); await loadCalendar(); render(); } catch (err) { b.disabled = false; toast('Didn’t go through — ' + (err.message || 'try again')); } }
   else if (a === 'market') marketSheet(x);

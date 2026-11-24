@@ -241,6 +241,7 @@ async function loadAll() {
 /* ---------- derived ---------- */
 function latestBy(list, key) { const m = {}; (list || []).forEach(r => { const k = r[key]; if (k) m[k] = r; }); return Object.values(m); }
 function localPhoto(u) { if (S.officeMode) return u; const m = /\/photos\/([a-z0-9-]+?)(?:-\d+)?\.(?:webp|jpe?g)$/i.exec(String(u || '')); return m ? 'thumbs/' + m[1] + '.jpg' : u; }
+const TITLE = { name: 'Title Alliance Puget Sound', email: 'service@tapugetsound.com' }; // the agent's title company (per-agent setting when others use the Office)
 const RAINIER = { name: 'Anthony', sms: '+12539880028', email: 'anthony@rainierrephoto.com', order: 'https://view.rainierrephoto.com/order' };
 const PKGS = ['Essentials: HDR photos, 2D floor plan, aerial, marketing kit', 'HDR photos + 2D floor plan', 'HDR photos only'];
 const ADDONS = ['Aerial photos', 'Twilight photos', 'Video', '3D tour', 'Floor plan'];
@@ -416,6 +417,7 @@ function listingSheet(a) {
     ${l.page ? `<a class="lrow" href="${esc(l.page)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Public page</span><span class="s" style="display:block">${esc(l.page.replace('https://', ''))}</span></span>${I.chev}</a>` : ''}
     ${l.code ? `<a class="lrow" href="https://homes.ranchpnw.com/sellers#code=${esc(l.code)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Seller portal · ${esc(l.sellers || '')}</span><span class="s" style="display:block">Code ${esc(l.code)}</span></span>${I.chev}</a>` : ''}
     <button class="lrow" data-act="shoot" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Photo shoot</span><span class="s" style="display:block">${(sh => sh ? esc([sh.status, sh.pkg && sh.pkg.split(':')[0], sh.total].filter(Boolean).join(' · ')) : 'Order from Rainier · text, email or book')(shootFor(a))}</span></span>${I.chev}</button>
+    <button class="lrow" data-act="title" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Open title</span><span class="s" style="display:block">Email ${esc(TITLE.name)}, ready to send</span></span>${I.chev}</button>
     <button class="lrow" data-act="portals" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Update Zillow &amp; Redfin numbers</span></span>${I.chev}</button>
     <button class="lrow" data-act="prep" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Seller checklist &amp; home facts</span><span class="s" style="display:block">Their progress, your items for this home, photo day</span></span>${I.chev}</button>
     <button class="lrow" data-act="feedback" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Open house feedback</span><span class="s" style="display:block">Review, edit and publish to the sellers</span></span>${I.chev}</button>
@@ -441,6 +443,20 @@ async function removeListing(a) {
   }
   (S.sheet.listings || []).forEach(r => { if (r[0] === a) r[3] = 'Removed'; });
   loadSheet().then(render);
+}
+function titleSheet(a) {
+  const l = listings().find(x => x.address === a) || { address: a };
+  sheet(`<p class="date">Open title · ${esc(TITLE.name)}</p><h3>${esc(a)}</h3><p class="s" style="margin:-4px 0 16px">Saves an email to your Gmail drafts, addressed to ${esc(TITLE.email)}. Give it a look and send.</p>
+  <form id="ttf"><div class="field"><label for="tta">Property address</label><input id="tta" name="a" value="${esc(a)}" required></div>
+  <div class="field"><label for="tts">Sellers</label><input id="tts" name="sellers" value="${esc(l.sellers || '')}"></div>
+  <div class="field"><label for="ttn">Anything else for them (optional)</label><textarea id="ttn" name="notes" placeholder="Buyer’s names, sale price, escrow company, closing date…"></textarea></div>
+  <div class="acts"><button class="pill" id="ttgo">Create the email</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
+  $('#ttf').onsubmit = async e => { e.preventDefault(); const f = e.target, b = $('#ttgo'); if (b.disabled) return; b.disabled = true; b.textContent = 'Saving…';
+    const addr = f.a.value.trim(), body = ['Hi team,', '', `Could you please open title for ${addr}?`, f.sellers.value.trim() ? `Seller${/ and |&|,/.test(f.sellers.value) ? 's' : ''}: ${f.sellers.value.trim()}` : '', f.notes.value.trim(), '', 'Thank you so much. Looking forward to working with you!'].filter((x, i, arr) => x !== '' || (arr[i - 1] !== '' && i > 0)).join('\n');
+    try { const r = await tool('Gmail', 'create_draft', { to: [TITLE.email], subject: 'Open title · ' + addr, body, includeSignature: true });
+      try { await append('Marketing', [[nowStamp(), addr, 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
+      sheet(`<p class="date">Saved to your Gmail drafts</p><h3>Open title · ${esc(addr)}</h3><p class="s" style="margin:-4px 0 16px">Addressed to ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
+    } catch (err) { b.disabled = false; b.textContent = 'Create the email'; toast('Not saved — ' + (err.message || 'try again')); } };
 }
 function shootText(f) {
   const d = Object.fromEntries(new FormData(f).entries()), adds = [...f.querySelectorAll('input[name=addon]:checked')].map(x => x.value);
@@ -725,6 +741,7 @@ document.addEventListener('click', async e => {
   else if (a === 'files') filesSheet(x);
   else if (a === 'launch') launchSheet(x);
   else if (a === 'rmask') removeAsk(x);
+  else if (a === 'title') titleSheet(x);
   else if (a === 'deal') dealSheet();
   else if (a === 'kit') kitSheet(x);
   else if (a === 'rsvp') { b.disabled = true; try { await tool('Google Calendar', 'respond_to_event', { calendarId: b.dataset.c, eventId: b.dataset.id, responseStatus: b.dataset.v }); toast(b.dataset.v === 'accepted' ? 'Accepted.' : 'Declined.'); await loadCalendar(); render(); } catch (err) { b.disabled = false; toast('Didn’t go through — ' + (err.message || 'try again')); } }

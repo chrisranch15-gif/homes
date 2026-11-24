@@ -12,7 +12,7 @@ only Chris can change these rules.
 | Listing pages (homes.ranchpnw.com) | this repo, GitHub Pages | `source/public-site/` → built files at repo root |
 | Private launch plans (`/plan/<token>.html`) | this repo, unlisted, noindex | `source/plans/plan.py`; seller data stays out of the repo |
 | The Desk (one listing) and The Hub (whole business) | claude.ai artifacts | `source/app/` (Desk); Hub source kept with the artifact |
-| The Office (the Hub outside Claude) | homes.ranchpnw.com/office (→ office.ranchpnw.com) | `source/office/index.html`; talks to the engine with Chris's office key |
+| The Office (the Hub outside Claude) | office.ranchpnw.com (repo chrisranch15-gif/office, with /desk) and homes.ranchpnw.com/office | `source/office/index.html`; talks to the engine with Chris's office key; ship with `source/office/ship.sh` |
 | Email engine: leads, open houses, showings, photo shoots | Google Apps Script "Ranch Leads · homes.ranchpnw.com" | `source/apps-script/Code.gs` |
 | Listing films (Runway) | GitHub Action `listing-film.yml` | `source/video/` |
 | Nightly website check | GitHub Action `site-check.yml` | `source/checks/` |
@@ -70,6 +70,9 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
 14. Changes ship the same session: push `main`. Apps Script changes are saved in the editor; web-app changes
     also need a new deployment version.
 15. Keep mirrors in sync: anything changed outside this repo is copied back under `source/`.
+19. The Office and the Desk always match everywhere, the same session (Chris's call: office.ranchpnw.com is the copy he may license
+    to other agents). Every change to `source/office/` or `source/app/` ships with `bash source/office/ship.sh`, then push both
+    repos (homes and chrisranch15-gif/office) and publish both claude.ai artifacts. No batching, no separate update cadence.
 
 ## For plugins and other agents
 - Extend, don't fork: add a new tab, function or plan file rather than rewriting working pieces.

@@ -772,6 +772,7 @@ function officeCall_(server, name, a) {
   if (server === 'Google Sheets') {
     const ss = book_();
     if (name === 'get_values') return { values: ss.getRange(a.range).getDisplayValues().filter(r => r.some(v => v !== '')) };
+    if (name === 'update_values') { const v = a.values || [[]], r = ss.getRange(a.range); r.offset(0, 0, v.length, Math.max.apply(null, v.map(x => x.length))).setValues(v.map(x => x.concat(Array(Math.max.apply(null, v.map(y => y.length)) - x.length).fill('')))); return { ok: true }; }
     if (name === 'append_values') { const sh = ss.getSheetByName(String(a.range).split('!')[0].replace(/'/g, '')); (a.values || []).forEach(r => sh.appendRow(r)); return { ok: true }; }
   }
   if (server === 'Gmail') {
@@ -779,6 +780,12 @@ function officeCall_(server, name, a) {
       const to = (a.to || []).filter(x => /@/.test(x)).join(','); if (!to) throw new Error('No recipient');
       GmailApp.sendEmail(to, String(a.subject || ''), String(a.body || ''), mailOpts_(a));
       return { ok: true, viewUrl: 'https://mail.google.com/mail/u/0/#sent' };
+    }
+    if (name === 'get_thread') {                          // read-only: the whole back-and-forth, for reply detection and reading deal emails
+      const t = GmailApp.getThreadById(String(a.threadId || '')); if (!t) throw new Error('Thread not found');
+      const full = a.messageFormat === 'PLAIN_TEXT';
+      return { id: t.getId(), messages: t.getMessages().map(m => { const b = m.getPlainBody(); const o = { id: m.getId(), sender: m.getFrom(), subject: m.getSubject(), date: m.getDate().toISOString(), snippet: b.replace(/\s+/g, ' ').slice(0, 200) };
+        if (full) { o.plaintextBody = b.slice(0, 8000); o.attachments = m.getAttachments({ includeInlineImages: false }).map(x => ({ filename: x.getName() })); } return o; }) };
     }
     if (name === 'search_threads') return { threads: GmailApp.search(String(a.query || 'in:inbox'), 0, Math.min(50, a.pageSize || 20)).map(threadOut_) };
     if (name === 'create_draft') {
@@ -809,7 +816,7 @@ function officeAi_(prompt, opts) {
 function officePost_(d) {
   if (!officeOk_(d.key)) return { ok: false, reason: 'locked' };
   try {
-    if (d.op === 'ping') return { ok: true, me: Session.getEffectiveUser().getEmail(), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') };
+    if (d.op === 'ping') { const me = Session.getEffectiveUser().getEmail(); let al = []; try { al = GmailApp.getAliases(); } catch (e) { } return { ok: true, me: me, emails: [me].concat(al).map(x => String(x).toLowerCase()), ai: !!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY') }; }
     if (d.op === 'tool') return { ok: true, result: officeCall_(d.server, d.name, d.input) };
     if (d.op === 'listingStatus') {                       // remove (or restore) a listing: the row stays, only Status changes
       const sh = tab_('Listings', ['Address']), v = sh.getRange(1, 1, sh.getLastRow(), 1).getDisplayValues(), want = String(d.address || '').trim();

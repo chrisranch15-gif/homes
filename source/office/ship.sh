@@ -17,11 +17,14 @@ sed 's/__MY_EMAILS__/[]/' "$HOMES/source/office/index.html" > "$HOMES/office/ind
 cp "$HOMES/office/index.html" "$OFFICE/index.html"
 # Private claude.ai copy keeps the CALENDARS line it already has (never committed)
 if [ -f /home/claude/hub/index.html ]; then
-  LINE=$(grep -m1 '^const CALENDARS = ' /home/claude/hub/index.html || true)
-  if [ -n "$LINE" ] && [ "$LINE" != 'const CALENDARS = [];' ]; then
+  LINE=$(grep -m1 -E '^(const|let) CALENDARS = ' /home/claude/hub/index.html | sed 's/^const /let /' || true)
+  if [ -n "$LINE" ] && [ "$LINE" != 'let CALENDARS = [];' ]; then
     python3 - "$LINE" "$HOMES/source/office/index.html" <<'EOF'
 import sys
-s = open(sys.argv[2]).read().replace("const CALENDARS = __MY_EMAILS__;", sys.argv[1], 1)
+import re
+s = open(sys.argv[2]).read()
+line = re.match(r"let CALENDARS = .*?;", sys.argv[1]).group(0)
+s = s.replace("let CALENDARS = __MY_EMAILS__;", line, 1)
 assert '__MY_EMAILS__' not in s
 open('/home/claude/hub/index.html', 'w').write(s)
 EOF

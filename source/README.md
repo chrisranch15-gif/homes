@@ -39,3 +39,6 @@ WebP images, minifies, and writes robots.txt / sitemap.xml / llms.txt.
 - Never show a photo that isn't of the place it sits next to.
 - Never put Chris's email in source; his direct line is approved for marketing. The Apps Script sends to whichever account runs it. Full rules: ../CLAUDE.md
 - See `GUIDES.md` for the town-guide plan and the daily interview routine.
+
+## The Office: private values
+`source/office/index.html` holds `__MY_EMAILS__`. The public copy (`office/index.html`) gets `[]`; only the private claude.ai copy gets Chris's addresses, filled in at publish time. Never commit them.

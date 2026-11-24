@@ -141,10 +141,21 @@ function login(msg){
 function load(code,fresh){
   if(fresh){var b=app.querySelector('#lf button');if(b){b.disabled=true;b.textContent='Opening…'}}
   window.CODE=code;
-  fetch(API+'?api=seller&code='+encodeURIComponent(code)).then(function(r){return r.json()}).then(function(d){
-    if(!d.ok){put(KEY,null);return login(d.reason||'That code didn’t match.')}
-    put(KEY,code);if(location.hash)history.replaceState(null,'',location.pathname);render(d,code);
-  }).catch(function(e){console.error(e);if(fresh)login('We couldn’t reach the portal. Please try again.');else login()});
+  var tries=0;
+  function go(){
+    tries++;
+    var ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort()},25000);
+    fetch(API+'?api=seller&code='+encodeURIComponent(code),ctl?{signal:ctl.signal}:{}).then(function(r){clearTimeout(tm);return r.json()}).then(function(d){
+      if(!d.ok){put(KEY,null);put(KEY+'.last',null);return login(d.reason||'That code didn’t match.')}
+      put(KEY,code);try{localStorage.setItem(KEY+'.last',JSON.stringify(d))}catch(e){}
+      if(location.hash)history.replaceState(null,'',location.pathname);render(d,code);
+    }).catch(function(e){clearTimeout(tm);console.error(e);
+      if(tries<3)return setTimeout(go,tries*1500);
+      var last=null;try{last=JSON.parse(localStorage.getItem(KEY+'.last')||'null')}catch(x){}
+      if(last&&last.ok&&get(KEY)===code){render(last,code);var n=document.createElement('p');n.className='note';n.style.cssText='text-align:center;margin:12px auto';n.textContent='You’re offline or the connection is weak, so this is the last version we loaded. Pull to refresh when you have signal.';app.insertBefore(n,app.firstChild);return}
+      if(fresh)login('The connection dropped. Check your signal and tap Open again.');else login()});
+  }
+  go();
 }
 
 var PREP={

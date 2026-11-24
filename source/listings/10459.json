@@ -11,7 +11,7 @@
  "status": "Active",
  "credit": "",
  "hero": "10457-des-moines-memorial-dr-5",
- "lede": "A bright two-bedroom condo with a white kitchen, wood-look floors and a deck that looks out into the trees.",
+ "lede": "An updated two-bedroom, two-bath condo with newer floors, fresh paint and a private deck, close to everything.",
  "features": [
   [
    "Living room and deck",
@@ -65,5 +65,32 @@
    ]
   ]
  ],
- "type": "Apartment"
+ "type": "Apartment",
+ "story": [
+  "The open layout makes the whole home feel bright and easy, and the living and dining areas flow together for relaxing, hosting or working from home. Newer flooring and fresh paint mean you can move right in.",
+  "Both bedrooms are a good size, and two full baths work well for owners, guests or roommates. You also get two parking spots, several storage areas and the laundry room just down the hall.",
+  "It sits near Rainier Golf and Country Club, with quick access to commuter routes, shopping, dining, parks, the water and the airport."
+ ],
+ "details": [
+  [
+   "Year built",
+   "1969"
+  ],
+  [
+   "Community",
+   "Boulevard Park"
+  ],
+  [
+   "HOA",
+   "$850 per month"
+  ],
+  [
+   "Parking",
+   "Two spaces, uncovered"
+  ],
+  [
+   "View",
+   "Territorial"
+  ]
+ ]
 }

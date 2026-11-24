@@ -11,7 +11,7 @@
  "status": "Active",
  "credit": "",
  "hero": "03-12005-5th-ave-s-3",
- "lede": "A two-bedroom home on a wide, open lot, with room to garden, park and grow.",
+ "lede": "A 1938 home on a fenced, level corner lot in Burien, with a basement that has its own entrance and room to grow.",
  "features": [
   [
    "The front of the home",
@@ -60,6 +60,41 @@
     "11-12005-5th-ave-s-11",
     "13-12005-5th-ave-s-13"
    ]
+  ]
+ ],
+ "story": [
+  "Today it lives as a two-bedroom, one-bath home on the main level, with a partially finished basement and its own separate entrance below. Enjoy it as it is, or look at what the lower level could become: more living space, a rec room, a studio, or possibly an accessory dwelling unit, subject to permits and your own verification.",
+  "The lot is just under half an acre, fully fenced, level and on a corner, with fruit trees, garden space, RV parking and outbuildings for storage and hobbies. R2 zoning gives you more to explore over time.",
+  "Good to know: the home is on septic. Buyers should verify sewer location, connection and costs, along with zoning and the feasibility of any plans."
+ ],
+ "details": [
+  [
+   "Year built",
+   "1938"
+  ],
+  [
+   "Lot",
+   "0.43 acre (18,700 sq ft), corner"
+  ],
+  [
+   "Basement",
+   "Partially finished, separate entrance"
+  ],
+  [
+   "Parking",
+   "Off-street, RV parking"
+  ],
+  [
+   "Zoning",
+   "R2"
+  ],
+  [
+   "Sewer / water",
+   "Septic / public water"
+  ],
+  [
+   "Schools",
+   "Highline School District"
   ]
  ]
 }

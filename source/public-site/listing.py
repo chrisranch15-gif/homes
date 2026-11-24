@@ -14,7 +14,14 @@ def build(key):
     ph = lambda s, w='': f'photos/{key}/{s}{"-800" if w else ""}.webp'
     title_of = lambda s: P[s]['title'] if s in P else s
     A = AGENT; addr = L['address']; place = f"{L['city']}, {L['state']}"
-    price = '${:,.0f}'.format(L['price']); facts = [f"{L['beds']} bed", f"{L['baths']} bath", '{:,} sq ft'.format(L['sqft'])]
+    price = '${:,.0f}'.format(L['price']); land = L.get('kind') == 'land'
+    facts = [f"{L['acres']} acres", L.get('parcels_note', '')] if land else [f"{L['beds']} bed", f"{L['baths']} bath", '{:,} sq ft'.format(L['sqft'])]
+    facts = [f for f in facts if f]
+    spec = (''.join(f'<div><b>{E(str(v))}</b><span>{E(k)}</span></div>' for k, v in L['spec']) if land else
+            f"<div><b>{L['beds']}</b><span>Bedrooms</span></div><div><b>{E(str(L['baths']))}</b><span>Baths</span></div><div><b>{'{:,}'.format(L['sqft'])}</b><span>Square feet</span></div>") + f"<div><b>{price}</b><span>MLS #{E(L['mls'])}</span></div>"
+    story = ''.join(f'<p>{E(x)}</p>' for x in L.get('story', []))
+    details = ''.join(f'<div><dt>{E(k)}</dt><dd>{E(v)}</dd></div>' for k, v in L.get('details', []))
+    more = (f'<div class="story">{story}</div>' if story else '') + (f'<dl class="dets">{details}</dl>' if details else '')
     url = f"{A['origin']}/{key}"
     desc = f"{addr}, {place}: {', '.join(facts)}, listed at {price}. {L['lede']} Presented by {A['name']}, {A['team']}."
     order = [s for _, g in L['groups'] for s in g if s in P]
@@ -26,7 +33,7 @@ def build(key):
     cfg = json.dumps({'api': API, 'key': key, 'listing': addr, 'photos': [{'src': ph(s), 'alt': title_of(s)} for s in order]})
     ld = json.dumps({'@context': 'https://schema.org', '@type': L.get('type', 'SingleFamilyResidence'), 'name': addr, 'url': url,
                      'address': {'@type': 'PostalAddress', 'streetAddress': addr, 'addressLocality': L['city'], 'addressRegion': L['state']},
-                     'numberOfRooms': L['beds'], 'floorSize': {'@type': 'QuantitativeValue', 'value': L['sqft'], 'unitCode': 'FTK'},
+                     **({} if land else {'numberOfRooms': L['beds'], 'floorSize': {'@type': 'QuantitativeValue', 'value': L['sqft'], 'unitCode': 'FTK'}}),
                      'image': f"{A['origin']}/photos/{key}/{L['hero']}.jpg"})
     page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(addr)}, {E(place)} · {price} · {E(A['team'])}</title>
@@ -58,6 +65,7 @@ h1,h2,h3{{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01e
 section.s{{padding:clamp(46px,7vw,84px) 0;border-top:1px solid var(--line)}}
 .lede{{font-family:var(--serif);font-size:clamp(24px,3.2vw,34px);line-height:1.3;max-width:820px;margin:14px 0 0}}
 .spec{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #1E2327;border-bottom:1px solid #1E2327;margin-top:34px}}
+.story{{max-width:760px;margin-top:30px;font-size:17px;line-height:1.7;color:#2B2F33}}.story p{{margin:0 0 14px}}.dets{{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0 28px;margin:26px 0 0;max-width:980px}}.dets div{{border-bottom:1px solid var(--line);padding:10px 0}}.dets dt{{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}}.dets dd{{margin:2px 0 0;font-size:16px}}
 .spec div{{padding:16px 12px 16px 0}}.spec b{{display:block;font-family:var(--serif);font-weight:400;font-size:28px}}.spec span{{font-size:13px;color:var(--muted)}}
 ul.feats{{list-style:none;padding:0;margin:30px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
 .ft{{all:unset;cursor:pointer;display:block}}.ft img{{aspect-ratio:4/3;object-fit:cover;width:100%;border-radius:4px}}.ft span{{display:block;margin-top:10px;font-weight:500}}
@@ -85,8 +93,8 @@ input,select,textarea{{font:inherit;font-size:16px;padding:12px 14px;border-radi
 <div class="row"><span class="price">{price}</span><span class="facts">{' · '.join(facts)}</span></div>
 <div class="ctas"><a class="btn gold" href="#tour">Request a tour</a><a class="btn line" href="#photos">See all {len(order)} photos</a></div></div></div></header>
 <main>
-<section class="s"><div class="wrap"><p class="eb">The home</p><p class="lede">{E(L['lede'])}</p>
-<div class="spec"><div><b>{L['beds']}</b><span>Bedrooms</span></div><div><b>{E(str(L['baths']))}</b><span>Baths</span></div><div><b>{'{:,}'.format(L['sqft'])}</b><span>Square feet</span></div><div><b>{price}</b><span>MLS #{E(L['mls'])}</span></div></div>
+<section class="s"><div class="wrap"><p class="eb">{E(L.get('eyebrow', 'The home'))}</p><p class="lede">{E(L['lede'])}</p>
+<div class="spec">{spec}</div>{more}
 <ul class="feats">{feats}</ul></div></section>
 <section class="s" id="photos"><div class="wrap"><p class="eb">Every photo</p><h2 style="font-size:clamp(30px,4vw,44px);margin-top:10px">Take the tour from here</h2>{gal}{credit}</div></section>
 <section class="s dark" id="tour"><div class="wrap"><p class="eb">See it in person</p><h2 style="font-size:clamp(30px,4vw,44px);margin-top:10px">Let's get you inside.</h2>

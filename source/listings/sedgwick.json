@@ -1,0 +1,107 @@
+{
+ "key": "sedgwick",
+ "kind": "land",
+ "type": "Place",
+ "eyebrow": "The land",
+ "address": "0 SE Sedgwick Road",
+ "city": "Port Orchard",
+ "state": "WA",
+ "price": 500000,
+ "acres": "11.92",
+ "parcels_note": "two parcels",
+ "mls": "2484243",
+ "status": "Active",
+ "credit": "",
+ "spec": [
+  [
+   "Acres",
+   "11.92"
+  ],
+  [
+   "Parcels",
+   "2"
+  ],
+  [
+   "Zoning",
+   "RR"
+  ]
+ ],
+ "hero": "8995-se-sedgwick-rd-7",
+ "lede": "Nearly 12 acres of level, usable land in two parcels, about five minutes from the Southworth ferry.",
+ "story": [
+  "Two parcels, 6.51 and 5.41 acres, both zoned Rural Residential. Level, usable ground for a custom home, a private estate or a small compound, with the room and privacy to build exactly what you have in mind.",
+  "You get quiet country living without the distance: about five minutes to the Southworth ferry for Seattle, West Seattle and Vashon Island, and minutes to shopping, dining and Highway 16."
+ ],
+ "details": [
+  [
+   "Parcels",
+   "6.51 acres and 5.41 acres"
+  ],
+  [
+   "Total",
+   "11.92 acres (519,234 sq ft)"
+  ],
+  [
+   "Zoning",
+   "Rural Residential (RR)"
+  ],
+  [
+   "Community",
+   "Southworth"
+  ],
+  [
+   "Schools",
+   "South Kitsap School District"
+  ],
+  [
+   "Terms",
+   "Cash or conventional"
+  ]
+ ],
+ "features": [
+  [
+   "The parcels, outlined",
+   "8995-se-sedgwick-rd-7"
+  ],
+  [
+   "Toward the water",
+   "8995-se-sedgwick-rd-5"
+  ],
+  [
+   "The land from above",
+   "8995-se-sedgwick-rd-2"
+  ],
+  [
+   "The Southworth ferry",
+   "8995-se-sedgwick-rd-10"
+  ]
+ ],
+ "groups": [
+  [
+   "The land",
+   [
+    "8995-se-sedgwick-rd-7",
+    "8995-se-sedgwick-rd-2",
+    "8995-se-sedgwick-rd-3",
+    "8995-se-sedgwick-rd-8",
+    "8995-se-sedgwick-rd-6"
+   ]
+  ],
+  [
+   "The views around it",
+   [
+    "8995-se-sedgwick-rd-1",
+    "8995-se-sedgwick-rd-5",
+    "8995-se-sedgwick-rd-7-1"
+   ]
+  ],
+  [
+   "The ferry, minutes away",
+   [
+    "8995-se-sedgwick-rd-10",
+    "8995-se-sedgwick-rd-9"
+   ]
+  ]
+ ],
+ "caption": "We just listed nearly 12 acres in Port Orchard, minutes from the Southworth ferry. Take a look and share with anyone who might love it:"
+}

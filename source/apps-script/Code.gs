@@ -760,6 +760,13 @@ function calOut_(c, ev) {
   return { id: ev.getId(), summary: ev.getTitle(), start: all ? { date: st } : { dateTime: st }, location: ev.getLocation(), htmlLink: 'https://calendar.google.com/calendar/r/day/' + Utilities.formatDate(ev.getStartTime(), 'America/Los_Angeles', 'yyyy/M/d'),
     organizer: { email: ev.getCreators()[0] || '', self: ev.isOwnedByMe() }, attendees: guests, status: 'confirmed', myStatus: String(ev.getMyStatus()) };
 }
+// the Office sends HTML with the branded signature; its headshot arrives as inline attachment 0 (cid:att0)
+function mailOpts_(a) {
+  if (!a.htmlBody) return {};
+  const o = { htmlBody: String(a.htmlBody) }, att = (a.attachments || [])[0];
+  if (att && att.inline && att.content) o.inlineImages = { att0: Utilities.newBlob(Utilities.base64Decode(att.content), att.mimeType || 'image/jpeg', att.filename || 'photo.jpg') };
+  return o;
+}
 function officeCall_(server, name, a) {
   a = a || {};
   if (server === 'Google Sheets') {
@@ -770,14 +777,14 @@ function officeCall_(server, name, a) {
   if (server === 'Gmail') {
     if (name === 'send_message') {                        // only ever called by the agent's own Send tap in the Office
       const to = (a.to || []).filter(x => /@/.test(x)).join(','); if (!to) throw new Error('No recipient');
-      GmailApp.sendEmail(to, String(a.subject || ''), String(a.body || '') + '\n\n' + AGENT_NAME + '\n' + BRAND + '\n(253) 335-5630');
+      GmailApp.sendEmail(to, String(a.subject || ''), String(a.body || ''), mailOpts_(a));
       return { ok: true, viewUrl: 'https://mail.google.com/mail/u/0/#sent' };
     }
     if (name === 'search_threads') return { threads: GmailApp.search(String(a.query || 'in:inbox'), 0, Math.min(50, a.pageSize || 20)).map(threadOut_) };
     if (name === 'create_draft') {
       const body = String(a.body || ''); let d;
-      if (a.replyToMessageId) d = GmailApp.getMessageById(a.replyToMessageId).createDraftReply(body);
-      else d = GmailApp.createDraft((a.to || []).join(','), String(a.subject || ''), body);
+      if (a.replyToMessageId) d = GmailApp.getMessageById(a.replyToMessageId).createDraftReply(body, mailOpts_(a));
+      else d = GmailApp.createDraft((a.to || []).join(','), String(a.subject || ''), body, mailOpts_(a));
       return { id: d.getId(), viewUrl: 'https://mail.google.com/mail/u/0/#drafts' };
     }
   }

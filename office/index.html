@@ -404,7 +404,7 @@ function replySheet(m) {
   <form id="replyf"><div class="field"><label for="rb">Your reply</label><textarea id="rb" name="body">${esc(m.reply || '')}</textarea></div>
   <div class="acts"><button class="pill">Save to drafts</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
   $('#replyf').onsubmit = async e => { e.preventDefault(); const b = e.target.querySelector('button'); b.disabled = true; b.textContent = 'Saving…';
-    try { const r = await tool('Gmail', 'create_draft', { replyToMessageId: m.msgId, body: e.target.body.value, includeSignature: true }); markDone(m, 'drafted'); render(); const u = (r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts';
+    try { const r = await mail('draft', { replyToMessageId: m.msgId, body: e.target.body.value }); markDone(m, 'drafted'); render(); const u = (r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts';
       sheet(`<p class="date">Saved to your Gmail drafts</p><h3>Ready to send</h3><p class="s" style="margin:-4px 0 16px">Your reply is in Gmail, in the same thread. Open it there, give it a last look and send.</p><div class="acts"><a class="pill" href="${esc(u)}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`); }
     catch (err) { b.disabled = false; b.textContent = 'Save to drafts'; toast('Not saved — ' + (err.message || 'try again')); } };
 }
@@ -453,8 +453,8 @@ function titleSheet(a) {
   <p class="s" style="margin:-6px 0 14px;font-size:13px">Your Gmail signature is added at the end.</p>
   <div class="acts"><button class="pill" id="ttgo" data-how="send">Send</button><button type="button" class="pill ghost" id="ttdr">Save to drafts</button><button type="button" class="pill ghost" data-act="close">Cancel</button></div></form>`);
   const go = async how => { const f = $('#ttf'); if (!f.reportValidity()) return; const b = $('#ttgo'), d = $('#ttdr'); if (b.disabled) return; b.disabled = d.disabled = true; (how === 'send' ? b : d).textContent = how === 'send' ? 'Sending…' : 'Saving…';
-    const msg = { to: [TITLE.email], subject: f.subject.value.trim(), body: f.body.value, includeSignature: true };
-    try { const r = await tool('Gmail', how === 'send' ? 'send_message' : 'create_draft', msg);
+    const msg = { to: [TITLE.email], subject: f.subject.value.trim(), body: f.body.value };
+    try { const r = await mail(how, msg);
       try { await append('Marketing', [[nowStamp(), a, how === 'send' ? 'Title opened (email sent)' : 'Title opened (email drafted)', '', TITLE.name]]); } catch (e) { }
       sheet(how === 'send' ? `<p class="date">Sent</p><h3>${esc(msg.subject)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. It’s in your Gmail Sent folder, and replies come to your inbox.</p><div class="acts"><button type="button" class="pill" data-act="close">Done</button></div>`
         : `<p class="date">Saved to your Gmail drafts</p><h3>${esc(msg.subject)}</h3><p class="s" style="margin:-4px 0 16px">To ${esc(TITLE.email)}. Send it from Gmail.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`);
@@ -681,6 +681,39 @@ async function eng(body) {
   throw new Error('Open The Office for this one');
 }
 
+
+/* ---------- email: every message the Office saves or sends carries the agent's branded signature ---------- */
+const SIG = { name: 'Chris Ranch', team: 'The Ranch Real Estate Group', phone: '(253) 335-5630', tel: '+12533355630', site: 'homes.ranchpnw.com', brokerage: 'Keller Williams Realty Puget Sound', badge: 'KW Luxury',
+  cta: { text: 'Looking for something that isn’t on the market?', url: 'https://homes.ranchpnw.com/unlisted' } }; // per-agent settings when others use the Office
+let SIGIMG = null;
+async function sigImage() {
+  if (SIGIMG !== null) return SIGIMG;
+  for (const u of ['chris-sig.jpg', '../marketing/chris-sig.jpg', 'https://homes.ranchpnw.com/marketing/chris-sig.jpg']) {
+    try { const r = await fetch(new URL(u, location.href)); if (!r.ok) continue; const b = new Uint8Array(await r.arrayBuffer()); let t = ''; b.forEach(x => t += String.fromCharCode(x)); return (SIGIMG = btoa(t)); } catch (e) { }
+  }
+  return (SIGIMG = '');
+}
+function sigHtml(full, img) {
+  const a = 'color:#8C6A43;text-decoration:none', serif = "font-family:'Playfair Display',Georgia,'Times New Roman',serif;color:#1E2327";
+  if (!full) return `<table cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;font-family:Arial,Helvetica,sans-serif"><tr><td style="border-left:2px solid #8C6A43;padding-left:12px"><div style="${serif};font-size:17px">${esc(SIG.name)}</div><div style="font-size:12px;color:#6B655C">${esc(SIG.team)} &nbsp;·&nbsp; <a href="tel:${SIG.tel}" style="color:#1E2327;text-decoration:none;font-weight:bold">${esc(SIG.phone)}</a></div></td></tr></table>`;
+  return `<table cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif"><tr>${img ? `<td style="padding:0 16px 0 0;vertical-align:top"><img src="cid:att0" width="76" height="76" alt="${esc(SIG.name)}" style="display:block;border-radius:50%;width:76px;height:76px"></td>` : ''}
+<td style="vertical-align:top;border-left:2px solid #8C6A43;padding:0 0 0 16px"><div style="${serif};font-size:21px;line-height:1.15">${esc(SIG.name)}</div>
+<div style="font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#8C6A43;margin:5px 0 8px">${esc(SIG.team)}</div>
+<div style="font-size:13px;line-height:1.55;color:#3A3F43"><a href="tel:${SIG.tel}" style="color:#1E2327;text-decoration:none;font-weight:bold">${esc(SIG.phone)}</a> &nbsp;·&nbsp; <a href="https://${SIG.site}" style="${a}">${esc(SIG.site)}</a></div>
+<div style="font-size:12px;color:#6B655C;margin-top:2px">${esc(SIG.brokerage)}${SIG.badge ? ' &nbsp;·&nbsp; ' + esc(SIG.badge) : ''}</div>
+${SIG.cta ? `<div style="margin-top:9px;font-size:12.5px"><a href="${SIG.cta.url}" style="${a};border-bottom:1px solid #D9C7AE">${esc(SIG.cta.text)}&nbsp;&rarr;</a></div>` : ''}</td></tr>
+<tr><td colspan="2" style="padding-top:12px;font-size:10px;line-height:1.4;color:#9A948B">Licensed real estate broker with ${esc(SIG.brokerage)}. Each office is independently owned and operated.</td></tr></table>`;
+}
+// how: 'send' | 'draft'; msg: { to, subject, body, replyToMessageId? }; replies get the compact signature
+async function mail(how, msg) {
+  const full = !msg.replyToMessageId, img = full ? await sigImage() : '';
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#222">${esc(msg.body || '').replace(/\n/g, '<br>')}</div>` + sigHtml(full, img);
+  const text = (msg.body || '') + `\n\n${SIG.name}\n${SIG.team}\n${SIG.phone}` + (full ? `\n${SIG.site}` : '');
+  const out = Object.assign({}, msg, { body: text, htmlBody: html, includeSignature: false });
+  if (img) out.attachments = [{ content: img, mimeType: 'image/jpeg', filename: 'chris-ranch.jpg', inline: true }];
+  return tool('Gmail', how === 'send' ? 'send_message' : 'create_draft', out);
+}
+
 /* ---------- Tell Ranch ---------- */
 async function tell(q) {
   if (!caps.sample) return toast('Tell Ranch needs Claude — open Ranch on claude.ai.');
@@ -707,7 +740,7 @@ REQUEST: ${q}`, { modelTier: 'default', cache: false });
     $('#tf').onsubmit = async e => { e.preventDefault(); const f = e.target, v = k => f[k] ? f[k].value : (dd[k] || ''); const b = f.querySelector('button'); b.disabled = true;
       try {
         if (out.action === 'event') await tool('Google Calendar', 'create_event', { calendarId: CALENDARS[0], summary: v('title'), startTime: v('start').replace(/(Z|[+-]\d\d:\d\d)$/, ''), endTime: v('end').replace(/(Z|[+-]\d\d:\d\d)$/, ''), location: v('location') });
-        if (out.action === 'email') await tool('Gmail', 'create_draft', { to: v('to') ? [v('to')] : [], subject: v('subject'), body: v('body'), includeSignature: true });
+        if (out.action === 'email') await mail('draft', { to: v('to') ? [v('to')] : [], subject: v('subject'), body: v('body') });
         if (out.action === 'seller_update') await append('Seller updates', [[nowStamp(), v('address'), v('title'), v('message'), 'Chris']]);
         if (out.action === 'marketing') await append('Marketing', [[nowStamp(), v('address'), v('what'), v('reach'), v('notes')]]);
         if (out.action === 'deal') await append('Deals', [[nowStamp(), v('address'), 'Listing', v('status'), v('price'), v('pct'), '', '', v('closing'), '']]);
@@ -727,7 +760,7 @@ document.addEventListener('click', async e => {
   else if (a === 'shoot') shootSheet(x || '');
   else if (a === 'shoot-email' || a === 'shoot-site') {
     const f = $('#shootf'); if (!f.reportValidity()) return; const o = shootText(f);
-    if (a === 'shoot-email') { b.disabled = true; try { const r = await tool('Gmail', 'create_draft', { to: [RAINIER.email], subject: 'Photo shoot · ' + o.d.address, body: o.body, includeSignature: true }); shootLog(o.d, 'email draft');
+    if (a === 'shoot-email') { b.disabled = true; try { const r = await mail('draft', { to: [RAINIER.email], subject: 'Photo shoot · ' + o.d.address, body: o.body }); shootLog(o.d, 'email draft');
         sheet(`<p class="date">Saved to your Gmail drafts</p><h3>Order ready to send</h3><p class="s" style="margin:-4px 0 16px">Give it a last look and send.</p><div class="acts"><a class="pill" href="${esc((r && r.viewUrl) || 'https://mail.google.com/mail/u/0/#drafts')}" target="_blank" rel="noopener noreferrer">Open in Gmail</a><button type="button" class="pill ghost" data-act="close">Done</button></div>`); }
       catch (err) { b.disabled = false; toast('Not saved — ' + (err.message || 'try again')); } }
     else { try { await navigator.clipboard.writeText(o.body); toast('Details copied. Paste into Rainier’s form.'); } catch (e) { } window.open(RAINIER.order, '_blank', 'noopener'); shootLog(o.d, 'site'); }
@@ -830,7 +863,7 @@ async function runProposal(i, j, kind, btn) {
   const p = CHAT[i].proposals[j], val = f => { const el = document.querySelector(`.cgin[data-f="${f}"][data-i="${i}"][data-j="${j}"]`); return el ? el.value : (p[f] || ''); };
   p.body = val('body'); p.subject = val('subject'); btn.disabled = true;
   try {
-    if (kind === 'email_draft') { await tool('Gmail', 'create_draft', { to: /@/.test(p.to) ? [p.to] : [], subject: p.subject, body: p.body, includeSignature: true }); p.done = 'Saved to your Gmail drafts. Review and send it from Gmail.'; }
+    if (kind === 'email_draft') { await mail('draft', { to: /@/.test(p.to) ? [p.to] : [], subject: p.subject, body: p.body }); p.done = 'Saved to your Gmail drafts. Review and send it from Gmail.'; }
     else if (kind === 'seller_update') { if (!p.listing) throw new Error('Which listing? Ask me again with the address.'); await append('Seller updates', [[nowStamp(), p.listing, p.subject || 'An update from Chris', p.body, 'Chris']]); p.done = 'Posted to their portal.'; }
     else if (kind === 'publish_feedback') { close(); return feedbackSheet(p.listing || ''); }
     else if (kind === 'event') { if (!p.start) throw new Error('What time? Ask me again with a day and time.'); const st = String(p.start).replace(/(Z|[+-]\d\d:\d\d)$/, ''), en = String(p.end || new Date(Date.parse(st) + 36e5).toISOString().slice(0, 19)).replace(/(Z|[+-]\d\d:\d\d)$/, '');

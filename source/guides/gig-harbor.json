@@ -1,0 +1,455 @@
+{
+ "slug": "gig-harbor",
+ "name": "Gig Harbor",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-23",
+ "review": "https://claude.ai/artifact/MLC1bspEE5Ao4GtYAVPjeu",
+ "headline": "A harbor town on the Gig Harbor Peninsula, across the Narrows from Tacoma.",
+ "lede": "Gig Harbor sits on Puget Sound on the Gig Harbor Peninsula in Pierce County, linked to Tacoma by SR-16 and the Tacoma Narrows Bridge. This guide covers the bridge toll and buses, city and state parks, schools, everyday services, housing figures and the places nearby, each with a source.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Gig Harbor, Washington",
+   "https://en.wikipedia.org/wiki/Gig_Harbor,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Gig Harbor city, Washington",
+   "https://www.census.gov/quickfacts/gigharborcitywashington"
+  ],
+  "wsdot": [
+   "WSDOT · Tacoma Narrows Bridge tolling",
+   "https://wsdot.wa.gov/travel/roads-bridges/toll-roads-bridges-tunnels/tacoma-narrows-bridge-tolling"
+  ],
+  "tnb": [
+   "Wikipedia · Tacoma Narrows Bridge",
+   "https://en.wikipedia.org/wiki/Tacoma_Narrows_Bridge"
+  ],
+  "pt100": [
+   "Pierce Transit · Route 100 Gig Harbor schedule",
+   "https://piercetransit.org/route-pdf/pierce-transit-route-100"
+  ],
+  "ptconnector": [
+   "Pierce Transit · Gig Harbor Waterfront Connector",
+   "https://piercetransit.org/Connector/"
+  ],
+  "pentransit": [
+   "Pierce County · Peninsula Transit",
+   "https://www.piercecountywa.gov/8894/Peninsula-Transit"
+  ],
+  "ghparks": [
+   "City of Gig Harbor · Parks",
+   "https://gigharborwa.gov/154/Parks"
+  ],
+  "skansie": [
+   "City of Gig Harbor · Skansie Brothers Park",
+   "https://gigharborwa.gov/193/Skansie-Brothers-Park"
+  ],
+  "wilkinson": [
+   "City of Gig Harbor · Wilkinson Farm Park",
+   "https://gigharborwa.gov/195/Wilkinson-Farm-Park"
+  ],
+  "crescent": [
+   "City of Gig Harbor · Crescent Creek Park",
+   "https://gigharborwa.gov/179/Crescent-Creek-Park"
+  ],
+  "cushman": [
+   "City of Gig Harbor · Cushman Trail",
+   "https://gigharborwa.gov/181/Cushman-Trail"
+  ],
+  "kopachuck": [
+   "Washington State Parks · Kopachuck State Park",
+   "https://parks.wa.gov/find-parks/state-parks/kopachuck-state-park"
+  ],
+  "kopachuckwiki": [
+   "Wikipedia · Kopachuck State Park",
+   "https://en.wikipedia.org/wiki/Kopachuck_State_Park"
+  ],
+  "psd": [
+   "Peninsula School District · District Boundaries",
+   "https://www.psd401.net/63648_3"
+  ],
+  "vmfh": [
+   "Virginia Mason Franciscan Health · St. Anthony Hospital",
+   "https://www.vmfh.org/our-hospitals/st-anthony-hospital"
+  ],
+  "stanthony": [
+   "Wikipedia · St. Anthony Hospital (Gig Harbor, Washington)",
+   "https://en.wikipedia.org/wiki/St._Anthony_Hospital_(Gig_Harbor,_Washington)"
+  ],
+  "pcls": [
+   "Pierce County Library System · Locations and hours",
+   "https://mypcls.org/visit-the-library/locations-hours/"
+  ],
+  "museum": [
+   "Wikipedia · Harbor History Museum",
+   "https://en.wikipedia.org/wiki/Harbor_History_Museum"
+  ],
+  "historic": [
+   "City of Gig Harbor · Historic Register Sites",
+   "https://gigharborwa.gov/380/Historic-Register-Sites"
+  ],
+  "tacoma": [
+   "Wikipedia · Tacoma, Washington",
+   "https://en.wikipedia.org/wiki/Tacoma,_Washington"
+  ],
+  "fox": [
+   "Wikipedia · Fox Island, Washington",
+   "https://en.wikipedia.org/wiki/Fox_Island,_Washington"
+  ],
+  "keypen": [
+   "Wikipedia · Key Peninsula",
+   "https://en.wikipedia.org/wiki/Key_Peninsula"
+  ],
+  "purdy": [
+   "Wikipedia · Purdy, Washington",
+   "https://en.wikipedia.org/wiki/Purdy,_Washington"
+  ],
+  "portorchard": [
+   "Wikipedia · Port Orchard, Washington",
+   "https://en.wikipedia.org/wiki/Port_Orchard,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "12,630",
+   "people in the city, Census estimate for July 1, 2025",
+   "census"
+  ],
+  [
+   "$4.50",
+   "Narrows Bridge toll toward Tacoma with a Good To Go! pass (two axles)",
+   "wsdot"
+  ],
+  [
+   "32.3 min",
+   "mean travel time to work for city residents, 2020–2024",
+   "census"
+  ],
+  [
+   "17",
+   "schools in the Peninsula School District",
+   "psd"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "12,029 at the 2020 census; 12,630 estimated for July 1, 2025",
+   "census"
+  ],
+  [
+   "County",
+   "Pierce County, on the Gig Harbor Peninsula, a sub-peninsula of the Kitsap Peninsula",
+   "wiki"
+  ],
+  [
+   "Incorporated",
+   "As a town on July 12, 1946; re-incorporated as a city in 1981",
+   "wiki"
+  ],
+  [
+   "Land area",
+   "5.90 square miles (2020)",
+   "census"
+  ],
+  [
+   "ZIP codes",
+   "98329, 98332 and 98335",
+   "wiki"
+  ],
+  [
+   "School district",
+   "Peninsula School District: 3 high schools, 4 middle schools and 10 elementary schools",
+   "psd"
+  ],
+  [
+   "Hospital",
+   "St. Anthony Hospital, with emergency services 24 hours a day",
+   "vmfh"
+  ],
+  [
+   "Owner-occupied homes",
+   "62.2% of housing units, 2020–2024",
+   "census"
+  ],
+  [
+   "Median home value",
+   "$767,100 for owner-occupied units, 2020–2024",
+   "census"
+  ]
+ ],
+ "notes": [
+  "Wikipedia’s Gig Harbor article gives two different total areas (6.12 and 5.96 square miles); the guide uses the Census land area of 5.90 square miles.",
+  "The City of Gig Harbor’s Wilkinson Farm Park page lists the park as both 17.74 acres and 16 acres, so no acreage is given here.",
+  "Census figures are for the City of Gig Harbor only. The Gig Harbor ZIP codes also cover unincorporated parts of the peninsula."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "State Route 16 is the main road in and out. It runs about 6 miles from Interstate 5 to Gig Harbor, crossing the Tacoma Narrows Bridge, and continues north toward Port Orchard and the rest of the Kitsap Peninsula.",
+   "dark": false,
+   "items": [
+    [
+     "Tacoma Narrows Bridge",
+     "Twin suspension bridges carry SR-16 over the Narrows: the 1950 span carries westbound traffic and the 2007 span carries eastbound traffic.",
+     "tnb"
+    ],
+    [
+     "The toll",
+     "Only trips headed to Tacoma are tolled. For a two-axle vehicle the toll is $4.50 with a Good To Go! pass, $5.50 at the toll booth (cash, card or mobile wallet) and $6.50 by mail. Pay By Plate adds 25 cents to the pass rate.",
+     "wsdot"
+    ],
+    [
+     "Commute time",
+     "The Census mean travel time to work for City of Gig Harbor residents is 32.3 minutes (2020–2024).",
+     "census"
+    ],
+    [
+     "Pierce Transit Route 100",
+     "Route 100 runs between the Tacoma Community College transit center and the Purdy Park & Ride, with stops including the Kimball Drive Park & Ride and Borgen Boulevard. It runs seven days a week, with shorter hours on weekends.",
+     "pt100"
+    ],
+    [
+     "Peninsula Transit shuttle",
+     "A free pilot shuttle, running through the end of 2027, links Longbranch on the Key Peninsula with Uptown Gig Harbor, with stops including the Purdy Park & Ride and Skansie Brothers Park. It runs on weekdays and Saturdays, and riders within 0.75 miles of the route can book a flexible pickup a day ahead.",
+     "pentransit"
+    ],
+    [
+     "Waterfront Connector",
+     "Pierce Transit’s seasonal Route 101 linked the downtown waterfront, Uptown and the Kimball Drive Park & Ride on Fridays, Saturdays and Sundays from June 12 to August 23, 2026.",
+     "ptconnector"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "The City of Gig Harbor owns numerous park properties, from waterfront parks downtown to a paved trail and a historic farm. Kopachuck State Park is a short drive west on Henderson Bay.",
+   "dark": false,
+   "items": [
+    [
+     "Skansie Brothers Park",
+     "A 2.59-acre downtown waterfront park with a viewing platform, covered pavilion, the historic Skansie netshed and the 1908 Andrew Skansie family home. It has a summer splash pad and hosts the Maritime Gig Festival, the holiday tree lighting and a summer concert series.",
+     "skansie"
+    ],
+    [
+     "Wilkinson Farm Park",
+     "A preserved pioneer farm at 4118 Rosedale Street, with a gambrel-roof dairy barn begun in 1914, wetlands, a holly orchard, meadows, trails, a community garden with a greenhouse and access to the Cushman Trail.",
+     "wilkinson"
+    ],
+    [
+     "Crescent Creek Park",
+     "At 3303 Vernhardson Street, with a reservable covered shelter and baseball field, a tennis court with pickleball striping, sand volleyball, a half basketball court and the Maritime PlayZone, an all-ability play area completed in 2014.",
+     "crescent"
+    ],
+    [
+     "Cushman Trail",
+     "A paved trail of nearly 6.2 miles for walking and biking, 12 to 16 feet wide, with trailheads on Borgen Boulevard, Grandview Street and Hollycroft Street. PenMet Parks extended it south of city limits to 14th Avenue NW.",
+     "cushman"
+    ],
+    [
+     "More city parks",
+     "The city’s parks list also includes Ancich Waterfront Park, Eddon Boat Park, Donkey Creek Park, Grandview Forest Park, the Maritime Pier, the Old Ferry Landing and the Gig Harbor Sports Complex.",
+     "ghparks"
+    ],
+    [
+     "Kopachuck State Park",
+     "A 109-acre park on Henderson Bay about 6 miles west of Gig Harbor, with over a mile of saltwater shoreline. Cutts Island State Park lies about half a mile offshore and is reached by boat.",
+     "kopachuckwiki"
+    ],
+    [
+     "Kopachuck today",
+     "The park is day-use only: the campground has been closed since 2011 because of laminated root rot. The beach faces Henderson Bay and is used for swimming, kayaking, paddleboarding and snorkeling.",
+     "kopachuck"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Peninsula School District serves Gig Harbor and the surrounding peninsula, including the Key Peninsula. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Peninsula School District",
+     "The district has 17 schools: 3 high schools, 4 middle schools and 10 elementary schools. Its Educational Service Center is at 14015 62nd Avenue NW, Gig Harbor.",
+     "psd"
+    ],
+    [
+     "High schools",
+     "The district’s high schools are Gig Harbor High School, Peninsula High School and Henderson Bay Alternative High School.",
+     "wiki"
+    ],
+    [
+     "Finding an assigned school",
+     "The district publishes boundary maps for each elementary school, a chart of which elementary schools feed each middle school, and a high school boundary map. For a specific address, the Educational Service Center can be reached at (253) 530-1000.",
+     "psd"
+    ],
+    [
+     "College",
+     "Tacoma Community College has a satellite campus in Gig Harbor.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "The hospital, the library and the Uptown shopping district are all within the city, with Tacoma across the bridge for more.",
+   "dark": false,
+   "items": [
+    [
+     "St. Anthony Hospital",
+     "At 11567 Canterwood Boulevard NW, part of Virginia Mason Franciscan Health. It has 24-hour emergency services, surgery, imaging, cancer care at the Jane Thompson Russell Cancer Care Center, orthopedics and rehabilitation.",
+     "vmfh"
+    ],
+    [
+     "Hospital history",
+     "St. Anthony Hospital opened in March 2009 and is operated by CommonSpirit Health.",
+     "stanthony"
+    ],
+    [
+     "Gig Harbor library",
+     "The Pierce County Library branch at 4424 Point Fosdick Drive is open seven days a week. The Key Center branch serves the Key Peninsula.",
+     "pcls"
+    ],
+    [
+     "Uptown",
+     "Pierce Transit describes Uptown as Gig Harbor’s shopping district.",
+     "ptconnector"
+    ],
+    [
+     "Harbor History Museum",
+     "On Harborview Drive downtown since 2010, with the 1893 Midway one-room schoolhouse and the wooden fishing boat Shenandoah, which worked from 1925.",
+     "museum"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "The City of Gig Harbor covers 5.90 square miles of land, but the Gig Harbor ZIP codes reach well beyond city limits into unincorporated Pierce County on the peninsula. Census figures below are for the city only.",
+   "dark": false,
+   "items": [
+    [
+     "City and peninsula",
+     "The city sits on the Gig Harbor Peninsula, a sub-peninsula of the Kitsap Peninsula, and is served by ZIP codes 98329, 98332 and 98335.",
+     "wiki"
+    ],
+    [
+     "Ownership",
+     "62.2% of housing units in the city were owner-occupied in 2020–2024.",
+     "census"
+    ],
+    [
+     "Values and rents",
+     "The median value of owner-occupied homes in the city was $767,100 and the median gross rent was $2,301 (2020–2024).",
+     "census"
+    ],
+    [
+     "Historic downtown",
+     "The town was platted in 1888. Fishing, boat building and logging drove its early economy, and the Skansie brothers built the area’s first gasoline-powered fishing boat in 1905.",
+     "wiki"
+    ],
+    [
+     "Working waterfront",
+     "The city’s historic register includes the Eddon Boat Building, a family-run waterfront boatyard, and the Skansie Brothers Park site.",
+     "historic"
+    ],
+    [
+     "The name",
+     "In 1840 Captain Charles Wilkes sheltered his gig, a small boat, in the harbor during a storm, and the bay was named for it after his 1841 map.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Gig Harbor is a short hop from Tacoma by bridge, with islands, peninsulas and towns around it in every direction.",
+   "dark": true,
+   "items": [
+    [
+     "Tacoma",
+     "Across the Narrows, Tacoma is the Pierce County seat and Washington’s third-most populous city (219,346 in 2020).",
+     "tacoma"
+    ],
+    [
+     "Fox Island",
+     "About 5 miles from Gig Harbor, Fox Island (3,921 people in 2020) connects to the mainland at Artondale by the Fox Island Bridge over Hale Passage, opened in 1954.",
+     "fox"
+    ],
+    [
+     "Purdy",
+     "North of Gig Harbor at the junction of SR-16 and SR-302, on Burley Lagoon and Henderson Bay. A sandspit separates the two, and the Purdy Bridge crosses it. Population 1,668 in 2020.",
+     "purdy"
+    ],
+    [
+     "Key Peninsula",
+     "Between Case Inlet and Carr Inlet, with communities including Key Center, Home, Lakebay, Longbranch and Vaughn, and no incorporated cities. Penrose Point State Park covers 237 acres.",
+     "keypen"
+    ],
+    [
+     "Port Orchard",
+     "Near the north end of SR-16, Port Orchard is the Kitsap County seat (15,587 in 2020). Kitsap Transit foot ferries cross Sinclair Inlet to Bremerton in about 10 minutes.",
+     "portorchard"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "Is there a toll to get to Gig Harbor?",
+   "No toll is charged heading to Gig Harbor. The Tacoma Narrows Bridge toll applies only to trips headed to Tacoma: $4.50 with a Good To Go! pass, $5.50 at the toll booth and $6.50 by mail for a two-axle vehicle.",
+   "wsdot"
+  ],
+  [
+   "What school district serves Gig Harbor?",
+   "Peninsula School District, with 3 high schools, 4 middle schools and 10 elementary schools. It publishes boundary maps; confirm the assigned school for any address with the district.",
+   "psd"
+  ],
+  [
+   "How many people live in Gig Harbor?",
+   "The city had 12,029 people at the 2020 census, and the Census Bureau estimated 12,630 for July 1, 2025.",
+   "census"
+  ],
+  [
+   "What county is Gig Harbor in?",
+   "Pierce County. The city sits on the Gig Harbor Peninsula, a sub-peninsula of the Kitsap Peninsula.",
+   "wiki"
+  ],
+  [
+   "How do you get from Tacoma to Gig Harbor?",
+   "By State Route 16, which runs about 6 miles from Interstate 5 across the Tacoma Narrows Bridge to Gig Harbor.",
+   "wiki"
+  ],
+  [
+   "Is there a bus from Gig Harbor to Tacoma?",
+   "Pierce Transit Route 100 runs between the Purdy Park & Ride and the Tacoma Community College transit center, with a stop at the Kimball Drive Park & Ride, seven days a week.",
+   "pt100"
+  ],
+  [
+   "What is the median home value in Gig Harbor?",
+   "For owner-occupied homes in the city, the Census median value was $767,100 for 2020–2024.",
+   "census"
+  ],
+  [
+   "What ZIP codes are in Gig Harbor?",
+   "98329, 98332 and 98335.",
+   "wiki"
+  ],
+  [
+   "Is there a hospital in Gig Harbor?",
+   "Yes. St. Anthony Hospital at 11567 Canterwood Boulevard NW has emergency services 24 hours a day, seven days a week.",
+   "vmfh"
+  ],
+  [
+   "How did Gig Harbor get its name?",
+   "Captain Charles Wilkes sheltered his gig, a small boat, in the harbor during an 1840 storm, and the bay was named for it after his 1841 map.",
+   "wiki"
+  ],
+  [
+   "Can you camp at Kopachuck State Park?",
+   "No. The park is day-use only; its campground has been closed since 2011 because of laminated root rot.",
+   "kopachuck"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; tolls, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

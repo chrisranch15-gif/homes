@@ -1,0 +1,462 @@
+{
+ "slug": "renton",
+ "name": "Renton",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-23",
+ "review": "https://claude.ai/artifact/W6hPkXhihUW2sBmmxTzMHC",
+ "headline": "Renton: a lakeside city at the south end of Lake Washington.",
+ "lede": "Renton sits on the southeast shore of Lake Washington at the mouth of the Cedar River, where I-5, I-405 and SR 167 meet. This guide covers getting around, parks and trails, schools, everyday errands, neighborhoods and housing figures, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Renton, Washington",
+   "https://en.wikipedia.org/wiki/Renton,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Renton city, Washington",
+   "https://www.census.gov/quickfacts/fact/table/rentoncitywashington/PST045224"
+  ],
+  "coulon": [
+   "Wikipedia · Gene Coulon Memorial Beach Park",
+   "https://en.wikipedia.org/wiki/Gene_Coulon_Memorial_Beach_Park"
+  ],
+  "crt": [
+   "Wikipedia · Cedar River Trail",
+   "https://en.wikipedia.org/wiki/Cedar_River_Trail"
+  ],
+  "boeing": [
+   "Wikipedia · Boeing Renton Factory",
+   "https://en.wikipedia.org/wiki/Boeing_Renton_Factory"
+  ],
+  "airport": [
+   "Wikipedia · Renton Municipal Airport",
+   "https://en.wikipedia.org/wiki/Renton_Municipal_Airport"
+  ],
+  "stride": [
+   "Sound Transit · Stride S1 Line",
+   "https://www.soundtransit.org/system-expansion/stride-s1-line"
+  ],
+  "rtc": [
+   "Sound Transit · Sound Transit breaks ground on Renton Transit Center",
+   "https://www.soundtransit.org/get-to-know-us/news-events/news-releases/sound-transit-breaks-ground-renton-transit-center"
+  ],
+  "rapidf": [
+   "King County Metro · King County celebrates launch of new RapidRide F Line",
+   "https://kingcounty.gov/depts/transportation/news-archive/archive/2014/20140606-rapidride-f-line.aspx"
+  ],
+  "tukwila": [
+   "Wikipedia · Tukwila station",
+   "https://en.wikipedia.org/wiki/Tukwila_station"
+  ],
+  "wsdot405": [
+   "WSDOT · I-405/Renton to Bellevue Widening and Express Toll Lanes Project",
+   "https://wsdot.wa.gov/construction-planning/search-projects/i-405renton-bellevue-widening-and-express-toll-lanes-project"
+  ],
+  "parks": [
+   "City of Renton · Parks and Trails",
+   "https://www.rentonwa.gov/Government/Departments-and-Offices/Public-Works/Parks-Trails"
+  ],
+  "pros": [
+   "City of Renton · 2026 Parks, Recreation, and Open Spaces (PROS) Plan adopted",
+   "https://www.rentonwa.gov/Government/Newsroom/City-news/2026-PROS-Plan-adopted"
+  ],
+  "market": [
+   "City of Renton · Renton Farmers Market",
+   "https://www.rentonwa.gov/Government/Departments-and-Offices/Parks-and-Recreation/Events/Recreation-Events-Calendar/Renton-Farmers-Market"
+  ],
+  "rsdmap": [
+   "Renton School District · School Boundary Map",
+   "https://www.rentonschools.us/learning-and-teaching/registration/school-boundary-map"
+  ],
+  "rsdwiki": [
+   "Wikipedia · Renton School District",
+   "https://en.wikipedia.org/wiki/Renton_School_District"
+  ],
+  "library": [
+   "Wikipedia · Renton Public Library",
+   "https://en.wikipedia.org/wiki/Renton_Public_Library"
+  ],
+  "vmc": [
+   "Wikipedia · Valley Medical Center (Washington)",
+   "https://en.wikipedia.org/wiki/Valley_Medical_Center_(Washington)"
+  ],
+  "landing": [
+   "Magnusson Klemencic Associates · The Landing",
+   "https://www.mka.com/projects/the-landing/"
+  ],
+  "sites": [
+   "City of Renton · Site Selection",
+   "https://www.rentonwa.gov/Government/Departments-and-Offices/Community-and-Economic-Development/Economic-Development/Site-Selection"
+  ],
+  "history": [
+   "City of Renton · Renton History Museum: 2000 to present",
+   "https://rentonwa.gov/city_hall/parks_and_recreation/museum/city_history/2000_to_present"
+  ],
+  "kennydale": [
+   "Wikipedia · Kennydale, Washington",
+   "https://en.wikipedia.org/wiki/Kennydale,_Washington"
+  ],
+  "fairwood": [
+   "Wikipedia · Fairwood, King County, Washington",
+   "https://en.wikipedia.org/wiki/Fairwood,_King_County,_Washington"
+  ],
+  "erh": [
+   "Wikipedia · East Renton Highlands, Washington",
+   "https://en.wikipedia.org/wiki/East_Renton_Highlands"
+  ]
+ },
+ "stats": [
+  [
+   "106,785",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "58",
+   "city park sites, totaling more than 1,300 acres",
+   "pros"
+  ],
+  [
+   "29.7 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ],
+  [
+   "$672,600",
+   "median value of owner-occupied homes, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "106,785 at the 2020 census; estimated 104,975 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Land area",
+   "23.47 square miles (2020)",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "September 6, 1901",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "Southeast shore of Lake Washington, at the mouth of the Cedar River",
+   "wiki"
+  ],
+  [
+   "Freeways",
+   "I-5, I-405 and SR 167 meet near Renton",
+   "wiki"
+  ],
+  [
+   "Main school district",
+   "Renton School District, with four high schools; parts of the city are served by the Issaquah, Tahoma and Kent districts",
+   "wiki"
+  ],
+  [
+   "Hospital",
+   "Valley Medical Center, part of UW Medicine since 2011",
+   "vmc"
+  ],
+  [
+   "Airport",
+   "Renton Municipal Airport (Clayton Scott Field), owned by the City of Renton",
+   "airport"
+  ],
+  [
+   "Big employer",
+   "The Boeing Renton Factory, where the 737 is built",
+   "boeing"
+  ]
+ ],
+ "notes": [
+  "Two City of Renton pages give different park totals: the Parks and Trails page lists 33 parks on 1,254 acres with 13 miles of trails, while the January 2026 PROS Plan announcement says the city manages 58 park sites totaling more than 1,300 acres. This guide uses the newer PROS figure.",
+  "Wikipedia gives two founding dates for Renton (1875 in the text, August 18, 1885 in the infobox), so this guide uses only the incorporation date, September 6, 1901."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Renton sits where three freeways meet, with bus rapid transit today and more on the way. Census figures put the mean travel time to work for Renton residents at 29.7 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "Freeways",
+     "I-5, I-405 and SR 167 meet near Renton, giving routes north to Seattle and Bellevue and south through the Kent valley.",
+     "wiki"
+    ],
+    [
+     "I-405 express toll lanes",
+     "WSDOT is widening I-405 between SR 167 in Renton and NE 6th Street in Bellevue, adding a lane each way to form dual express toll lanes. Opening to traffic is forecast for summer 2027, which will link into a 40-mile express toll lane system.",
+     "wsdot405"
+    ],
+    [
+     "RapidRide F Line",
+     "King County Metro’s RapidRide F Line runs between Burien and the Renton Transit Center, serving The Landing, Westfield Southcenter, Tukwila Sounder Station and the Tukwila International Boulevard Link station. At launch it ran about every 10 minutes at weekday peaks.",
+     "rapidf"
+    ],
+    [
+     "Sounder and Amtrak at Tukwila",
+     "Tukwila station on Longacres Way is served by 13 daily Sounder S Line round trips to Seattle’s King Street Station and south to Tacoma or Lakewood, plus Amtrak Cascades trains. Its park-and-ride has 390 spaces.",
+     "tukwila"
+    ],
+    [
+     "Stride S1 Line (coming)",
+     "Sound Transit’s Stride S1 bus rapid transit will connect Bellevue and Burien along I-405 and SR 518, every 10 to 15 minutes, 17+ hours a day, seven days a week. Service is anticipated in 2028.",
+     "stride"
+    ],
+    [
+     "New Renton Transit Center",
+     "Ground broke February 4, 2026, on a new Renton Transit Center in the Rainier/Grady corridor, with 8 bus bays, covered waiting areas and a bus-only lane on northbound SR 167. It is planned to open in 2028 for Stride S1, Metro and the future RapidRide I Line.",
+     "rtc"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Lake Washington shoreline and the Cedar River shape Renton’s outdoor spaces. The city manages 58 park sites totaling more than 1,300 acres, according to its 2026 PROS Plan.",
+   "dark": false,
+   "items": [
+    [
+     "Gene Coulon Memorial Beach Park",
+     "A 57-acre city park on Lake Washington with 5,400 feet of shoreline, a lifeguarded swimming beach, an eight-lane boat launch, a 900-foot pier, about two miles of paths, covered pavilions and a fishing dock. Dogs are not allowed.",
+     "coulon"
+    ],
+    [
+     "Cedar River Trail",
+     "A 17.3-mile, partially paved trail that runs from Renton to Maple Valley and on to Landsburg near the Cedar River Watershed, with crushed gravel beyond Maple Valley. It connects to the Cedar to Green River Trail at mile 12.3.",
+     "crt"
+    ],
+    [
+     "Kennydale Beach Park",
+     "Listed in the city’s park directory. Dogs are not allowed.",
+     "parks"
+    ],
+    [
+     "Cedar River Park and Liberty Park",
+     "Cedar River Park is at 1717 Maple Valley Highway; Liberty Park, at 1101 Bronson Way N, has a skate park.",
+     "parks"
+    ],
+    [
+     "Springbrook Trail",
+     "One of the city’s trails; the city notes its boardwalk is currently closed for damage repair.",
+     "parks"
+    ],
+    [
+     "Renton Farmers Market",
+     "Tuesdays from 3 to 7 p.m. in season (June 3 to September 30 in 2025). While Piazza Park is under construction, it has moved to Williams Avenue South between South 2nd and South 3rd Streets.",
+     "market"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Renton is in the Renton School District, and parts of the city are served by the Issaquah, Tahoma and Kent school districts. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Renton School District",
+     "The district runs 16 elementary schools, 4 middle schools (Dimmitt, McKnight, Nelsen, Risdon) and 4 high schools (Albert Talley, Hazen, Lindbergh, Renton). It also serves Bryn Mawr-Skyway and parts of Bellevue, East Renton Highlands, Fairwood, Kent, Newcastle, SeaTac and Tukwila.",
+     "rsdwiki"
+    ],
+    [
+     "Other districts",
+     "Parts of the city are served by the Issaquah, Tahoma and Kent school districts.",
+     "wiki"
+    ],
+    [
+     "Finding an assigned school",
+     "The district offers a School Boundary Map in Google Maps: pick elementary, middle or high school, then search an address. The district notes it is not an official locator; to confirm placement, contact Student Information Services at (425) 204-2333.",
+     "rsdmap"
+    ],
+    [
+     "Renton Technical College",
+     "Opened in 1942 as a war production school; it now offers associate degrees and certificates.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Shopping, health care and the library are spread between downtown, the lakefront and the valley.",
+   "dark": false,
+   "items": [
+    [
+     "The Landing",
+     "Over 337,000 square feet of retail and restaurants in 24 buildings on the site of the former Boeing 757 plant, completed in 2008. RapidRide F serves it.",
+     "landing"
+    ],
+    [
+     "Valley Medical Center",
+     "Opened as Renton Hospital on April 15, 1945, at 400 South 43rd Street. It has 341 beds at its main campus, is a Level III trauma center and has been part of UW Medicine since 2011.",
+     "vmc"
+    ],
+    [
+     "Renton Library",
+     "The downtown library, built over the Cedar River, opened April 17, 1966, joined the King County Library System in 2010 and reopened in August 2015 after a $10.2 million renovation.",
+     "library"
+    ],
+    [
+     "South Renton",
+     "The city lists IKEA, Walmart, Fred Meyer and the Valley Medical Center campus among the South District’s neighbors, with access to I-405, SR 167 and Sea-Tac.",
+     "sites"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "The City of Renton groups its neighborhoods into north, central and south districts, and several unincorporated communities next door share Renton addresses.",
+   "dark": false,
+   "items": [
+    [
+     "North District",
+     "Kennydale, Highlands and East Plateau. The Seahawks facilities and Renton Technical College are in this district.",
+     "sites"
+    ],
+    [
+     "Kennydale",
+     "On the southeast shore of Lake Washington, split by I-405 into Lower Kennydale by the lake and Upper Kennydale east of the freeway. It was laid out in 1898 and named for the developer’s wife, whose maiden name was Kenny.",
+     "kennydale"
+    ],
+    [
+     "Central District",
+     "City Center, Cedar River and West Hill, home to Boeing, PACCAR, The Landing and the Hyatt Regency Lake Washington.",
+     "sites"
+    ],
+    [
+     "South District and Benson Hill",
+     "Talbot, Valley and Benson. Renton annexed the Benson Hill communities in 2008.",
+     "history"
+    ],
+    [
+     "Fairwood",
+     "An unincorporated census-designated place bordered by Renton on the north and west, sharing Renton’s 98058 ZIP code. It counted 19,396 residents in 2020 and is served by the Renton and Kent school districts.",
+     "fairwood"
+    ],
+    [
+     "East Renton Highlands",
+     "A census-designated place bordering Renton to the east, with 11,937 residents in 2020. Most of it is in the Issaquah School District, with smaller parts in the Renton and Tahoma districts.",
+     "erh"
+    ],
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 54.4%, median owner-occupied home value $672,600 and median gross rent $1,998 (Census, 2020–2024).",
+     "census"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Renton borders Newcastle to the north, Kent to the south and Tukwila and unincorporated West Hill to the west.",
+   "dark": true,
+   "items": [
+    [
+     "Seattle",
+     "Renton Municipal Airport is about twelve miles southeast of downtown Seattle.",
+     "airport"
+    ],
+    [
+     "Bellevue",
+     "I-405 runs north from Renton to Bellevue, and the coming Stride S1 Line will link Renton to the Bellevue Transit Center.",
+     "stride"
+    ],
+    [
+     "Southcenter and Tukwila",
+     "RapidRide F connects Renton with Westfield Southcenter, Tukwila Sounder Station and Link light rail at Tukwila International Boulevard.",
+     "rapidf"
+    ],
+    [
+     "Maple Valley",
+     "The Cedar River Trail runs from Renton to Maple Valley, largely alongside SR 169.",
+     "crt"
+    ],
+    [
+     "Boeing Renton Factory",
+     "Built in 1941 on land reclaimed when Lake Washington was lowered in 1916, it built 1,119 B-29s in wartime and later the 707 and 737. New jets depart from the next-door Renton Municipal Airport.",
+     "boeing"
+    ],
+    [
+     "Seahawks headquarters",
+     "The Virginia Mason Athletic Center at Port Quendall opened in August 2008.",
+     "wiki"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Renton in?",
+   "Renton is in King County, on the southeast shore of Lake Washington.",
+   "wiki"
+  ],
+  [
+   "What is the population of Renton, WA?",
+   "The 2020 census counted 106,785 people; the Census Bureau estimated 104,975 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "What school district is Renton in?",
+   "Most of Renton is in the Renton School District. Parts of the city are served by the Issaquah, Tahoma and Kent school districts, so confirm with the district for any specific address.",
+   "wiki"
+  ],
+  [
+   "How do I find which school serves an address in Renton?",
+   "The Renton School District’s School Boundary Map lets you search an address by school level. The district says it is not an official locator; Student Information Services at (425) 204-2333 can confirm placement.",
+   "rsdmap"
+  ],
+  [
+   "Is there light rail in Renton?",
+   "Not in Renton itself. RapidRide F connects the Renton Transit Center to the Link station at Tukwila International Boulevard.",
+   "rapidf"
+  ],
+  [
+   "Where is the closest Sounder train to Renton?",
+   "Tukwila station on Longacres Way, served by 13 daily Sounder S Line round trips and Amtrak Cascades. RapidRide F stops there.",
+   "tukwila"
+  ],
+  [
+   "When does Stride S1 open?",
+   "Sound Transit anticipates Stride S1 service between Bellevue and Burien, via Renton, in 2028, every 10 to 15 minutes.",
+   "stride"
+  ],
+  [
+   "How long is the average commute from Renton?",
+   "The Census Bureau’s mean travel time to work for Renton residents is 29.7 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "What is the median home value in Renton?",
+   "The Census Bureau reports a median owner-occupied home value of $672,600 and median gross rent of $1,998 for 2020–2024.",
+   "census"
+  ],
+  [
+   "Is Fairwood part of Renton?",
+   "No. Fairwood is an unincorporated census-designated place bordering Renton, though it shares Renton’s 98058 ZIP code.",
+   "fairwood"
+  ],
+  [
+   "What planes are built in Renton?",
+   "The Boeing Renton Factory builds the 737. It earlier built the B-29 and the 707.",
+   "boeing"
+  ],
+  [
+   "How big is Gene Coulon Park?",
+   "Gene Coulon Memorial Beach Park covers 57 acres with 5,400 feet of Lake Washington shoreline.",
+   "coulon"
+  ]
+ ],
+ "listings": [
+  {
+   "eyebrow": "For sale now",
+   "title": "11532 SE 173rd St #53, Renton",
+   "desc": "Listed by Chris Ranch. See photos, details and price.",
+   "url": "https://homes.ranchpnw.com/11532"
+  }
+ ],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

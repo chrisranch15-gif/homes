@@ -21,6 +21,13 @@ Then: Fife, Auburn, Kent, Sumner, Seattle.
 Renton, Burien, Port Orchard and Edgewood have current Ranch listings (Port Orchard is vacant land): link each guide to its listing page.
 ~~Tehaleh~~ is live at gotehaleh.com.
 
+## How guides are built (from Nov 23)
+Data: `source/guides/<town>.json` (schema in `source/guides/SCHEMA.md`). Builder: `python3 source/guides/build_guides.py`
+writes only guides with `"status": "published"` to `guides/<town>.html` + `guides/index.html`;
+`--drafts <dir>` builds drafts (noindex, images inlined) for private review as claude.ai artifacts (link in each JSON's `review`).
+Approving a guide: add Chris's answers in his words (a `"kind": "picks"` chapter), set status to published, rebuild,
+then add it to the home page guides section (`source/public-site/collection.template.html` → `index.html`), sitemap.xml and llms.txt.
+
 ## Draft-first rule
 A draft is built from sourced facts only (every number and claim links to its source). Chris's first-hand parts
 (picks, a day in the life, who it's not for) are added from his interview answers; until then the draft says
@@ -43,3 +50,4 @@ Keep it to ~10 minutes of Chris's time. Quality over count: 2–3 strong guides 
 - 2026-11-21 — Fox Island interview sent: 5 questions (perfect day, 3 spots, kids/dogs, what surprises residents incl. bridge/wells/storms, who it's not for) + 2 facts to confirm (2020 pop. 3,921 and bridge opened Aug 28, 1954 per Wikipedia; Pierce County replacement-bridge EIS with east/west alternatives per piercecountywa.gov/9131). Also asked how the guide relates to myfoxisland.com. Bonney Lake still blocked: repo `chrisranch15-gif/live` not found and live.ranchpnw.com unverified; reminded Chris once (don't repeat). Awaiting answers.
 - 2026-11-22 — Fox Island answers still outstanding; re-sent the same 5 questions + 2 facts + myfoxisland.com question (no new guide started). Couldn't check `chrisranch15-gif/live` (run only has homes repo access); Bonney Lake still blocked.
 - 2026-11-23 — Fox Island answers still outstanding (3rd ask); re-sent the same 5 questions + 2 facts + myfoxisland.com question. No new guide started. Bonney Lake still blocked on live repo/DNS.
+- 2026-11-23 (night 1, overnight build) — Guide builder created (`source/guides/`). Drafted 5 private review drafts (noindex, not in index/sitemap/llms.txt): **Bonney Lake** (ported unchanged from towns.js; target homes.ranchpnw.com/guides/bonney-lake) [review](https://claude.ai/artifact/2ghqvwiU7gqf6aaihJHyvq), **Gig Harbor** [review](https://claude.ai/artifact/MLC1bspEE5Ao4GtYAVPjeu), **Renton** (links 11532) [review](https://claude.ai/artifact/W6hPkXhihUW2sBmmxTzMHC), **Lake Tapps** [review](https://claude.ai/artifact/4tPCHuML6mMXJCoRoasZRG), **Tacoma** [review](https://claude.ai/artifact/4e9GNppuUzhUzS1x3Qpa5f). New towns are sourced facts only; "Chris's local picks are coming soon." Fox Island skipped on purpose (still waiting on how it relates to myfoxisland.com), so Lake Tapps and Tacoma were pulled forward from night 2. Emailed Chris one "Guide drafts" email with links, 3 facts and 3 picks questions per town. **Waiting on Chris:** "approve <town>" + picks answers for each; Fox Island/myfoxisland.com decision. Published: none yet. Next night: Enumclaw, Burien, Port Orchard, Edgewood (Fox Island when decided).

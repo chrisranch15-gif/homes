@@ -1,0 +1,402 @@
+{
+ "slug": "lake-tapps",
+ "name": "Lake Tapps",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-23",
+ "review": "https://claude.ai/artifact/4tPCHuML6mMXJCoRoasZRG",
+ "headline": "A 1911 reservoir ringed by homes, with a community named after it.",
+ "lede": "Lake Tapps is both a reservoir and an unincorporated census-designated place in Pierce County, between Auburn to the north and Bonney Lake and Sumner to the south. This guide covers the lake and its seasons, the two public launches, schools, getting around, housing figures and what lies nearby.",
+ "sources": {
+  "wiki_lake": [
+   "Wikipedia · Lake Tapps",
+   "https://en.wikipedia.org/wiki/Lake_Tapps"
+  ],
+  "wiki_cdp": [
+   "Wikipedia · Lake Tapps, Washington",
+   "https://en.wikipedia.org/wiki/Lake_Tapps,_Washington"
+  ],
+  "cwa_levels": [
+   "Cascade Water Alliance · Lake Levels",
+   "https://cascadewater.org/lake-tapps/lake-levels/"
+  ],
+  "cwa_history": [
+   "Cascade Water Alliance · Cascade’s History",
+   "https://cascadewater.org/?p=41"
+  ],
+  "pc_park": [
+   "Pierce County · North Lake Tapps Park",
+   "https://www.piercecountywa.gov/1326/North-Lake-Tapps-Park"
+  ],
+  "pc_alert": [
+   "Pierce County · North Lake Tapps Park Boat Launch closing starting Aug. 14 due to low lake levels",
+   "https://www.piercecountywa.gov/CivicSend/ViewMessage/message/296827"
+  ],
+  "pc_profile": [
+   "Pierce County · Community Profile, Lake Tapps CDP (Esri, April 2025)",
+   "https://www.piercecountywa.gov/DocumentCenter/View/145899/Community-Profile_Lake-Tapps-CDP"
+  ],
+  "bl_boating": [
+   "City of Bonney Lake · Boating",
+   "https://bonneylake.hosted.civiclive.com/residents/community/boating"
+  ],
+  "bl_ayp": [
+   "City of Bonney Lake · Allan Yorke Park operational changes",
+   "https://bonneylake.hosted.civiclive.com/news/what_s_new/allan_yorke_park_operational_changes"
+  ],
+  "dsd": [
+   "Dieringer School District · About Our District",
+   "https://www.dieringer.wednet.edu/our-district/about-our-district"
+  ],
+  "dsd_faq": [
+   "Dieringer School District · Enrollment FAQs",
+   "https://www.dieringer.wednet.edu/our-district/enrollment/enrollment-faqs"
+  ],
+  "sbl_wiki": [
+   "Wikipedia · Sumner–Bonney Lake School District",
+   "https://en.wikipedia.org/wiki/Sumner_School_District"
+  ],
+  "wsdot_410": [
+   "WSDOT · Corridor Sketch, SR 410: SR 167 Jct (Sumner) to 284th Ave SE Jct (Enumclaw)",
+   "https://appstest.wsdot.wa.gov/sites/default/files/2021-10/CSS373-SR410-SR167JctSumner-284thAveSEJctEnumclaw.pdf"
+  ],
+  "wiki_sumner_stn": [
+   "Wikipedia · Sumner station",
+   "https://en.wikipedia.org/wiki/Sumner_station"
+  ],
+  "pcls": [
+   "Pierce County Library System · Locations and hours",
+   "https://mypcls.org/?p=249"
+  ],
+  "clui": [
+   "Center for Land Use Interpretation · Lake Tapps, Washington",
+   "https://clui.org/ludb/site/lake-tapps"
+  ],
+  "wiki_auburn": [
+   "Wikipedia · Auburn, Washington",
+   "https://en.wikipedia.org/wiki/Auburn,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "12,962",
+   "people in the Lake Tapps CDP at the 2020 census",
+   "wiki_cdp"
+  ],
+  [
+   "4.5 sq mi",
+   "reservoir surface area",
+   "wiki_lake"
+  ],
+  [
+   "45 mi",
+   "of shoreline, about, with many inlets, peninsulas and islands",
+   "wiki_lake"
+  ],
+  [
+   "1911",
+   "year Puget Sound Power & Light created the reservoir",
+   "wiki_lake"
+  ]
+ ],
+ "glance": [
+  [
+   "What it is",
+   "An unincorporated community and census-designated place in Pierce County, first counted as a CDP in the 2010 census",
+   "wiki_cdp"
+  ],
+  [
+   "Area",
+   "13.0 sq mi total, 12.255 sq mi of it land",
+   "wiki_cdp"
+  ],
+  [
+   "Reservoir owner",
+   "Cascade Water Alliance, since 2009",
+   "cwa_levels"
+  ],
+  [
+   "Water source",
+   "White River, diverted near Buckley through a flume into the east side of the lake",
+   "wiki_lake"
+  ],
+  [
+   "Summer recreation levels",
+   "541.5 to 543.0 feet, April 15 to September 30",
+   "cwa_levels"
+  ],
+  [
+   "Fall and winter level",
+   "About 538 to 539 feet; the 2026 drawdown began November 1",
+   "cwa_levels"
+  ],
+  [
+   "Public launches",
+   "North Lake Tapps Park (Pierce County) and Allan Yorke Park (City of Bonney Lake, residents only in 2026)",
+   "bl_boating"
+  ],
+  [
+   "Housing units",
+   "4,723 in 2020, 85.0% owner-occupied",
+   "pc_profile"
+  ],
+  [
+   "Preschool to 8th grade",
+   "Dieringer School District surrounds the northern two-thirds of the lake",
+   "dsd"
+  ]
+ ],
+ "notes": [
+  "Pierce County’s park page gives North Lake Tapps Park’s address as 2022 198th Ave. E.; the City of Bonney Lake boating page lists 1715 198th Ave E. Check the county page before you go.",
+  "Home values in the Pierce County community profile are Esri estimates, not Census counts."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Lake Tapps sits off the main highways, with SR 410 and SR 167 meeting in nearby Sumner and commuter rail running from Sumner’s station.",
+   "dark": false,
+   "items": [
+    [
+     "SR 410",
+     "WSDOT describes SR 410 from the SR 167 junction in Sumner to Enumclaw as a freight and commuter route that also serves as a main street for Bonney Lake, Buckley and Enumclaw, and as a recreation corridor toward Mount Rainier. The corridor is about 17 miles long.",
+     "wsdot_410"
+    ],
+    [
+     "Traffic on SR 410",
+     "In 2016, average daily traffic between Sumner and Bonney Lake ranged from 21,000 vehicles after the 214th Ave E junction to 75,000 after the SR 167 ramp.",
+     "wsdot_410"
+    ],
+    [
+     "Sounder from Sumner",
+     "Sumner station, at 810 Maple Street, is served by Sound Transit’s Sounder S Line north to King Street Station in Seattle and south to Tacoma Dome and Lakewood on weekdays.",
+     "wiki_sumner_stn"
+    ],
+    [
+     "Express buses",
+     "Sound Transit Express Route 578 stops at Sumner station on its way to Puyallup, Auburn, Federal Way and downtown Seattle, and peak-only Route 596 links the station with the Bonney Lake park and ride.",
+     "wiki_sumner_stn"
+    ]
+   ]
+  },
+  {
+   "title": "The lake and outdoors",
+   "intro": "The reservoir is a water-supply asset first and a summer lake second: Cascade Water Alliance sets the levels, and two parks hold the only public launches.",
+   "dark": true,
+   "items": [
+    [
+     "How the lake works",
+     "A diversion dam on the White River near Buckley sends water through a flume into the east side of the lake, and a series of dikes holds the reservoir in place.",
+     "wiki_lake"
+    ],
+    [
+     "The yearly cycle",
+     "Cascade keeps recreation levels from April 15 to September 30, then draws the lake down to about 538 to 539 feet for fall and winter dike maintenance. The 2027 spring refill is expected to begin in mid-February.",
+     "cwa_levels"
+    ],
+    [
+     "2026 drought season",
+     "With low White River flows, diversions stopped in summer 2026; the level fell to 541.28 feet by July 31 and 540.55 feet in late September, and both public boat launches closed early.",
+     "cwa_levels"
+    ],
+    [
+     "North Lake Tapps Park",
+     "Pierce County’s 135-acre park has about 10,000 feet of waterfront, a sandy swimming area, an extended boat ramp, picnic areas, trails and a peninsula path to a Mount Rainier viewpoint. The ramp closes November through March, and parking fills on hot summer weekends.",
+     "pc_park"
+    ],
+    [
+     "Allan Yorke Park",
+     "The City of Bonney Lake runs the launch at 7203 West Tapps Hwy on the south end of the lake. For 2026 it was open to residents inside city limits only, with an annual trailer parking pass of $43.80 including tax and room for 26 vehicles in the Ballfield 4 lot.",
+     "bl_boating"
+    ],
+    [
+     "Beach at Allan Yorke",
+     "The city calls Allan Yorke’s beach area the only free public access on Lake Tapps’ shores, with beach access capped at 250 guests at a time.",
+     "bl_ayp"
+    ],
+    [
+     "Boater rules",
+     "Washington requires a Boater Safety Education Card for operators of motorized boats of 15 horsepower or more. Bonney Lake Police’s Marine Service Unit handles watercraft safety on the lake.",
+     "bl_boating"
+    ],
+    [
+     "Fish",
+     "Carp, smallmouth bass, perch and tiger musky live in the lake.",
+     "wiki_lake"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Two public school districts serve the Lake Tapps area. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Dieringer School District",
+     "Established in 1890, the district covers about 5.5 square miles of unincorporated Pierce County around the northern two-thirds of Lake Tapps, bounded by Auburn to the north and Bonney Lake and Sumner to the south.",
+     "dsd"
+    ],
+    [
+     "Dieringer schools",
+     "Lake Tapps Elementary, Dieringer Heights Elementary and North Tapps Middle School provide preschool through 8th grade.",
+     "dsd"
+    ],
+    [
+     "Checking an address",
+     "Dieringer points families who aren’t sure whether they live in the district to its boundary map.",
+     "dsd_faq"
+    ],
+    [
+     "Sumner–Bonney Lake School District",
+     "This district serves Bonney Lake, Edgewood, Sumner and unincorporated east Pierce County, including portions of Lake Tapps. Its high schools are Bonney Lake High School and Sumner High School.",
+     "sbl_wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Lake Tapps is mostly residential, and day-to-day services sit in the neighboring cities.",
+   "dark": false,
+   "items": [
+    [
+     "Bonney Lake Pierce County Library",
+     "The nearest branch listed by the county library system is at 18501 90th St. E. in Bonney Lake, open seven days a week.",
+     "pcls"
+    ],
+    [
+     "Bonney Lake’s main street",
+     "WSDOT notes that SR 410 serves as a main street for Bonney Lake, Buckley and Enumclaw.",
+     "wsdot_410"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Homes ring nearly the whole shoreline, and the community spans unincorporated Pierce County with some edges inside Bonney Lake and Auburn.",
+   "dark": false,
+   "items": [
+    [
+     "A ring of homes",
+     "More than 1,600 houses form a continuous ring around the shore.",
+     "clui"
+    ],
+    [
+     "Waterfront and access",
+     "The shoreline is nearly all developed, and private lake access is generally through neighborhood associations.",
+     "wiki_lake"
+    ],
+    [
+     "Docks and bulkheads",
+     "Shoreline owners need a Cascade Water Alliance license before adding or changing docks, boat lifts, ramps, boathouses or bulkheads, and new bulkheads should be designed for the 543-foot level.",
+     "cwa_levels"
+    ],
+    [
+     "Which jurisdiction",
+     "The lake area is primarily unincorporated Pierce County, with some surrounding areas in the city of Bonney Lake and Auburn at the northern edge.",
+     "wiki_lake"
+    ],
+    [
+     "Auburn’s side",
+     "Auburn crosses into Pierce County, and its Lakeland Hills area spans both King and Pierce counties.",
+     "wiki_auburn"
+    ],
+    [
+     "Census housing figures",
+     "The Lake Tapps CDP had 4,723 housing units in 2020, 85.0% owner-occupied and 11.1% renter-occupied, up from 3,645 units in 2000.",
+     "pc_profile"
+    ],
+    [
+     "Tapps Island",
+     "Tapps Island hosts a Fourth of July fireworks show; Pierce County keeps North Lake Tapps Park open until the show ends.",
+     "pc_park"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Lake Tapps sits between larger neighbors on each side.",
+   "dark": false,
+   "items": [
+    [
+     "Bonney Lake",
+     "The city to the south; SR 410 serves as its main street.",
+     "wsdot_410"
+    ],
+    [
+     "Sumner",
+     "Home to Sumner station and the SR 410 and SR 167 junction.",
+     "wiki_sumner_stn"
+    ],
+    [
+     "Auburn",
+     "The city on the lake’s northern edge.",
+     "dsd"
+    ],
+    [
+     "Mount Rainier",
+     "SR 410 continues east as a recreation corridor toward the Cascades and Mount Rainier.",
+     "wsdot_410"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "Who owns Lake Tapps?",
+   "Cascade Water Alliance has owned and operated the Lake Tapps Reservoir since 2009, when it took ownership from Puget Sound Energy.",
+   "bl_boating"
+  ],
+  [
+   "Is Lake Tapps a city?",
+   "No. Lake Tapps is an unincorporated community and census-designated place in Pierce County.",
+   "wiki_cdp"
+  ],
+  [
+   "How many people live in Lake Tapps?",
+   "The CDP had 12,962 residents at the 2020 census, up from 11,859 in 2010.",
+   "wiki_cdp"
+  ],
+  [
+   "When was Lake Tapps built?",
+   "Puget Sound Power & Light created the reservoir in 1911 for hydroelectric power, which ended in 2004.",
+   "wiki_lake"
+  ],
+  [
+   "Why does the lake drop in the fall?",
+   "Cascade lowers the reservoir to about 538 to 539 feet each fall and winter so dikes can be maintained and to reduce risk from wind, storms and waves.",
+   "cwa_levels"
+  ],
+  [
+   "When is the lake full?",
+   "Cascade maintains recreation levels of 541.5 to 543.0 feet from April 15 to September 30, though drought can lower the lake, as in 2026.",
+   "cwa_levels"
+  ],
+  [
+   "Can the public launch boats on Lake Tapps?",
+   "Pierce County’s North Lake Tapps Park has a public ramp, closed November through March. Bonney Lake’s Allan Yorke Park launch was limited to city residents with an annual pass in 2026.",
+   "bl_boating"
+  ],
+  [
+   "Is there public swimming?",
+   "North Lake Tapps Park has a sandy swimming area, and Allan Yorke Park has a beach area the City of Bonney Lake describes as the only free public access on the shore.",
+   "bl_ayp"
+  ],
+  [
+   "Can I build a dock on Lake Tapps?",
+   "Shoreline owners need a license from Cascade Water Alliance before adding or changing docks, boat lifts, ramps, boathouses or bulkheads, on top of any city, county, state or federal permits.",
+   "bl_boating"
+  ],
+  [
+   "Which school district serves Lake Tapps?",
+   "Dieringer School District (preschool through 8th grade) surrounds the northern two-thirds of the lake, and the Sumner–Bonney Lake School District covers portions of Lake Tapps. Confirm with the district for any address.",
+   "dsd"
+  ],
+  [
+   "Where does the lake’s water come from?",
+   "The White River, diverted near Buckley and only when river flows are above state minimums.",
+   "cwa_levels"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; lake levels, launch rules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

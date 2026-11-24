@@ -1,0 +1,552 @@
+{
+ "slug": "tacoma",
+ "name": "Tacoma",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-23",
+ "review": "https://claude.ai/artifact/4e9GNppuUzhUzS1x3Qpa5f",
+ "headline": "Pierce County’s waterfront city on Commencement Bay.",
+ "lede": "Tacoma is the county seat of Pierce County, about 30 miles south of Seattle on Commencement Bay. This guide covers getting around, parks, schools, everyday errands, neighborhoods and the towns close by, with every fact linked to its source.",
+ "sources": {
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Tacoma city, Washington",
+   "https://www.census.gov/quickfacts/fact/table/tacomacitywashington/PST045224"
+  ],
+  "wiki": [
+   "Wikipedia · Tacoma, Washington",
+   "https://en.wikipedia.org/wiki/Tacoma,_Washington"
+  ],
+  "st_tline": [
+   "Sound Transit · Hilltop Tacoma Link Extension opens to passengers",
+   "https://www.soundtransit.org/get-to-know-us/news-events/news-releases/hilltop-tacoma-link-extension-opens-passengers-tomorrow"
+  ],
+  "st_tdle": [
+   "Sound Transit · Tacoma Dome Link Extension",
+   "https://www.soundtransit.org/system-expansion/tacoma-dome-link-extension"
+  ],
+  "st_sline": [
+   "Sound Transit · S Line (Sounder) schedule",
+   "https://www.soundtransit.org/ride-with-us/routes-schedules/s-line"
+  ],
+  "st_590": [
+   "Sound Transit · Route 590 Tacoma–Seattle",
+   "https://www.soundtransit.org/ride-with-us/routes-schedules/590"
+  ],
+  "wsdot_tnb": [
+   "WSDOT · Tacoma Narrows Bridge tolling",
+   "https://wsdot.wa.gov/travel/roads-bridges/toll-roads-bridges-tunnels/tacoma-narrows-bridge-tolling"
+  ],
+  "wiki_tnb": [
+   "Wikipedia · Tacoma Narrows Bridge",
+   "https://en.wikipedia.org/wiki/Tacoma_Narrows_Bridge"
+  ],
+  "pt_stream": [
+   "Pierce Transit · Stream Community Line Tacoma–Spanaway",
+   "https://piercetransit.org/stream/"
+  ],
+  "mpt_pd": [
+   "Metro Parks Tacoma · Point Defiance Park",
+   "https://www.parkstacoma.gov/place/point-defiance-park/"
+  ],
+  "mpt_fivemile": [
+   "Metro Parks Tacoma · Five Mile Drive and trails",
+   "https://www.parkstacoma.gov/five-mile-drive-trails-point-defiance/"
+  ],
+  "mpt_rw": [
+   "Metro Parks Tacoma · Ruston Way",
+   "https://www.parkstacoma.gov/place/ruston-way/"
+  ],
+  "mpt_dune": [
+   "Metro Parks Tacoma · Dune Peninsula",
+   "https://www.parkstacoma.gov/place/dune-peninsula/"
+  ],
+  "mpt_about": [
+   "Metro Parks Tacoma · About",
+   "https://www.parkstacoma.gov/about/"
+  ],
+  "wiki_pd": [
+   "Wikipedia · Point Defiance Park",
+   "https://en.wikipedia.org/wiki/Point_Defiance_Park"
+  ],
+  "wiki_rustonway": [
+   "Wikipedia · Ruston Way, Tacoma, Washington",
+   "https://en.wikipedia.org/wiki/Ruston_Way,_Tacoma,_Washington"
+  ],
+  "tps_about": [
+   "Tacoma Public Schools · About",
+   "https://www.tacomaschools.org/about"
+  ],
+  "tps_lookup": [
+   "Tacoma Public Schools · School boundaries and address lookup",
+   "https://www.tacomaschools.org/schools-and-learning-sites/boundaries"
+  ],
+  "wiki_tps": [
+   "Wikipedia · Tacoma Public Schools",
+   "https://en.wikipedia.org/wiki/Tacoma_Public_Schools"
+  ],
+  "wiki_tg": [
+   "Wikipedia · MultiCare Tacoma General Hospital",
+   "https://en.wikipedia.org/wiki/Tacoma_General_Hospital"
+  ],
+  "aha_trauma": [
+   "American Hospital Association · Two Washington state hospitals tag-team trauma care",
+   "https://www.aha.org/role-hospitals-st-joseph-medical-center-multicare-tacoma-general-hospital-tag-team-trauma-care"
+  ],
+  "wiki_tpl": [
+   "Wikipedia · Tacoma Public Library",
+   "https://en.wikipedia.org/wiki/Tacoma_Public_Library"
+  ],
+  "tpl_main": [
+   "Tacoma Public Library · Main Branch",
+   "https://www.tacomalibrary.org/locations/1/"
+  ],
+  "proctor_fm": [
+   "Proctor Farmers Market",
+   "https://proctorfarmersmarket.com/"
+  ],
+  "city_fm": [
+   "City of Tacoma · Farmers markets",
+   "https://cityoftacoma.org/visitors/farmers_markets"
+  ],
+  "city_nc": [
+   "City of Tacoma · Neighborhood Council Program",
+   "https://tacoma.gov/government/departments/neighborhood-and-community-services/neighborhood-council-program"
+  ],
+  "wiki_proctor": [
+   "Wikipedia · Proctor District",
+   "https://en.wikipedia.org/wiki/Proctor_District,_Tacoma,_Washington"
+  ],
+  "wiki_stadium": [
+   "Wikipedia · Stadium District",
+   "https://en.wikipedia.org/wiki/Stadium_District,_Tacoma,_Washington"
+  ],
+  "wiki_hilltop": [
+   "Wikipedia · Hilltop, Tacoma",
+   "https://en.wikipedia.org/wiki/Hilltop,_Tacoma,_Washington"
+  ],
+  "wiki_oldtown": [
+   "Wikipedia · Old Tacoma",
+   "https://en.wikipedia.org/wiki/Old_Tacoma,_Tacoma,_Washington"
+  ],
+  "wiki_uwt": [
+   "Wikipedia · University of Washington Tacoma",
+   "https://en.wikipedia.org/wiki/University_of_Washington_Tacoma"
+  ],
+  "wiki_ruston": [
+   "Wikipedia · Ruston, Washington",
+   "https://en.wikipedia.org/wiki/Ruston,_Washington"
+  ],
+  "wiki_gh": [
+   "Wikipedia · Gig Harbor, Washington",
+   "https://en.wikipedia.org/wiki/Gig_Harbor,_Washington"
+  ],
+  "wiki_up": [
+   "Wikipedia · University Place, Washington",
+   "https://en.wikipedia.org/wiki/University_Place,_Washington"
+  ],
+  "wiki_fife": [
+   "Wikipedia · Fife, Washington",
+   "https://en.wikipedia.org/wiki/Fife,_Washington"
+  ],
+  "wiki_puy": [
+   "Wikipedia · Puyallup, Washington",
+   "https://en.wikipedia.org/wiki/Puyallup,_Washington"
+  ],
+  "wiki_lakewood": [
+   "Wikipedia · Lakewood, Washington",
+   "https://en.wikipedia.org/wiki/Lakewood,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "219,346",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "760",
+   "acres in Point Defiance Park",
+   "mpt_pd"
+  ],
+  [
+   "28.8 min",
+   "mean travel time to work (2020–2024)",
+   "census"
+  ],
+  [
+   "~62 min",
+   "Sounder ride, Tacoma Dome to Seattle’s King Street",
+   "st_sline"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "219,346 at the 2020 census; 229,816 estimated for July 1, 2025",
+   "census"
+  ],
+  [
+   "County seat",
+   "Tacoma is the county seat of Pierce County",
+   "wiki"
+  ],
+  [
+   "Land area",
+   "49.71 square miles (2020)",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "November 12, 1875; known as the “City of Destiny” and “Grit City”",
+   "wiki"
+  ],
+  [
+   "Distance to Seattle",
+   "About 30 miles",
+   "wiki"
+  ],
+  [
+   "Main transit hub",
+   "Tacoma Dome Station: Sounder, Amtrak, the T Line and buses",
+   "wiki"
+  ],
+  [
+   "Public schools",
+   "Tacoma Public Schools serves almost all of the city",
+   "wiki_tps"
+  ],
+  [
+   "Homeownership",
+   "55.8% owner-occupied housing units (2020–2024)",
+   "census"
+  ],
+  [
+   "Rainfall",
+   "About 40.81 inches of precipitation a year",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "The City of Tacoma’s farmers market page lists Broadway Market season dates for 2024; current-year dates were not confirmed, so only the day and location are shown.",
+  "Census housing and commute figures are 2020–2024 American Community Survey estimates, not a single-year count."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Interstate 5 runs through Tacoma for about 6.5 miles, and State Route 16 carries traffic west to the Tacoma Narrows Bridge and the Kitsap Peninsula. Tacoma Dome Station, southeast of downtown, is the city’s main train and bus hub.",
+   "dark": false,
+   "items": [
+    [
+     "Sounder to Seattle",
+     "Sound Transit’s S Line runs weekdays from Tacoma Dome Station and South Tacoma Station to Seattle’s King Street Station; scheduled trips from Tacoma Dome take about 62 minutes.",
+     "st_sline"
+    ],
+    [
+     "Express bus to Seattle",
+     "Sound Transit Route 590 runs between Commerce Street Station and Tacoma Dome Station in Tacoma and downtown Seattle.",
+     "st_590"
+    ],
+    [
+     "T Line",
+     "The T Line connects Tacoma Dome Station with downtown, the UW Tacoma campus and Hilltop. Its 2.4-mile Hilltop extension opened September 16, 2023, adding seven stations and running to St. Joseph.",
+     "st_tline"
+    ],
+    [
+     "Amtrak",
+     "Amtrak Cascades and Coast Starlight trains stop at Tacoma Dome Station.",
+     "wiki"
+    ],
+    [
+     "Pierce Transit Stream",
+     "The Stream Community Line runs between Tacoma Dome Station and Spanaway, with buses about every 20 minutes.",
+     "pt_stream"
+    ],
+    [
+     "Tacoma Narrows Bridge",
+     "State Route 16 crosses the Narrows on twin spans opened in 1950 (westbound) and 2007 (eastbound).",
+     "wiki_tnb"
+    ],
+    [
+     "Narrows Bridge toll",
+     "Tolls are collected only on trips headed to Tacoma. For a two-axle vehicle: $4.50 with a Good To Go! pass, $5.50 at the toll booth, $6.50 by mail.",
+     "wsdot_tnb"
+    ],
+    [
+     "Light rail from Federal Way",
+     "The Tacoma Dome Link Extension is in planning: about 8.5 miles with four new stations, including Fife, East Tacoma/Portland Avenue and Tacoma Dome. The Final EIS is expected in 2027; no opening year is posted.",
+     "st_tdle"
+    ],
+    [
+     "Commute time",
+     "Mean travel time to work for Tacoma residents is 28.8 minutes (2020–2024).",
+     "census"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Metro Parks Tacoma manages 2,905 acres of parkland, from the old-growth forest at Point Defiance to the two-mile Ruston Way waterfront.",
+   "dark": true,
+   "items": [
+    [
+     "Point Defiance Park",
+     "A 760-acre park at the city’s northern tip. It became a public park in 1888.",
+     "mpt_pd"
+    ],
+    [
+     "Old-growth forest",
+     "About 400 acres of Point Defiance Park is old-growth forest.",
+     "wiki_pd"
+    ],
+    [
+     "Point Defiance Zoo & Aquarium",
+     "Inside the park; the zoo was founded in 1891 and the aquarium added in 1933.",
+     "wiki_pd"
+    ],
+    [
+     "Fort Nisqually",
+     "A living history museum in Point Defiance Park, a replica of a 19th-century Hudson’s Bay Company trading post.",
+     "wiki_pd"
+    ],
+    [
+     "Five Mile Drive",
+     "The outer loop is closed to motor vehicles and open to walkers and cyclists; the Square Trail around it is 4.6 miles and the Triangle Trail on the inner loop is 3.3 miles.",
+     "mpt_fivemile"
+    ],
+    [
+     "Owen Beach and gardens",
+     "Point Defiance also holds Owen Beach, a rose garden begun in 1895 and a Japanese garden with a 1914 pagoda that was once a streetcar station.",
+     "wiki_pd"
+    ],
+    [
+     "Ruston Way waterfront",
+     "About two miles of shoreline parks on Commencement Bay, with a paved path, fishing piers, beach access and viewpoints.",
+     "mpt_rw"
+    ],
+    [
+     "Ruston Way parks",
+     "Along the path are Chinese Reconciliation Park, Jack Hyde Park, Hamilton Park, Dickman Mill Park and Marine Park.",
+     "wiki_rustonway"
+    ],
+    [
+     "Dune Peninsula",
+     "An 11-acre waterfront park with the paved Frank Herbert Trail, named for the Tacoma-born author of Dune; the Wilson Way Bridge links it to Point Defiance Park and Ruston Way.",
+     "mpt_dune"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Tacoma Public Schools serves about 28,000 students from preschool through grade 12, and its boundaries include almost all of Tacoma plus Ruston, Browns Point, Dash Point and parts of nearby cities. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Tacoma Public Schools",
+     "The district lists 36 elementary schools, 13 middle schools, 11 high schools and 4 early learning centers.",
+     "tps_about"
+    ],
+    [
+     "Find an assigned school",
+     "The district’s school boundaries page has an address lookup tool; Enrollment Services can be reached at 253-571-1000.",
+     "tps_lookup"
+    ],
+    [
+     "Specialty schools",
+     "Options include the downtown School of the Arts (founded 2001) and the Science and Math Institute in Point Defiance Park (founded 2009).",
+     "wiki_tps"
+    ],
+    [
+     "Other districts",
+     "Some Tacoma addresses fall in Clover Park, Fife, Franklin Pierce or University Place school districts.",
+     "wiki"
+    ],
+    [
+     "Colleges",
+     "University of Washington Tacoma began classes downtown in 1990 and grew into repurposed warehouses on the southern edge of downtown.",
+     "wiki_uwt"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Several of Tacoma’s hospitals sit along the Hilltop’s “Medical Mile,” and the public library has eight locations across the city.",
+   "dark": false,
+   "items": [
+    [
+     "MultiCare Tacoma General Hospital",
+     "A 437-bed hospital that traces its start to 1882, attached to Mary Bridge Children’s Hospital.",
+     "wiki_tg"
+    ],
+    [
+     "St. Joseph Medical Center",
+     "St. Joseph and Tacoma General share Level II trauma care through the Tacoma Trauma Trust, alternating days.",
+     "aha_trauma"
+    ],
+    [
+     "Other hospitals",
+     "MultiCare Allenmore Hospital and Mary Bridge Children’s Hospital are also in Tacoma.",
+     "wiki"
+    ],
+    [
+     "Tacoma Public Library",
+     "Eight locations: Main, Fern Hill, Kobetich, Moore, Mottet, South Tacoma, Swasey and Wheelock. The Main Branch opened in 1903 as Washington’s first Carnegie library.",
+     "wiki_tpl"
+    ],
+    [
+     "Main Branch",
+     "1102 Tacoma Avenue South.",
+     "tpl_main"
+    ],
+    [
+     "Proctor Farmers Market",
+     "Saturdays at N. 27th and N. Proctor, 9 a.m. to 2 p.m., April 4 through December 19, 2026, with winter dates in early 2027.",
+     "proctor_fm"
+    ],
+    [
+     "Broadway Market",
+     "The Tacoma Farmers Market’s Broadway Market runs Thursdays at 9th and Broadway downtown; check the current season.",
+     "city_fm"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "The City of Tacoma organizes neighborhoods into eight neighborhood council areas: Central, Eastside, New Tacoma, North End, Northeast, South End, South Tacoma and West End. In 2020–2024, 55.8% of housing units were owner-occupied, the median owner-occupied home value was $479,600 and median gross rent was $1,676.",
+   "dark": false,
+   "items": [
+    [
+     "Proctor District",
+     "A north end business district centered at Proctor Street and North 26th, home to the 1923 Blue Mouse Theatre and the Wheelock branch library.",
+     "wiki_proctor"
+    ],
+    [
+     "Stadium District",
+     "A north end neighborhood named for historic Stadium High School, with homes, apartments and condominiums, some with Commencement Bay views; the Stadium-Seminary Historic District was listed on the National Register in 1985.",
+     "wiki_stadium"
+    ],
+    [
+     "Old Town",
+     "The site of the original settlement, where Job Carr built a cabin in 1865; St. Peter’s Church, the city’s oldest existing building, is here.",
+     "wiki_oldtown"
+    ],
+    [
+     "Hilltop",
+     "On a bluff above Commencement Bay, home to the Medical Mile hospitals and served by the T Line along Martin Luther King Jr. Way.",
+     "wiki_hilltop"
+    ],
+    [
+     "Downtown and museums",
+     "Downtown holds UW Tacoma, the Museum of Glass with its Bridge of Glass, the Tacoma Art Museum, America’s Car Museum and the Washington State History Museum.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Tacoma borders several smaller cities, and Seattle is about 30 miles north.",
+   "dark": false,
+   "items": [
+    [
+     "Ruston",
+     "A separate town incorporated in 1906, surrounded on three sides by Tacoma; it includes the 97-acre Point Ruston development on the former smelter site. 1,055 people in 2020.",
+     "wiki_ruston"
+    ],
+    [
+     "Gig Harbor",
+     "Across the Tacoma Narrows on Puget Sound, known as “the Maritime City.” 12,029 people in 2020.",
+     "wiki_gh"
+    ],
+    [
+     "University Place",
+     "Incorporated in 1995, home to the Chambers Bay golf course, host of the 2015 U.S. Open. 34,866 people in 2020.",
+     "wiki_up"
+    ],
+    [
+     "Fife",
+     "An eastern neighbor on Interstate 5, entirely within the Puyallup Indian Reservation. 10,999 people in 2020.",
+     "wiki_fife"
+    ],
+    [
+     "Puyallup",
+     "About 10 miles southeast, home to the Washington State Fair and a Sounder stop. 42,973 people in 2020.",
+     "wiki_puy"
+    ],
+    [
+     "Lakewood",
+     "Pierce County’s second-largest city, bordering Joint Base Lewis–McChord, with the S Line’s southern terminus. 63,612 people in 2020.",
+     "wiki_lakewood"
+    ],
+    [
+     "Mount Rainier",
+     "Mount Rainier National Park is about 58 miles southeast.",
+     "wiki"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What is the population of Tacoma, WA?",
+   "219,346 at the 2020 census. The Census Bureau estimates 229,816 for July 1, 2025.",
+   "census"
+  ],
+  [
+   "How far is Tacoma from Seattle?",
+   "About 30 miles.",
+   "wiki"
+  ],
+  [
+   "How long does the Sounder train take from Tacoma to Seattle?",
+   "Scheduled weekday trips from Tacoma Dome Station to King Street Station take about 62 minutes. Sounder does not run on weekends.",
+   "st_sline"
+  ],
+  [
+   "Where does the T Line go in Tacoma?",
+   "It runs from Tacoma Dome Station through downtown and UW Tacoma to Hilltop and St. Joseph. The 2.4-mile Hilltop extension opened September 16, 2023.",
+   "st_tline"
+  ],
+  [
+   "Is light rail coming from Seattle to the Tacoma Dome?",
+   "The Tacoma Dome Link Extension from Federal Way is in planning, about 8.5 miles with four stations. Sound Transit expects the Final EIS in 2027 and has not posted an opening year.",
+   "st_tdle"
+  ],
+  [
+   "How much is the Tacoma Narrows Bridge toll?",
+   "Only trips toward Tacoma are tolled. A two-axle vehicle pays $4.50 with a Good To Go! pass, $5.50 at the booth or $6.50 by mail.",
+   "wsdot_tnb"
+  ],
+  [
+   "How big is Point Defiance Park?",
+   "760 acres, including about 400 acres of old-growth forest.",
+   "wiki_pd"
+  ],
+  [
+   "Is Point Ruston in Tacoma?",
+   "Point Ruston sits on the former smelter site in the Town of Ruston, a separate municipality incorporated in 1906 and surrounded on three sides by Tacoma.",
+   "wiki_ruston"
+  ],
+  [
+   "What school district is Tacoma in?",
+   "Most of the city is in Tacoma Public Schools, about 28,000 students. Some addresses are in Clover Park, Fife, Franklin Pierce or University Place districts. Boundaries change; confirm with the district for a specific address.",
+   "wiki"
+  ],
+  [
+   "What is the median home value in Tacoma?",
+   "$479,600 for owner-occupied homes, per the Census Bureau’s 2020–2024 estimates. Median gross rent was $1,676.",
+   "census"
+  ],
+  [
+   "When is the Proctor Farmers Market?",
+   "Saturdays, 9 a.m. to 2 p.m., April 4 through December 19, 2026, at N. 27th and N. Proctor Streets.",
+   "proctor_fm"
+  ],
+  [
+   "What hospitals are in Tacoma?",
+   "MultiCare Tacoma General, St. Joseph Medical Center, Mary Bridge Children’s Hospital and MultiCare Allenmore Hospital.",
+   "wiki"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

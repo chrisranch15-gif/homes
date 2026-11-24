@@ -8,7 +8,7 @@ private Listing Concierge on claude.ai. One source, three outputs.
 | Listing Concierge (The Desk, seller portal, story) | claude.ai artifact `6a12fcfd-7e65-4e8d-8acd-573532aab862` | `app/build.py <artifact url>` |
 | homes.ranchpnw.com/19917 | repo `chrisranch15-gif/homes` (GitHub Pages) | `public-site/build_public.py` + `finish.py` |
 | gotehaleh.com | repo `chrisranch15-gif/gotehaleh` (GitHub Pages) | same |
-| live.ranchpnw.com/<town> (town guides; data in `app/src/towns.js`) | repo `chrisranch15-gif/live` (GitHub Pages) — not created yet | same |
+| homes.ranchpnw.com/guides/<town> (town guides; data in `guides/<town>.json`, drafts private until Chris approves) | this repo, `guides/` | `guides/build_guides.py` |
 | Lead emails + Sheet | Google Apps Script "Ranch Leads · homes.ranchpnw.com" (Chris's KW Google account) | `apps-script/Code.gs` |
 
 Lead endpoint (web app): `https://script.google.com/macros/s/AKfycbz0ALnuwyuwKaRkr2sGS7N_TPJ3DIXYYRiLP7RiNlBvv5HfQMxfy82jS88ihRab7Duu/exec`

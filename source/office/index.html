@@ -102,6 +102,7 @@ section[data-tone=need] .group{background:linear-gradient(180deg,color-mix(in sr
 .cgin{width:100%;box-sizing:border-box;margin-top:6px;font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit}
 .cgtag{margin-top:6px;font-size:11px;letter-spacing:.06em;opacity:.65}
 .cgf{display:flex;gap:8px}.cgf input{flex:1;min-width:0;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,120,108,.35);background:transparent;color:inherit}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px}.fl{display:grid;gap:4px;font-size:13px;color:var(--muted)}.fl input{font:inherit;font-size:15px;color:var(--ink,#1E2327);padding:10px 12px;border:1px solid var(--line,#DCD4C8);border-radius:10px;background:var(--card,#fff)}
 </style>
 </head>
 <body>
@@ -167,7 +168,7 @@ const I = {
 
 /* ---------- loading ---------- */
 async function loadSheet() {
-  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200" };
+  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200", offers: 'Offers!A1:M300' };
   const out = {};
   await Promise.all(Object.keys(tabs).map(async k => { try { out[k] = await sheetRows(tabs[k]); } catch (e) { out[k] = null; S.err.sheet = e.message || String(e); } }));
   S.sheet = out; S.at = Date.now();
@@ -220,6 +221,13 @@ async function loadInbox() {
       th.forEach(t => { if (t.id in sent) { const got = Date.parse(t.date); if (isNaN(got) || sent[t.id] >= got) t.replied = true; } });
     } catch (e) { }
     th.sort((x, y) => (Date.parse(y.date) || 0) - (Date.parse(x.date) || 0));
+    // in a back-and-forth, the last word that counts is the last one a person wrote (auto-replies and archive notices don't count)
+    const AUTO = /no-?reply|do-?not-?reply|mailer-daemon|notifications?@|postmaster|bounce/i;
+    await Promise.all(th.filter(t => t.count > 1 || AUTO.test(t.from)).slice(0, 15).map(async t => { try {
+      const g = await tool('Gmail', 'get_thread', { threadId: t.id, messageFormat: 'MINIMAL' });
+      const ms = ((g && g.messages) || []).filter(m => !AUTO.test(m.sender || ''));
+      const last = ms[ms.length - 1]; if (last) { t.replied = ME.test(last.sender || ''); if (!t.replied) { t.from = last.sender || t.from; t.snippet = last.snippet || t.snippet; t.date = last.date || t.date; } }
+    } catch (e) { } }));
     // read the back-and-forth on threads that look like deals, so the sort knows where each one stands
     const dealish = th.filter(t => new RegExp(DEAL_WORDS.replace(/[()"]/g, '').split(' OR ').join('|') + (nums.length ? '|' + nums.join('|') : ''), 'i').test(t.subject + ' ' + t.snippet)).slice(0, 6);
     await Promise.all(dealish.map(async t => { try { const g = await tool('Gmail', 'get_thread', { threadId: t.id, messageFormat: 'PLAIN_TEXT' });
@@ -232,7 +240,7 @@ async function loadInbox() {
 For each email decide:
 kind: "deal" (an offer, counteroffer, inspection, escrow, title, lender, appraisal, closing or anything about a transaction or one of his listings under contract), "lead" (a new person wanting to buy, sell, tour or get a value, including Ranch Leads notices from his website), "person" (a real human writing to him: client, agent, vendor, friend, colleague), "auto" (newsletters, notifications, receipts, system alerts, tests, marketing, anything nobody personally wrote).
 urgency: "now" (a real person is waiting on Chris: any offer or deal item, any new lead, any question or request for his opinion or decision), "today" (a real person expects a reply this week), "fyi" (worth knowing, no reply needed), "skip" (tests, junk, automated noise).
-Rules: an offer on one of his listings is always deal + now. A new lead is always lead + now. Test emails and automated notices are never now. If THREAD shows Chris already answered and the other side has not written back, it is fyi. If the other side wrote back after Chris, it needs a reply again.
+Rules: an offer on one of his listings is always deal + now. A new lead is always lead + now. Test emails and automated notices are never now. If THREAD shows Chris already answered (from any of his addresses) and no person has written back since, it is fyi; automated archive notices and auto-replies do not count as writing back. An offer Chris acknowledged is still kind deal, urgency today, why = "offer received, decision pending". If the other side wrote back after Chris, it needs a reply again.
 Only for now/today with a reply expected, write a short, warm reply in Chris's voice (first person, no sign-off name, never invent facts or make promises on price or terms; if something is unknown, say he'll confirm). Otherwise reply = "".
 Match "deal" to one listing address if related, else "".
 Return a JSON array: [{"i": index, "kind": "...", "urgency": "...", "why": "<= 12 words", "deal": "", "reply": ""}]
@@ -269,6 +277,7 @@ function shoots() { const by = {}; ((S.sheet && S.sheet.shoots) || []).slice(1).
 function shootFor(a) { return shoots()[hk(a)]; }
 const KNOWN = { '19917 145th st': { sqft: 2772, beds: 5, baths: 2.75, city: 'Bonney Lake', zip: '98391' } };
 function dealFor(a) { const n = (String(a).match(/^\d{3,6}/) || [])[0]; return n && (S.inbox || []).find(m => m.kind === 'deal' && !m.replied && (String(m.deal).indexOf(n) === 0 || (m.subject + m.snippet).indexOf(n) >= 0)); }
+function offersFor(a) { const n = (String(a).match(/^\d{3,6}/) || [])[0]; return ((S.sheet && S.sheet.offers) || []).filter(r => n && String(r[1]).indexOf(n) === 0 && !/withdrawn|rejected|expired/i.test(r[9] || '')); }
 function listings() { return (S.sheet && S.sheet.listings || []).filter(r => r[0] && !/^removed$/i.test(r[3] || '')).map(r => ({ address: r[0], city: r[1], price: r[2], status: r[3] || 'Active', sellers: r[4], page: r[5], desk: r[6], code: r[7], listed: toDate(r[8]), photo: r[9] })); }
 function deals() { return latestBy(S.sheet && S.sheet.deals, 1).map(r => ({ address: r[1], side: r[2], status: r[3], price: Number(String(r[4]).replace(/[^\d.]/g, '')) || 0, pct: Number(String(r[5]).replace(/[^\d.]/g, '')) || 0, gci: Number(String(r[6]).replace(/[^\d.]/g, '')) || 0, contract: toDate(r[7]), closing: toDate(r[8]), notes: r[9] })); }
 function business() {
@@ -299,6 +308,7 @@ function needs() {
     const tel = String(r[3] || '').replace(/[^\d+]/g, '');
     out.push({ ico: I.phone, t: `${r[1]} · ${r[2]}`, s: [r[6], r[5]].filter(Boolean).join(' · '), acts: [tel ? `<a class="pill" href="tel:${esc(tel)}">Call</a>` : '', tel ? `<a class="pill ghost" href="sms:${esc(tel)}">Text</a>` : '', r[4] ? `<a class="pill ghost" href="mailto:${esc(r[4])}">Email</a>` : ''].join('') });
   });
+  ((S.sheet && S.sheet.offers) || []).filter(r => /^received|^countered/i.test(r[9] || '')).forEach(r => out.unshift({ ico: I.doc, t: `Offer on ${r[1]} · ${money(r[5])}`, s: [r[6], r[8] ? 'asks ' + money(r[8]) + ' toward closing' : '', r[3], r[10] ? 'respond by ' + r[10] : 'waiting on your sellers'].filter(Boolean).join(' · '), acts: `${r[12] ? `<a class="pill ghost" href="${esc(r[12])}" target="_blank" rel="noopener">Open email</a>` : ''}` }));
   inboxView().open.filter(m => m.kind === 'deal' && m.urgency === 'now').slice(0, 4).forEach(m => out.unshift({ ico: I.doc, t: `Deal · ${m.subject}`, s: `${m.from.replace(/<.*>/, '').replace(/"/g, '').trim()}${m.why ? ' · ' + m.why : ''}`, acts: `${m.url ? `<a class="pill" href="${esc(m.url)}" target="_blank" rel="noopener">Open in Gmail</a>` : ''}<button class="pill ghost" data-act="goinbox">Reply from inbox</button>` }));
   { const nw = inboxView().open.filter(m => m.urgency === 'now' && m.kind !== 'deal'); if (nw.length) out.push({ ico: I.mail, t: `${nw.length} email${nw.length > 1 ? 's' : ''} need${nw.length > 1 ? '' : 's'} you today`, s: nw.slice(0, 3).map(m => m.from.replace(/<.*>/, '').replace(/"/g, '').trim()).join(' · '), acts: `<button class="pill ghost" data-act="goinbox">See inbox</button>` }); }
   (S.cal || []).filter(e => e.invite).forEach(e => out.push({ ico: I.cal, t: 'Invitation · ' + e.title, s: new Date(e.start).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }) + (e.from ? ' · from ' + e.from : ''), acts: `<button class="pill" data-act="rsvp" data-id="${esc(e.id)}" data-c="${esc(e.cal)}" data-v="accepted">Accept</button><button class="pill ghost" data-act="rsvp" data-id="${esc(e.id)}" data-c="${esc(e.cal)}" data-v="declined">Decline</button>` }));
@@ -320,7 +330,7 @@ function needs() {
 /* ---------- views ---------- */
 function mailRow(m, faded) {
   const who = (m.from.replace(/<.*>/, '').replace(/"/g, '').trim().match(/\b\w/g) || ['·']).slice(0, 2).join('').toUpperCase();
-  return `<div class="row${faded ? ' faded' : ''}"><span class="who" aria-hidden="true">${esc(who)}</span><div class="body"><div class="t">${faded ? `<span class="tag">${m.replied ? 'Replied' : 'Cleared'}</span>` : m.urgency === 'now' ? `<span class="tag now">${m.kind === 'deal' ? 'Deal · reply now' : m.kind === 'lead' ? 'New lead' : 'Reply today'}</span>` : m.urgency === 'today' ? '<span class="tag">Reply this week</span>' : m.urgency === 'fyi' ? '<span class="tag">No reply needed</span>' : ''}${esc(m.subject)}</div><div class="s">${esc(m.from.replace(/<.*>/, '').trim())}${m.why ? ' · ' + esc(m.why) : ''}${m.deal ? ' · ' + esc(m.deal) : ''}</div></div><div class="acts">${!faded && m.reply ? `<button class="pill ghost" data-act="reply" data-id="${esc(m.id)}">Reply</button>` : ''}${m.url ? `<a class="pill ghost" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">Open</a>` : ''}${faded ? '' : `<button class="xbtn" data-act="mdone" data-id="${esc(m.id)}" aria-label="Done with ${esc(m.subject)}" title="Done — clear it">✕</button>`}</div></div>`;
+  return `<div class="row${faded ? ' faded' : ''}"><span class="who" aria-hidden="true">${esc(who)}</span><div class="body"><div class="t">${faded ? `<span class="tag">${m.replied ? 'Replied' : 'Cleared'}</span>` : m.urgency === 'now' ? `<span class="tag now">${m.kind === 'deal' ? 'Deal · reply now' : m.kind === 'lead' ? 'New lead' : 'Reply today'}</span>` : m.urgency === 'today' ? '<span class="tag">Reply this week</span>' : m.urgency === 'fyi' ? '<span class="tag">No reply needed</span>' : ''}${esc(m.subject)}</div><div class="s">${esc(m.from.replace(/<.*>/, '').trim())}${m.why ? ' · ' + esc(m.why) : ''}${m.deal ? ' · ' + esc(m.deal) : ''}</div></div><div class="acts">${!faded && m.reply ? `<button class="pill ghost" data-act="reply" data-id="${esc(m.id)}">Reply</button>` : ''}${m.kind === 'deal' && /offer|counter/i.test(m.subject + ' ' + m.snippet) && !offerLogged(m) ? `<button class="pill ghost" data-act="logoffer" data-id="${esc(m.id)}">Log offer</button>` : ''}${m.url ? `<a class="pill ghost" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">Open</a>` : ''}${faded ? '' : `<button class="xbtn" data-act="mdone" data-id="${esc(m.id)}" aria-label="Done with ${esc(m.subject)}" title="Done — clear it">✕</button>`}</div></div>`;
 }
 function inboxHtml() {
   if (S.inbox == null) return `<div class="group"><div class="empty">${S.busy.inbox ? 'Claude is reading the last three days…' : esc(S.err.inbox || 'Not loaded yet.')}</div></div>`;
@@ -373,7 +383,7 @@ function render() {
   ${!caps.mcp && S.ready && !S.officeMode ? `<section><div class="group"><div class="row"><div class="ico">${I.globe}</div><div class="body"><div class="t">Open Ranch on claude.ai</div><div class="s">Your Gmail, Sheet and social accounts connect there. This view is a preview.</div></div></div></div></section>` : ''}
 
   <section aria-label="Listings" data-tone="list" id="listings"><div class="h2row"><h2>Listings</h2><span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="linkbtn" data-act="refresh" ${S.busy.all ? 'disabled' : ''}>${S.busy.all ? 'Updating…' : (S.at ? 'Updated ' + new Date(S.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + ' · Refresh' : 'Refresh')}</button><button class="pill ghost launch" data-act="shoot">${I.cal}<span>Order photos</span></button><button class="pill launch" data-act="launch">${I.plus}<span>Launch a listing</span></button></span></div>
-    <div class="group">${listings().length ? '' : '<div class="empty">No listings yet. Launch your first one.</div>'}${listings().map(l => `<button class="lrow" data-act="listing" data-a="${esc(l.address)}">${l.photo ? `<img class="thumb" src="${esc(localPhoto(l.photo))}" alt="" onerror="this.onerror=null;this.src='${esc(l.photo)}'">` : '<span class="thumb" aria-hidden="true"></span>'}<span class="body"><span class="t" style="display:block">${esc(l.address)}</span><span class="s" style="display:block">${esc([l.city, money(l.price), l.listed ? 'Day ' + (Math.floor((Date.now() - l.listed) / 864e5) + 1) : l.page ? '' : 'needs a page', dealFor(l.address) ? 'Offer / deal email waiting' : '', (shootFor(l.address) || {}).status ? 'Photos: ' + shootFor(l.address).status.toLowerCase() : ''].filter(Boolean).join(' · '))}</span></span>${I.chev}</button>`).join('')}</div></section>
+    <div class="group">${listings().length ? '' : '<div class="empty">No listings yet. Launch your first one.</div>'}${listings().map(l => `<button class="lrow" data-act="listing" data-a="${esc(l.address)}">${l.photo ? `<img class="thumb" src="${esc(localPhoto(l.photo))}" alt="" onerror="this.onerror=null;this.src='${esc(l.photo)}'">` : '<span class="thumb" aria-hidden="true"></span>'}<span class="body"><span class="t" style="display:block">${esc(l.address)}</span><span class="s" style="display:block">${esc([l.city, money(l.price), l.listed ? 'Day ' + (Math.floor((Date.now() - l.listed) / 864e5) + 1) : l.page ? '' : 'needs a page', offersFor(l.address).length ? offersFor(l.address).length + ' offer' + (offersFor(l.address).length > 1 ? 's' : '') + ' · best ' + money(Math.max(...offersFor(l.address).map(r => +r[5] || 0))) : dealFor(l.address) ? 'Offer / deal email waiting' : '', (shootFor(l.address) || {}).status ? 'Photos: ' + shootFor(l.address).status.toLowerCase() : ''].filter(Boolean).join(' · '))}</span></span>${I.chev}</button>`).join('')}</div></section>
 
 
   <section aria-label="Presentations" data-tone="biz" id="kit"><div class="h2row"><h2>Presentations &amp; print</h2></div>
@@ -770,6 +780,33 @@ REQUEST: ${q}`, { modelTier: 'default', cache: false });
   } catch (e) { sheet(`<p class="date">Tell Ranch</p><h3>I didn’t catch that.</h3><p class="s">Try “open house Saturday 1–4 at 19917”, “email the Hendersons a thank-you”, or “what’s pending?”</p><div class="acts" style="margin-top:14px"><button class="pill ghost" data-act="close">OK</button></div>`); }
 }
 
+/* ---------- Log an offer: read the email, fill the Offers tab, Chris checks it first ---------- */
+const OFFER_COLS = ['Received', 'Address', 'Buyers', "Buyer's agent", 'Brokerage', 'Price', 'Financing', 'Earnest money', 'Seller credit asked', 'Status', 'Response due', 'Notes', 'Email'];
+function offerLogged(m) { return ((S.sheet && S.sheet.offers) || []).some(r => String(r[12] || '').indexOf(m.id) >= 0 || (r[12] && m.url && r[12] === m.url)); }
+async function offerSheet(m, pre) {
+  sheet(`<p class="date">Log an offer</p><h3>Reading the offer…</h3><p class="s">Pulling the terms from the email. You check them before anything is saved.</p>`);
+  let o = pre || {};
+  if (!pre) try {
+    const g = await tool('Gmail', 'get_thread', { threadId: m.id, messageFormat: 'PLAIN_TEXT' });
+    const text = ((g && g.messages) || []).map(x => `${x.date} ${x.sender}: ${String(x.plaintextBody || x.snippet || '').slice(0, 2500)}\nAttachments: ${(x.attachments || []).map(a => a.filename).filter(Boolean).join(', ')}`).join('\n---\n');
+    o = await caps.sample.json(`Pull the offer terms from this email thread for Chris Ranch's listing. Listings: ${listings().map(l => l.address).join('; ')}.
+Return JSON {"address": one listing address exactly as written above, "buyers": "", "agent": "", "brokerage": "", "price": number or "", "financing": "", "earnest": number or "", "credit": number or "" (closing costs or credit the buyer asks the seller for), "due": "response deadline if stated, else empty", "notes": "one line: lender, contingencies, attachments, and whether Chris has already replied"}.
+Only use what the email says. Leave anything not stated empty.
+THREAD:
+${text}`, { modelTier: 'default', cache: false }) || {};
+  } catch (e) { o = {}; }
+  const f = (k, label, v) => `<label class="fl"><span>${label}</span><input name="${k}" value="${esc(v == null ? '' : v)}"></label>`;
+  sheet(`<p class="date">Log an offer · check it, then save</p><h3>${esc(o.address || m.subject)}</h3>
+  <form id="offf" class="form">${f('address', 'Listing', o.address)}${f('buyers', 'Buyers', o.buyers)}${f('agent', 'Buyer’s agent', o.agent)}${f('brokerage', 'Brokerage', o.brokerage)}${f('price', 'Price', o.price)}${f('financing', 'Financing', o.financing)}${f('earnest', 'Earnest money', o.earnest)}${f('credit', 'Seller credit asked', o.credit)}${f('due', 'Response due', o.due)}${f('notes', 'Notes', o.notes)}</form>
+  <p class="s" style="margin:10px 0 0;font-size:13px">Saves to the Offers tab in your Sheet (private: sellers and agents never see it). The listing stays Active until you mark it pending.</p>
+  <div class="acts" style="margin-top:12px"><button class="pill" id="offsave">Save offer</button><button class="pill ghost" data-act="close">Cancel</button></div>`);
+  $('#offsave').onclick = async ev => { const v = Object.fromEntries(new FormData($('#offf'))); if (!v.address) return toast('Which listing?'); ev.target.disabled = true;
+    try { await append('Offers', [[nowStamp(), v.address, v.buyers, v.agent, v.brokerage, String(v.price).replace(/[^\d.]/g, ''), v.financing, String(v.earnest).replace(/[^\d.]/g, ''), String(v.credit).replace(/[^\d.]/g, ''), 'Received', v.due, v.notes, m.url || m.id]]);
+      append('Hub done', [[nowStamp(), 'offer:' + m.id, 'offer logged', m.subject]]).catch(() => { });
+      close(); toast('Offer logged. It’s on the listing and in Needs you.'); await loadSheet(); render(); }
+    catch (err) { ev.target.disabled = false; toast('Not saved — ' + (err.message || 'try again')); } };
+}
+
 /* ---------- events ---------- */
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
@@ -790,6 +827,7 @@ document.addEventListener('click', async e => {
   else if (a === 'later') { S.showLater = true; render(); }
   else if (a === 'past') { S.showPast = !S.showPast; render(); }
   else if (a === 'goinbox') { const el = document.getElementById('inbox'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  else if (a === 'logoffer') { const m = (S.inbox || []).find(t => t.id === b.dataset.id); if (m) offerSheet(m); }
   else if (a === 'reply') { const m = (S.inbox || []).find(t => t.id === b.dataset.id); if (m) replySheet(m); }
   else if (a === 'listing') listingSheet(x);
   else if (a === 'portals') portalsSheet(x);
@@ -851,6 +889,7 @@ LISTINGS (address | city | price | status | sellers | page): ${JSON.stringify(li
 SELLERS WITH PORTALS: ${JSON.stringify(sellers)}
 RECENT LEADS (newest last): ${JSON.stringify(tail('leads', 15))}
 DEALS: ${JSON.stringify(tail('deals', 15))}
+OFFERS (received | address | buyers | agent | brokerage | price | financing | earnest | credit asked | status | due | notes): ${JSON.stringify(tail('offers', 20).map(r => r.slice(0, 12)))}
 RECENT MARKETING: ${JSON.stringify(tail('marketing', 10))}
 TODAY'S CALENDAR: ${JSON.stringify((S.cal || []).slice(0, 10).map(e => [e.title, e.start, e.where]))}
 INBOX, SORTED (kind | urgency | replied? | from | subject | date | preview): ${JSON.stringify(inbox)}
@@ -879,8 +918,8 @@ CONVERSATION SO FAR:
 ${convo}
 Chris: ${q}
 
-Reply as JSON: {"text": "your answer to Chris", "proposals": [{"kind": "email_draft"|"text_draft"|"seller_update"|"event"|"launch_listing"|"other", "to": "", "subject": "", "body": "", "listing": "", "start": "YYYY-MM-DDTHH:mm:ss local, events only", "end": "same, events only", "location": ""}]}.
-For launch_listing put the address in listing and in body a JSON string with any of address, city, price, sellers, photos, notes he gave. For seller_update put the home address in listing. Use [] when nothing needs approving.`, { modelTier: 'default', cache: false });
+Reply as JSON: {"text": "your answer to Chris", "proposals": [{"kind": "email_draft"|"text_draft"|"seller_update"|"event"|"launch_listing"|"log_offer"|"other", "to": "", "subject": "", "body": "", "listing": "", "start": "YYYY-MM-DDTHH:mm:ss local, events only", "end": "same, events only", "location": ""}]}.
+For launch_listing put the address in listing and in body a JSON string with any of address, city, price, sellers, photos, notes he gave. For seller_update put the home address in listing. When an offer email in the threads above is not yet in OFFERS, propose log_offer with listing = the address and body = a JSON string of {buyers, agent, brokerage, price, financing, earnest, credit, due, notes} taken only from the email. Use [] when nothing needs approving.`, { modelTier: 'default', cache: false });
   return { text: (out && out.text) || '', proposals: (out && Array.isArray(out.proposals)) ? out.proposals.filter(p => p && p.kind) : [] };
 }
 const AGENT_NAME_OFFICE = 'Chris Ranch';
@@ -891,7 +930,7 @@ function drawChat() {
   box.scrollTop = box.scrollHeight;
   box.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => runProposal(+b.dataset.i, +b.dataset.j, b.dataset.pa, b));
 }
-const PLABEL = { event: 'Add to calendar', launch_listing: 'Review and launch', email_draft: 'Save to Gmail drafts', text_draft: 'Copy text', seller_update: 'Post to their portal', checklist_item: 'Copy item', publish_feedback: 'Open feedback to publish', other: 'Copy' };
+const PLABEL = { log_offer: 'Check and log offer', event: 'Add to calendar', launch_listing: 'Review and launch', email_draft: 'Save to Gmail drafts', text_draft: 'Copy text', seller_update: 'Post to their portal', checklist_item: 'Copy item', publish_feedback: 'Open feedback to publish', other: 'Copy' };
 function proposalCard(p, i, j) {
   return `<div class="cgp"><div class="s" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px">${esc((p.kind || 'other').replace('_', ' '))}${p.to ? ' · to ' + esc(p.to) : ''}${p.listing ? ' · ' + esc(p.listing) : ''}</div>
   ${p.subject ? `<input class="cgin" data-f="subject" data-i="${i}" data-j="${j}" value="${esc(p.subject)}" aria-label="Subject">` : ''}
@@ -903,6 +942,7 @@ async function runProposal(i, j, kind, btn) {
   p.body = val('body'); p.subject = val('subject'); btn.disabled = true;
   try {
     if (kind === 'email_draft') { await mail('draft', { to: /@/.test(p.to) ? [p.to] : [], subject: p.subject, body: p.body }); p.done = 'Saved to your Gmail drafts. Review and send it from Gmail.'; }
+    else if (kind === 'log_offer') { let o = {}; try { o = JSON.parse(p.body); } catch (e) { } o.address = o.address || p.listing; return offerSheet({ id: 'concierge-' + Date.now(), subject: 'Offer on ' + (p.listing || ''), url: '' }, o); }
     else if (kind === 'seller_update') { if (!p.listing) throw new Error('Which listing? Ask me again with the address.'); await append('Seller updates', [[nowStamp(), p.listing, p.subject || 'An update from Chris', p.body, 'Chris']]); p.done = 'Posted to their portal.'; }
     else if (kind === 'publish_feedback') { close(); return feedbackSheet(p.listing || ''); }
     else if (kind === 'event') { if (!p.start) throw new Error('What time? Ask me again with a day and time.'); const st = String(p.start).replace(/(Z|[+-]\d\d:\d\d)$/, ''), en = String(p.end || new Date(Date.parse(st) + 36e5).toISOString().slice(0, 19)).replace(/(Z|[+-]\d\d:\d\d)$/, '');

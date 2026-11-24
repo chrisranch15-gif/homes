@@ -26,7 +26,7 @@ a{color:inherit}h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;line-
 .top{position:absolute;left:0;right:0;top:0;z-index:2;color:#fff}.top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:76px;gap:16px}
 .mark{font-family:var(--serif);font-size:19px}.mark small{display:block;font:11px var(--sans);letter-spacing:.22em;text-transform:uppercase;opacity:.75}
 .top nav{display:flex;gap:24px;font-size:14px;flex-wrap:wrap}.top nav a{text-decoration:none;opacity:.9}
-.hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:flex-end;color:#fff;background:#16191B center/cover no-repeat}
+.hero{position:relative;min-height:min(86vh,760px);padding-top:110px;display:flex;align-items:flex-end;color:#fff;background:#16191B center/cover no-repeat}
 .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(22,25,27,.72),rgba(22,25,27,.25) 55%,rgba(22,25,27,0) 80%),linear-gradient(180deg,rgba(22,25,27,.45),rgba(22,25,27,0) 28%,rgba(22,25,27,.1) 60%,rgba(22,25,27,.7))}
 .hero .wrap{position:relative;z-index:1;padding-bottom:clamp(40px,7vw,88px);width:100%}
 .hero h1{font-size:clamp(40px,6.4vw,80px);max-width:14ch;margin:14px 0 16px}.hero p{max-width:52ch;font-size:clamp(16px,1.6vw,19px);opacity:.92;margin:0 0 26px}
@@ -60,14 +60,14 @@ footer{padding:44px 0 60px;font-size:13px;color:var(--muted)}footer .wrap{displa
 </head>
 <body>
 <header class="top"><div class="wrap"><div class="mark">The Ranch Real Estate Group<small>Keller Williams Realty Puget Sound</small></div>
-<nav aria-label="Main"><a href="#homes">Homes</a><a href="#guides">Neighborhoods</a><a href="#notice">First notice</a><a href="/19917#valuation">Home value</a></nav></div></header>
+<nav aria-label="Main"><a href="#homes">Homes</a><a href="/unlisted">Unlisted</a><a href="#guides">Neighborhoods</a><a href="/sell">Selling</a></nav></div></header>
 
 <main>
 <div class="hero" style="background-image:url(photos/front-dusk.webp)"><div class="wrap">
 <p class="eyebrow">Homes for sale · Puget Sound</p>
 <h1>Homes worth telling the story of.</h1>
 <p>Every home we list gets its own story, its own neighborhood guide and a team of 600 agents across 10 Keller Williams offices behind it.</p>
-<div class="acts"><a class="btn light" href="#homes">See the homes</a><a class="btn line" href="/19917#valuation">What’s my home worth?</a></div>
+<div class="acts"><a class="btn light" href="#homes">See the homes</a><a class="btn line" href="/sell">What’s my home worth?</a></div>
 </div></div>
 
 <section id="homes"><div class="wrap">
@@ -75,7 +75,7 @@ footer{padding:44px 0 60px;font-size:13px;color:var(--muted)}footer .wrap{displa
 <div class="homes">
 <a class="home" href="/19917"><img src="photos/front-dusk-800.webp" alt="19917 145th St E in Tehaleh at dusk" loading="lazy" width="800" height="600">
 <div class="b"><span class="eyebrow">Tehaleh · Bonney Lake</span><h3>19917 145th St E</h3><div class="m">$775,000 · Five bedrooms · backs to the greenbelt</div><span class="go">See the home</span></div></a>
-<div class="soon"><span class="eyebrow">Coming next</span><h3>Hear about our next home first.</h3><p class="m" style="color:var(--muted);margin:0">Our listings reach this list before the weekend rush.</p><a class="btn" href="#notice" style="align-self:flex-start">Get first notice</a></div>
+<div class="soon"><span class="eyebrow">Coming next</span><h3>Hear about our next home first.</h3><p class="m" style="color:var(--muted);margin:0">Our listings reach this list before the weekend rush.</p><a class="btn" href="#notice" style="align-self:flex-start">Hear about it first</a></div>
 </div></div></section>
 
 <section id="guides" style="padding-top:0"><div class="wrap">
@@ -86,13 +86,13 @@ footer{padding:44px 0 60px;font-size:13px;color:var(--muted)}footer .wrap{displa
 </div></div></section>
 
 <section id="notice" class="dark"><div class="wrap split">
-<div><p class="eyebrow" style="color:#C9A97C">First notice</p><h2>New homes, before they’re everywhere.</h2><p>Tell us what you’re looking for. When a home like it is coming, you’ll hear from us first — often before it’s anywhere online.</p></div>
+<div><p class="eyebrow" style="color:#C9A97C">Unlisted · our off-market search</p><h2>The home you want may never hit the market.</h2><p>Tell us what you’re looking for. We’ll tell you when a home like it is coming, and we can go hunting for the ones that aren’t for sale yet.</p><p><a href="/unlisted" style="color:#E8D9C3">How Unlisted works →</a></p></div>
 <div id="nf"><form id="notice-form" novalidate>
 <div class="row2"><div><label for="n">Name</label><input id="n" name="name" autocomplete="name" required></div><div><label for="p">Phone</label><input id="p" name="phone" type="tel" autocomplete="tel" required></div></div>
 <div><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email" required></div>
 <div><label for="w">Where, and roughly what? (optional)</label><input id="w" name="question" placeholder="Tehaleh or Gig Harbor, 4+ bedrooms, under $900K"></div>
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-<div><button class="btn light">Get first notice</button></div>
+<div><button class="btn light">Tell me first</button></div>
 <p class="fine">Chris will text or email you personally. Reply STOP any time.</p>
 </form></div></div></section>
 </main>
@@ -108,7 +108,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(f.website.value)re
   var b=f.querySelector('button');b.disabled=true;b.textContent='Sending…';
   fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'alerts',name:n,phone:p,email:m,question:f.question.value.trim(),page:'collection',listing:'All listings',source:'homes.ranchpnw.com'})})
   .then(function(r){return r.json()}).then(function(j){if(!j.ok)throw new Error(j.reason);document.getElementById('nf').innerHTML='<p class="ok">You’re on the list.</p><p>Chris will be in touch personally — and you’ll hear about the next home first.</p>'})
-  .catch(function(err){b.disabled=false;b.textContent='Get first notice';alert((err&&err.message)||'That didn’t go through. Please try again.')});
+  .catch(function(err){b.disabled=false;b.textContent='Tell me first';alert((err&&err.message)||'That didn’t go through. Please try again.')});
 });
 try{fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'visit',view:'collection',page:'collection',source:document.referrer?'referral':'direct',visitor:Math.random().toString(36).slice(2,10)}),keepalive:true})}catch(e){}
 })();

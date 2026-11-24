@@ -5,22 +5,26 @@ First-hand local guides that answer engines (ChatGPT, Claude, Perplexity, Google
 Chris's listings in that town. Value comes from lived experience Zillow can't copy: picks, a day in the life,
 honest "who it's not for", resident FAQs — plus sourced facts.
 
-## Domains (decided Nov 19, 2026)
-- New guides: **live.ranchpnw.com/<town>** (one site so every link and share builds the whole network).
+## Domains (updated Nov 23, 2026)
+- New guides: **homes.ranchpnw.com/guides/<town>** (decided Nov 23 with Chris: one domain builds one site's authority for search and AEO,
+  and it unblocks publishing — the live.ranchpnw.com repo/DNS never got set up). live.ranchpnw.com is dropped.
 - Tehaleh stays at **gotehaleh.com** (Chris owns it). Listings at **homes.ranchpnw.com/<listing>**.
 - Guides and listings link to each other; nothing is published twice.
 - Longer term: Chris may move ranchpnw.com off the KW site; then everything can consolidate under it.
 - myfoxisland.com exists with Fox Island info (no IDX) — decide with Chris how the Fox Island guide relates to it before building.
 
-## Queue
-1. ~~Tehaleh~~ — live at gotehaleh.com (chapters, Chris's picks, day in the life, FAQ, at-a-glance)
-2. **Bonney Lake** — next (Tehaleh is a neighborhood within it; Lake Tapps, Allan Yorke Park, SR-410 corridor, Costco)
-3. Fox Island
-4. Gig Harbor
-5. Lake Tapps
-6. Tacoma
-7. Federal Way
-8. Then outward: Puyallup, Fife, Auburn, Kent, Enumclaw, Renton, Seattle — ideally each with picks from a Ranch agent who lives there
+## Queue (Chris, Nov 23: build fast, 4 a night, as drafts he approves)
+Night 1 (Nov 23): Bonney Lake (move the written guide to homes.ranchpnw.com/guides/bonney-lake), Gig Harbor, Fox Island, Renton
+Night 2 (Nov 24): Lake Tapps, Tacoma, Enumclaw, Burien
+Night 3 (Nov 25): Port Orchard, Edgewood, then Federal Way, Puyallup
+Then: Fife, Auburn, Kent, Sumner, Seattle.
+Renton, Burien, Port Orchard and Edgewood have current Ranch listings (Port Orchard is vacant land): link each guide to its listing page.
+~~Tehaleh~~ is live at gotehaleh.com.
+
+## Draft-first rule
+A draft is built from sourced facts only (every number and claim links to its source). Chris's first-hand parts
+(picks, a day in the life, who it's not for) are added from his interview answers; until then the draft says
+"Local picks coming soon" rather than inventing any. Nothing goes live until Chris approves the draft.
 
 ## Each guide contains
 - At-a-glance facts (sourced), chapters with real photos (credited), Chris's (or the local agent's) picks,

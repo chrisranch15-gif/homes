@@ -301,14 +301,14 @@ function closedHtml(d){
 
 /* ---------- pending: congratulations, the road to closing, dates to remember, what to do now ---------- */
 function pendingHtml(d){
-  var tl=(d.timeline||[]).filter(function(x){return x.at}).sort(function(a,b){return a.at-b.at}),now=Date.now();
+  var tl=(d.timeline||[]).filter(function(x){return x.what}),now=Date.now();   // published in order; steps without a date yet show as "date to come"
   var close=tl.filter(function(x){return /clos/i.test(x.what)}).pop(),left=close?Math.max(0,Math.ceil((close.at-now)/864e5)):null;
   var dl=function(t){return new Date(t).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
   var road=tl.length?tl:[{what:'Mutual acceptance'},{what:'Inspection'},{what:'Appraisal'},{what:'Loan approval'},{what:'Signing with escrow'},{what:'Closing day'}];
-  var nxt=tl.filter(function(x){return !x.done&&x.at>=now-864e5})[0];
+  var nxt=tl.filter(function(x){return !x.done&&x.at&&x.at>=now-864e5})[0];
   var h='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">Under contract'+(close?' · closing '+dl(close.at):'')+'</p><h1>Congratulations, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' is pending. From here, my job is getting you to the closing table smoothly, and you’ll see every step right here.</p></div></div>';
   h+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>The road to closing</h2>'+(left!=null?'<div class="shsum"><div>'+left+'<span>days to closing</span></div>'+(nxt?'<div style="font-size:24px">'+esc(nxt.what)+'<span>next · '+dl(nxt.at)+'</span></div>':'')+'</div>':'')+
-    '<ol class="road">'+road.map(function(x){var st=x.done?'done':(nxt&&x===nxt)?'now':'';return '<li class="'+st+'"><span class="dot"></span><div><b>'+esc(x.what)+'</b>'+(x.at?'<span class="rd">'+dl(x.at)+'</span>':'')+(x.note?'<div class="muted small">'+esc(x.note)+'</div>':'')+'</div></li>'}).join('')+'</ol>'+
+    '<ol class="road">'+road.map(function(x){var st=x.done?'done':(nxt&&x===nxt)?'now':'';return '<li class="'+st+'"><span class="dot"></span><div><b>'+esc(x.what)+'</b>'+(x.at?'<span class="rd">'+dl(x.at)+'</span>':(tl.length?'<span class="rd">Date to come</span>':''))+(x.note?'<div class="muted small">'+esc(x.note)+'</div>':'')+'</div></li>'}).join('')+'</ol>'+
     (tl.length?'':'<p class="note">Your exact dates go up here as soon as the paperwork is final.</p>')+'</div></section>';
   h+='<section><div class="wrap"><p class="eyebrow">While we’re pending</p><h2>What helps right now</h2><ul class="chk" style="max-width:720px">'+[
     'Keep the home much as it looked when it sold. The buyers’ inspector and appraiser will both be visiting.',

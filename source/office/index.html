@@ -288,7 +288,7 @@ function deals() { return latestBy(S.sheet && S.sheet.deals, 1).map(r => ({ addr
 /* ---------- TC shadow mode: what the TC would have done, side by side with what happened. Nothing here sends. ---------- */
 function shadowKey(r) { return [r[0], r[1], String(r[2] || '').slice(0, 60)].join(' · '); }
 function shadowRows(a) { const n = (String(a || '').match(/^\d{3,6}/) || [])[0]; return ((S.sheet && S.sheet.shadow) || []).filter(r => r[1] && (!a || (n ? String(r[1]).indexOf(n) === 0 : r[1] === a))); }
-function tcCalls() { const m = {}; ((S.sheet && S.sheet.tcfb) || []).forEach(r => { if (r[2]) m[r[2]] = { call: r[3], note: r[4] }; }); return m; }
+function tcCalls() { const m = {}; ((S.sheet && S.sheet.tcfb) || []).forEach(r => { if (r[2] && !/^edited$/i.test(r[3] || '')) m[r[2]] = { call: r[3], note: r[4] }; }); return m; }
 function dueAt(v) { if (!v) return null; v = String(v).trim(); if (/^\d{4}-\d{2}-\d{2}$/.test(v)) v += 'T12:00'; let t = Date.parse(v); if (isNaN(t)) t = Date.parse(String(v).replace(/(\d)(am|pm)/i, '$1 $2') + ' ' + new Date().getFullYear()); return isNaN(t) ? null : t; }
 function liveDeals() {
   const out = {}, add = (a, from) => { const k = (String(a).match(/^\d{3,6}/) || [a])[0]; if (!out[k]) out[k] = { address: a, from }; };
@@ -313,8 +313,22 @@ function tcDraftHtml(r, k) { const id = tcDraftId(r), d = (S.tcDraft || {})[id],
   if (d.error) return d.error === 'gone' ? '<p class="s" style="margin-top:8px">This draft isn’t in Gmail anymore (sent or deleted there). Tap Handled to clear it.</p>'
     : `<p class="s" style="margin-top:8px">Couldn’t open it here (${esc(d.error)}). <a href="${link}" target="_blank" rel="noopener">Open in Gmail</a></p>`;
   const f = tcFiles(d), who = ['To: ' + (d.toRecipients || []).join(', '), (d.ccRecipients || []).length ? 'CC: ' + d.ccRecipients.join(', ') : ''].filter(Boolean).join('\n');
+  if (S.tcEdit === k) return `<form class="tcedit" data-k="${esc(k)}" style="margin-top:8px"><div class="s">${esc(who)}</div>
+    <div class="field" style="margin:8px 0"><label>Subject</label><input name="subject" value="${esc(d.subject || '')}"></div>
+    <div class="field" style="margin:0 0 8px"><label>Message</label><textarea name="body" rows="16" style="min-height:320px">${esc(String(d.plaintextBody || '').trim())}</textarea></div>
+    <div class="acts"><button class="pill" type="submit">Save to the draft</button><button class="pill ghost" type="button" data-act="tceditx">Cancel</button></div>
+    <p class="s" style="margin-top:8px">Saving updates the same Gmail draft. Nothing sends until you tap Send. Your TC learns from what you change.</p></form>`;
   return `<div class="draftbox" style="margin-top:8px;white-space:pre-wrap"><b>${esc(d.subject || '(no subject)')}</b>\n${esc(who)}${f.length ? '\nAttached: ' + esc(f.map(x => x.filename).join(', ')) : ''}\n\n${esc(String(d.plaintextBody || '').trim())}</div>
-  <div class="acts" style="margin-top:10px">${f.length ? `<a class="pill" href="${link}" target="_blank" rel="noopener">Send in Gmail (has an attachment)</a>` : `<button class="pill" data-act="tcsend" data-k="${esc(k)}">${S.tcSure === k ? 'Tap again to send to ' + esc((d.toRecipients || []).join(', ')) : 'Send'}</button>`}<a class="pill ghost" href="${link}" target="_blank" rel="noopener">Edit in Gmail</a></div>`; }
+  <div class="acts" style="margin-top:10px">${f.length ? `<a class="pill" href="${link}" target="_blank" rel="noopener">Send in Gmail (has an attachment)</a>` : `<button class="pill" data-act="tcsend" data-k="${esc(k)}">${S.tcSure === k ? 'Tap again to send to ' + esc((d.toRecipients || []).join(', ')) : 'Send'}</button><button class="pill ghost" data-act="tcedit" data-k="${esc(k)}">Edit here</button>`}<a class="pill ghost" href="${link}" target="_blank" rel="noopener">Edit in Gmail</a></div>`; }
+const tcText = d => 'Subject: ' + ((d && d.subject) || '') + '\n\n' + String((d && d.plaintextBody) || '').trim();
+async function tcSaveEdit(k, subject, body) { const r = ((S.sheet && S.sheet.shadow) || []).find(x => shadowKey(x) === k); if (!r) return; const id = tcDraftId(r);
+  try { const before = await tool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' });
+    if (tcFiles(before).length) throw new Error('it has an attachment, so edit it in Gmail');
+    await tool('Gmail', 'update_draft', { draftId: id, subject, body });
+    const after = await tool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' }); S.tcDraft[id] = after || { error: 'gone' }; S.tcEdit = null;
+    if (tcText(before) !== tcText(after)) await append('TC feedback', [[nowStamp(), r[1], k, 'Edited', ('Chris edited the draft in the Office.\n\nBEFORE:\n' + tcText(before) + '\n\nAFTER:\n' + tcText(after)).slice(0, 45000)]]).catch(() => { });
+    toast('Saved to the draft.'); tcSheet(r[1]);
+  } catch (e) { toast('Not saved — ' + (e.message || 'try again')); } }
 async function tcSend(k) { const r = ((S.sheet && S.sheet.shadow) || []).find(x => shadowKey(x) === k); if (!r) return; const id = tcDraftId(r);
   if (S.tcSure !== k) { S.tcSure = k; return tcSheet(r[1]); }
   S.tcSure = null; toast('Sending…');
@@ -326,7 +340,7 @@ async function tcSend(k) { const r = ((S.sheet && S.sheet.shadow) || []).find(x 
     await tool('Gmail', 'send_message', msg);
     await tool('Gmail', 'delete_draft', { draftId: id }).catch(() => { });
     S.tcDraft[id] = { error: 'gone' };
-    await append('TC feedback', [[nowStamp(), r[1], k, 'Sent', 'Chris sent it from the Office']]).catch(() => { });
+    await append('TC feedback', [[nowStamp(), r[1], k, 'Sent', ('Chris sent it from the Office.\n\nAS SENT:\n' + tcText(d)).slice(0, 45000)]]).catch(() => { });
     toast('Sent.'); await loadSheet(); render(); tcSheet(r[1]);
   } catch (e) { toast('Not sent — ' + (e.message || 'try again')); tcSheet(r[1]); } }
 function tcNeedsChris(r, calls) {   // only what Chris must act on: urgent items, Gmail drafts waiting to send, and fresh text drafts that haven't been overtaken by events
@@ -358,6 +372,7 @@ function tcSheet(a) {
   <details style="margin-top:18px"><summary class="mini" style="cursor:pointer;margin:0 4px">Everything your TC logged · ${rs.length} (with sources)</summary><div class="group" style="margin-top:8px">${rs.slice().reverse().map(r => `<div class="row plain" style="display:block"><div class="s">${esc(r[0])}${r[3] ? ' · due ' + esc(r[3]) : ''}${calls[shadowKey(r)] ? ' · your call: ' + esc(calls[shadowKey(r)].call) : ''}</div><div class="t" style="font-size:14px">${esc(r[2])}</div>${r[8] ? `<div class="s">What happened: ${esc(r[8])}</div>` : ''}</div>`).join('')}</div></details>
   <div class="acts" style="margin-top:18px"><button class="pill ghost" data-act="close">Done</button></div>`);
   const el = $('#sheet'); if (el) el.dataset.tc = a;
+  document.querySelectorAll('#sheet form.tcedit').forEach(f => { f.onsubmit = e => { e.preventDefault(); const b = f.querySelector('[type=submit]'); b.disabled = true; b.textContent = 'Saving…'; tcSaveEdit(f.dataset.k, f.subject.value, f.body.value); }; });
 }
 /* ---------- pending: publish seller-safe dates to the seller portal (Seller timeline tab) and switch it to the pending view. Only when Chris taps. ---------- */
 const SELLER_STEPS = ['Mutual acceptance', 'Earnest money deposited', 'Home inspection', 'Inspection period ends', 'HOA documents due to the buyers', 'Buyers\u2019 information review ends', 'HOA review ends', 'Appraisal', 'Financing check-in', 'Signing with escrow', 'Closing day'];
@@ -1061,6 +1076,8 @@ document.addEventListener('click', async e => {
   else if (a === 'fbok') { const id = 'fb:' + b.dataset.k; try { const l = JSON.parse(store('done') || '[]'); l.push(id); store('done', JSON.stringify(l.slice(-300))); } catch (err) { } render(); toast('Removed. Feedback is in.'); append('Hub done', [[nowStamp(), id, 'Feedback received', x || '']]).catch(() => { }); }
   else if (a === 'tccall') { b.disabled = true; tcCall(b.dataset.k, b.dataset.v); }
   else if (a === 'tcsend') { b.disabled = true; tcSend(b.dataset.k); }
+  else if (a === 'tcedit') { S.tcEdit = b.dataset.k; S.tcSure = null; const el = $('#sheet'); tcSheet(el && el.dataset.tc); }
+  else if (a === 'tceditx') { S.tcEdit = null; const el = $('#sheet'); tcSheet(el && el.dataset.tc); }
   else if (a === 'tccopy') { const r = ((S.sheet && S.sheet.shadow) || []).find(r => shadowKey(r) === b.dataset.k); try { await navigator.clipboard.writeText(r ? r[5] : ''); toast('Draft copied.'); } catch (err) { toast('Couldn’t copy on this device.'); } }
   else if (a === 'tcfix') { const box = document.createElement('div'); box.className = 'form'; box.innerHTML = `<textarea rows="3" placeholder="What would you change, or say instead?" style="width:100%"></textarea><div class="acts" style="margin-top:8px"><button class="pill" type="button">Save</button></div>`; b.parentElement.replaceWith(box); box.querySelector('textarea').focus(); box.querySelector('button').onclick = () => { const t = box.querySelector('textarea').value.trim(); if (t) tcCall(b.dataset.k, 'Change it', t); }; }
   else if (a === 'kit') kitSheet(x);

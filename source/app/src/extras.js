@@ -210,6 +210,7 @@ Object.assign(A, {
 });
 ui.q = ui.q || {};
 function keepQuick(f) { if (!f) return; ['address', 'price', 'beds', 'baths', 'sqft', 'highlights', 'photos', 'seller', 'sellerEmail', 'tone'].forEach(k => { if (f.elements[k]) ui.q[k] = f.elements[k].value; }); ['photosReady', 'launchOk'].forEach(k => { if (f.elements[k]) ui.q[k] = f.elements[k].checked; }); }
+Object.assign(FORMS, { 'tc-edit': f => { const b = f.querySelector('[type=submit]'); if (b) { b.disabled = true; b.textContent = 'Saving…'; } tcSaveDesk(f.dataset.k, f.subject.value, f.body.value); } });
 Object.assign(FORMS, {
   follow: async f => { const c = readContact(f); if (!c) return; if (!(await submitLead(f, 'follow', c))) return; const r = E.emit(LID, 'follow.created', { name: c.name, contact: c.email, consent: true, source: session.attribution || 'story' });
     if (!r.follower) return toast('Enter a mobile number or email.'); session.follower = r.follower.code; keepSession();
@@ -255,7 +256,7 @@ async function liveLoad(quiet) {
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Offers!A2:Q300' }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'TC shadow'!A2:L2000" }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'TC feedback'!A2:E2000" }).catch(() => null)
-    ]).then(r => { ui.offerRows = liveRows(r[6]); ui.tcRows = liveRows(r[7]); ui.tcCalls = {}; liveRows(r[8]).forEach(x => { if (x[2]) ui.tcCalls[x[2]] = x[3]; }); ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); ui.fbOk = Object.assign({}, ui.fbOk); liveRows(r[5]).forEach(x => { if (/^fb:/.test(x[0])) ui.fbOk[String(x[0]).slice(3)] = 1; }); try { applyOpenHouses(ui.ohRows); } catch (e) {}
+    ]).then(r => { ui.offerRows = liveRows(r[6]); ui.tcRows = liveRows(r[7]); ui.tcCalls = {}; liveRows(r[8]).forEach(x => { if (x[2] && !/^edited$/i.test(x[3] || '')) ui.tcCalls[x[2]] = x[3]; }); ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); ui.fbOk = Object.assign({}, ui.fbOk); liveRows(r[5]).forEach(x => { if (/^fb:/.test(x[0])) ui.fbOk[String(x[0]).slice(3)] = 1; }); try { applyOpenHouses(ui.ohRows); } catch (e) {}
       try { const lr = liveRows(r[4]).filter(x => String(x[1]) === '19917'); const last = lr[lr.length - 1]; if (last && !ui.photoDraft) { const j = v => { try { return JSON.parse(v || '[]'); } catch (e) { return []; } }; applyLayout({ order: j(last[2]), hidden: j(last[3]), featured: j(last[4]) }); ui.layoutSaved = last[0]; } } catch (e) {}
       return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
@@ -453,15 +454,30 @@ function tcBlock() {
     if (!d || d === 'loading') { if (!d) setTimeout(() => tcDraftFetch(id)); inner = '<p class="small muted" style="margin:8px 0 0">Opening the draft…</p>'; }
     else if (d.error) inner = d.error === 'gone' ? '<p class="small muted" style="margin:8px 0 0">This draft isn’t in Gmail anymore (sent or deleted there). Tap Handled to clear it.</p>'
       : `<p class="small muted" style="margin:8px 0 0">Couldn’t open it here (${esc(d.error)}). <a href="${link}" target="_blank" rel="noopener noreferrer">Open in Gmail</a></p>`;
+    else if (ui.tcEdit === k) inner = `<form data-form="tc-edit" data-k="${esc(k)}" style="margin-top:8px"><p class="small muted" style="margin:0 0 8px">To: ${esc((d.toRecipients || []).join(', '))}</p>
+        <div class="field"><label>Subject</label><input name="subject" value="${esc(d.subject || '')}"></div>
+        <div class="field"><label>Message</label><textarea name="body" rows="16" style="min-height:320px">${esc(String(d.plaintextBody || '').trim())}</textarea></div>
+        <div class="chips"><button class="btn" type="submit">Save to the draft</button><button class="chip" type="button" data-act="tc-editx">Cancel</button></div>
+        <p class="small muted" style="margin-top:8px">Saving updates the same Gmail draft. Nothing sends until you tap Send. Your TC learns from what you change.</p></form>`;
     else { const f = tcFilesOf(d), to = (d.toRecipients || []).join(', ');
       inner = `<div style="padding:12px 14px;margin-top:8px;background:var(--paper2,rgba(128,120,108,.08));border-radius:10px"><div class="small"><b>${esc(d.subject || '(no subject)')}</b></div>
         <div class="small muted" style="margin-top:4px">To: ${esc(to)}${(d.ccRecipients || []).length ? ' · CC: ' + esc(d.ccRecipients.join(', ')) : ''}${f.length ? ' · Attached: ' + esc(f.map(x => x.filename).join(', ')) : ''}</div>
         <div class="small" style="white-space:pre-wrap;margin-top:8px;line-height:1.5">${esc(String(d.plaintextBody || '').trim())}</div></div>
-        <div class="chips" style="margin:10px 0 0">${f.length ? `<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Send in Gmail (has an attachment)</a>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) : 'Send'}</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>`; }
+        <div class="chips" style="margin:10px 0 0">${f.length ? `<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Send in Gmail (has an attachment)</a>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) : 'Send'}</button><button class="chip" data-act="tc-edit" data-k="${esc(k)}">Edit here</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>`; }
     return `<div style="padding:14px 0 6px;border-top:1px solid var(--line)"><div><b>${title}</b></div>${inner}</div>`; };
   return `<div class="sharebar" id="tcdrafts"><div class="eyebrow">Ready to send · ${rs.length} email${rs.length > 1 ? 's' : ''} from your TC</div>${rs.map(card).join('')}
     <p class="small muted" style="margin-top:10px">Nothing goes out until you tap Send. The same drafts are in your Gmail drafts and in the Office.</p></div>`;
 }
+const tcTextOf = d => 'Subject: ' + ((d && d.subject) || '') + '\n\n' + String((d && d.plaintextBody) || '').trim();
+async function tcSaveDesk(k, subject, body) { const r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; const id = tcDraftIdOf(r);
+  try { const before = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' });
+    if (tcFilesOf(before).length) throw new Error('it has an attachment, so edit it in Gmail');
+    await callTool('Gmail', 'update_draft', { draftId: id, subject, body });
+    const after = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' }); (ui.tcDraft = ui.tcDraft || {})[id] = after || { error: 'gone' }; ui.tcEdit = null;
+    if (tcTextOf(before) !== tcTextOf(after)) await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Edited', ('Edited on the Desk.\n\nBEFORE:\n' + tcTextOf(before) + '\n\nAFTER:\n' + tcTextOf(after)).slice(0, 45000)], 'Saved to the draft.');
+    else toast('Saved to the draft.');
+  } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); }
+  render(); }
 async function tcSendDesk(k) { const r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; const id = tcDraftIdOf(r);
   if (ui.tcSure !== k) { ui.tcSure = k; return render(); }
   ui.tcSure = null; toast('Sending…');
@@ -473,7 +489,7 @@ async function tcSendDesk(k) { const r = (ui.tcRows || []).find(x => tcKey(x) ==
     await callTool('Gmail', 'send_message', msg);
     await callTool('Gmail', 'delete_draft', { draftId: id }).catch(() => null);
     (ui.tcDraft = ui.tcDraft || {})[id] = { error: "gone" }; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Sent' });
-    await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Sent', 'Sent from the Desk'], 'Sent.');
+    await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Sent', ('Sent from the Desk.\n\nAS SENT:\n' + tcTextOf(d)).slice(0, 45000)], 'Sent.');
   } catch (e) { toast('Not sent — ' + ((e && e.message) || 'try again') + '.'); }
   render(); }
 function showBlock() {
@@ -567,6 +583,8 @@ Object.assign(A, {
   'offer-accept': async (el) => { const n = +el.dataset.r; if (ui.offerSure !== n) { ui.offerSure = n; return render(); }
     ui.offerSure = null; try { await offerSetStatus(n); toast('Marked accepted. The other offers stay saved.'); } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); } render(); },
   'offer-reopen': async () => { try { await offerSetStatus(0); toast('Back to comparing offers.'); } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); } render(); },
+  'tc-edit': (el) => { ui.tcEdit = el.dataset.k; ui.tcSure = null; render(); },
+  'tc-editx': () => { ui.tcEdit = null; render(); },
   'tc-send': (el) => { el.disabled = true; tcSendDesk(el.dataset.k); },
   'tc-handled': async (el) => { const k = el.dataset.k, r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Handled' }); render();
     await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Handled', 'Marked on the Desk'], 'Cleared.'); },

@@ -311,6 +311,7 @@ function pendingHtml(d){
   var tl=(d.timeline||[]).filter(function(x){return x.what}),now=Date.now();   // published in order; steps without a date yet show as "date to come"
   var close=tl.filter(function(x){return /clos/i.test(x.what)}).pop(),left=close?Math.max(0,Math.ceil((close.at-now)/864e5)):null;
   var dl=function(t){return new Date(t).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+  var lastAt=0;tl=tl.map(function(x,i){if(x.at)lastAt=x.at;return {x:x,k:x.at||lastAt,i:i}}).sort(function(a,b){return a.k-b.k||a.i-b.i}).map(function(o){return o.x});
   var road=tl.length?tl:[{what:'Mutual acceptance'},{what:'Inspection'},{what:'Appraisal'},{what:'Loan approval'},{what:'Signing with escrow'},{what:'Closing day'}];
   var nxt=tl.filter(function(x){return !x.done&&x.at&&x.at>=now-864e5})[0];
   var h='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">Under contract'+(close?' · closing '+dl(close.at):'')+'</p><h1>Congratulations, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' is pending. From here, my job is getting you to the closing table smoothly, and you’ll see every step right here.</p></div></div>';

@@ -3,7 +3,7 @@
  "address": "13157 175th Ave E #P2",
  "city": "Bonney Lake",
  "state": "WA",
- "price": 450000,
+ "price": 465000,
  "status": "Preparing",
  "sellers": "Stephanie and Charles",
  "photo_day": "2026-11-24",
@@ -30,5 +30,118 @@
   "high": "Orting High",
   "elementary": "check: Orting Elementary or Ptarmigan Ridge"
  },
- "source": "Realist public record, 2026-11-23"
+ "source": "Realist public record, 2026-11-23",
+ "sqft_note": "Public record says 1,579 sq ft; the CubiCasa floor plan measures 1,512 (515 main, 997 upper). Hidden on the page until Chris confirms which goes on NWMLS.",
+ "mls": "",
+ "credit": "Anthony Jones / Rainier Real Estate Photography",
+ "type": "Townhouse",
+ "hero": "19-13157-175th-ave-e-019",
+ "lede": "A 2021 Tehaleh townhome built around an open kitchen, with three bedrooms and the laundry upstairs and a fenced patio at the front door.",
+ "features": [
+  [
+   "The kitchen",
+   "19-13157-175th-ave-e-019"
+  ],
+  [
+   "Living room and kitchen",
+   "21-13157-175th-ave-e-021"
+  ],
+  [
+   "The primary bedroom",
+   "27-13157-175th-ave-e-027"
+  ],
+  [
+   "The front patio",
+   "02-13157-175th-ave-e-002"
+  ]
+ ],
+ "groups": [
+  [
+   "Outside",
+   [
+    "02-13157-175th-ave-e-002",
+    "01-13157-175th-ave-e-001",
+    "14-13157-175th-ave-e-014"
+   ]
+  ],
+  [
+   "Kitchen and living room",
+   [
+    "19-13157-175th-ave-e-019",
+    "21-13157-175th-ave-e-021",
+    "17-13157-175th-ave-e-017",
+    "18-13157-175th-ave-e-018",
+    "20-13157-175th-ave-e-020",
+    "22-13157-175th-ave-e-022",
+    "23-13157-175th-ave-e-023",
+    "24-13157-175th-ave-e-024",
+    "25-13157-175th-ave-e-025",
+    "26-13157-175th-ave-e-026"
+   ]
+  ],
+  [
+   "Upstairs",
+   [
+    "27-13157-175th-ave-e-027",
+    "28-13157-175th-ave-e-028",
+    "29-13157-175th-ave-e-029",
+    "31-13157-175th-ave-e-031",
+    "33-13157-175th-ave-e-033",
+    "32-13157-175th-ave-e-032",
+    "36-13157-175th-ave-e-036",
+    "37-13157-175th-ave-e-037",
+    "35-13157-175th-ave-e-035",
+    "38-13157-175th-ave-e-038",
+    "39-13157-175th-ave-e-039",
+    "34-13157-175th-ave-e-034"
+   ]
+  ],
+  [
+   "The neighborhood",
+   [
+    "06-13157-175th-ave-e-006",
+    "04-13157-175th-ave-e-004",
+    "03-13157-175th-ave-e-003",
+    "09-13157-175th-ave-e-009",
+    "10-13157-175th-ave-e-010",
+    "11-13157-175th-ave-e-011",
+    "12-13157-175th-ave-e-012"
+   ]
+  ]
+ ],
+ "story": [
+  "The main floor is one open room: the living room flows into a kitchen with white shaker cabinets, a subway-tile backsplash, a gas range, stainless appliances and an island that seats three. A half bath sits just off the kitchen.",
+  "Upstairs, the primary bedroom has a walk-in closet and its own bath with double sinks, a soaking tub and a separate shower. Two more bedrooms, a full hall bath, a laundry room and a landing that works as a desk nook share the floor.",
+  "Out front, a picket-fenced paver patio sits right at the door. Room sizes come from a CubiCasa floor plan; buyers should verify measurements."
+ ],
+ "details": [
+  [
+   "Year built",
+   "2021 (Lennar)"
+  ],
+  [
+   "Community",
+   "Discovery Park at Tehaleh"
+  ],
+  [
+   "Style",
+   "Townhouse, 2 stories"
+  ],
+  [
+   "Garage",
+   "469 sq ft (public record)"
+  ],
+  [
+   "Heating and cooling",
+   "Forced air, central A/C"
+  ],
+  [
+   "Schools",
+   "Orting School District"
+  ],
+  [
+   "Taxes",
+   "$3,952 (2026)"
+  ]
+ ]
 }

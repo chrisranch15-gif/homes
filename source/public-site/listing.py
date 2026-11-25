@@ -15,10 +15,12 @@ def build(key):
     title_of = lambda s: P[s]['title'] if s in P else s
     A = AGENT; addr = L['address']; place = f"{L['city']}, {L['state']}"
     price = '${:,.0f}'.format(L['price']); land = L.get('kind') == 'land'
-    facts = [f"{L['acres']} acres", L.get('parcels_note', '')] if land else [f"{L['beds']} bed", f"{L['baths']} bath", '{:,} sq ft'.format(L['sqft'])]
+    soon = not L.get('mls')  # not on NWMLS yet: private preview, noindex, no MLS number
+    sq = L.get('sqft') if not L.get('sqft_note') else None  # sqft_note = sources disagree; stays hidden until confirmed
+    facts = [f"{L['acres']} acres", L.get('parcels_note', '')] if land else [f"{L['beds']} bed", f"{L['baths']} bath", '{:,} sq ft'.format(sq) if sq else '']
     facts = [f for f in facts if f]
     spec = (''.join(f'<div><b>{E(str(v))}</b><span>{E(k)}</span></div>' for k, v in L['spec']) if land else
-            f"<div><b>{L['beds']}</b><span>Bedrooms</span></div><div><b>{E(str(L['baths']))}</b><span>Baths</span></div><div><b>{'{:,}'.format(L['sqft'])}</b><span>Square feet</span></div>") + f"<div><b>{price}</b><span>MLS #{E(L['mls'])}</span></div>"
+            f"<div><b>{L['beds']}</b><span>Bedrooms</span></div><div><b>{E(str(L['baths']))}</b><span>Baths</span></div>" + (f"<div><b>{'{:,}'.format(sq)}</b><span>Square feet</span></div>" if sq else '')) + f"<div><b>{price}</b><span>{'Coming soon' if soon else 'MLS #' + E(L['mls'])}</span></div>"
     story = ''.join(f'<p>{E(x)}</p>' for x in L.get('story', []))
     details = ''.join(f'<div><dt>{E(k)}</dt><dd>{E(v)}</dd></div>' for k, v in L.get('details', []))
     more = (f'<div class="story">{story}</div>' if story else '') + (f'<dl class="dets">{details}</dl>' if details else '')
@@ -33,11 +35,11 @@ def build(key):
     cfg = json.dumps({'api': API, 'key': key, 'listing': addr, 'photos': [{'src': ph(s), 'alt': title_of(s)} for s in order]})
     ld = json.dumps({'@context': 'https://schema.org', '@type': L.get('type', 'SingleFamilyResidence'), 'name': addr, 'url': url,
                      'address': {'@type': 'PostalAddress', 'streetAddress': addr, 'addressLocality': L['city'], 'addressRegion': L['state']},
-                     **({} if land else {'numberOfRooms': L['beds'], 'floorSize': {'@type': 'QuantitativeValue', 'value': L['sqft'], 'unitCode': 'FTK'}}),
+                     **({} if land else {'numberOfRooms': L['beds'], **({'floorSize': {'@type': 'QuantitativeValue', 'value': sq, 'unitCode': 'FTK'}} if sq else {})}),
                      'image': f"{A['origin']}/photos/{key}/{L['hero']}.jpg"})
     page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(addr)}, {E(place)} · {price} · {E(A['team'])}</title>
-<meta name="description" content="{E(desc)}"><link rel="canonical" href="{url}">
+<meta name="description" content="{E(desc)}"><link rel="canonical" href="{url}">{'<meta name="robots" content="noindex,nofollow">' if soon else ''}
 <meta property="og:type" content="website"><meta property="og:site_name" content="{E(A['team'])}"><meta property="og:title" content="{E(addr)} · {price}">
 <meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{A['origin']}/photos/{key}/{L['hero']}.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -89,7 +91,7 @@ input,select,textarea{{font:inherit;font-size:16px;padding:12px 14px;border-radi
 </style></head><body>
 <header class="hero"><img src="photos/{key}/{L['hero']}.webp" alt="{E(addr)}, {E(place)}" fetchpriority="high">
 <div class="top"><div class="wrap"><span class="brand">{E(A['team'])}</span><a class="call" href="tel:{A['tel']}">{E(A['phone'])}</a></div></div>
-<div class="hc"><div class="wrap"><p class="eb">{E(L['status'])} · {E(L['city'])}</p><h1>{E(addr)}</h1><p class="place">{E(place)}</p>
+<div class="hc"><div class="wrap"><p class="eb">{E('Coming soon' if soon else L['status'])} · {E(L['city'])}</p><h1>{E(addr)}</h1><p class="place">{E(place)}</p>
 <div class="row"><span class="price">{price}</span><span class="facts">{' · '.join(facts)}</span></div>
 <div class="ctas"><a class="btn gold" href="#tour">Request a tour</a><a class="btn line" href="#photos">See all {len(order)} photos</a></div></div></div></header>
 <main>

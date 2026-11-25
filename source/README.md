@@ -42,3 +42,11 @@ WebP images, minifies, and writes robots.txt / sitemap.xml / llms.txt.
 
 ## The Office: private values
 `source/office/index.html` holds `__MY_EMAILS__`. The public copy (`office/index.html`) gets `[]`; only the private claude.ai copy gets Chris's addresses, filled in at publish time. Never commit them.
+
+## Marketing assets and the Sites gallery
+`source/marketing/build_assets.py` (run by `source/office/ship.sh`) finds every listing's launch assets by file name
+(`<key>.html`, `print/<key>-*brochure.pdf`, `print/open-house-signs-<key>-<style>.pdf`, `social/video/<key>-*.mp4`,
+`social/<key>/*.jpg`), makes thumbnails in `marketing/thumbs/`, and writes the Desk's `src/assets.js` and the Office's
+`source/office/sites.json` (public sites + town guides from `source/guides/*.json`). Name launch files this way and they
+show up on the Desk's Marketing assets and in the Office's Sites & pages on the next ship. claude.ai artifacts can't load
+remote images, so publish the thumbnails with each artifact (Office: `site-*.jpg`; Desk: that listing's thumbs).

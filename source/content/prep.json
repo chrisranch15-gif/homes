@@ -68,7 +68,7 @@
   },
   {
    "id": "closing",
-   "name": "As closing gets close",
+   "name": "Before closing day",
    "when": "closing",
    "items": [
     "Forward your mail with the official USPS change of address at usps.com/move (skip look-alike sites that charge more).",

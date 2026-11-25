@@ -60,7 +60,7 @@ def section(n, g, cls=''):
     lede = f'<p class="lede">{E(g["lede"])}</p>' if g.get('lede') else ''
     note = f'<p class="note">{E(g["note"])}</p>' if g.get('note') else ''
     return (f'<section class="{cls}"><div class="wrap"><div class="hd"><span class="n">{n:02d}</span><div>'
-            f'<p class="eyebrow">{"As closing gets close" if g["when"] == "closing" else "Before we list"}</p>'
+            f'<p class="eyebrow">{"Before closing day" if g["when"] == "closing" else "Before we list"}</p>'
             f'<h2>{E(g["name"])}</h2></div></div>{lede}<ul class="chk">{items(g)}</ul>{note}</div></section>')
 def build():
     A = AGENT

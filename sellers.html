@@ -67,6 +67,9 @@ section h2{font-size:30px;margin:8px 0 18px}
 .sh .st{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .sh.off .d,.sh.off .t{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(0,0,0,.25)}
 .shsum{display:flex;gap:28px;flex-wrap:wrap;margin:6px 0 18px}.shsum div{font-family:var(--serif,Georgia),serif;font-size:34px;line-height:1}.shsum span{display:block;font-family:inherit;font-size:13px;color:var(--muted);margin-top:6px}
+.dayc{background:var(--card);border:1px solid var(--line);padding:24px 26px;margin:14px 0 6px}.dayc .dn{font-family:var(--serif,Georgia,serif);font-size:30px;line-height:1.1}.dayc .dn b{font-size:52px;color:var(--accent);font-weight:500}.dayc .dl{color:var(--muted);margin:6px 0 18px}.dayc .dl b{color:var(--ink,#1d1d1b);font-weight:600}.trk{position:relative;height:8px;background:var(--line);border-radius:4px;margin:0 6px}.trk>span{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:4px}.trk .tk{position:absolute;top:-3px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper,#fff);border:2px solid var(--line)}.trk .tk.on{border-color:var(--accent);background:var(--accent)}.trk .you{position:absolute;top:-8px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:var(--paper,#fff);border:3px solid var(--accent);box-shadow:0 0 0 5px rgba(140,106,67,.18)}.tke{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:14px}
+.bts{margin-top:26px;padding:20px 24px;border-left:3px solid var(--accent);background:var(--card)}.bts p:last-child{margin:0}
+.helps{background:#1f1d1a;color:#f4efe7;padding:34px 30px}.helps .eyebrow{color:#E8D9C3}.helps h2{color:#fff}.helps ol{margin:16px 0 0;padding:0;list-style:none;counter-reset:h}.helps li{counter-increment:h;position:relative;padding:14px 0 14px 48px;border-top:1px solid rgba(255,255,255,.14);font-size:17px}.helps li:before{content:counter(h);position:absolute;left:0;top:12px;width:30px;height:30px;border-radius:50%;background:#E8D9C3;color:#1f1d1a;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
 .road{list-style:none;margin:18px 0 0;padding:0;border-left:2px solid var(--line)}.road li{position:relative;display:flex;gap:14px;padding:12px 0 12px 22px}.road .dot{position:absolute;left:-7px;top:17px;width:12px;height:12px;border-radius:50%;background:var(--paper,#fff);border:2px solid var(--line)}.road li.done .dot{background:var(--accent);border-color:var(--accent)}.road li.now .dot{border-color:var(--accent);box-shadow:0 0 0 4px rgba(140,106,67,.18)}.road li.now b{color:var(--accent)}.road b{display:block;font-weight:600}.road .rd{display:block;font-size:14px;color:var(--muted);margin-top:2px}
 .feedback{display:grid;gap:12px}
 .fb{background:var(--card);border:1px solid var(--line);padding:18px 20px}
@@ -229,7 +232,7 @@ var PREP={
   },
   {
    "id": "closing",
-   "name": "As closing gets close",
+   "name": "Before closing day",
    "when": "closing",
    "items": [
     "Forward your mail with the official USPS change of address at usps.com/move (skip look-alike sites that charge more).",
@@ -246,23 +249,25 @@ var PD={code:'',home:'',rows:[]};
 function pdone(k){return PD.rows.some(function(r){return r.key===k&&r.done})}
 function prepHtml(si,d,code){
   PD={code:code,home:d.home,rows:d.prep||[]};
-  return '<section id="prep"><div class="wrap"><p class="eyebrow">Your checklist</p><h2>Getting ready</h2><div id="prepbody">'+prepBody(si,d)+'</div></div></section>';
+  return '<section id="prep"><div class="wrap"><p class="eyebrow">'+(si>=4?'Your moving checklist':'Your checklist')+'</p><h2>'+(si>=4?'Getting ready to move':'Getting ready')+'</h2><div id="prepbody">'+prepBody(si,d)+'</div></div></section>';
 }
 function prepBody(si,d){
-  var closingNow=si>=3, groups=function(when){return PREP.groups.filter(function(g){return g.when===when})};
+  var closingNow=si>=3,PN=si>=4, groups=function(when){return PREP.groups.filter(function(g){return g.when===when})};
   var li=function(k,t,own){return '<li><label><input type="checkbox" data-prep="'+k+'"'+(pdone(k)?' checked':'')+'><span>'+esc(t)+'</span></label><span class="pa"><button type="button" class="ask" data-ask="'+esc(t)+'" aria-label="Ask Chris about this">Ask</button>'+(own?'<button type="button" class="ask" data-rm="'+k+'" aria-label="Remove">Remove</button>':'')+'</span></li>'};
   var box=function(name,items,note,extra){return '<div class="pg"><h3>'+esc(name)+'</h3><ul class="chk">'+items.join('')+'</ul>'+(note?'<p class="pn">'+esc(note)+'</p>':'')+(extra||'')+'</div>'};
   var mine=PD.rows.filter(function(r){return r.from==='Chris'}), own=PD.rows.filter(function(r){return r.from==='Seller'});
   var keysBefore=[];groups('before').forEach(function(g){g.items.forEach(function(t){keysBefore.push(g.id+'-'+hk(t))})});
   mine.concat(own).forEach(function(r){keysBefore.push(r.key)});
+  if(PN){keysBefore=[];groups('closing').forEach(function(g){g.items.forEach(function(t){keysBefore.push(g.id+'-'+hk(t))})});own.forEach(function(r){keysBefore.push(r.key)})}
   var left=keysBefore.filter(function(k){return !pdone(k)}).length, total=keysBefore.length, doneN=total-left;
-  var head='<div class="pprog"><div class="pbar"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div><p><b>'+doneN+' of '+total+'</b> done before we list'+(function(){if(!d.photoDay)return '';var pd=new Date(d.photoDay),days=Math.ceil((new Date(pd.toDateString())-new Date(new Date().toDateString()))/864e5);if(days<0)return '';return ' · <b>Photos '+(days===0?'today':days===1?'tomorrow':pd.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))+'</b>, '+left+' to go'})()+'</p></div>';
+  var head='<div class="pprog"><div class="pbar"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div><p><b>'+doneN+' of '+total+'</b> done '+(PN?'before closing':'before we list')+(function(){if(PN||!d.photoDay)return '';var pd=new Date(d.photoDay),days=Math.ceil((new Date(pd.toDateString())-new Date(new Date().toDateString()))/864e5);if(days<0)return '';return ' · <b>Photos '+(days===0?'today':days===1?'tomorrow':pd.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}))+'</b>, '+left+' to go'})()+'</p></div>';
   var cards=[];
   if(mine.length)cards.push(box('From Chris, for your home',mine.map(function(r){return li(r.key,r.text)})));
   groups('before').forEach(function(g){cards.push(box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note))});
   cards.push(box('Your own list',own.map(function(r){return li(r.key,r.text,1)}),'','<form class="padd" id="padd"><input id="paddt" maxlength="160" placeholder="Add something, like “fix the gate latch”" aria-label="Add your own item"><button class="btn line">Add</button></form>'));
   var before='<details'+(si<=1?' open':'')+'><summary>Before we list</summary><p class="muted" style="margin:10px 0 0">'+esc(PREP.lede)+'</p><div class="prep">'+cards.join('')+'</div></details>';
-  var closing='<details'+(closingNow?' open':'')+'><summary>As closing gets close</summary><div class="prep">'+groups('closing').map(function(g){return box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note)}).join('')+'</div></details>';
+  var closing='<details'+(closingNow?' open':'')+'><summary>Before closing day</summary><div class="prep">'+groups('closing').map(function(g){return box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note)}).join('')+'</div></details>';
+  if(PN)return head+'<p class="muted" style="margin:0 0 14px">A few things to take care of before closing day. Tick them off as you go; your ticks save to your portal on any device.</p><div class="prep">'+groups('closing').map(function(g){return box(g.name,g.items.map(function(t){return li(g.id+'-'+hk(t),t)}),g.note)}).join('')+box('Your own list',own.map(function(r){return li(r.key,r.text,1)}),'','<form class="padd" id="padd"><input id="paddt" maxlength="160" placeholder="Add something, like “book the movers”" aria-label="Add your own item"><button class="btn line">Add</button></form>')+'</div>';
   return head+'<p class="muted" style="margin:0 0 14px">Tick things off as you go. Your ticks save to your portal, so they’re there on any device.</p>'+(closingNow?closing+before:before+closing);
 }
 var PSI=0,PDD=null;
@@ -317,6 +322,8 @@ function render(d,code){
     {at:listed+180000,what:'Sign QR codes and instant tour and follow requests turned on',reach:''}]);
   var mk=(d.marketing||[]).concat(auto).sort(function(a,b){return b.at-a.at});
   var up=(d.updates||[])[0];
+  (function(){var si0=stageIndex(d.status);if(si0!==4)return;var m=(d.timeline||[]).filter(function(x){return /mutual/i.test(x.what)&&x.at})[0],mt=m?m.at:0;
+    if(!up||up.at<mt)up={at:mt||Date.now(),title:'We’re pending. Congratulations!',from:'Chris and the Ranch team',text:'Congratulations, '+d.sellers+'! Your home is officially under contract, and we couldn’t be happier for you.\n\nReal estate has a lot of moving pieces between now and closing day, and our goal is to make this as smooth as humanly possible. We’ll keep you updated on every step that matters, right here on this page and from me directly, and we’ll handle the back-and-forth so you don’t have to.\n\nThere are still a few hurdles ahead, like the inspection, the appraisal and the buyers’ loan approval. That’s normal, and we’ll walk you through each one as it comes. We’re with you all the way to the finish line.'}})();
   var html='';
   if(DONE)html+=closedHtml(d);else if(PEND)html+=pendingHtml(d);
   else html+='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">'+(listed?'Day '+days+' on the market · '+esc(d.status||'Active'):'Getting ready to list')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+(H.area?' · '+esc(H.area):'')+'</p>'+(STORY?'<div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div>':'')+'</div></div>';
@@ -388,16 +395,23 @@ function pendingHtml(d){
   var road=tl.length?tl:[{what:'Mutual acceptance'},{what:'Inspection'},{what:'Appraisal'},{what:'Loan approval'},{what:'Signing with escrow'},{what:'Closing day'}];
   var nxt=tl.filter(function(x){return !x.done&&x.at&&x.at>=now-864e5})[0];
   var h='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">Under contract'+(close?' · closing '+dl(close.at):'')+'</p><h1>Congratulations, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' is pending. From here, my job is getting you to the closing table smoothly, and you’ll see every step right here.</p></div></div>';
-  h+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>The road to closing</h2>'+(left!=null?'<div class="shsum"><div>'+left+'<span>days to closing</span></div>'+(nxt?'<div style="font-size:24px">'+esc(nxt.what)+'<span>next · '+dl(nxt.at)+'</span></div>':'')+'</div>':'')+
+  var mut=tl.filter(function(x){return /mutual/i.test(x.what)&&x.at})[0],prog='';
+  if(mut&&close&&close.at>mut.at){
+    var D=function(t){var x=new Date(t);return Date.UTC(x.getFullYear(),x.getMonth(),x.getDate())/864e5},tot=Math.round(D(close.at)-D(mut.at)),day=Math.min(tot,Math.max(0,Math.round(D(now)-D(mut.at)))),pct=Math.round(day/tot*100);
+    var ticks=tl.filter(function(x){return x.at&&x!==mut&&x!==close}).map(function(x){var p=Math.max(0,Math.min(100,(D(x.at)-D(mut.at))/tot*100));return '<i class="tk'+(x.done||D(x.at)<D(now)?' on':'')+'" style="left:'+p.toFixed(1)+'%" title="'+esc(x.what)+' · '+dl(x.at)+'"></i>'}).join('');
+    prog='<div class="dayc"><div class="dn">Day <b>'+day+'</b> of '+tot+'</div><div class="dl">'+(left===0?'Closing day is today':left===1?'1 day to closing':left+' days to closing')+(nxt?' · next: <b>'+esc(nxt.what)+'</b>, '+dl(nxt.at):'')+'</div><div class="trk"><span style="width:'+pct+'%"></span>'+ticks+'<i class="you" style="left:'+pct+'%"></i></div><div class="tke"><span>Mutual acceptance<br>'+dl(mut.at)+'</span><span style="text-align:right">Closing<br>'+dl(close.at)+'</span></div></div>';
+  }
+  h+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>The road to closing</h2>'+(prog||(left!=null?'<div class="shsum"><div>'+left+'<span>days to closing</span></div>'+(nxt?'<div style="font-size:24px">'+esc(nxt.what)+'<span>next · '+dl(nxt.at)+'</span></div>':'')+'</div>':''))+
     '<ol class="road">'+road.map(function(x){var st=x.done?'done':(nxt&&x===nxt)?'now':'';return '<li class="'+st+'"><span class="dot"></span><div><b>'+esc(x.what)+'</b>'+(x.at?'<span class="rd">'+dl(x.at)+'</span>':(tl.length?'<span class="rd">Date to come</span>':''))+(x.note?'<div class="muted small">'+esc(x.note)+'</div>':'')+'</div></li>'}).join('')+'</ol>'+
-    (tl.length?'':'<p class="note">Your exact dates go up here as soon as the paperwork is final.</p>')+'</div></section>';
-  h+='<section><div class="wrap"><p class="eyebrow">While we’re pending</p><h2>What helps right now</h2><ul class="chk" style="max-width:720px">'+[
+    (tl.length?'':'<p class="note">Your exact dates go up here as soon as the paperwork is final.</p>')+
+    '<div class="bts"><p class="eyebrow">Behind the scenes</p><p>A lot of people help get a home to closing: the buyers’ lender, the appraiser, inspectors, title and escrow, the HOA, and both agents’ teams. Keeping all of them on schedule is our job, not yours. Most of it happens quietly in the background. When we do need something from you, we’ll keep it short and clear, and you’ll see it here or hear it from me.</p></div></div></section>';
+  h+='<section><div class="wrap"><div class="helps"><p class="eyebrow">While we’re pending</p><h2>What helps right now</h2><ol>'+[
     'Keep the home much as it looked when it sold. The buyers’ inspector and appraiser will both be visiting.',
     'Keep your homeowner’s insurance in place until after closing day.',
     'Hold on to any receipts or warranties for recent work, in case questions come up.',
-    'Start gathering keys, garage remotes and appliance manuals to leave for the buyers. Your checklist below has the rest.',
+    'Start gathering keys, garage remotes and appliance manuals to leave for the buyers. Your moving checklist below has the rest.',
     'Watch for an email from escrow to set up your signing. Never wire money based on an email alone; call me first.'
-  ].map(function(t){return '<li style="padding:8px 0;border-top:1px solid var(--line)">'+esc(t)+'</li>'}).join('')+'</ul></div></section>';
+  ].map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ol></div></div></section>';
   return h;
 }
 

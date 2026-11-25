@@ -1,0 +1,560 @@
+{
+ "slug": "port-orchard",
+ "name": "Port Orchard",
+ "county": "Kitsap County",
+ "status": "draft",
+ "checked": "2026-11-24",
+ "review": "https://claude.ai/artifact/9KwHB6FZ1qnYiKdDCMzjAo",
+ "headline": "Port Orchard: the Kitsap County seat on the south shore of Sinclair Inlet.",
+ "lede": "Port Orchard sits on the south side of Sinclair Inlet, across the water from Bremerton, with SR 16 running southeast to Gig Harbor and the Tacoma Narrows Bridge. This guide covers ferries and commutes, parks and shoreline, schools, everyday errands, neighborhoods and housing figures, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia (via Wikiwand) · Port Orchard, Washington",
+   "https://www.wikiwand.com/en/articles/Port_Orchard,_WA"
+  ],
+  "ofm": [
+   "Washington State Office of Financial Management · April 1 official population estimates",
+   "https://ofm.wa.gov/sites/default/files/public/dataresearch/pop/april1/ofm_april1_population_final.pdf"
+  ],
+  "acs": [
+   "Census Reporter · Port Orchard, WA (ACS 2024 5-year)",
+   "https://censusreporter.org/profiles/16000US5355785-port-orchard-wa/"
+  ],
+  "city": [
+   "City of Port Orchard · About Port Orchard",
+   "https://portorchardwa.gov/about-port-orchard"
+  ],
+  "historylink": [
+   "HistoryLink · Port Orchard — Thumbnail History",
+   "https://historylink.org/file/9550"
+  ],
+  "foot": [
+   "Kitsap Transit · Foot Ferry",
+   "https://kitsaptransit.com/service/foot-ferry"
+  ],
+  "footfaq": [
+   "Kitsap Transit · Foot Ferry FAQs",
+   "https://www.kitsaptransit.com/faqs/foot-ferry-faqs"
+  ],
+  "bffast": [
+   "Kitsap Transit · Bremerton Fast Ferry",
+   "https://kitsaptransit.org/service/fast-ferry/bremerton-fast-ferry"
+  ],
+  "swfast": [
+   "Kitsap Transit · Southworth Fast Ferry",
+   "https://kitsaptransit.com/service/fast-ferry/southworth-fast-ferry"
+  ],
+  "skbus": [
+   "Kitsap Transit · South Kitsap schedule booklet (effective September 13, 2026)",
+   "https://www.kitsaptransit.com/uploads/pdf/schedule-booklets/south-kitsap.pdf"
+  ],
+  "triangle": [
+   "WSDOT · Fauntleroy/Vashon/Southworth schedule update project",
+   "https://wsdot.wa.gov/construction-planning/search-studies/fauntleroy-vashon-southworth-schedule-update-project"
+  ],
+  "southworth": [
+   "WSDOT · Southworth Terminal Preservation",
+   "https://wsdot.wa.gov/construction-planning/search-projects/southworth-terminal-preservation"
+  ],
+  "sr160": [
+   "Wikipedia (via Wikiwand) · Washington State Route 160",
+   "https://wikiwand.com/en/articles/Washington_State_Route_160"
+  ],
+  "sr16": [
+   "Wikipedia (via Wikiwand) · Washington State Route 16",
+   "https://wikiwand.com/en/articles/Washington_State_Route_16"
+  ],
+  "tnb": [
+   "WSDOT · Tacoma Narrows Bridge tolling",
+   "https://wsdot.wa.gov/travel/roads-bridges/toll-roads-bridges-tunnels/tacoma-narrows-bridge-tolling"
+  ],
+  "bremerton": [
+   "Wikipedia · Bremerton, Washington",
+   "https://en.wikipedia.org/wiki/Bremerton,_Washington"
+  ],
+  "skschools": [
+   "South Kitsap School District · About us",
+   "https://skschools.org/about-us"
+  ],
+  "skwiki": [
+   "Wikipedia · South Kitsap School District",
+   "https://en.wikipedia.org/wiki/South_Kitsap_School_District"
+  ],
+  "skenroll": [
+   "South Kitsap High School · Enrollment",
+   "https://skhs.skschools.org/enrollment"
+  ],
+  "manchester": [
+   "Washington State Parks · Manchester State Park",
+   "https://parks.wa.gov/find-parks/state-parks/manchester-state-park"
+  ],
+  "manchesterwiki": [
+   "Wikipedia · Manchester State Park (Washington)",
+   "https://en.wikipedia.org/wiki/Manchester_State_Park_(Washington)"
+  ],
+  "banner": [
+   "Kitsap County Parks · Banner Forest Heritage Park",
+   "https://kitsap.gov/parks/Pages/BannerForestHeritagePark.aspx"
+  ],
+  "skrp": [
+   "Kitsap County Parks · South Kitsap Regional Park",
+   "https://www.kitsap.gov/parks/Pages/SouthKitsapRegionalPark.aspx"
+  ],
+  "marina": [
+   "Port of Bremerton · Port Orchard Marina",
+   "https://portofbremerton.org/port-orchard-marina"
+  ],
+  "bspp": [
+   "City of Port Orchard · Bay Street Pedestrian Pathway",
+   "https://portorchardwa.gov/bay-street-pedestrian-pathway"
+  ],
+  "sr166": [
+   "City of Port Orchard · SR 166/Bay Street Reconstruction",
+   "https://portorchardwa.gov/sr166-bay-street-reconstruction"
+  ],
+  "market": [
+   "Visit Kitsap Peninsula · Port Orchard Farmers Market",
+   "https://visitkitsap.com/shopping/port-orchard-farmers-market/"
+  ],
+  "krl": [
+   "Kitsap Regional Library · Port Orchard New Library",
+   "https://www.krl.org/port-orchard-new-library/"
+  ],
+  "courthouse": [
+   "Kitsap County Clerk · Driving Directions",
+   "https://kitsap.gov/clerk/Pages/Driving-Directions.aspx"
+  ],
+  "stmichael": [
+   "Becker’s Hospital Review · CHI Franciscan opens $500M replacement hospital in Washington state",
+   "https://www.beckershospitalreview.com/capital/chi-franciscan-opens-500m-replacement-hospital-in-washington-state"
+  ],
+  "keda": [
+   "Kitsap Economic Development Alliance · Major Employers",
+   "https://www.kitsapeda.org/workforce/major-employers"
+  ],
+  "psnshist": [
+   "HistoryLink · Puget Sound Naval Shipyard",
+   "https://www.historylink.org/file/5579"
+  ],
+  "mcw2009": [
+   "Port Orchard Independent (Kitsap Daily News) · October 8, 2009",
+   "https://www.kitsapdailynews.com/?p=18656"
+  ],
+  "mcw2008": [
+   "Port Orchard Independent (Kitsap Daily News) · Port Orchard endorses, supports McCormick Woods annexation (July 16, 2008)",
+   "https://kitsapdailynews.com/?p=16269"
+  ],
+  "targets": [
+   "Kitsap Regional Coordinating Council · Approved 2044 growth targets (October 2022)",
+   "https://www.kitsap.gov/dcd/PEP%20Documents/KRCC%20Apprroved%20Growth%20Targets_October%202022.pdf"
+  ],
+  "gigharbor": [
+   "Wikipedia · Gig Harbor, Washington",
+   "https://en.wikipedia.org/wiki/Gig_Harbor,_Washington"
+  ],
+  "olalla": [
+   "Wikipedia · Olalla, Washington",
+   "https://en.wikipedia.org/wiki/Olalla,_Washington"
+  ],
+  "vethome": [
+   "National Park Service · Washington Veterans Home",
+   "https://www.nps.gov/places/washington-veterans-home.htm"
+  ]
+ },
+ "stats": [
+  [
+   "20,500",
+   "people, April 1, 2026 state estimate (15,587 at the 2020 census)",
+   "ofm"
+  ],
+  [
+   "26,087",
+   "people planned for in the city by 2044 under countywide growth targets",
+   "targets"
+  ],
+  [
+   "32.8 min",
+   "mean travel time to work, 2020–2024",
+   "acs"
+  ],
+  [
+   "$539,700",
+   "median value of owner-occupied homes, 2020–2024",
+   "acs"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "15,587 at the 2020 census; estimated 20,500 on April 1, 2026",
+   "ofm"
+  ],
+  [
+   "Area",
+   "11.21 square miles, of which 9.64 square miles is land",
+   "wiki"
+  ],
+  [
+   "Incorporated",
+   "September 15, 1890, as the town of Sidney; renamed Port Orchard by the Legislature of 1902–1903",
+   "historylink"
+  ],
+  [
+   "County seat",
+   "Seat of Kitsap County since voters chose Sidney in the November 1892 election",
+   "historylink"
+  ],
+  [
+   "Setting",
+   "South side of Sinclair Inlet, with Bremerton across the water to the north; 13 miles due west of West Seattle",
+   "wiki"
+  ],
+  [
+   "Highway",
+   "SR 16, a freeway from I-5 in Tacoma through Port Orchard, continuing as a four-lane highway to Gorst",
+   "sr16"
+  ],
+  [
+   "Ferries",
+   "A Kitsap Transit foot ferry crosses to Bremerton seven days a week",
+   "foot"
+  ],
+  [
+   "School district",
+   "South Kitsap School District, with 10 elementary schools, 3 middle schools and South Kitsap High School",
+   "skschools"
+  ],
+  [
+   "Big employer nearby",
+   "Naval Base Kitsap, with a total headcount of 39,440 (December 31, 2024)",
+   "keda"
+  ]
+ ],
+ "notes": [
+  "Population figures differ by source and date: the City of Port Orchard’s About page says 17,480 (which matches the state’s 2023 estimate), Wikipedia gives a 2022 estimate of 17,089, and the Census Bureau’s 2020–2024 American Community Survey shows 17,149. This guide uses the Washington Office of Financial Management’s April 1, 2026 estimate of 20,500, the most recent official figure.",
+  "Kitsap Transit lists the Bremerton–Seattle fast ferry crossing at about 30 minutes; Wikipedia says 28 minutes. This guide uses Kitsap Transit’s figure.",
+  "Census housing and commute figures are 2020–2024 American Community Survey estimates, not a single-year count. The Census Bureau’s QuickFacts page could not be loaded during checking, so these come from Census Reporter, which republishes the same ACS data.",
+  "Kitsap Transit’s foot ferry page currently says all Annapolis sailings are canceled until further notice and that the Port Orchard run has no backup vessel; check the page before relying on the schedule."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Port Orchard is a ferry town as much as a highway town: a foot ferry crosses Sinclair Inlet to Bremerton, Southworth connects to Vashon and Seattle, and SR 16 runs to Tacoma. Census figures put the mean travel time to work at 32.8 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "Foot ferry to Bremerton",
+     "Kitsap Transit’s foot ferry runs between the Port Orchard and Bremerton ferry docks seven days a week, with crossings of 7 or 12 minutes. On the temporary weekday schedule (effective November 2, 2026) boats leave Port Orchard from 4:25 a.m. to 8:30 p.m.; Saturday and Sunday service runs every 30 minutes. Paid parking is at Lot 4 downtown.",
+     "foot"
+    ],
+    [
+     "Foot ferry fare",
+     "$2.00 one way, or $1.00 reduced fare for eligible riders, the same as Kitsap Transit buses. ORCA users get a free two-hour transfer; card payment is only at the machines on the Bremerton dock.",
+     "footfaq"
+    ],
+    [
+     "On to Seattle from Bremerton",
+     "Kitsap Transit’s fast ferry runs from the Bremerton Transportation Center to Seattle’s Pier 50 in about 30 minutes, Monday through Friday, with Saturday sailings May through September. Adult fare is $2 to Seattle and $13 back; riders 18 and under ride free.",
+     "bffast"
+    ],
+    [
+     "Washington State Ferries from Bremerton",
+     "Washington State Ferries runs a car ferry between Bremerton and Seattle that takes about an hour.",
+     "bremerton"
+    ],
+    [
+     "Southworth and the Triangle route",
+     "The Southworth terminal serves the Washington State Ferries Triangle route to Vashon Island and West Seattle, and Kitsap Transit’s fast ferry to downtown Seattle. It served more than 825,000 WSF riders in 2025, and WSDOT plans to replace its building and trestle by 2031.",
+     "southworth"
+    ],
+    [
+     "Southworth fast ferry",
+     "Kitsap Transit’s passenger-only boat from Southworth reaches downtown Seattle’s Pier 50 in about 26 minutes, Monday through Friday, with Saturday service May through September. Adult fare is $2 to Seattle and $13 back.",
+     "swfast"
+    ],
+    [
+     "SR 16 and the Tacoma Narrows Bridge",
+     "SR 16 runs 27.16 miles from I-5 in Tacoma, across the Tacoma Narrows and through Gig Harbor, to SR 3 at Gorst. The eastbound Narrows span opened July 15, 2007.",
+     "sr16"
+    ],
+    [
+     "Narrows Bridge toll",
+     "Tolls are collected only on trips headed to Tacoma: $4.50 with a Good To Go! pass, $5.50 at the toll booth and $6.50 by mail for two-axle vehicles.",
+     "tnb"
+    ],
+    [
+     "Local buses",
+     "Kitsap Transit routes 104 Tremont, 105 Sidney, 108 Bethel, 109 East Port Orchard and 186 Southworth serve the Port Orchard ferry dock; routes 184, 185 and 186 serve Southworth. The on-demand Purdy Ride links with Pierce Transit’s Gig Harbor Runner.",
+     "skbus"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Saltwater shoreline and second-growth forest frame Port Orchard’s outdoor spaces, from a state park on Rich Passage to a 636-acre county forest.",
+   "dark": false,
+   "items": [
+    [
+     "Manchester State Park",
+     "A 111-acre park on Rich Passage with 3,400 feet of shoreline. It began in the early 1900s as the Middle Point Military Reservation, guarding the naval shipyard; its 1901 torpedo warehouse still stands. The state took the land in 1970 and the park opened May 22, 1981.",
+     "manchesterwiki"
+    ],
+    [
+     "Camping at Manchester",
+     "Tent and RV sites with showers, bicycle sites, Cascadia Marine Trail sites near the beach and a group camp. A Discover Pass is needed: $10 a day or $45 a year.",
+     "manchester"
+    ],
+    [
+     "Banner Forest Heritage Park",
+     "A 636-acre Kitsap County park at Banner Road SE and SE Overra Road with walking and equestrian trails. A 139-acre conservation easement, granted in December 2000, is held by Great Peninsula Conservancy.",
+     "banner"
+    ],
+    [
+     "South Kitsap Regional Park",
+     "A 209-acre county park off Jackson Ave SE and SE Lund Ave, with three grass fields, a skate park, a playground, batting cages and trails, including the 1/3-mile Forest Explorer Trail. Kitsap Live Steamers runs a scale outdoor railroad here.",
+     "skrp"
+    ],
+    [
+     "Port Orchard Marina",
+     "The Port of Bremerton’s marina at 707 Sidney Parkway has room for 80+ visiting boats, a fuel dock, free showers and a covered activity float. Monthly moorage has a waitlist.",
+     "marina"
+    ],
+    [
+     "Bay Street Pedestrian Pathway",
+     "A one-mile waterfront path being built from the downtown ferry dock to the Annapolis pier, part of the planned Mosquito Fleet Trail from Kingston to Southworth. Segments 1–5 opened in 2019; the next phase is scheduled for construction in 2026/2027.",
+     "bspp"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Port Orchard is in the South Kitsap School District, which covers the southern part of Kitsap County. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "South Kitsap School District",
+     "The district serves the city of Port Orchard, part of Bremerton and about 360 square miles of south Kitsap County, with 9,343 students in 2023–24. Its office is at 2689 Hoover Ave SE.",
+     "skwiki"
+    ],
+    [
+     "Elementary schools",
+     "Burley Glenwood, East Port Orchard, Hidden Creek, Manchester, Mullenix Ridge, Olalla, Orchard Heights, Sidney Glen, South Colby and Sunnyslope.",
+     "skschools"
+    ],
+    [
+     "Middle and high school",
+     "Cedar Heights, John Sedgwick and Marcus Whitman middle schools, and South Kitsap High School. The district also lists Discovery High School, Explorer Academy and Wildcrest Expeditionary Learning as programs.",
+     "skschools"
+    ],
+    [
+     "Finding an assigned school",
+     "Attendance areas are set by home address. The district posts elementary and middle school boundary maps, and its Transportation Department at 360-874-7093 can verify the school for an address.",
+     "skenroll"
+    ],
+    [
+     "Enrolling",
+     "New students enroll online through Skyward Family Access, with proof of residence, proof of age and a Certificate of Immunization. Kindergartners must turn 5 on or before August 31, 2026.",
+     "skenroll"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown Port Orchard along Bay Street holds the county courthouse, the library, the marina and the Saturday market.",
+   "dark": false,
+   "items": [
+    [
+     "Downtown and Bay Street",
+     "The downtown corridor along Sinclair Inlet has shops, museums, galleries and dining, and the Bay Street pedestrian bridge at Etta Turner Park.",
+     "city"
+    ],
+    [
+     "Bay Street rebuild",
+     "The City plans to reconstruct SR 166/Bay Street from Robert Geiger Street to Frederick Avenue, raising the roadway against flooding and sea level rise and widening sidewalks. Preliminary design is funded; construction funding is being sought.",
+     "sr166"
+    ],
+    [
+     "Port Orchard Farmers Market",
+     "Saturdays from 9 a.m. to 2 p.m., April through mid-October, at Marina Waterfront Park, 905 Bay Street.",
+     "market"
+    ],
+    [
+     "Library",
+     "The Kitsap Regional Library branch on Sidney Ave, in a former post office converted in 1984, is set to move into a new 24,000-square-foot community event center on the downtown waterfront, expected to open in 2030.",
+     "krl"
+    ],
+    [
+     "Kitsap County Courthouse",
+     "The county courthouse is at 614 Division Street in Port Orchard.",
+     "courthouse"
+    ],
+    [
+     "Hospital",
+     "St. Michael Medical Center in Silverdale, a 248-bed, $500 million hospital that replaced St. Michael Medical Center-Bremerton, opened in December 2020.",
+     "stmichael"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Port Orchard has grown quickly since the 2020 census, and it has grown in area too, by annexing neighborhoods such as McCormick Woods.",
+   "dark": false,
+   "items": [
+    [
+     "Growth since 2020",
+     "State estimates show the city rising from 15,587 at the 2020 census to 17,480 in 2023, 19,260 in 2025 and 20,500 on April 1, 2026.",
+     "ofm"
+    ],
+    [
+     "Planned growth to 2044",
+     "Countywide targets plan for 10,500 more people in the city between 2020 and 2044, to 26,087, and 5,400 more jobs, to 13,962.",
+     "targets"
+    ],
+    [
+     "Long-run growth",
+     "HistoryLink reports the city grew from 4,900 residents in 1990 to 10,910 in 2010.",
+     "historylink"
+    ],
+    [
+     "McCormick Woods",
+     "Port Orchard annexed the McCormick Woods subdivision in 2009, after an annexation effort of about two years.",
+     "mcw2009"
+    ],
+    [
+     "McCormick Woods by the numbers",
+     "When owners began petitioning to join the city in 2008, McCormick Woods counted 871 parcels with a total assessed value of $328.4 million.",
+     "mcw2008"
+    ],
+    [
+     "Downtown waterfront",
+     "The City is developing a community event center and library on the downtown waterfront; the $28 million facility has $18.5 million secured through the Kitsap Public Facilities District.",
+     "krl"
+    ],
+    [
+     "East Port Orchard and Southworth",
+     "SR 160 runs east from the city through East Port Orchard, a suburban area north of Long Lake, to Southworth on the ferry route.",
+     "sr160"
+    ],
+    [
+     "Housing figures",
+     "Median owner-occupied home value $539,700 (Census ACS, 2020–2024).",
+     "acs"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Bremerton is straight across Sinclair Inlet, Gig Harbor and Tacoma are down SR 16, and Vashon and West Seattle are a ferry ride from Southworth.",
+   "dark": true,
+   "items": [
+    [
+     "Bremerton",
+     "Kitsap County’s largest city, with 43,505 people at the 2020 census, is bordered to the south across Sinclair Inlet by Port Orchard.",
+     "bremerton"
+    ],
+    [
+     "Puget Sound Naval Shipyard",
+     "Established in 1891 on a 145-acre site next to Bremerton on Sinclair Inlet, the shipyard employed about 32,500 people at its World War II peak and was listed as a National Historic Landmark District in 1992.",
+     "psnshist"
+    ],
+    [
+     "Naval Base Kitsap",
+     "Naval Base Kitsap had a total headcount of 39,440 (24,758 civilian and 14,758 active duty) on December 31, 2024, according to the Kitsap Economic Development Alliance’s 2024 top employers list.",
+     "keda"
+    ],
+    [
+     "Gig Harbor",
+     "A Pierce County city of 12,029 (2020 census) along SR 16, about 6 miles from I-5 by way of the Tacoma Narrows Bridge.",
+     "gigharbor"
+    ],
+    [
+     "Olalla",
+     "A community on Colvos Passage just north of the Pierce County line; its name is the Salishan and Chinook Jargon word for “berry” or “berries.”",
+     "olalla"
+    ],
+    [
+     "Vashon Island and West Seattle",
+     "WSF’s Triangle route links Southworth with Vashon Island and Fauntleroy, carrying about 2.3 million customers a year.",
+     "triangle"
+    ],
+    [
+     "Washington Veterans Home",
+     "John Charles Olmsted’s 1908 preliminary plan for the state veterans home in Port Orchard placed it on the edge of a steep bluff, with views of the water and distant mountains.",
+     "vethome"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Port Orchard in?",
+   "Port Orchard is in Kitsap County and formally became the county seat in 1893.",
+   "historylink"
+  ],
+  [
+   "What is the population of Port Orchard, WA?",
+   "The 2020 census counted 15,587 people. The state estimated 20,500 on April 1, 2026.",
+   "ofm"
+  ],
+  [
+   "Is there a ferry from Port Orchard to Bremerton?",
+   "Yes. Kitsap Transit’s foot ferry crosses Sinclair Inlet to the Bremerton dock seven days a week, in 7 to 12 minutes, for a $2.00 adult fare.",
+   "foot"
+  ],
+  [
+   "How do you get from Port Orchard to Seattle by ferry?",
+   "One way is the foot ferry to Bremerton, then Kitsap Transit’s fast ferry from the Bremerton Transportation Center to Seattle’s Pier 50, about 30 minutes, Monday through Friday.",
+   "bffast"
+  ],
+  [
+   "Where is the Southworth ferry terminal?",
+   "At the east end of SR 160, 7.47 miles from SR 16 in Port Orchard. Washington State Ferries sails from there to Vashon Island and Fauntleroy in West Seattle.",
+   "sr160"
+  ],
+  [
+   "How much is the Tacoma Narrows Bridge toll?",
+   "For two-axle vehicles: $4.50 with Good To Go!, $5.50 at the booth and $6.50 by mail. Only trips toward Tacoma are tolled.",
+   "tnb"
+  ],
+  [
+   "What school district is Port Orchard in?",
+   "The South Kitsap School District. Confirm the assigned school for any specific address with the district.",
+   "skschools"
+  ],
+  [
+   "How do I find which school serves an address in Port Orchard?",
+   "The district posts elementary and middle school boundary maps, and its Transportation Department at 360-874-7093 can verify the school for an address.",
+   "skenroll"
+  ],
+  [
+   "Is McCormick Woods in Port Orchard city limits?",
+   "Yes. Port Orchard annexed the McCormick Woods subdivision in 2009.",
+   "mcw2009"
+  ],
+  [
+   "How long is the average commute from Port Orchard?",
+   "The Census Bureau’s mean travel time to work for Port Orchard residents is 32.8 minutes (2020–2024).",
+   "acs"
+  ],
+  [
+   "What is the median home value in Port Orchard?",
+   "Census figures show a median owner-occupied home value of $539,700 for 2020–2024.",
+   "acs"
+  ],
+  [
+   "How big is Manchester State Park?",
+   "Manchester State Park covers 111 acres with 3,400 feet of shoreline on Rich Passage.",
+   "manchesterwiki"
+  ]
+ ],
+ "listings": [
+  {
+   "eyebrow": "For sale now",
+   "title": "0 SE Sedgwick Road, Port Orchard",
+   "desc": "11.92 acres of land listed by Chris Ranch. See photos, details and price.",
+   "url": "https://homes.ranchpnw.com/sedgwick"
+  }
+ ],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

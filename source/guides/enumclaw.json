@@ -1,0 +1,555 @@
+{
+ "slug": "enumclaw",
+ "name": "Enumclaw",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-24",
+ "review": "https://claude.ai/artifact/4wqRwkrQZSWEQ8FdRQnD2m",
+ "headline": "Enumclaw: a plateau town at the foot of the Cascades, where the Chinook Scenic Byway begins.",
+ "lede": "Enumclaw sits on the Enumclaw Plateau in southeast King County, against the Cascade foothills, with farmland on three sides and SR 410 heading east toward Mount Rainier. This guide covers getting around, parks and the nearby state parks, schools, everyday errands, housing figures, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Enumclaw, Washington",
+   "https://en.wikipedia.org/wiki/Enumclaw,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Enumclaw city, Washington",
+   "https://www.census.gov/quickfacts/enumclawcitywashington"
+  ],
+  "sr410": [
+   "Wikipedia · Washington State Route 410",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_410"
+  ],
+  "sr164": [
+   "Wikipedia · Washington State Route 164",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_164"
+  ],
+  "sr169": [
+   "Wikipedia · Washington State Route 169",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_169"
+  ],
+  "byway": [
+   "Federal Highway Administration · America’s Byways: Chinook Scenic Byway",
+   "https://fhwaapps.fhwa.dot.gov/bywaysp/StateMaps/Show/byway/2226"
+  ],
+  "nps": [
+   "National Park Service · SR 410/Chinook and SR 123/Cayuse passes scheduled to reopen May 22 (May 14, 2026)",
+   "https://home.nps.gov/mora/learn/news/sr-410-chinook-and-sr-123-cayuse-passes-scheduled-to-reopen-may-22.htm"
+  ],
+  "bridge": [
+   "WSDOT · New over height detection system installed on SR 410 White River Bridge near Enumclaw (August 20, 2026)",
+   "https://wsdot.wa.gov/about/news/2026/new-over-height-detection-system-installed-sr-410-white-river-bridge-near-enumclaw"
+  ],
+  "reopen": [
+   "WSDOT · SR 410 White River Bridge reopens ahead of schedule, reconnecting Buckley and Enumclaw",
+   "https://appstest.wsdot.wa.gov/about/news/2025/sr-410-white-river-bridge-reopens-ahead-schedule-reconnecting-buckley-and-enumclaw"
+  ],
+  "auburnstn": [
+   "Wikipedia · Auburn station (Sound Transit)",
+   "https://en.wikipedia.org/wiki/Auburn_station_(Sound_Transit)"
+  ],
+  "expo": [
+   "Visit Enumclaw · Enumclaw Expo Center",
+   "https://www.visitenumclaw.com/enumclaw-expo-center"
+  ],
+  "fair": [
+   "WSU Extension King County · King County Fair",
+   "https://extension.wsu.edu/king/events/2026-07-17/"
+  ],
+  "parksplan": [
+   "City of Enumclaw · Comprehensive Plan, Parks, Recreation and Open Space chapter (February 2025)",
+   "https://cityofenumclaw.net/DocumentCenter/View/9878/6-Parks-and-Recreation"
+  ],
+  "housingplan": [
+   "City of Enumclaw · Comprehensive Plan Appendix B, Land Capacity Analysis and Housing Provisions",
+   "https://www.cityofenumclaw.net/DocumentCenter/View/9872/3-Appendix-B-HousingProvisions"
+  ],
+  "federation": [
+   "Washington State Parks · Federation Forest State Park",
+   "https://parks.wa.gov/find-parks/state-parks/federation-forest-state-park"
+  ],
+  "mudwiki": [
+   "Wikipedia · Mud Mountain Dam",
+   "https://en.wikipedia.org/wiki/Mud_Mountain_Dam"
+  ],
+  "nolte": [
+   "Washington State Parks · Nolte State Park",
+   "https://parks.wa.gov/find-parks/state-parks/nolte-state-park"
+  ],
+  "geyser": [
+   "Wikipedia · Flaming Geyser State Park",
+   "https://en.wikipedia.org/wiki/Flaming_Geyser_State_Park"
+  ],
+  "kanaskat": [
+   "Wikipedia · Kanaskat-Palmer State Park",
+   "https://en.wikipedia.org/wiki/Kanaskat-Palmer_State_Park"
+  ],
+  "foothills": [
+   "Wikipedia · Foothills Trail (Washington)",
+   "https://en.wikipedia.org/wiki/Foothills_Trail_(Washington)"
+  ],
+  "esd": [
+   "Enumclaw School District · Our District",
+   "https://enumclaw.wednet.edu/page/our-district"
+  ],
+  "esdcontact": [
+   "Enumclaw School District · District Boundary Maps",
+   "https://www.enumclaw.wednet.edu/o/esd/page/district-boundary-maps"
+  ],
+  "tentrails": [
+   "Enumclaw School District · Ten Trails Boundary Map (Westwood Elementary, August 10, 2022)",
+   "https://www.enumclaw.wednet.edu/o/wwe/article/802069"
+  ],
+  "grc": [
+   "Green River College · Welcome to the Enumclaw Campus",
+   "https://www.greenriver.edu/students/academics/enumclaw-campus"
+  ],
+  "seh": [
+   "Virginia Mason Franciscan Health · St. Elizabeth Hospital",
+   "https://vmfh.org/our-hospitals/st-elizabeth-hospital"
+  ],
+  "seh2011": [
+   "Becker’s Hospital Review · Franciscan Health System opens new hospital in Washington (February 3, 2011)",
+   "https://beckershospitalreview.com/hospital-management-administration/franciscan-health-system-opens-new-hospital-in-washington.html"
+  ],
+  "library": [
+   "City of Enumclaw · Public Library",
+   "https://cityofenumclaw.net/176/Public-Library"
+  ],
+  "kcls": [
+   "King County Library System · About Enumclaw Library",
+   "https://kcls.org/about-enumclaw-library"
+  ],
+  "blackdiamond": [
+   "Wikipedia · Black Diamond, Washington",
+   "https://en.wikipedia.org/wiki/Black_Diamond,_Washington"
+  ],
+  "buckley": [
+   "Wikipedia · Buckley, Washington",
+   "https://en.wikipedia.org/wiki/Buckley,_Washington"
+  ],
+  "bonneylake": [
+   "Wikipedia · Bonney Lake, Washington",
+   "https://en.wikipedia.org/wiki/Bonney_Lake,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "12,543",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "85 mi",
+   "Chinook Scenic Byway, from Enumclaw over Chinook Pass",
+   "byway"
+  ],
+  [
+   "33.0 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ],
+  [
+   "$524,600",
+   "median value of owner-occupied homes, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "12,543 at the 2020 census; estimated 13,172 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Land area",
+   "5.17 square miles (2020)",
+   "census"
+  ],
+  [
+   "Elevation",
+   "745 feet",
+   "wiki"
+  ],
+  [
+   "Incorporated",
+   "January 27, 1913; the town was platted October 31, 1885",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "East Puget Sound lowlands against the Cascade foothills, with farm preservation land on three sides and protected forest to the east",
+   "wiki"
+  ],
+  [
+   "State routes",
+   "SR 410, SR 164 and SR 169 all meet in Enumclaw",
+   "sr164"
+  ],
+  [
+   "School district",
+   "Enumclaw School District, which also serves Black Diamond and several unincorporated communities",
+   "esd"
+  ],
+  [
+   "Hospital",
+   "St. Elizabeth Hospital, part of Virginia Mason Franciscan Health, with a 24/7 emergency department",
+   "seh"
+  ],
+  [
+   "ZIP code",
+   "98022",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "Land area: the Census Bureau and the Wikipedia infobox give 5.17 square miles, while the Wikipedia article text gives 4.27. This guide uses the Census figure.",
+  "Home values: Wikipedia lists a median home value of $753,000 without a clear source or date; this guide uses the Census Bureau’s 2020–2024 median owner-occupied value of $524,600, which is a survey estimate of what owners say their homes are worth, not a sale-price figure.",
+  "Enumclaw Expo Center size: Visit Enumclaw and Wikipedia say 72 acres; the city’s February 2025 parks chapter lists the Expo Center at 55 acres. This guide uses 72 acres from the Expo’s own tourism page and flags the difference.",
+  "The city’s parks chapter lists a city park total of 150.58 acres, but its listed park acreages add to about 116.6, so this guide gives the number of parks and individual park sizes, not a total.",
+  "St. Elizabeth Hospital replaced the town’s earlier hospital in 2011; Becker’s calls it Enumclaw Regional Hospital and Wikipedia calls it Enumclaw Community Hospital, so the old name is left out.",
+  "Name meaning: Wikipedia traces “Enumclaw” to a Sahaptin word meaning “he who makes noise,” and notes the City of Enumclaw gives “thundering noise.” The guide mentions only that the town is named for nearby Enumclaw Mountain.",
+  "The Buckley Wikipedia page still describes the SR 410 White River Bridge as closed; WSDOT reports it reopened October 17, 2025, so this guide follows WSDOT.",
+  "Bus service: King County Metro’s own schedule pages could not be read for this draft, so bus details come from the Wikipedia Auburn station page. Confirm current routes with King County Metro before publishing.",
+  "Census housing and commute figures are 2020–2024 American Community Survey estimates, not a single-year count."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Three state routes meet in Enumclaw, and SR 410 continues east into the mountains. Census figures put the mean travel time to work for Enumclaw residents at 33.0 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "SR 410",
+     "SR 410 runs 107.44 miles from SR 167 in Sumner to US 12 in Naches, passing through Enumclaw, Federation Forest State Park and Mount Rainier National Park over Cayuse and Chinook passes.",
+     "sr410"
+    ],
+    [
+     "SR 164 to Auburn",
+     "A 14.82-mile state highway from an interchange with SR 18 in Auburn to SR 410 in Enumclaw. It follows the White River along the Auburn–Enumclaw Road and passes through the Muckleshoot Indian Reservation.",
+     "sr164"
+    ],
+    [
+     "SR 169 to Maple Valley and Renton",
+     "The Maple Valley Highway runs 25.26 miles north from Enumclaw through Black Diamond and Maple Valley to Renton. It crosses the Green River gorge on the Kummer Bridge (officially the Dan Evans Bridge), about 155 feet above the water.",
+     "sr169"
+    ],
+    [
+     "White River Bridge to Buckley",
+     "The SR 410 steel truss bridge over the White River, built in 1949, connects Enumclaw and Buckley and carries an average of 22,099 vehicles a day. It has a 14-foot clearance, and WSDOT added an over-height warning system in 2026.",
+     "bridge"
+    ],
+    [
+     "2025 bridge closure",
+     "An over-height vehicle struck the White River Bridge on August 18, 2025, damaging several beams. WSDOT reopened it on Friday, October 17, 2025, ahead of schedule.",
+     "reopen"
+    ],
+    [
+     "Chinook and Cayuse passes",
+     "The SR 410 Chinook Pass and SR 123 Cayuse Pass segments through Mount Rainier National Park close for winter. In 2026 they were scheduled to reopen by 8 a.m. on May 22, in time for Memorial Day weekend.",
+     "nps"
+    ],
+    [
+     "Bus to Auburn and Sounder",
+     "King County Metro bus and dial-a-ride routes connect Enumclaw with Auburn station, which has 13 weekday Sounder S Line round trips, about 35 minutes to Seattle and 28 minutes to Tacoma, and 633 parking spaces.",
+     "auburnstn"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "City parks, a regional trail and several state parks along the White and Green rivers are within reach of town. The city lists 22 city-owned parks in its February 2025 parks chapter.",
+   "dark": false,
+   "items": [
+    [
+     "City parks",
+     "The 22 city-owned parks include 7 mini-parks, 9 neighborhood parks and 6 community parks. Among the larger ones: Mahler Park (30 acres, undeveloped), Boise Creek Park (19.3 acres), Sportsman Park (12.86 acres) and Farmers Park (9.7 acres, with a disc golf course).",
+     "parksplan"
+    ],
+    [
+     "Golf course and Aquatic Center",
+     "The city-owned Enumclaw Golf Course covers 188 acres with 18 holes and is leased to a private operator. The Enumclaw Aquatic Center has a 4,956-square-foot pool in a 13,540-square-foot building.",
+     "parksplan"
+    ],
+    [
+     "Foothills Trail",
+     "A mostly paved trail from Puyallup through Orting, South Prairie and Buckley to Enumclaw. Its 572-foot White River bridge, which cost $16 million, opened in October 2024 and linked the trail into Enumclaw.",
+     "foothills"
+    ],
+    [
+     "Federation Forest State Park",
+     "A 619-acre old-growth forest that SR 410 parallels along the White River east of Enumclaw.",
+     "sr410"
+    ],
+    [
+     "Federation Forest trails",
+     "At 49201 Highway 410 E: about 12 miles of easy to moderate trails through forest and wetlands. The Catherine T. Montgomery Interpretive Center is open Friday through Sunday in June through August. A storm-damaged trail to the riverside picnic area was closed when checked.",
+     "federation"
+    ],
+    [
+     "Mud Mountain Dam",
+     "A 432-foot U.S. Army Corps of Engineers flood-control dam on the White River, finished in 1948, a few miles southeast of Enumclaw. Its day-use recreation area has picnic facilities, interpretive exhibits and ten miles of hiking trails.",
+     "mudwiki"
+    ],
+    [
+     "Nolte State Park",
+     "A day-use park on Deep Lake near the Green River Gorge, at 36921 Veazie Cumberland Road, with an easy 1.4-mile loop trail around the lake. Open 8 a.m. to dusk year-round.",
+     "nolte"
+    ],
+    [
+     "Flaming Geyser State Park",
+     "A 503-acre park with more than 3 miles of Green River shoreline near Black Diamond. Its name comes from a methane pocket struck by a coal test hole in the early 1900s.",
+     "geyser"
+    ],
+    [
+     "Kanaskat-Palmer State Park",
+     "About 320 acres with roughly 2 miles of Green River shoreline, camping and about 3 miles of trails. Experienced paddlers can raft and kayak the expert-level Green River Gorge.",
+     "kanaskat"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Enumclaw is in the Enumclaw School District #216, which covers about 456 square miles. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Enumclaw School District",
+     "The district serves the cities of Enumclaw and Black Diamond plus several unincorporated communities, with 4,225 students as of November 2023.",
+     "esd"
+    ],
+    [
+     "Elementary schools",
+     "Five elementary schools: Black Diamond, Byron Kibler, Southwood, Sunrise and Westwood. The district also runs a Birth to Five Center.",
+     "esd"
+    ],
+    [
+     "Middle and high school",
+     "Two middle schools, Enumclaw and Thunder Mountain, and one high school, Enumclaw High School.",
+     "esd"
+    ],
+    [
+     "Ten Trails area",
+     "Because of growth in Black Diamond, the district set a boundary in 2022–2023 assigning parts of the Ten Trails area to Westwood Elementary.",
+     "tentrails"
+    ],
+    [
+     "Confirming an assigned school",
+     "The district office is at 2929 McDougall Ave, Enumclaw; call (360) 802-7100 to confirm which schools serve a specific address.",
+     "esdcontact"
+    ],
+    [
+     "Green River College, Enumclaw campus",
+     "Green River’s first branch campus, opened in 1996 at 1414 Griffin Avenue, offers credit and continuing education classes, proctoring and room rentals.",
+     "grc"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown, the hospital, the library and the Expo Center are all in town, and the city runs more of its own utilities than most.",
+   "dark": false,
+   "items": [
+    [
+     "St. Elizabeth Hospital",
+     "At 1455 Battersby Avenue, part of Virginia Mason Franciscan Health, with a 24/7 emergency department, a Family Birth Center, inpatient and surgical care, imaging and a walk-in lab.",
+     "seh"
+    ],
+    [
+     "The 2011 hospital",
+     "The current hospital opened February 2, 2011, as a 25-bed critical access hospital with private rooms and a rooftop helicopter pad, replacing the town’s earlier hospital.",
+     "seh2011"
+    ],
+    [
+     "Enumclaw Library",
+     "Part of the King County Library System, at 1700 1st Street at Railroad Avenue.",
+     "library"
+    ],
+    [
+     "Library history",
+     "The first library opened in City Hall in 1923. The current 10,541-square-foot building opened in 1991, and the library joined KCLS in 2012.",
+     "kcls"
+    ],
+    [
+     "Enumclaw Expo Center",
+     "A 72-acre site, formerly the King County Fairgrounds, with multi-use buildings, arenas and grass midways. King County transferred it to the city in 2006, and since July 1, 2015, a nonprofit, the Enumclaw Expo and Events Association, has run it.",
+     "expo"
+    ],
+    [
+     "Expo events",
+     "More than 180,000 people a year come for events such as the King County Fair, the Scottish Highland Games, the Olympic Kennel Club Dog Show and the Enumclaw Pro-Rodeo.",
+     "expo"
+    ],
+    [
+     "City utilities",
+     "The city runs its own garbage, water, stormwater and sewer utilities and owns its natural gas utility, one of two city-owned gas utilities in Washington.",
+     "wiki"
+    ],
+    [
+     "City Hall",
+     "City offices are at 1339 Griffin Avenue; the main number is 360-825-3591.",
+     "library"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Enumclaw is a compact city ringed by farmland. The figures below are from the Census Bureau and the city’s comprehensive plan.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 74.3%, median owner-occupied home value $524,600 and median gross rent $1,954 (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "Households",
+     "5,135 households, averaging 2.46 people per household (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "Mostly single-family",
+     "The city’s housing appendix notes that historically only detached single-family homes have been built in the city, and only 7 accessory dwelling units were built from 2018 to 2023.",
+     "housingplan"
+    ],
+    [
+     "Growth target",
+     "The comprehensive plan sets a target of 1,057 new housing units and 202 emergency housing beds through 2044, against an estimated capacity of about 2,016 units including projects already in the pipeline.",
+     "housingplan"
+    ],
+    [
+     "Farmland edges",
+     "Farm preservation land surrounds the city on three sides, with protected forest to the east. Enumclaw counts 16 Grade “A” dairy farms.",
+     "wiki"
+    ],
+    [
+     "Downtown",
+     "Downtown is a mix of small local boutiques and non-chain restaurants; summer brings the Sidewalk Street Fair in the third week of July and Sundays on Cole.",
+     "wiki"
+    ],
+    [
+     "Plateau history",
+     "The Enumclaw Plateau formed from a Mount Rainier lahar about 5,700 years ago. Frank and Mary Stevenson homesteaded the town site in 1879, and hops gave way to dairy farming after crop failures.",
+     "wiki"
+    ],
+    [
+     "Weather",
+     "Summers typically run about 5°F warmer than Seattle and winters about 5°F colder, with 6 to 8 inches of snow in a typical year. Enumclaw recorded the state’s highest wind, 74 mph, in the November 2024 bomb cyclone.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Enumclaw sits at the King–Pierce county line, with the White River between it and Buckley, and the mountains straight east.",
+   "dark": true,
+   "items": [
+    [
+     "Mount Rainier and Crystal Mountain",
+     "Enumclaw is the gateway to Mount Rainier National Park and the Crystal Mountain ski area.",
+     "wiki"
+    ],
+    [
+     "Chinook Scenic Byway",
+     "An 85-mile All-American Road from Enumclaw over Chinook Pass to the Naches valley, about three hours of driving past the glacier-fed White River and Mount Rainier views.",
+     "byway"
+    ],
+    [
+     "Buckley",
+     "A Pierce County city of 5,114 (2020 census) on the south side of the White River, which forms the King–Pierce county line.",
+     "buckley"
+    ],
+    [
+     "Bonney Lake",
+     "A Pierce County city of 22,487 (2020 census) split by SR 410, which links it to the rest of the Seattle area and the northeast side of Mount Rainier.",
+     "bonneylake"
+    ],
+    [
+     "Black Diamond",
+     "A city of 4,697 (2020 census), incorporated February 19, 1959, that grew up around coal mining starting in the 1880s.",
+     "blackdiamond"
+    ],
+    [
+     "Auburn",
+     "SR 164 runs 14.82 miles along the White River from Enumclaw to SR 18 in Auburn.",
+     "sr164"
+    ],
+    [
+     "Green River Gorge",
+     "SR 169 crosses the gorge on the Kummer Bridge, about 155 feet above the Green River, on the way to Black Diamond and Maple Valley.",
+     "sr169"
+    ],
+    [
+     "Puyallup and Orting by trail",
+     "The Foothills Trail links Enumclaw with Buckley, South Prairie, Orting and Puyallup, with frequent Mount Rainier views.",
+     "foothills"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Enumclaw in?",
+   "Enumclaw is in King County, near the Pierce County line along the White River.",
+   "wiki"
+  ],
+  [
+   "What is the population of Enumclaw, WA?",
+   "The 2020 census counted 12,543 people; the Census Bureau estimated 13,172 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "What school district is Enumclaw in?",
+   "The Enumclaw School District #216, which also serves Black Diamond. It runs five elementary schools, two middle schools and Enumclaw High School. Confirm assignment for a specific address with the district.",
+   "esd"
+  ],
+  [
+   "How do you get to Mount Rainier from Enumclaw?",
+   "SR 410 heads east from Enumclaw along the White River and passes through Mount Rainier National Park over Cayuse and Chinook passes.",
+   "sr410"
+  ],
+  [
+   "Is Chinook Pass open in winter?",
+   "No. The SR 410 Chinook Pass segment closes for winter; in 2026 it was scheduled to reopen May 22.",
+   "nps"
+  ],
+  [
+   "How long is the average commute from Enumclaw?",
+   "The Census Bureau’s mean travel time to work for Enumclaw residents is 33.0 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "Is there a train near Enumclaw?",
+   "The closest Sounder stop is Auburn station, with 13 weekday S Line round trips, about 35 minutes to Seattle. Metro buses and dial-a-ride connect it with Enumclaw.",
+   "auburnstn"
+  ],
+  [
+   "What is the median home value in Enumclaw?",
+   "The Census Bureau reports a median owner-occupied home value of $524,600 and median gross rent of $1,954 for 2020–2024.",
+   "census"
+  ],
+  [
+   "Is the White River Bridge between Enumclaw and Buckley open?",
+   "Yes. It closed after an over-height truck strike on August 18, 2025, and reopened October 17, 2025. Its clearance is 14 feet.",
+   "bridge"
+  ],
+  [
+   "Where is the King County Fair held?",
+   "At the Enumclaw Expo Center, 45224 284th Ave SE, Enumclaw.",
+   "fair"
+  ],
+  [
+   "Does it snow in Enumclaw?",
+   "Some. A typical year brings about 6 to 8 inches, and winters run about 5°F colder than Seattle.",
+   "wiki"
+  ],
+  [
+   "What hospital is in Enumclaw?",
+   "St. Elizabeth Hospital at 1455 Battersby Avenue, part of Virginia Mason Franciscan Health, with a 24/7 emergency department.",
+   "seh"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

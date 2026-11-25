@@ -1,0 +1,535 @@
+{
+ "slug": "burien",
+ "name": "Burien",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-24",
+ "review": "https://claude.ai/artifact/4nmYzMzxVHuiyXPooSqFwj",
+ "headline": "Burien: a Puget Sound city just northwest of Sea-Tac Airport.",
+ "lede": "Burien sits on Puget Sound south of Seattle, immediately northwest of Seattle–Tacoma International Airport, where SR 509 and SR 518 meet. This guide covers getting around, parks and the shoreline, schools, everyday errands, neighborhoods and housing figures, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Burien, Washington",
+   "https://en.wikipedia.org/wiki/Burien,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Burien city, Washington",
+   "https://www.census.gov/quickfacts/fact/table/buriencitywashington/PST045224"
+  ],
+  "about": [
+   "City of Burien · About Burien",
+   "https://burienwa.gov/city_hall/about_burien"
+  ],
+  "parks": [
+   "City of Burien · Parks",
+   "https://burienwa.gov/i_want_to___/parks"
+  ],
+  "seahurst": [
+   "City of Burien · Seahurst Ed Munro Park",
+   "https://www.burienwa.gov/SeahurstPark"
+  ],
+  "seahurstwiki": [
+   "Wikipedia · Seahurst Park",
+   "https://en.wikipedia.org/wiki/Seahurst_Park"
+  ],
+  "eagle": [
+   "City of Burien · Eagle Landing Park",
+   "https://www.burienwa.gov/EagleLandingPark"
+  ],
+  "lbsmp": [
+   "City of Burien · Lake Burien School Memorial Park",
+   "https://www.burienwa.gov/residents/parks_recreation_cultural_services/city_parks_trails_facilities/lake_burien_school_memorial_park"
+  ],
+  "tsq": [
+   "City of Burien · Town Square Park",
+   "https://www.burienwa.gov/residents/parks_recreation_cultural_services/city_parks_trails_facilities/town_square_park"
+  ],
+  "art": [
+   "City of Burien · Arts and Culture",
+   "https://burienwa.gov/visitors/art"
+  ],
+  "market": [
+   "Discover Burien · Burien Farmers Market",
+   "https://www.discoverburien.org/info"
+  ],
+  "library": [
+   "King County Library System · About Burien Library",
+   "https://kcls.org/about-burien-library"
+  ],
+  "schoolslib": [
+   "City of Burien · Schools and Libraries",
+   "https://burienwa.gov/residents/resident_resources/schools_libraries"
+  ],
+  "hsd": [
+   "Wikipedia · Highline Public Schools",
+   "https://en.wikipedia.org/wiki/Highline_Public_Schools"
+  ],
+  "kennedy": [
+   "Wikipedia · John F. Kennedy Catholic High School (Washington)",
+   "https://en.wikipedia.org/wiki/John_F._Kennedy_Catholic_High_School_(Washington)"
+  ],
+  "hpac": [
+   "Seattle Southside · Highline Performing Arts Center",
+   "https://seattlesouthside.com/directory/highline-performing-arts-center"
+  ],
+  "museum": [
+   "Seattle Southside · Highline Heritage Museum",
+   "https://seattlesouthside.com/directory/highline-heritage-museum"
+  ],
+  "stanne": [
+   "Virginia Mason Franciscan Health · St. Anne Hospital",
+   "https://vmfh.org/our-hospitals/st-anne-hospital"
+  ],
+  "stride": [
+   "Sound Transit · Stride S1 Line",
+   "https://www.soundtransit.org/system-expansion/stride-s1-line"
+  ],
+  "stridefolio": [
+   "Sound Transit · Stride S1 Line project folio (PDF)",
+   "https://soundtransit.org/sites/default/files/documents/stride-s1-folio.pdf"
+  ],
+  "rrf": [
+   "Wikipedia · RapidRide F Line",
+   "https://en.wikipedia.org/wiki/RapidRide_F_Line"
+  ],
+  "rrh": [
+   "Wikipedia · RapidRide H Line",
+   "https://en.wikipedia.org/wiki/RapidRide_H_Line"
+  ],
+  "garage": [
+   "Sound Transit · King County, Sound Transit dedicate new 500-stall Burien Park-and-Ride garage",
+   "https://www.soundtransit.org/get-to-know-us/news-events/news-releases/king-county-sound-transit-dedicate-new-500-stall-burien"
+  ],
+  "sr509": [
+   "WSDOT · SR 509 Completion Project",
+   "https://wsdot.wa.gov/construction-planning/search-projects/sr-509-completion-project"
+  ],
+  "sr518": [
+   "Wikipedia · Washington State Route 518",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_518"
+  ],
+  "ttp": [
+   "Wikipedia · Three Tree Point",
+   "https://en.wikipedia.org/wiki/Three_Tree_Point"
+  ],
+  "blvd": [
+   "Wikipedia · Boulevard Park, Washington",
+   "https://en.wikipedia.org/wiki/Boulevard_Park,_Washington"
+  ],
+  "white": [
+   "Wikipedia · White Center, Washington",
+   "https://en.wikipedia.org/wiki/White_Center,_Washington"
+  ],
+  "normandy": [
+   "Wikipedia · Normandy Park, Washington",
+   "https://en.wikipedia.org/wiki/Normandy_Park,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "52,066",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "365+",
+   "acres of city parks and open space",
+   "parks"
+  ],
+  [
+   "26.8 min",
+   "mean travel time to work, 2019–2023",
+   "census"
+  ],
+  [
+   "$609,300",
+   "median value of owner-occupied homes, 2019–2023",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "52,066 at the 2020 census; estimated 50,730 on July 1, 2023",
+   "census"
+  ],
+  [
+   "Land area",
+   "10.04 square miles (2020)",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "February 28, 1993",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "On Puget Sound south of Seattle, immediately northwest of Seattle–Tacoma International Airport",
+   "wiki"
+  ],
+  [
+   "Shoreline",
+   "5.5 miles of Puget Sound shoreline along the city’s western border",
+   "wiki"
+  ],
+  [
+   "Highways",
+   "SR 509 and SR 518 meet in Burien",
+   "wiki"
+  ],
+  [
+   "Transit hub",
+   "Burien Transit Center, the end of the RapidRide F Line to Renton",
+   "rrf"
+  ],
+  [
+   "School district",
+   "Highline Public Schools, headquartered on Ambaum Boulevard SW in Burien",
+   "hsd"
+  ],
+  [
+   "Hospital",
+   "St. Anne Hospital (formerly Highline Medical Center), with 24/7 emergency care",
+   "stanne"
+  ]
+ ],
+ "notes": [
+  "Wikipedia gives Burien 5.5 miles of Puget Sound shoreline, while the City of Burien’s About page says six miles. This guide uses the more precise Wikipedia figure.",
+  "Census housing, rent and commute figures are 2019–2023 American Community Survey estimates as shown on QuickFacts when checked; the page listed no July 1, 2024 estimate for Burien, so the July 1, 2023 estimate is shown.",
+  "Wikipedia gives RapidRide H two different midday frequencies (15 and 10 minutes), so this guide lists only the peak and off-peak figures from the infobox.",
+  "Wikipedia lists five Highline elementary schools in Burien; the City of Burien’s schools page also lists Hilltop and Southern Heights elementaries with Burien addresses. The City page appears older (it still lists closed colleges), so both are noted and readers are pointed to the district.",
+  "Three Tree Point is described as just west of town; the sources checked did not say whether all of it is inside Burien city limits, so the guide does not say so. Boulevard Park and White Center are separate census-designated places north of the city."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Burien sits where SR 509 and SR 518 meet, right next to the airport, with two RapidRide lines today and Stride bus rapid transit on the way. Census figures put the mean travel time to work for Burien residents at 26.8 minutes (2019–2023).",
+   "dark": false,
+   "items": [
+    [
+     "SR 509 and SR 518",
+     "The two state routes meet in Burien. SR 518 is a 3.42-mile freeway east from SR 509 in Burien to I-5 in Tukwila, where it continues as I-405, serving Sea-Tac Airport on the way.",
+     "sr518"
+    ],
+    [
+     "SR 509 Completion Project",
+     "WSDOT is building about three miles of new four-lane expressway linking SR 509’s current end near the airport to I-5. The first mile opened in June 2025; the final two miles are expected to open in 2028, with completion listed for 2029. It will be tolled electronically, with no tollbooths.",
+     "sr509"
+    ],
+    [
+     "Burien Transit Center",
+     "In downtown Burien, next to a Park-and-Ride garage dedicated in August 2011 with 504 stalls between its five floors and a surface lot.",
+     "garage"
+    ],
+    [
+     "RapidRide H Line",
+     "Launched March 18, 2023, replacing Route 120. It runs 13 miles from the Burien Transit Center up Ambaum Boulevard and Delridge Way through White Center and West Seattle to downtown Seattle, about every 7 minutes at peak and every 15 minutes off-peak.",
+     "rrh"
+    ],
+    [
+     "RapidRide F Line",
+     "Launched June 7, 2014. It runs 12.8 miles from the Burien Transit Center to The Landing in Renton, serving Tukwila International Boulevard Link station, Southcenter, Tukwila Sounder/Amtrak station and the Renton Transit Center. Peak buses run every 10 minutes.",
+     "rrf"
+    ],
+    [
+     "Stride S1 Line (coming)",
+     "Sound Transit’s Stride S1 bus rapid transit will connect Burien and Bellevue along SR 518 and I-405, every 10 to 15 minutes, 17+ hours a day, seven days a week. Service is anticipated in 2028.",
+     "stride"
+    ],
+    [
+     "Stride stations",
+     "S1 adds a new Stride station at the existing Burien Transit Center, with stops at Tukwila International Blvd Station, the Renton Transit Center, Renton/NE 44th and the Bellevue Transit Center.",
+     "stridefolio"
+    ],
+    [
+     "Sea-Tac Airport",
+     "Burien sits immediately northwest of Seattle–Tacoma International Airport; the city puts the airport about 5 minutes east and Seattle about 12 minutes’ drive north.",
+     "about"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Puget Sound beaches, wooded trails and a downtown square shape Burien’s outdoor spaces. The city lists more than 365 acres of parks and open space.",
+   "dark": false,
+   "items": [
+    [
+     "Seahurst Ed Munro Park",
+     "About 178 acres on Puget Sound with roughly 2,000 feet of beach. Restoration since 2004 has removed the 1972 seawall in stages for a more natural, sloping beach. King County managed it until 1996, when it passed to the new city.",
+     "seahurstwiki"
+    ],
+    [
+     "Seahurst visits",
+     "At 1600 SW Seahurst Park Road, open 8 a.m. to sunset, with a saltwater beach, Olympic Mountains views, several trails, reservable picnic shelters, a playground and 184 parking stalls plus 5 accessible stalls in the lower lot.",
+     "seahurst"
+    ],
+    [
+     "Eagle Landing Park",
+     "A 6.21-acre park at the west end of SW 149th Street, with an interpretive trail through the woods to a Puget Sound viewpoint and a 257-step metal stairway to the beach. Bald eagles are sometimes seen in the treetops.",
+     "eagle"
+    ],
+    [
+     "Lake Burien School Memorial Park",
+     "4.6 acres at 1620 SW 149th Street on the site of the former Lake Burien School, with open lawn, tennis courts, a walking trail, a playground and summer concerts. Terra cotta sculptures saved from the school are mounted on an arch in the park.",
+     "lbsmp"
+    ],
+    [
+     "Town Square Park",
+     "At the center of Town Square, next to the Burien Library and City Hall, and the venue for many community events. Its fountain runs daily from noon to 6 p.m. in season through Labor Day weekend.",
+     "tsq"
+    ],
+    [
+     "Moshier Community Art Center",
+     "A city art center with quarterly classes for all ages in ceramics, painting, drawing, mosaics and sculpture, a fully equipped ceramics studio and 24-hour access studio spaces for artists.",
+     "art"
+    ],
+    [
+     "Lake Burien",
+     "The lake the city is named for is state-owned but surrounded by private property, with no public access.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Burien is served by Highline Public Schools, which is headquartered in the city. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Highline Public Schools",
+     "Headquartered at 15675 Ambaum Boulevard SW in Burien, the district serves Burien, most of Des Moines, Normandy Park and SeaTac, plus White Center and much of Boulevard Park. It reported 17,563 students for 2022–2023.",
+     "hsd"
+    ],
+    [
+     "High schools in Burien",
+     "Highline High School, Highline Big Picture and Highline Choice Academy.",
+     "hsd"
+    ],
+    [
+     "Middle school",
+     "Sylvester Middle School is at 16222 Sylvester Road SW in Burien.",
+     "schoolslib"
+    ],
+    [
+     "Elementary schools",
+     "Cedarhurst, Gregory Heights, Hazel Valley, Seahurst and Shorewood elementaries are in Burien.",
+     "hsd"
+    ],
+    [
+     "Puget Sound Skills Center",
+     "A Highline career and technical center at 18010 8th Avenue South in Burien.",
+     "schoolslib"
+    ],
+    [
+     "Kennedy Catholic High School",
+     "John F. Kennedy Catholic High School, founded in 1966, is a coed grades 9–12 school of the Archdiocese of Seattle at 140 South 140th Street.",
+     "kennedy"
+    ],
+    [
+     "Confirming a school",
+     "School assignment depends on the address and boundaries change, so confirm with Highline Public Schools before relying on a particular school.",
+     "hsd"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown Burien and Town Square hold the library, City Hall and the weekly market.",
+   "dark": false,
+   "items": [
+    [
+     "St. Anne Hospital",
+     "Formerly Highline Medical Center, now part of Virginia Mason Franciscan Health, at 16251 Sylvester Road SW, with emergency care 24/7.",
+     "stanne"
+    ],
+    [
+     "Burien Library",
+     "A 32,000-square-foot King County Library System branch that opened June 13, 2009, sharing its building with Burien City Hall. It holds the Northwest Collection, KCLS’s largest collection of Northwest history materials.",
+     "library"
+    ],
+    [
+     "Boulevard Park Library",
+     "A second KCLS branch, at 12015 Roseberg Avenue South.",
+     "schoolslib"
+    ],
+    [
+     "Burien Farmers Market",
+     "Thursdays in Town Square Park, 10 a.m. to 6 p.m. May to October and 10 a.m. to 4 p.m. November to April, run by Discover Burien.",
+     "market"
+    ],
+    [
+     "Town Square",
+     "Completed in 2017, with retail space, condos, rental apartments, a senior living center, the library with underground parking, and City Hall on the top floor.",
+     "wiki"
+    ],
+    [
+     "Highline Performing Arts Center",
+     "An 800-seat venue at 401 S 152nd Street, owned and operated by Highline Public Schools.",
+     "hpac"
+    ],
+    [
+     "Highline Heritage Museum",
+     "A South King County history museum at 819 SW 152nd Street, with exhibits on Indigenous heritage, early settlement, aviation and immigration.",
+     "museum"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Burien grew from homesteads around Lake Burien and a summer waterfront community on Puget Sound, and took in southern North Highline in 2010.",
+   "dark": false,
+   "items": [
+    [
+     "Olde Burien",
+     "The historic town center, around SW 152nd Street on the west side of Ambaum Boulevard.",
+     "wiki"
+    ],
+    [
+     "Downtown and Town Square",
+     "About 500 residential units surround Town Square’s central park, and the Puget Sound Regional Council designates Burien as one of 25 Regional Growth Centers.",
+     "about"
+    ],
+    [
+     "Lake Burien",
+     "Gottlieb Burian built a cabin on the lake in 1884, and the community took his name. The lake is ringed by private property.",
+     "wiki"
+    ],
+    [
+     "Gregory Heights and Seahurst",
+     "Burien neighborhoods served by the Burien Community Shuttle, route 631.",
+     "about"
+    ],
+    [
+     "Three Tree Point",
+     "A low, triangle-shaped gravelly spit on the east side of Puget Sound, historically a place of resorts, summer homes and cabins. It is now residential, with close attention to tree preservation.",
+     "ttp"
+    ],
+    [
+     "North Highline annexation",
+     "Burien annexed southern North Highline effective April 1, 2010; voters in the northern area, including White Center, rejected annexation in November 2012.",
+     "wiki"
+    ],
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 56.9%, median owner-occupied home value $609,300 and median gross rent $1,742 (Census, 2019–2023).",
+     "census"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Burien borders Seattle, White Center and Boulevard Park to the north, Tukwila and SeaTac to the east, Normandy Park to the south and Puget Sound to the west.",
+   "dark": true,
+   "items": [
+    [
+     "Downtown Seattle and West Seattle",
+     "RapidRide H runs from the Burien Transit Center through White Center and West Seattle along Delridge Way to downtown Seattle.",
+     "rrh"
+    ],
+    [
+     "White Center",
+     "An unincorporated community between West Seattle and Burien, with 16,631 residents at the 2020 census; Burien’s center is about 3 miles south.",
+     "white"
+    ],
+    [
+     "Boulevard Park",
+     "A census-designated place between Burien and Seattle, bordered by Tukwila on the east, with 4,094 residents in 2020.",
+     "blvd"
+    ],
+    [
+     "SeaTac and the airport",
+     "Burien sits immediately northwest of Seattle–Tacoma International Airport, and SeaTac and Tukwila border the city on the east.",
+     "wiki"
+    ],
+    [
+     "Normandy Park",
+     "A city bordering Burien on the south, with Des Moines beyond, incorporated in 1953, with 6,771 residents in 2020.",
+     "normandy"
+    ],
+    [
+     "Tukwila, Southcenter and Renton",
+     "RapidRide F connects Burien with Tukwila International Boulevard Link station, Southcenter Mall, Tukwila Sounder station and Renton.",
+     "rrf"
+    ],
+    [
+     "Bellevue and Tacoma",
+     "The City of Burien puts Tacoma and Bellevue about 30 minutes away by car.",
+     "about"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Burien in?",
+   "Burien is in King County, on Puget Sound south of Seattle.",
+   "wiki"
+  ],
+  [
+   "What is the population of Burien, WA?",
+   "The 2020 census counted 52,066 people; the Census Bureau estimated 50,730 on July 1, 2023.",
+   "census"
+  ],
+  [
+   "How close is Burien to Sea-Tac Airport?",
+   "Burien sits immediately northwest of Seattle–Tacoma International Airport, and SR 518 runs from Burien past the airport to I-5.",
+   "wiki"
+  ],
+  [
+   "When did Burien become a city?",
+   "Burien incorporated on February 28, 1993, and annexed southern North Highline on April 1, 2010.",
+   "wiki"
+  ],
+  [
+   "What school district is Burien in?",
+   "Highline Public Schools, which is headquartered in Burien. Confirm school assignment with the district for any specific address.",
+   "hsd"
+  ],
+  [
+   "Is there light rail in Burien?",
+   "Not in Burien itself. RapidRide F connects the Burien Transit Center to the Link station at Tukwila International Boulevard.",
+   "rrf"
+  ],
+  [
+   "What buses go from Burien to downtown Seattle?",
+   "RapidRide H runs from the Burien Transit Center to downtown Seattle via White Center, Delridge Way and West Seattle, about every 7 minutes at peak.",
+   "rrh"
+  ],
+  [
+   "When does Stride S1 open in Burien?",
+   "Sound Transit anticipates Stride S1 service between Burien and Bellevue in 2028, every 10 to 15 minutes.",
+   "stride"
+  ],
+  [
+   "How long is the average commute from Burien?",
+   "The Census Bureau’s mean travel time to work for Burien residents is 26.8 minutes (2019–2023).",
+   "census"
+  ],
+  [
+   "What is the median home value in Burien?",
+   "The Census Bureau reports a median owner-occupied home value of $609,300 and median gross rent of $1,742 for 2019–2023.",
+   "census"
+  ],
+  [
+   "How big is Seahurst Park?",
+   "Seahurst Ed Munro Park covers about 178 acres with roughly 2,000 feet of Puget Sound beach.",
+   "seahurstwiki"
+  ],
+  [
+   "Is White Center part of Burien?",
+   "No. White Center is an unincorporated community north of Burien; its voters rejected annexation to Burien in 2012.",
+   "white"
+  ]
+ ],
+ "listings": [
+  {
+   "eyebrow": "For sale now",
+   "title": "12005 5th Ave S",
+   "desc": "A 1938 home on a fenced, level corner lot in Burien, listed by Chris Ranch. See photos, details and price.",
+   "url": "https://homes.ranchpnw.com/12005"
+  }
+ ],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

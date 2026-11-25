@@ -1,0 +1,514 @@
+{
+ "slug": "edgewood",
+ "name": "Edgewood",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-24",
+ "review": "https://claude.ai/artifact/BLi7xjyVZXebhkzeVy9qtK",
+ "headline": "Edgewood: a young city on North Hill, above the Puyallup River valley.",
+ "lede": "Edgewood sits on the hill north of the Puyallup River valley, between Fife, Milton, Federal Way, Sumner and Puyallup, with Meridian Avenue (SR 161) running through it. This guide covers getting around, parks and trails, schools, everyday errands, housing and zoning, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Edgewood, Washington",
+   "https://en.wikipedia.org/wiki/Edgewood,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Edgewood city, Washington",
+   "https://census.gov/quickfacts/fact/table/edgewoodcitywashington/POP060210"
+  ],
+  "profile": [
+   "Pierce County · Community Profile: Edgewood city (Esri, April 2025)",
+   "https://www.piercecountywa.gov/DocumentCenter/View/115373/Community-Profile_Edgewood-city"
+  ],
+  "parks": [
+   "City of Edgewood · Edgewood Parks",
+   "https://www.edgewoodwa.gov/189/Edgewood-Parks"
+  ],
+  "nelson": [
+   "City of Edgewood · Nelson Farm Park",
+   "https://www.edgewoodwa.gov/193/Nelson-Farm-Park"
+  ],
+  "ecp": [
+   "City of Edgewood · Edgewood Community Park",
+   "https://www.edgewoodwa.gov/327/Edgewood-Community-Park"
+  ],
+  "utilities": [
+   "City of Edgewood · Utilities Serving Edgewood",
+   "https://www.edgewoodwa.gov/240/Utilities-Serving-Edgewood"
+  ],
+  "sewer": [
+   "City of Edgewood · General Sewer Plan Update",
+   "https://www.edgewoodwa.gov/424/General-Sewer-Plan-Update"
+  ],
+  "econ": [
+   "City of Edgewood · Economic Development",
+   "https://www.edgewoodwa.gov/475/Economic-Development"
+  ],
+  "corridor": [
+   "City of Edgewood · Meridian Ave E Corridor Study",
+   "https://www.edgewoodwa.gov/414/Meridian-Ave-E-Corridor-Study"
+  ],
+  "zoning": [
+   "Edgewood Municipal Code · Chapter 18.80 Land Use Zones",
+   "https://www.codepublishing.com/WA/Edgewood/html/Edgewood18/Edgewood1880.html"
+  ],
+  "psd": [
+   "Wikipedia · Puyallup School District",
+   "https://en.wikipedia.org/wiki/Puyallup_School_District"
+  ],
+  "psdmaps": [
+   "Puyallup School District · District Maps",
+   "https://www.puyallupsd.org/about-us/district-maps"
+  ],
+  "sbl": [
+   "Wikipedia · Sumner–Bonney Lake School District",
+   "https://en.wikipedia.org/wiki/Sumner_School_District"
+  ],
+  "fifesd": [
+   "Wikipedia · Fife Public Schools",
+   "https://en.wikipedia.org/wiki/Fife_Public_Schools"
+  ],
+  "trail1": [
+   "Washington Wildlife and Recreation Coalition · Interurban Trail & Trailhead",
+   "https://wildliferecreation.org/projects/interurban-trail-trailhead-2/"
+  ],
+  "trail3": [
+   "Washington Wildlife and Recreation Coalition · Interurban Trail Phase III – Jovita Canyon",
+   "https://wildliferecreation.org/?p=18696"
+  ],
+  "traillink": [
+   "TrailLink · Interurban Trail (South)",
+   "https://www.traillink.com/trail/interurban-trail-(south)/"
+  ],
+  "sr161": [
+   "Wikipedia · Washington State Route 161",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_161"
+  ],
+  "sr167": [
+   "WSDOT · What is the SR 167 Completion Project",
+   "https://engage.wsdot.wa.gov/sr-167-completion-project/what-is-the-sr-167-completion-project"
+  ],
+  "puyst": [
+   "Wikipedia · Puyallup station",
+   "https://en.wikipedia.org/wiki/Puyallup_station"
+  ],
+  "sumst": [
+   "Wikipedia · Sumner station",
+   "https://en.wikipedia.org/wiki/Sumner_station"
+  ],
+  "sumgarage": [
+   "Sound Transit · Sumner Station Parking and Access Improvements",
+   "https://www.soundtransit.org/system-expansion/sumner-station-parking-access-improvements"
+  ],
+  "fwlink": [
+   "Wikipedia · Federal Way Downtown station",
+   "https://en.wikipedia.org/wiki/Federal_Way_Transit_Center"
+  ],
+  "library": [
+   "Pierce County Library System · Locations and hours",
+   "https://mypcls.org/visit-the-library/locations-hours/"
+  ],
+  "fire": [
+   "Washington 211 · East Pierce Fire and Rescue, Edgewood Fire Station",
+   "https://search.wa211.org/search/e831a14d-e715-5933-9732-f23315a6db24"
+  ],
+  "fair": [
+   "Washington State Fair · About the Fair",
+   "https://www.thefair.com/about-us/"
+  ],
+  "puyallup": [
+   "Wikipedia · Puyallup, Washington",
+   "https://en.wikipedia.org/wiki/Puyallup,_Washington"
+  ],
+  "milton": [
+   "Wikipedia · Milton, Washington",
+   "https://en.wikipedia.org/wiki/Milton,_Washington"
+  ],
+  "fife": [
+   "Wikipedia · Fife, Washington",
+   "https://en.wikipedia.org/wiki/Fife,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "12,327",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "1996",
+   "incorporated as a city, February 28",
+   "wiki"
+  ],
+  [
+   "8.39 sq mi",
+   "of land (2020)",
+   "census"
+  ],
+  [
+   "27.9 min",
+   "mean travel time to work, 2019–2023",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "12,327 at the 2020 census, up from 9,387 in 2010; estimated 13,257 on July 1, 2023",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "February 28, 1996",
+   "wiki"
+  ],
+  [
+   "Neighbors",
+   "Fife to the west, Milton to the northwest, Federal Way to the north, Sumner to the east and Puyallup to the south",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "On North Hill (shared informally with Milton), across the Puyallup River valley from South Hill",
+   "wiki"
+  ],
+  [
+   "Main road",
+   "Meridian Avenue East (SR 161), which the city calls its Meridian Avenue Corridor",
+   "econ"
+  ],
+  [
+   "School districts",
+   "Mostly Puyallup School District; some areas in Fife Public Schools or the Sumner–Bonney Lake School District",
+   "wiki"
+  ],
+  [
+   "Town Center",
+   "A 112-acre designated Center of Local Importance",
+   "econ"
+  ],
+  [
+   "City symbol",
+   "The Nyholm Windmill at 2284 Meridian Avenue East, moved there in 1980",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "Area differs slightly within Wikipedia (8.39 square miles in the infobox, 8.42 in the text). This guide uses 8.39 square miles, which matches the Census Bureau’s 2020 land area.",
+  "The Census QuickFacts page as fetched showed 2019–2023 survey figures and a July 1, 2023 population estimate; newer figures may be available. The Pierce County community profile (Esri) gives different, modeled estimates, such as a 2024 median home value of $685,242; this guide uses the Census figures for housing and population and cites Esri only for housing-unit counts.",
+  "Sumner station figures differ by source and date: Wikipedia lists 302 spaces and says the station was expected to expand to over 600 stalls in 2026, while Sound Transit’s project page now expects the garage to open in late 2026 or early 2027. This guide uses Sound Transit’s newer timing.",
+  "Wikipedia’s Edgewood article names the “Sumner School District”; the district’s current name is the Sumner–Bonney Lake School District, which lists Edgewood among the areas it serves.",
+  "Several angles were left out because a source page could not be read or did not state them: specific Pierce Transit bus routes through Edgewood, the City’s sanitary sewer page, and town-center sewer extension details beyond the General Sewer Plan."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Meridian Avenue (SR 161) is Edgewood’s main road, connecting south to Puyallup and north toward Federal Way. Census figures put the mean travel time to work for Edgewood residents at 27.9 minutes (2019–2023).",
+   "dark": false,
+   "items": [
+    [
+     "Meridian Avenue (SR 161)",
+     "SR 161 runs north on Meridian Avenue from Puyallup and forms the boundary between Edgewood and Milton before entering King County as the Enchanted Parkway, crossing over I-5 and ending at SR 18 in Federal Way.",
+     "sr161"
+    ],
+    [
+     "Meridian corridor study",
+     "The City adopted a Meridian Avenue corridor study on September 10, 2024, covering 24th Street East to the southern city limits. The City notes its recommendations are subject to future design and review, with no timeline yet set.",
+     "corridor"
+    ],
+    [
+     "SR 167 and I-5",
+     "WSDOT’s SR 167 Completion Project is building 6 miles of new tolled expressway between Puyallup and the Port of Tacoma, with new I-5 access in Fife and a rebuilt SR 167/SR 161 to SR 410 interchange in Puyallup. Full completion is planned for 2029.",
+     "sr167"
+    ],
+    [
+     "Sounder at Puyallup",
+     "Puyallup station at 131 West Main Avenue has 13 weekday Sounder S Line round trips; northbound trains reach Seattle’s King Street Station in about 49 minutes. A five-story, 510-stall garage opened in March 2023, part of 1,044 stalls in all.",
+     "puyst"
+    ],
+    [
+     "Sounder at Sumner",
+     "Sumner station at 810 Maple Street has 13 weekday Sounder S Line round trips to Seattle’s King Street Station and south to Tacoma Dome or Lakewood, with 302 parking spaces in two lots.",
+     "sumst"
+    ],
+    [
+     "Link light rail at Federal Way",
+     "Federal Way Downtown station became the southern end of the Link 1 Line on December 6, 2025, about 16 minutes to SeaTac/Airport and about 56 minutes to Westlake in downtown Seattle. Pierce Transit serves Milton and Fife from there.",
+     "fwlink"
+    ],
+    [
+     "Sea-Tac Airport",
+     "The City says Seattle-Tacoma International Airport is 15.3 miles north of Edgewood.",
+     "econ"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Edgewood’s parks range from a newer community park on Meridian to a wetland nature park and a segment of the Interurban Trail along Jovita Boulevard.",
+   "dark": false,
+   "items": [
+    [
+     "Edgewood Community Park",
+     "At the northeast corner of 36th Street East and Meridian Avenue East. Opened in March 2022 after almost twenty years of planning, it has an all-abilities playground, a grassy amphitheater, about 0.7 miles of paved and gravel trails, a picnic shelter and restrooms.",
+     "ecp"
+    ],
+    [
+     "Interurban Trail and Jovita Crossroads",
+     "Edgewood’s 0.83-mile segment runs from the city limits near Military Road, where it meets Milton’s segment, to 114th Avenue East. Jovita Crossroads Park at 22 114th Avenue East is the trailhead, with parking, picnic shelters, a restroom and interpretive displays.",
+     "trail1"
+    ],
+    [
+     "Interurban Trail Phase III (Jovita Canyon)",
+     "An active City project to build a 1-mile, 12-foot-wide trail from 114th Avenue East to West Valley Highway along the north side of Jovita Boulevard, linking to Pacific’s trail work at Stewart Road. It has a $3,000,000 state WWRP trails grant.",
+     "trail3"
+    ],
+    [
+     "Nelson Farm Park",
+     "Just over 10 acres at 11912 18th Street East, with 31 raised garden beds (4 by 20 feet) that residents can rent each growing season for $20.",
+     "nelson"
+    ],
+    [
+     "Edgemont Park",
+     "A 5-acre wooded park with a playground, a baseball diamond that doubles as a soccer field, a basketball court, a picnic shelter, off-street parking and restrooms.",
+     "parks"
+    ],
+    [
+     "Nelson Nature Park",
+     "A passive park in a wetland area, home to a variety of animals and plants.",
+     "parks"
+    ],
+    [
+     "Crawford Woods",
+     "Land donated to the city in 2008 by long-time resident J. Jeane Heine.",
+     "parks"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Edgewood is in the Puyallup School District, with some areas in Fife Public Schools or the Sumner–Bonney Lake School District. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Schools in Edgewood",
+     "Four schools are located in the city: Alice V. Hedden Elementary (Fife), and Northwood Elementary, Mountain View Elementary and Edgemont Junior High (Puyallup).",
+     "wiki"
+    ],
+    [
+     "Puyallup School District",
+     "Serves most of Puyallup and most of Edgewood, with 22 elementary schools and seven junior highs. High schools are Puyallup, Rogers and Emerald Ridge, plus the alternative E.B. Walker High School.",
+     "psd"
+    ],
+    [
+     "Edgemont, Northwood and Mountain View",
+     "Edgemont Junior High (grades 6–9, established 1938), Northwood Elementary (building replaced in 2019) and Mountain View Elementary joined the Puyallup district when the Edgemont School District consolidated with it in 1967.",
+     "psd"
+    ],
+    [
+     "Fife Public Schools",
+     "Covers portions of Edgewood along with most of Fife and Milton. Hedden Elementary serves grades 3–5; Fife High School serves grades 10–12.",
+     "fifesd"
+    ],
+    [
+     "Sumner–Bonney Lake School District",
+     "Lists Edgewood among the areas it serves, with Sumner High School and Bonney Lake High School.",
+     "sbl"
+    ],
+    [
+     "Finding an assigned school",
+     "The Puyallup School District posts elementary, junior high and high school boundary maps. Its Capital Projects office, (253) 841-8641, is the listed contact for questions.",
+     "psdmaps"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "City services, the library and the larger shopping and medical centers are spread between Edgewood and its neighbors.",
+   "dark": false,
+   "items": [
+    [
+     "Milton/Edgewood Library",
+     "The Pierce County Library System’s Milton/Edgewood branch is at 900 Meridian East, Suite 29, in Milton.",
+     "library"
+    ],
+    [
+     "Fire and EMS",
+     "East Pierce Fire and Rescue provides fire and emergency medical services from the Edgewood Fire Station at 10105 24th Street East.",
+     "fire"
+    ],
+    [
+     "Utilities",
+     "Puget Sound Energy provides power and gas. Water comes from Mt. View Edgewood Water Company, City of Milton Water or Lakehaven Water and Sewer District depending on location; garbage and recycling are handled by Murrey’s DM Disposal.",
+     "utilities"
+    ],
+    [
+     "City Hall",
+     "City Hall is open Monday through Thursday, 8:30 a.m. to 5 p.m.",
+     "nelson"
+    ],
+    [
+     "Grocery",
+     "The City’s economic development page names a regional grocery store or market as its flagship recruiting opportunity.",
+     "econ"
+    ],
+    [
+     "Washington State Fair",
+     "Held in Puyallup for 20 days starting the Friday of Labor Day weekend, with a Spring Fair in April and events through the year. The fair began in 1900.",
+     "fair"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Edgewood’s zoning ranges from large-lot single-family areas to a planned mixed-use Town Center along Meridian, and sewer service is being extended under a new citywide plan.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 69.3%, median owner-occupied home value $664,000 and median gross rent $1,837 (Census, 2019–2023).",
+     "census"
+    ],
+    [
+     "Growth in homes",
+     "Housing units grew from 3,800 in 2010 to 5,125 in 2020, with an estimated 5,836 in 2024 (Esri).",
+     "profile"
+    ],
+    [
+     "Large-lot zoning",
+     "The Single-Family 2 (SF-2) zone continues large residential lots in areas with extensive tree coverage, with an 18,500-square-foot minimum lot size. SF-3 and SF-5 are the main single-family zones in established neighborhoods.",
+     "zoning"
+    ],
+    [
+     "Mixed residential",
+     "The MR-1 and MR-2 zones allow small-lot detached homes, duplexes and townhouses, at up to 4 and 8 homes per acre.",
+     "zoning"
+    ],
+    [
+     "Town Center",
+     "The code describes the Town Center zone as “the heart of Edgewood,” a walkable, mixed-use core. The City calls the 112-acre Town Center the place for its most significant high-density, mixed-use growth.",
+     "econ"
+    ],
+    [
+     "Sewer",
+     "The City adopted an updated General Sewer Plan on December 10, 2024, effective January 1, 2025. It maps which areas route to four receiving utilities (Lakehaven, Fife, Pierce County and Puyallup), with the goal of a path to sewer availability for everyone in Edgewood. The earlier plan started sewer along Meridian Avenue.",
+     "sewer"
+    ],
+    [
+     "Sewer providers",
+     "The City lists Lakehaven Water and Sewer District and the City of Fife (west of 86th Avenue East) as sewer providers.",
+     "utilities"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Edgewood is surrounded by cities on every side, from the Port of Tacoma side in Fife to downtown Puyallup in the valley below.",
+   "dark": true,
+   "items": [
+    [
+     "Milton",
+     "Milton borders Edgewood and lies in both Pierce and King counties; it counted 8,697 people in 2020. Together the two are informally known as North Hill.",
+     "milton"
+    ],
+    [
+     "Puyallup",
+     "On the Puyallup River, about 10 miles southeast of Tacoma and 35 miles south of Seattle, with 42,973 people in 2020. It is home to the Washington State Fair and Pierce College Puyallup.",
+     "puyallup"
+    ],
+    [
+     "Fife",
+     "East of Tacoma and south of the Port of Tacoma, with 10,999 people in 2020. I-5 runs through the city.",
+     "fife"
+    ],
+    [
+     "Federal Way",
+     "Federal Way Downtown station is the southern end of the Link 1 Line, with 13 bus bays and a five-story garage of about 1,500 stalls three blocks away.",
+     "fwlink"
+    ],
+    [
+     "Sumner",
+     "East of Edgewood. Sound Transit is building a parking garage at Sumner station and expects it to open in late 2026 or early 2027.",
+     "sumgarage"
+    ],
+    [
+     "Interurban Trail (South)",
+     "The main paved trail runs about 14.8 miles, nearly straight and flat, with an endpoint at the Green River Trail in Tukwila. Edgewood’s 0.8-mile segment starts at Jovita Crossroads Trailhead Park, includes a historical railway display, and is not yet connected to the main trail.",
+     "traillink"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Edgewood in?",
+   "Edgewood is in Pierce County, bordered by Fife, Milton, Federal Way, Sumner and Puyallup.",
+   "wiki"
+  ],
+  [
+   "What is the population of Edgewood, WA?",
+   "The 2020 census counted 12,327 people; the Census Bureau estimated 13,257 on July 1, 2023.",
+   "census"
+  ],
+  [
+   "When did Edgewood become a city?",
+   "Edgewood incorporated on February 28, 1996.",
+   "wiki"
+  ],
+  [
+   "What school district is Edgewood in?",
+   "Most of Edgewood is in the Puyallup School District, with some areas in Fife Public Schools or the Sumner–Bonney Lake School District. Confirm with the district for any specific address.",
+   "wiki"
+  ],
+  [
+   "Which schools are in Edgewood?",
+   "Hedden Elementary (Fife), Northwood Elementary, Mountain View Elementary and Edgemont Junior High (Puyallup) are located in the city.",
+   "wiki"
+  ],
+  [
+   "Where is the closest Sounder train to Edgewood?",
+   "Sounder S Line trains stop at Puyallup station and Sumner station, each with 13 weekday round trips.",
+   "puyst"
+  ],
+  [
+   "Is there light rail near Edgewood?",
+   "Yes, at Federal Way Downtown station, where the Link 1 Line began service on December 6, 2025.",
+   "fwlink"
+  ],
+  [
+   "How long is the average commute from Edgewood?",
+   "The Census Bureau’s mean travel time to work for Edgewood residents is 27.9 minutes (2019–2023).",
+   "census"
+  ],
+  [
+   "What is the median home value in Edgewood?",
+   "The Census Bureau reports a median owner-occupied home value of $664,000 and median gross rent of $1,837 for 2019–2023.",
+   "census"
+  ],
+  [
+   "Does Edgewood have sewer?",
+   "The City adopted a General Sewer Plan in December 2024 that maps which areas route to four receiving utilities, with the goal of a path to sewer availability for everyone in Edgewood. Ask about sewer or septic for any specific property.",
+   "sewer"
+  ],
+  [
+   "Are there large lots in Edgewood?",
+   "The SF-2 zone is meant to continue large residential lots in tree-covered areas, with an 18,500-square-foot minimum lot size.",
+   "zoning"
+  ],
+  [
+   "What is the Interurban Trail in Edgewood?",
+   "A 0.83-mile segment from the city limits near Military Road, where it meets Milton’s segment, to 114th Avenue East, with Jovita Crossroads Park as its trailhead.",
+   "trail1"
+  ]
+ ],
+ "listings": [
+  {
+   "eyebrow": "For sale now",
+   "title": "10707 47th St E, Edgewood",
+   "desc": "A 3-bedroom, 3-bath home with 2,572 square feet, listed by Chris Ranch. See photos, details and price.",
+   "url": "https://homes.ranchpnw.com/10707"
+  }
+ ],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

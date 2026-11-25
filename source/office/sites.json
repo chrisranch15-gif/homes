@@ -1,0 +1,116 @@
+[
+{
+"g": "Sites",
+"t": "Your homes site",
+"s": "Listings, reviews, selling and Unlisted",
+"u": "https://homes.ranchpnw.com/",
+"th": "marketing/thumbs/site-home.jpg"
+},
+{
+"g": "Sites",
+"t": "Unlisted",
+"s": "Off-market buyer program: Inside Track and By Invitation",
+"u": "https://homes.ranchpnw.com/unlisted",
+"th": "marketing/thumbs/site-unlisted.jpg"
+},
+{
+"g": "Sites",
+"t": "Reviews",
+"s": "What clients say",
+"u": "https://homes.ranchpnw.com/reviews",
+"th": "marketing/thumbs/site-reviews.jpg"
+},
+{
+"g": "Sites",
+"t": "Selling with us",
+"s": "What happens when we take your listing",
+"u": "https://homes.ranchpnw.com/sell",
+"th": "marketing/thumbs/site-sell.jpg"
+},
+{
+"g": "Sites",
+"t": "Seller portal",
+"s": "Sellers sign in to follow their sale",
+"u": "https://homes.ranchpnw.com/sellers",
+"th": "marketing/thumbs/site-sellers.jpg"
+},
+{
+"g": "Town guides",
+"t": "Tehaleh",
+"s": "Live at gotehaleh.com",
+"u": "https://gotehaleh.com",
+"th": "marketing/thumbs/site-tehaleh.jpg"
+},
+{
+"g": "Town guides",
+"t": "Bonney Lake",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/2ghqvwiU7gqf6aaihJHyvq",
+"th": "marketing/thumbs/site-guide-bonney-lake.jpg",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Burien",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/4nmYzMzxVHuiyXPooSqFwj",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Edgewood",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/BLi7xjyVZXebhkzeVy9qtK",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Enumclaw",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/4wqRwkrQZSWEQ8FdRQnD2m",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Gig Harbor",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/MLC1bspEE5Ao4GtYAVPjeu",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Lake Tapps",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/4tPCHuML6mMXJCoRoasZRG",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Port Orchard",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/9KwHB6FZ1qnYiKdDCMzjAo",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Renton",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/W6hPkXhihUW2sBmmxTzMHC",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Tacoma",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/4e9GNppuUzhUzS1x3Qpa5f",
+"th": "",
+"draft": true
+}
+]

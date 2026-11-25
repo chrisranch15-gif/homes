@@ -515,3 +515,5 @@ sup.fn a{color:var(--accent);text-decoration:none;font-family:var(--sans);font-w
 .ptile .pt-a{display:flex;gap:4px;padding:6px}
 .ptile .pt-a button{flex:1;min-height:34px;border:1px solid var(--line);background:transparent;border-radius:8px;font-size:13px;cursor:pointer;color:inherit}
 .ptile .pt-a button[aria-pressed="true"]{background:#E7D7BF;border-color:#E7D7BF;color:#1a1a1a}
+
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.atile{display:grid;gap:6px;align-content:start}.atile a{display:grid;gap:6px;color:inherit;text-decoration:none}.atile img,.atile .ph{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:10px;background:var(--line);border:1px solid var(--line)}.atile b{font-size:14px;font-weight:600;line-height:1.3}.atile .chip{justify-self:start}

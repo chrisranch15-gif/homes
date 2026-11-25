@@ -294,6 +294,16 @@ function photoBlock() {
     <div class="chips" style="margin-top:16px"><button class="btn" data-act="photo-save" ${ui.busy === 'photos' ? 'disabled' : ''}>${ui.busy === 'photos' ? 'Publishing…' : 'Publish to the listing page'}</button><button class="chip" data-act="photo-reset">Back to the original order</button><button class="chip" data-act="photo-close">Cancel</button></div>
     <p class="small muted" style="margin-top:10px">Shows on homes.ranchpnw.com/19917 within a minute.</p></div>`;
 }
+/* ---------- marketing assets: every launch asset for this listing, as a gallery (source/marketing/build_assets.py) ---------- */
+function assetsBlock() {
+  if (!isStaff() || typeof ASSETS === 'undefined') return '';
+  const num = (String(street()).match(/^\d+/) || [''])[0], all = ASSETS[num] || [];
+  if (!all.length) return '';
+  const order = [['Listing page', 'Pages'], ['Page', 'Pages'], ['Print', 'Print'], ['Film', 'Films'], ['Social', 'Social posts and stories']], groups = {};
+  order.forEach(([k, g]) => all.filter(a => a.kind === k).forEach(a => (groups[g] = groups[g] || []).push(a)));
+  return `<div class="sharebar" id="assets"><div class="eyebrow">Marketing assets · ${all.length}</div><p class="small muted" style="margin:6px 0 0">Everything made for this listing. Tap to open, or copy a link to send.</p>
+    ${Object.keys(groups).map(g => `<div class="small" style="font-weight:600;margin:16px 0 8px">${esc(g)}</div><div class="agrid">${groups[g].map(a => `<div class="atile"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.th ? `<img src="${esc(a.th)}" alt="" loading="lazy">` : '<span class="ph"></span>'}<b>${esc(a.t)}</b></a><button class="chip" data-act="asset-copy" data-u="${esc(a.u)}">Copy link</button></div>`).join('')}</div>`).join('')}</div>`;
+}
 const SIGN_SETS = { '19917': [['gallery', 'Gallery'], ['noir', 'Noir'], ['daylight', 'Daylight']] }; // printed by source/print/open_house_signs.py
 function ohBlock() {
   if (!isStaff()) return '';
@@ -496,6 +506,7 @@ Object.assign(A, {
     ui.offerSure = null; try { await offerSetStatus(n); toast('Marked accepted. The other offers stay saved.'); } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); } render(); },
   'offer-reopen': async () => { try { await offerSetStatus(0); toast('Back to comparing offers.'); } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); } render(); },
   'offer-mail-close': (el) => { delete (ui.offerMail || {})[el.dataset.t]; render(); },
+  'asset-copy': async (el) => { try { await navigator.clipboard.writeText(el.dataset.u); el.textContent = 'Copied'; } catch (e) { el.textContent = el.dataset.u; } },
   'show-fbok': async (el) => {
     const x = showList().find(s => s.key === el.dataset.k); if (!x) return;
     ui.fbOk = Object.assign({}, ui.fbOk, { [x.key]: 1 }); render();

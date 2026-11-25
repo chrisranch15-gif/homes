@@ -12,14 +12,18 @@ OFFICE=${1:-/home/claude/office}
 DESK_URL=https://claude.ai/artifact/E6iKnuAbJ77ML5sArMqhEq
 [ -d "$OFFICE/.git" ] || { echo "Clone chrisranch15-gif/office to $OFFICE first"; exit 1; }
 
+# Marketing assets + Sites gallery data (thumbnails, ASSETS for the Desk, sites.json for the Office)
+python3 "$HOMES/source/marketing/build_assets.py"
+SRC=$(mktemp); python3 "$HOMES/source/office/inject_sites.py" "$HOMES/source/office/index.html" "$HOMES/source/office/sites.json" "$SRC"
+
 # Office: public copies never hold Chris's addresses
-sed 's/__MY_EMAILS__/[]/' "$HOMES/source/office/index.html" > "$HOMES/office/index.html"
+sed 's/__MY_EMAILS__/[]/' "$SRC" > "$HOMES/office/index.html"
 cp "$HOMES/office/index.html" "$OFFICE/index.html"
 # Private claude.ai copy keeps the CALENDARS line it already has (never committed)
 if [ -f /home/claude/hub/index.html ]; then
   LINE=$(grep -m1 -E '^(const|let) CALENDARS = ' /home/claude/hub/index.html | sed 's/^const /let /' || true)
   if [ -n "$LINE" ] && [ "$LINE" != 'let CALENDARS = [];' ]; then
-    python3 - "$LINE" "$HOMES/source/office/index.html" <<'EOF'
+    python3 - "$LINE" "$SRC" <<'EOF'
 import sys
 import re
 s = open(sys.argv[2]).read()
@@ -31,6 +35,9 @@ EOF
   else echo "Note: private Office copy needs Chris's CALENDARS line; left unchanged."; fi
 fi
 
+# Desk copy on office.ranchpnw.com gets the gallery thumbnails
+mkdir -p "$OFFICE/desk/marketing" && mkdir -p "$OFFICE/desk/marketing/thumbs" && cp -r "$HOMES/marketing/thumbs/." "$OFFICE/desk/marketing/thumbs/"
+
 # Desk: tests must pass, then build for claude.ai and for office.ranchpnw.com/desk
 rm -rf /home/claude/app && mkdir -p /home/claude/app && cp -r "$HOMES/source/app/." /home/claude/app/
 cd /home/claude/app
@@ -39,4 +46,4 @@ python3 build.py "$DESK_URL" >/dev/null
 ln -sfn "$OFFICE/desk/photos" photos; ln -sfn "$OFFICE/desk/thumbs" thumbs
 python3 build_office.py "$OFFICE"
 
-echo "Built. Now: commit + push homes and office; publish /home/claude/hub/index.html → Office artifact ba66a063-8ba8-459c-8002-fc0ce149443d and /home/claude/app/index.html → Desk artifact 6a12fcfd-7e65-4e8d-8acd-573532aab862."
+echo "Built. Publish both artifacts WITH thumbnails (Office: marketing/thumbs/site-*.jpg and guide-*.jpg; Desk: marketing/thumbs/<listing>*). Now: commit + push homes and office; publish /home/claude/hub/index.html → Office artifact ba66a063-8ba8-459c-8002-fc0ce149443d and /home/claude/app/index.html → Desk artifact 6a12fcfd-7e65-4e8d-8acd-573532aab862."

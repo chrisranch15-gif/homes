@@ -252,8 +252,9 @@ async function liveLoad(quiet) {
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Showing agents'!A2:J500" }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Photo layout'!A2:F500" }).catch(() => null),
       callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'Hub done'!B2:B3000" }).catch(() => null),
-      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Offers!A2:Q300' }).catch(() => null)
-    ]).then(r => { ui.offerRows = liveRows(r[6]); ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); ui.fbOk = Object.assign({}, ui.fbOk); liveRows(r[5]).forEach(x => { if (/^fb:/.test(x[0])) ui.fbOk[String(x[0]).slice(3)] = 1; }); try { applyOpenHouses(ui.ohRows); } catch (e) {}
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: 'Offers!A2:Q300' }).catch(() => null),
+      callTool('Google Sheets', 'get_values', { spreadsheetId: LIVE_SHEET, range: "'TC shadow'!A2:H600" }).catch(() => null)
+    ]).then(r => { ui.offerRows = liveRows(r[6]); ui.tcRows = liveRows(r[7]); ui.ohRows = liveRows(r[2]); ui.showRows = liveRows(r[3]); ui.fbOk = Object.assign({}, ui.fbOk); liveRows(r[5]).forEach(x => { if (/^fb:/.test(x[0])) ui.fbOk[String(x[0]).slice(3)] = 1; }); try { applyOpenHouses(ui.ohRows); } catch (e) {}
       try { const lr = liveRows(r[4]).filter(x => String(x[1]) === '19917'); const last = lr[lr.length - 1]; if (last && !ui.photoDraft) { const j = v => { try { return JSON.parse(v || '[]'); } catch (e) { return []; } }; applyLayout({ order: j(last[2]), hidden: j(last[3]), featured: j(last[4]) }); ui.layoutSaved = last[0]; } } catch (e) {}
       return r; });
     ui.live = { at: Date.now(), leads: liveRows(leads).filter(r => r[8] !== 'test').reverse(), marketing: liveRows(mk).reverse() };
@@ -293,6 +294,31 @@ function photoBlock() {
     <div class="ptiles">${d.list.map(tile).join('')}</div>
     <div class="chips" style="margin-top:16px"><button class="btn" data-act="photo-save" ${ui.busy === 'photos' ? 'disabled' : ''}>${ui.busy === 'photos' ? 'Publishing…' : 'Publish to the listing page'}</button><button class="chip" data-act="photo-reset">Back to the original order</button><button class="chip" data-act="photo-close">Cancel</button></div>
     <p class="small muted" style="margin-top:10px">Shows on homes.ranchpnw.com/19917 within a minute.</p></div>`;
+}
+
+/* ---------- pending: the deal at the top, the sellers right under it, listing-stage tools sink to the bottom ---------- */
+function pendingDeal() { const k = homeKeyJs(street()); return (ui.offerRows || []).filter(r => homeKeyJs(r[1]) === k && /accept|mutual|pending|contract/i.test(r[9] || '')).pop() || null; }
+function sellerDates() { const k = homeKeyJs(street()), out = {}; (ui.tcRows || []).filter(r => homeKeyJs(r[1]) === k && /^seller date:/i.test(r[2] || '')).forEach(r => { out[String(r[2]).replace(/^seller date:\s*/i, '')] = { d: r[3], note: r[4] }; }); return out; }
+function dealBlock() {
+  const o = pendingDeal(); if (!o || !isStaff()) return '';
+  const sd = sellerDates(), day = v => /^\d{4}-\d\d-\d\d/.test(v || '') ? new Date(String(v).slice(0, 10) + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '';
+  const now = new Date().toISOString().slice(0, 10), rows = Object.entries(sd);
+  return `<div class="sharebar" id="deal"><div class="eyebrow">Under contract · closing ${esc(day(o[13]) || o[13] || 'date to come')}</div>
+    <p class="small muted" style="margin:6px 0 0">${esc(String(o[2] || '').replace(/\s*\(.*\)/, ''))} · ${esc(o[6] || '')}. Inspection, appraisal and signing stay on watch here as they’re booked.</p>
+    ${rows.length ? `<div class="list" style="margin-top:12px">${rows.map(([m, x]) => `<div style="${x.d && String(x.d).slice(0, 10) < now ? 'opacity:.55' : ''}"><span aria-hidden="true">${x.d && String(x.d).slice(0, 10) < now ? '✓' : '●'}</span><span><b>${esc(m)}</b>${x.note ? `<br><span class="small muted">${esc(String(x.note).slice(0, 120))}</span>` : ''}</span><span class="when">${esc(day(x.d) || 'to come')}</span></div>`).join('')}</div>` : '<p class="small muted" style="margin-top:10px">Contract dates appear here once your TC reads the signed agreement.</p>'}</div>`;
+}
+function sellerBlock() {
+  if (!isStaff()) return '';
+  return `<div style="margin-top:28px">
+  <div class="decision" style="margin-top:28px"><div class="eyebrow">Seller portal · Aaron and Holly</div><div class="t" style="margin-top:6px"><a href="${PORTAL_URL}" target="_blank" rel="noopener">${PORTAL_URL.replace('https://', '')}</a> · code <b>${PORTAL_CODE}</b></div><div class="d">${pendingDeal() ? 'They see the road to closing, their key dates and your updates.' : 'They see live visits, shares, scans, tour and follow counts (never names), your updates, the marketing log and showing feedback.'}</div>
+    <div class="chips" style="margin-top:12px"><button class="chip" data-act="portal-copy">Copy their invite</button><a class="chip" href="${PORTAL_URL}#code=${PORTAL_CODE}" target="_blank" rel="noopener">Open it as them</a></div></div>
+  ${caps.mcp ? `<details style="margin-top:22px"><summary class="btn ghost" style="display:inline-flex">Post an update to the sellers</summary>
+    <form data-form="live-update" style="margin-top:16px"><div class="field"><label for="lu-t">Headline</label><input id="lu-t" name="headline" required placeholder="A strong first weekend"></div><div class="field"><label for="lu-m">Message</label><textarea id="lu-m" name="msg" required placeholder="Three showings booked for Saturday…"></textarea></div><button class="btn">Post to their portal</button></form></details>
+${pendingDeal() ? `<details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Zillow &amp; Redfin numbers</summary><div style="margin-top:12px">` : ''}  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Update Zillow &amp; Redfin numbers</summary>
+    <form data-form="live-portal" style="margin-top:16px"><div class="small muted" style="margin-bottom:12px">Copy the views and saves from each listing page. The sellers see these at the top of their portal.</div>
+    <div class="row2"><div class="field"><label for="lp-zv">Zillow views</label><input id="lp-zv" name="zv" inputmode="numeric"></div><div class="field"><label for="lp-zs">Zillow saves</label><input id="lp-zs" name="zs" inputmode="numeric"></div></div>
+    <div class="row2"><div class="field"><label for="lp-rv">Redfin views</label><input id="lp-rv" name="rv" inputmode="numeric"></div><div class="field"><label for="lp-rs">Redfin favorites</label><input id="lp-rs" name="rs" inputmode="numeric"></div></div><button class="btn">Update their portal</button></form></details>
+${pendingDeal() ? '</div></details>' : ''}` : ''}</div>`;
 }
 /* ---------- marketing assets: every launch asset for this listing, as a gallery (source/marketing/build_assets.py) ---------- */
 function assetsBlock() {
@@ -444,17 +470,9 @@ function liveBlock() {
   return `<div style="margin-top:44px" id="live"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="serif" style="font-size:26px;margin:0">Live from your website</h2>${caps.mcp ? `<button class="btn text small" data-act="live-load" ${ui.liveBusy ? 'disabled' : ''}>${ui.liveBusy ? 'Refreshing…' : 'Refresh'}</button>` : ''}</div>
   <p class="small muted" style="margin:4px 0 14px">Requests from homes.ranchpnw.com and gotehaleh.com${lv && lv.at ? ' · checked ' + ago(lv.at) : ''}</p>
   ${leadHtml}
-  <div class="decision" style="margin-top:28px"><div class="eyebrow">Seller portal · Aaron and Holly</div><div class="t" style="margin-top:6px"><a href="${PORTAL_URL}" target="_blank" rel="noopener">${PORTAL_URL.replace('https://', '')}</a> · code <b>${PORTAL_CODE}</b></div><div class="d">They see live visits, shares, scans, tour and follow counts (never names), your updates, the marketing log and showing feedback.</div>
-    <div class="chips" style="margin-top:12px"><button class="chip" data-act="portal-copy">Copy their invite</button><a class="chip" href="${PORTAL_URL}#code=${PORTAL_CODE}" target="_blank" rel="noopener">Open it as them</a></div></div>
-  ${caps.mcp ? `<details style="margin-top:22px"><summary class="btn ghost" style="display:inline-flex">Post an update to the sellers</summary>
-    <form data-form="live-update" style="margin-top:16px"><div class="field"><label for="lu-t">Headline</label><input id="lu-t" name="headline" required placeholder="A strong first weekend"></div><div class="field"><label for="lu-m">Message</label><textarea id="lu-m" name="msg" required placeholder="Three showings booked for Saturday…"></textarea></div><button class="btn">Post to their portal</button></form></details>
-  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log marketing</summary>
+  ${caps.mcp ? `<details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log marketing</summary>
     <form data-form="live-mk" style="margin-top:16px"><div class="field"><label for="lm-w">What we did</label><select id="lm-w" name="what">${MARKETING_PRESETS.map(m => `<option data-reach="${esc(m[1])}">${esc(m[0])}</option>`).join('')}</select></div><div class="field"><label for="lm-r">Reach</label><input id="lm-r" name="reach" placeholder="~600 agents"></div><div class="field"><label for="lm-n">Notes the sellers will see</label><input id="lm-n" name="notes" placeholder="Called top Tehaleh agents personally"></div><button class="btn">Add to their timeline</button></form>
     ${mk.length ? `<div class="list" style="margin-top:14px">${mk.map(r => `<div><span aria-hidden="true">✓</span><span>${esc(r[2])}${r[3] ? ' <span class="muted small">· ' + esc(r[3]) + '</span>' : ''}</span><span class="when">${esc(String(r[0]).split(' ')[0])}</span></div>`).join('')}</div>` : ''}</details>
-  <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Update Zillow &amp; Redfin numbers</summary>
-    <form data-form="live-portal" style="margin-top:16px"><div class="small muted" style="margin-bottom:12px">Copy the views and saves from each listing page. The sellers see these at the top of their portal.</div>
-    <div class="row2"><div class="field"><label for="lp-zv">Zillow views</label><input id="lp-zv" name="zv" inputmode="numeric"></div><div class="field"><label for="lp-zs">Zillow saves</label><input id="lp-zs" name="zs" inputmode="numeric"></div></div>
-    <div class="row2"><div class="field"><label for="lp-rv">Redfin views</label><input id="lp-rv" name="rv" inputmode="numeric"></div><div class="field"><label for="lp-rs">Redfin favorites</label><input id="lp-rs" name="rs" inputmode="numeric"></div></div><button class="btn">Update their portal</button></form></details>
   <details style="margin-top:12px" open><summary class="btn ghost" style="display:inline-flex">Social results</summary>
     <div style="margin-top:14px"><p class="small muted" style="margin:0 0 12px">Pulls reach, clicks and boost results for every Instagram and Facebook post that mentions this home, and puts them on the sellers’ portal.</p><button class="btn" data-act="social-sync" ${ui.busy === 'social' ? 'disabled' : ''}>${ui.busy === 'social' ? 'Pulling from Metricool…' : 'Pull from Metricool'}</button>${ui.socialMsg ? `<p class="small" style="margin-top:10px">${esc(ui.socialMsg)}</p>` : ''}</div></details>
   <details style="margin-top:12px"><summary class="btn ghost" style="display:inline-flex">Log showing feedback</summary>

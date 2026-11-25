@@ -705,8 +705,8 @@ function deskShell(tab, body) {
   const dom = l.history.filter(h => h.to === 'active')[0];
   const tabs = [['desk', 'Overview'], ['desk-runs', 'How it runs'], ['desk-facts', 'Facts'], ['desk-activity', 'Everything handled'], ['desk-run', 'Run the scenario'], ['desk-kit', 'Print & present'], ['setup', 'Setup'], ['system', 'System & tests']];
   return `<div class="private desk">${DB.clockOffset ? `<div class="banner" style="text-align:center">Simulated time: <b>${when(E.now())}</b> · <button class="btn text small" data-act="clock-reset">Back to now</button></div>` : ''}<div class="wrap"><div class="top"><span class="mark">THE DESK</span><span class="small">${greeting()}, ${esc(T().agent.name.split(' ')[0])}</span></div>
-  <div class="dhero">${img('front-dusk', '')}<div class="scrim"></div><div class="c"><div><div class="eyebrow">The Desk · ${dom ? 'Day ' + Math.max(1, Math.ceil((E.now() - dom.at) / 864e5)) + ' on market' : LC.STATES[l.state]}</div><h1>${esc(street())}</h1></div>
-    <div class="small" style="display:flex;gap:8px;align-items:center"><span class="dot" style="color:#B8D4B2"></span>Concierge is running · ${esc(LC.STATES[l.state])}</div></div></div>
+  <div class="dhero">${img('front-dusk', '')}<div class="scrim"></div><div class="c"><div><div class="eyebrow">The Desk · ${pendingDeal() ? 'Pending' : dom ? 'Day ' + Math.max(1, Math.ceil((E.now() - dom.at) / 864e5)) + ' on market' : LC.STATES[l.state]}</div><h1>${esc(street())}</h1></div>
+    <div class="small" style="display:flex;gap:8px;align-items:center"><span class="dot" style="color:#B8D4B2"></span>Concierge is running · ${pendingDeal() ? 'Under contract' : esc(LC.STATES[l.state])}</div></div></div>
   <nav class="tabs" aria-label="Desk">${tabs.map(([h, n]) => `<a href="#${h}" ${tab === h ? 'aria-current="page"' : ''}>${n}</a>`).join('')}</nav>
   ${body}</div></div>`;
 }
@@ -751,6 +751,12 @@ function decisionCard(d) {
   if (a.kind === 'price.change') return `<div class="decision"><div class="eyebrow">A price change</div><div class="t">${esc(a.label)}.</div><div class="d">${esc(a.detail)}</div><div class="acts"><button class="btn" data-act="approve" data-id="${a.id}">Approve</button><button class="btn text" data-act="decline" data-id="${a.id}">Decline</button></div></div>`;
   return `<div class="decision"><div class="eyebrow">Needs your approval</div><div class="t">${esc(a.label)}</div><div class="d">${esc(a.reason || a.detail)}</div><div class="acts"><button class="btn" data-act="approve" data-id="${a.id}">Approve</button><button class="btn text" data-act="decline" data-id="${a.id}">Decline</button></div></div>`;
 }
+function tellBlock() {
+  const qs = pendingDeal() ? ['What needs me today?', 'Check in with my TC', 'Check in with the lender', 'Check in with title & escrow', 'Check in with the buyer’s agent', 'Send my seller a quick update']
+    : ['What needs me today?', 'How is the listing doing?', 'Send my seller a quick update', 'Open house next Saturday 1–4 pm'];
+  return `<form data-form="tell" class="tell"><label for="tell" class="eyebrow">Tell the Concierge</label><div class="tellrow"><input id="tell" name="q" placeholder="${pendingDeal() ? 'Ask about the deal, or draft a check-in' : 'Schedule an open house Saturday, 1–4 pm'}" autocomplete="off"><button class="btn" ${ui.busy === 'tell' ? 'disabled' : ''}>${ui.busy === 'tell' ? '…' : 'Go'}</button></div>
+    <div class="chips" style="margin-top:10px">${qs.map(q => `<button type="button" class="chip" data-act="tell-q" data-q="${q}">${q}</button>`).join('')}</div></form>`;
+}
 function desk() {
   const l = L(), ds = decisions(), n = ds.length;
   const words = ['Nothing needs you.', 'One decision is yours.', 'Two decisions are yours.', 'Three decisions are yours.'];
@@ -763,19 +769,14 @@ function desk() {
   const todays = acts.filter(a => a.at >= today.getTime());
   const s = l.saved;
   return deskShell('desk', `<div class="narrow" style="padding:0">
-  <p class="say">${esc(lead)} ${n <= 3 ? words[n] : n + ' decisions are yours.'}</p>
-  ${offerBlock()}
-  ${shareBar()}
-  ${ohBlock()}
-  ${photoBlock()}
-  ${assetsBlock()}
-  ${showBlock()}
-  <form data-form="tell" class="tell"><label for="tell" class="eyebrow">Tell the Concierge</label><div class="tellrow"><input id="tell" name="q" placeholder="Schedule an open house Saturday, 1–4 pm" autocomplete="off"><button class="btn" ${ui.busy === 'tell' ? 'disabled' : ''}>${ui.busy === 'tell' ? '…' : 'Go'}</button></div>
-    <div class="chips" style="margin-top:10px">${['What needs me today?', 'How is the listing doing?', 'Send my seller a quick update', 'Open house next Saturday 1–4 pm'].map(q => `<button type="button" class="chip" data-act="tell-q" data-q="${q}">${q}</button>`).join('')}</div></form>
+  <p class="say">${pendingDeal() ? 'Under contract' + (pendingDeal()[13] ? ', closing ' + new Date(pendingDeal()[13] + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '') + '.' : esc(lead)} ${n <= 3 ? words[n] : n + ' decisions are yours.'}</p>
+  ${pendingDeal() ? dealBlock() + offerBlock() + sellerBlock() + tellBlock() + assetsBlock() + shareBar() + showBlock() + `<div style="opacity:.6">${ohBlock()}</div>` + photoBlock()
+    : offerBlock() + sellerBlock() + shareBar() + ohBlock() + assetsBlock() + showBlock() + tellBlock() + photoBlock()}
+
   ${n ? `<div class="decisions">${ds.slice(0, 2).map(decisionCard).join('')}</div>${n > 2 ? `<details style="margin-top:20px"><summary class="btn ghost" style="display:inline-flex">${n - 2} more</summary><div class="decisions" style="margin-top:20px">${ds.slice(2).map(decisionCard).join('')}</div></details>` : ''}`
     : `<div class="decision" style="margin-top:40px"><div class="t">All quiet. The Concierge is handling the rest.</div><div class="d">You’ll see something here only when a fact conflicts, a judgment call is needed, a connection breaks, or pricing and contracts are involved.</div></div>`}
   ${suggestionsBlock()}
-  ${liveBlock()}
+  ${pendingDeal() ? `<details style="margin-top:40px"><summary class="btn ghost" style="display:inline-flex">Website leads and marketing log</summary>${liveBlock()}</details>` : liveBlock()}
   ${buyersBlock()}
   ${followersBlock()}
   <div class="quiet" style="margin-top:56px"><div><div class="serif">${todays.length || acts.length} things handled ${todays.length ? 'today' : 'so far'}</div><div class="small muted" style="margin-top:8px">${acts.slice(0, 3).map(a => esc(a.text)).join(' · ') || 'Nothing yet'}</div></div><a href="#desk-runs" class="small">See how it ran</a></div>
@@ -1005,6 +1006,29 @@ AGENT: ${q}` }], { tools, modelTier: 'default', cache: false });
   sheet(`<div class="eyebrow">Your Concierge</div><h3 style="font-size:24px">${esc(q)}</h3><p style="font-size:16px;line-height:1.6">${esc(answer)}</p>
     ${done.length ? `<div class="list" style="margin-top:14px">${done.map(d => `<div><span style="color:var(--ok)" aria-hidden="true">✓</span><span>${esc(d.name)}<div class="small muted">${esc(typeof d.res === 'string' ? d.res : 'Read the current listing record')}</div></span></div>`).join('')}</div>` : ''}
     <p class="small muted" style="margin-top:14px">Every action went through your rules. See it on <a href="#desk-runs" data-act="close">How it runs</a>.</p>`);
+}
+/* ---------- pending check-ins: a short draft to the TC, lender, title or buyer's agent, built from what the TC has logged. Saved as a Gmail draft only when Chris taps; nothing sends. ---------- */
+async function checkIn(q) {
+  const k = homeKeyJs(street()), rows = (ui.tcRows || []).filter(r => homeKeyJs(r[1]) === k).slice(-30), o = pendingDeal();
+  if (!caps.sample) return toast('Check-ins need Claude: open The Desk on claude.ai.');
+  ui.busy = 'tell'; render();
+  const ctx = rows.map(r => [r[0], r[2], r[3] ? 'due ' + r[3] : '', r[4], r[6] ? 'people: ' + r[6] : ''].filter(Boolean).join(' | ')).join('\n');
+  let out = null;
+  try {
+    out = await caps.sample.json(`You help listing agent ${T().agent.name} (${T().name}) on ${street()}, under contract${o ? ' with ' + o[2] + ', ' + o[6] + ', closing ' + o[13] : ''}. Today is ${new Date().toDateString()}.
+Request: "${q}". Use ONLY the deal log below (from his transaction coordinator, read from real emails). Never invent people, emails or facts.
+If the request is about "my TC": no email. Return {"summary": "3-5 short plain lines: what the TC has done, what's next, anything waiting on Chris"}.
+Otherwise draft ONE short email in Chris's style for professionals: one warm opener, the one ask (where things stand and anything needed from them), a warm close. No recap of contract terms. Signed "Chris". Return {"to": ["email from the log, only if it appears there"], "subject": "...", "body": "...", "who": "name and role from the log"}. If no address for that party is in the log, leave "to" empty and say so in "who".
+DEAL LOG:
+${ctx || '(nothing logged yet)'}`);
+  } catch (e) { out = { summary: 'I couldn’t reach Claude just now.' }; }
+  ui.busy = null; render();
+  if (out && out.summary) return sheet(`<div class="eyebrow">Your TC</div><h3 style="font-size:24px">${esc(q)}</h3><p style="white-space:pre-line;line-height:1.6">${esc(out.summary)}</p>`);
+  const to = (out && out.to || []).filter(x => /@/.test(x));
+  sheet(`<div class="eyebrow">Check-in draft · nothing is sent</div><h3 style="font-size:24px">${esc(q)}</h3><p class="small muted">${esc(out && out.who || '')}${to.length ? ' · ' + esc(to.join(', ')) : ''}</p>
+    <div class="field"><label for="ci-s">Subject</label><input id="ci-s" value="${esc(out && out.subject || '')}"></div><div class="field"><label for="ci-b">Message</label><textarea id="ci-b" rows="8">${esc(out && out.body || '')}</textarea></div>
+    <div class="acts">${to.length && caps.mcp ? `<button class="btn" data-act="ci-draft" data-to="${esc(to.join(','))}">Save as a Gmail draft</button>` : ''}<button class="btn ghost" data-act="ci-copy">Copy</button></div>
+    <p class="small muted" style="margin-top:10px">Saved drafts wait in your kw.com Gmail for you to send.</p>`);
 }
 function tellOffline(q) {
   if (/(need|today|decision)/i.test(q)) { const ds = decisions(); return sheet(`<div class="eyebrow">Your Concierge</div><h3 style="font-size:24px">${ds.length === 0 ? 'Nothing needs you' : ds.length === 1 ? 'One thing needs you' : ds.length + ' things need you'}</h3>${ds.map(d => `<p>— ${esc(d.kind === 'ex' ? d.x.title : d.a.label)}</p>`).join('')}`); }
@@ -1316,7 +1340,9 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
   menu: () => { ui.menu = !ui.menu; render(); },
   'share-guide': async () => { const url = shareUrl('tehaleh'); try { if (navigator.share) { await navigator.share({ title: 'Life in Tehaleh', text: 'A guide to Tehaleh from ' + T().name, url }); return; } } catch (e) { if (e && e.name === 'AbortError') return; } copy(url); },
   'menu-go': el => { ui.menu = false; location.hash = el.getAttribute('href').slice(1); },
-  'tell-q': el => caps.sample ? tell(el.dataset.q) : tellOffline(el.dataset.q),
+  'ci-draft': async el => { const b = document.getElementById('ci-b').value, sub = document.getElementById('ci-s').value; el.disabled = true; try { const d = await callTool('Gmail', 'create_draft', { to: el.dataset.to.split(','), subject: sub, body: b, includeSignature: true }); el.textContent = 'Saved in Gmail drafts'; if (d && d.viewUrl) toast('Draft saved. Open Gmail to send it.'); } catch (e) { el.disabled = false; toast('Couldn’t save the draft: ' + (e.message || 'try again')); } },
+  'ci-copy': async () => { try { await navigator.clipboard.writeText(document.getElementById('ci-s').value + '\n\n' + document.getElementById('ci-b').value); toast('Copied.'); } catch (e) { toast('Couldn’t copy here.'); } },
+  'tell-q': el => /^check in with/i.test(el.dataset.q) ? checkIn(el.dataset.q) : caps.sample ? tell(el.dataset.q) : tellOffline(el.dataset.q),
   'check-drive': () => checkDrive(),
   'all-photos': () => { ui.allPhotos = !ui.allPhotos; render(); },
   'check-metricool': () => checkMetricool(),

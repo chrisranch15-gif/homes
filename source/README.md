@@ -50,3 +50,9 @@ WebP images, minifies, and writes robots.txt / sitemap.xml / llms.txt.
 `source/office/sites.json` (public sites + town guides from `source/guides/*.json`). Name launch files this way and they
 show up on the Desk's Marketing assets and in the Office's Sites & pages on the next ship. claude.ai artifacts can't load
 remote images, so publish the thumbnails with each artifact (Office: `site-*.jpg`; Desk: that listing's thumbs).
+
+## Roadmap (TC)
+- **Inbox watcher** (Apps Script, with the next engine deploy): checks the deal inbox every few minutes and flags fires right away (wire or bank-detail emails, "terminate", inspection responses, lender or title problems). Test whether it can also start a TC run immediately; if not, it alerts Chris and the hourly TC run picks it up.
+- **Deal inbox** on ranchpnw.com, forwarded into Chris's deal inbox with a label so the TC reads one inbox.
+- **Buyer side**: the same TC timeline, drafts and watcher for deals where the Ranch team represents the buyer (a buyer view instead of the seller portal).
+- Standing TC rules (fire reviews, signed addenda for date changes, appraisal tracking, county/septic documents, wire fraud) live as "All deals" rows on the TC feedback tab.

@@ -67,6 +67,7 @@ section h2{font-size:30px;margin:8px 0 18px}
 .sh .st{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .sh.off .d,.sh.off .t{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(0,0,0,.25)}
 .shsum{display:flex;gap:28px;flex-wrap:wrap;margin:6px 0 18px}.shsum div{font-family:var(--serif,Georgia),serif;font-size:34px;line-height:1}.shsum span{display:block;font-family:inherit;font-size:13px;color:var(--muted);margin-top:6px}
+.road{list-style:none;margin:18px 0 0;padding:0;border-left:2px solid var(--line)}.road li{position:relative;display:flex;gap:14px;padding:12px 0 12px 22px}.road .dot{position:absolute;left:-7px;top:17px;width:12px;height:12px;border-radius:50%;background:var(--paper,#fff);border:2px solid var(--line)}.road li.done .dot{background:var(--accent);border-color:var(--accent)}.road li.now .dot{border-color:var(--accent);box-shadow:0 0 0 4px rgba(140,106,67,.18)}.road li.now b{color:var(--accent)}.road b{display:block;font-weight:600}.road .rd{display:block;font-size:14px;color:var(--muted);margin-top:2px}
 .feedback{display:grid;gap:12px}
 .fb{background:var(--card);border:1px solid var(--line);padding:18px 20px}
 .fb .meta{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
@@ -227,7 +228,7 @@ function render(d,code){
   useHome(d);
   var m=d.metrics||{},first=String(d.sellers||'').split(/ and | & /),listed=d.listed||null;
   var days=listed?Math.max(1,Math.ceil((Date.now()-listed)/864e5)):0;
-  var si=stageIndex(d.status);
+  var si=stageIndex(d.status),PEND=si===4;
   var auto=!listed?[]:[
     {at:listed,what:'Listed on NWMLS'+(H.price?' at '+H.price:''),reach:'every agent in the MLS'}].concat(STORY?[
     {at:listed+60000,what:'Your home’s page went live — '+STORY.replace(/^https?:\/\//,''),reach:'tap to open',link:STORY}]:[]).concat(H.guide?[
@@ -236,31 +237,32 @@ function render(d,code){
   var mk=(d.marketing||[]).concat(auto).sort(function(a,b){return b.at-a.at});
   var up=(d.updates||[])[0];
   var html='';
-  html+='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">'+(listed?'Day '+days+' on the market · '+esc(d.status||'Active'):'Getting ready to list')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+(H.area?' · '+esc(H.area):'')+'</p>'+(STORY?'<div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div>':'')+'</div></div>';
-  html+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your journey</h2><ol class="journey">'+STAGES.map(function(s,i){return '<li class="'+(i<si?'done':i===si?'now':'')+'"><b>'+s[0]+'</b>'+s[1]+'</li>'}).join('')+'</ol></div></section>';
-  PSI=si;PDD=d;html+=prepHtml(si,d,code)+factsHtml(d);
+  if(PEND)html+=pendingHtml(d);
+  else html+='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">'+(listed?'Day '+days+' on the market · '+esc(d.status||'Active'):'Getting ready to list')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+(H.area?' · '+esc(H.area):'')+'</p>'+(STORY?'<div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div>':'')+'</div></div>';
+  if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your journey</h2><ol class="journey">'+STAGES.map(function(s,i){return '<li class="'+(i<si?'done':i===si?'now':'')+'"><b>'+s[0]+'</b>'+s[1]+'</li>'}).join('')+'</ol></div></section>';
+  PSI=si;PDD=d;html+=prepHtml(si,d,code)+(PEND?'':factsHtml(d));
   // across the web
   var P={};(d.portals||[]).forEach(function(x){P[x.site.toLowerCase()]=x});
   var soc=d.social||[],reach=0,has=false;soc.forEach(function(x){if(x.reach!=null||x.paidReach!=null){has=true;reach+=(x.reach||0)+(x.paidReach||0)}});
   var pz=P.zillow,pr=P.redfin,asOf=[pz,pr].filter(Boolean).map(function(x){return x.at}).sort().pop();
-  html+='<section><div class="wrap"><p class="eyebrow">Live · updated '+when(d.at)+'</p><h2>Your home across the web</h2><div class="stats">'+
+  if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">Live · updated '+when(d.at)+'</p><h2>Your home across the web</h2><div class="stats">'+
     stat(pz&&pz.views,'Zillow views')+stat(pz&&pz.saves,'Zillow saves')+stat(pr&&pr.views,'Redfin views')+
     stat(pr&&pr.saves,'Redfin favorites')+stat(has?reach:null,'people reached on Instagram & Facebook')+stat(m.visitors,'visitors to your home’s page')+
     stat(m.tours,'tour requests')+stat(m.following,'people following your home')+
     '</div>'+(asOf?'<p class="note">Zillow and Redfin as of '+when(asOf)+'.</p>':'')+'</div></section>';
-  html+=marketSection(d.market);
+  if(!PEND)html+=marketSection(d.market);
   // share
-  if(STORY)html+='<section id="share"><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">Help us spread the word</p><h2 style="margin-bottom:6px">Share your home</h2><p style="opacity:.85;margin:0 0 18px">This is what people see when you post the link on Facebook or Instagram, or text it. Every visit from it is counted'+(m.shared?' — <b>'+m.shared+'</b> so far':'')+'.</p>'+
+  if(!PEND)if(STORY)html+='<section id="share"><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">Help us spread the word</p><h2 style="margin-bottom:6px">Share your home</h2><p style="opacity:.85;margin:0 0 18px">This is what people see when you post the link on Facebook or Instagram, or text it. Every visit from it is counted'+(m.shared?' — <b>'+m.shared+'</b> so far':'')+'.</p>'+
     '<a class="preview" href="'+STORY+'" target="_blank" rel="noopener"><img src="'+esc(H.og||H.hero||'')+'" alt="" width="1200" height="630"><span class="pv"><span class="pd">HOMES.RANCHPNW.COM</span><span class="pt">'+esc(H.ogTitle||d.home)+'</span></span></a>'+
     '<div class="link"><input readonly value="'+SHARE+'" onfocus="this.select()" aria-label="Your share link"><button class="btn light" id="cp">Copy link</button>'+(navigator.share?'<button class="btn light" id="sh">Share…</button>':'')+'<a class="btn line" href="'+STORY+'" target="_blank" rel="noopener">Open your page</a></div><p class="cap" id="capt">'+esc(H.caption||'We just listed our home! Take a look and share with anyone who might love it:')+' '+SHARE+'</p><button class="btn light" id="cpc" style="margin-top:12px">Copy this caption</button></div></div></section>';
   // social posts
   var nm={instagram:'Instagram',facebook:'Facebook'};
-  html+='<section><div class="wrap"><p class="eyebrow">On social</p><h2>Your posts on Instagram &amp; Facebook</h2>'+(soc.length?'<div class="posts">'+soc.sort(function(a,b){return (b.posted||0)-(a.posted||0)}).map(function(x){return '<a class="post" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+(x.image?'<img src="'+esc(x.image)+'" alt="" loading="lazy">':'')+'<div class="pb"><div class="meta">'+esc(nm[x.network]||x.network)+(x.posted?' · '+day(x.posted):'')+(x.spend?' · Boosted':'')+'</div><div class="pm">'+
+  if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">On social</p><h2>Your posts on Instagram &amp; Facebook</h2>'+(soc.length?'<div class="posts">'+soc.sort(function(a,b){return (b.posted||0)-(a.posted||0)}).map(function(x){return '<a class="post" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+(x.image?'<img src="'+esc(x.image)+'" alt="" loading="lazy">':'')+'<div class="pb"><div class="meta">'+esc(nm[x.network]||x.network)+(x.posted?' · '+day(x.posted):'')+(x.spend?' · Boosted':'')+'</div><div class="pm">'+
       pm(x.reach,'reached')+pm(x.views,'views')+pm(x.interactions,'likes, comments & shares')+pm(x.clicks,'link clicks')+(x.spend?pm(x.paidReach,'reached by the boost')+'<span><b>$'+Math.round(x.spend)+'</b> boost spend</span>':'')+'</div></div></a>'}).join('')+'</div>':'<p class="empty">Your launch posts are with Chris for approval. Once they go out, each post and its reach, clicks and any boost results will show here.</p>')+'</div></section>';
   html+='<section><div class="wrap"><p class="eyebrow">From Chris</p><h2>Latest update</h2>'+(up?'<div class="letter"><p class="small muted">'+when(up.at)+'</p><h3>'+esc(up.title)+'</h3><p>'+esc(up.text)+'</p><p class="small muted">— '+esc(up.from||'Chris')+'</p></div>':'<div class="letter"><h3>You’re live.</h3><p>Your home went live on NWMLS on November 19 at about 4 PM. Every update from here — showings, feedback and next steps — will land on this page.</p><p class="small muted">— Chris</p></div>')+
     ((d.updates||[]).length>1?'<ul class="timeline" style="margin-top:18px">'+d.updates.slice(1).map(function(u){return '<li><div class="when">'+day(u.at)+'</div><div><div class="what">'+esc(u.title)+'</div><div class="muted small" style="white-space:pre-line">'+esc(u.text)+'</div></div></li>'}).join('')+'</ul>':'')+'</div></section>';
-  html+='<section><div class="wrap"><p class="eyebrow">Done for you</p><h2>Everything we’re doing to sell your home</h2><ul class="timeline">'+mk.map(function(x){return '<li><div class="when">'+day(x.at)+'</div><div><span class="what">'+(x.link?'<a href="'+x.link+'" target="_blank" rel="noopener">'+esc(x.what)+'</a>':esc(x.what))+'</span>'+(x.reach?'<span class="reach">'+esc(x.reach)+'</span>':'')+(x.notes?'<div class="muted small">'+esc(x.notes)+'</div>':'')+'</div></li>'}).join('')+'</ul></div></section>';
-  (function(){var sc=(d.schedule||[]).filter(function(x){return x.type!=='Agent preview'||x.status!=='Cancelled'});if(!sc.length)return;
+  if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">Done for you</p><h2>Everything we’re doing to sell your home</h2><ul class="timeline">'+mk.map(function(x){return '<li><div class="when">'+day(x.at)+'</div><div><span class="what">'+(x.link?'<a href="'+x.link+'" target="_blank" rel="noopener">'+esc(x.what)+'</a>':esc(x.what))+'</span>'+(x.reach?'<span class="reach">'+esc(x.reach)+'</span>':'')+(x.notes?'<div class="muted small">'+esc(x.notes)+'</div>':'')+'</div></li>'}).join('')+'</ul></div></section>';
+  if(!PEND)(function(){var sc=(d.schedule||[]).filter(function(x){return x.type!=='Agent preview'||x.status!=='Cancelled'});if(!sc.length)return;
     var now=Date.now(),wk=now-7*864e5,live=sc.filter(function(x){return x.status!=='Cancelled'&&x.status!=='Declined'});
     var up=live.filter(function(x){return x.at>=now-30*60e3}).sort(function(a,b){return a.at-b.at}),past=live.filter(function(x){return x.at<now-30*60e3});
     var tm=function(t){return new Date(t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})};
@@ -269,15 +271,36 @@ function render(d,code){
       +'<div class="shsum"><div>'+past.length+'<span>showings so far</span></div><div>'+past.filter(function(x){return x.at>=wk}).length+'<span>in the last 7 days</span></div><div>'+up.length+'<span>coming up</span></div></div>'
       +'<div class="shows">'+sc.slice().sort(function(a,b){return b.at-a.at}).slice(0,12).map(row).join('')+'</div>'
       +'<p class="note" style="margin-top:12px">Showings are booked through ShowingTime and update here on their own. Buyers’ agents’ details stay private, as they should. Chris follows up with each one for feedback.</p></div></section>';})();
-  html+='<section><div class="wrap"><p class="eyebrow">What buyers are saying</p><h2>Showing feedback</h2><div class="feedback">'+((d.showings||[]).length?d.showings.map(function(s){return '<div class="fb"><div class="meta">'+day(s.at)+(s.interest?' · '+esc(s.interest):'')+'</div><div>'+esc(s.feedback)+'</div></div>'}).join(''):'<p class="empty">Feedback will appear here as buyers’ agents share it.</p>')+'</div></div></section>';
-  html+='<section><div class="wrap"><p class="eyebrow">Anything on your mind?</p><h2>Message Chris</h2><form id="mf" style="display:grid;gap:12px;max-width:560px"><textarea id="msg" required placeholder="A question, a showing window that doesn’t work, something you noticed…" aria-label="Your message"></textarea><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><div><button class="btn">Send to Chris</button></div></form></div></section>';
+  if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">What buyers are saying</p><h2>Showing feedback</h2><div class="feedback">'+((d.showings||[]).length?d.showings.map(function(s){return '<div class="fb"><div class="meta">'+day(s.at)+(s.interest?' · '+esc(s.interest):'')+'</div><div>'+esc(s.feedback)+'</div></div>'}).join(''):'<p class="empty">Feedback will appear here as buyers’ agents share it.</p>')+'</div></div></section>';
+  html+='<section><div class="wrap"><p class="eyebrow">Anything on your mind?</p><h2>Message Chris</h2><form id="mf" style="display:grid;gap:12px;max-width:560px"><textarea id="msg" required placeholder="'+(PEND?'A question about closing, your move, anything at all…':'A question, a showing window that doesn’t work, something you noticed…')+'" aria-label="Your message"></textarea><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><div><button class="btn">Send to Chris</button></div></form></div></section>';
   html+='<footer><div class="wrap">'+[STORY?'<a href="'+STORY+'">See your home’s page</a>':'',H.guide?'<a href="'+H.guide.url+'">'+esc(H.guide.short||H.guide.label)+'</a>':''].filter(Boolean).join(' · ')+'<br>The Ranch Real Estate Group · Keller Williams Realty Puget Sound<div style="margin-top:14px;font-size:12px;line-height:1.7;max-width:720px"><strong style="font-weight:500">Keller Williams Realty Puget Sound</strong> · 33434 8th Ave S, Suite 103, Federal Way, WA 98003 · Each Office Is Independently Owned and Operated.<br><span style="display:inline-flex;gap:8px;align-items:center;margin-top:8px"><svg width="26" height="26" viewBox="0 0 64 64" role="img" aria-label="Equal Housing Opportunity"><path d="M32 6 4 26h7v30h42V26h7z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="21" y="32" width="22" height="5" fill="currentColor"/><rect x="21" y="42" width="22" height="5" fill="currentColor"/></svg>Equal Housing Opportunity. Information deemed reliable but not guaranteed.</span></div></div></footer>';
   app.innerHTML=html;scrollTo(0,0);
-  if(STORY){document.getElementById('cp').onclick=function(){copy(SHARE)};
+  if(STORY&&!PEND){document.getElementById('cp').onclick=function(){copy(SHARE)};
   document.getElementById('cpc').onclick=function(){copy(document.getElementById('capt').textContent)};}
   var sh=document.getElementById('sh');if(sh)sh.onclick=function(){navigator.share({title:H.shareTitle||'Our home',url:SHARE}).catch(function(){})};
   document.getElementById('mf').onsubmit=function(e){e.preventDefault();var f=e.target,b=f.querySelector('button'),t=document.getElementById('msg').value.trim();if(!t||f.website.value)return;b.disabled=true;b.textContent='Sending…';
     fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'seller-message',code:code,name:d.sellers,question:t,page:d.page,listing:d.home,source:'seller portal'})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;f.innerHTML='<p class="letter" style="margin:0">Sent. Chris will get back to you shortly.</p>'}).catch(function(){b.disabled=false;b.textContent='Send to Chris';toast('That didn’t go through — please try again.')})};
+}
+
+/* ---------- pending: congratulations, the road to closing, dates to remember, what to do now ---------- */
+function pendingHtml(d){
+  var tl=(d.timeline||[]).filter(function(x){return x.at}).sort(function(a,b){return a.at-b.at}),now=Date.now();
+  var close=tl.filter(function(x){return /clos/i.test(x.what)}).pop(),left=close?Math.max(0,Math.ceil((close.at-now)/864e5)):null;
+  var dl=function(t){return new Date(t).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})};
+  var road=tl.length?tl:[{what:'Mutual acceptance'},{what:'Inspection'},{what:'Appraisal'},{what:'Loan approval'},{what:'Signing with escrow'},{what:'Closing day'}];
+  var nxt=tl.filter(function(x){return !x.done&&x.at>=now-864e5})[0];
+  var h='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">Under contract'+(close?' · closing '+dl(close.at):'')+'</p><h1>Congratulations, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+' is pending. From here, my job is getting you to the closing table smoothly, and you’ll see every step right here.</p></div></div>';
+  h+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>The road to closing</h2>'+(left!=null?'<div class="shsum"><div>'+left+'<span>days to closing</span></div>'+(nxt?'<div style="font-size:24px">'+esc(nxt.what)+'<span>next · '+dl(nxt.at)+'</span></div>':'')+'</div>':'')+
+    '<ol class="road">'+road.map(function(x){var st=x.done?'done':(nxt&&x===nxt)?'now':'';return '<li class="'+st+'"><span class="dot"></span><div><b>'+esc(x.what)+'</b>'+(x.at?'<span class="rd">'+dl(x.at)+'</span>':'')+(x.note?'<div class="muted small">'+esc(x.note)+'</div>':'')+'</div></li>'}).join('')+'</ol>'+
+    (tl.length?'':'<p class="note">Your exact dates go up here as soon as the paperwork is final.</p>')+'</div></section>';
+  h+='<section><div class="wrap"><p class="eyebrow">While we’re pending</p><h2>What helps right now</h2><ul class="chk" style="max-width:720px">'+[
+    'Keep the home much as it looked when it sold. The buyers’ inspector and appraiser will both be visiting.',
+    'Keep your homeowner’s insurance in place until after closing day.',
+    'Hold on to any receipts or warranties for recent work, in case questions come up.',
+    'Start gathering keys, garage remotes and appliance manuals to leave for the buyers. Your checklist below has the rest.',
+    'Watch for an email from escrow to set up your signing. Never wire money based on an email alone; call me first.'
+  ].map(function(t){return '<li style="padding:8px 0;border-top:1px solid var(--line)">'+esc(t)+'</li>'}).join('')+'</ul></div></section>';
+  return h;
 }
 
 function marketSection(rows){

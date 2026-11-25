@@ -319,8 +319,30 @@ function tcSheet(a) {
       ${r[10] ? `<div class="s" style="margin-top:6px"><b>Lesson:</b> ${esc(r[10])}</div>` : ''}
       ${c ? `<div class="s" style="margin-top:6px"><b>Your call:</b> ${esc(c.call)}${c.note ? ' · ' + esc(c.note) : ''}</div>` : r[5] || r[4] ? `<div class="acts" style="margin-top:10px">${r[5] ? `<button class="pill ghost" data-act="tccopy" data-k="${esc(k)}">Copy draft</button>` : ''}<button class="pill ghost" data-act="tccall" data-k="${esc(k)}" data-v="Right call">Right call</button><button class="pill ghost" data-act="tcfix" data-k="${esc(k)}">I'd change it</button></div>` : ''}
     </div></div>`; }).join('') : '<div class="empty">Nothing logged yet. The first entries appear after the next hourly read.</div>'}</div>
-  <div class="acts" style="margin-top:18px"><button class="pill ghost" data-act="close">Done</button></div>`);
+  <div class="acts" style="margin-top:18px"><button class="pill" data-act="sellerdates" data-a="${esc(a)}">Seller portal dates</button><button class="pill ghost" data-act="close">Done</button></div>`);
   const el = $('#sheet'); if (el) el.dataset.tc = a;
+}
+/* ---------- pending: publish seller-safe dates to the seller portal (Seller timeline tab) and switch it to the pending view. Only when Chris taps. ---------- */
+const SELLER_STEPS = [['Mutual acceptance', /mutual/i], ['Inspection period ends', /inspect/i], ['Appraisal', /apprais/i], ['Financing deadline', /financ|loan/i], ['Signing with escrow', /sign/i], ['Closing day', /clos/i]];
+async function sellerDatesSheet(a) {
+  const n = (String(a).match(/^\d{3,6}/) || [''])[0], rs = shadowRows(a), off = ((S.sheet && S.sheet.offers) || []).filter(r => String(r[1]).indexOf(n) === 0 && /accept|mutual|pending/i.test(r[9] || ''))[0];
+  const pre = SELLER_STEPS.map(([m, re]) => { const hit = rs.filter(r => re.test(r[2]) && /^\d{4}-\d\d-\d\d/.test(r[3] || '')).pop(); let d = hit ? String(hit[3]).slice(0, 10) : '';
+    if (!d && m === 'Closing day' && off && /^\d{4}-\d\d-\d\d$/.test(off[13] || '')) d = off[13]; return { m, d }; });
+  let cur = []; try { cur = (await tool('Google Sheets', 'get_values', { spreadsheetId: SHEET, range: "'Seller timeline'!A1:E300" })).values || []; } catch (e) { }
+  cur.slice(1).filter(r => String(r[1]).indexOf(n) === 0).forEach(r => { const x = pre.find(p => p.m === r[2]); if (x) { x.d = String(r[0]).slice(0, 10); x.done = /done/i.test(r[4] || ''); x.note = r[3]; } });
+  sheet(`<p class="date">${esc(a)}</p><h3>Seller portal · pending view</h3><p class="s" style="margin:-4px 0 14px">These dates show on your sellers’ portal under “The road to closing.” Nothing changes for them until you tap Publish. Leave a date blank to hide that step (a cash deal has no appraisal).</p>
+  <form class="form" id="sdf">${pre.map((x, i) => `<div class="fl" style="display:grid;grid-template-columns:1fr 150px;gap:8px;align-items:center"><span>${esc(x.m)}<label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin-top:4px"><input type="checkbox" name="done${i}" ${x.done ? 'checked' : ''}> done</label></span><input type="date" name="d${i}" value="${esc(x.d)}"></div><input name="n${i}" placeholder="Note for the sellers (optional)" value="${esc(x.note || '')}" style="width:100%;margin:6px 0 14px">`).join('')}
+  <label style="display:flex;gap:8px;align-items:center;margin:6px 0 14px"><input type="checkbox" name="pend" checked> Switch their portal to the pending view</label>
+  <div class="acts"><button class="pill" type="submit">Publish to the sellers’ portal</button><button class="pill ghost" type="button" data-act="close">Cancel</button></div></form>
+  <p class="s" style="margin-top:12px">Dates come from the signed contract as your TC logged them. Check them before you publish.</p>`);
+  $('#sdf').onsubmit = async e => { e.preventDefault(); const f = new FormData(e.target), b = e.target.querySelector('[type=submit]'); b.disabled = true; b.textContent = 'Publishing…';
+    try { const st = (n || a), rows = pre.map((x, i) => [f.get('d' + i) || '', a, x.m, f.get('n' + i) || '', f.get('done' + i) ? 'Done' : '']);
+      const keep = cur.slice(1).filter(r => String(r[1]).indexOf(n) !== 0);
+      const all = [['Date', 'Home', 'Milestone', 'Note', 'Status']].concat(keep, rows.filter(r => r[0])); while (all.length < cur.length) all.push(['', '', '', '', '']);   // blank out rows left over from before
+      await tool('Google Sheets', 'update_values', { spreadsheetId: SHEET, range: "'Seller timeline'!A1:E" + all.length, values: all });
+      if (f.get('pend')) { const sel = (await tool('Google Sheets', 'get_values', { spreadsheetId: SHEET, range: 'Sellers!A1:F300' })).values || [], i = sel.findIndex(r => String(r[2] || '').indexOf(n) === 0 || String(r[3] || '').indexOf(n) >= 0);
+        if (i > 0) await tool('Google Sheets', 'update_values', { spreadsheetId: SHEET, range: 'Sellers!F' + (i + 1), values: [['Pending']] }); }
+      close(); toast('Published. Their portal shows it the next time they open it.'); } catch (err) { b.disabled = false; b.textContent = 'Publish to the sellers’ portal'; toast('Didn’t publish: ' + (err.message || 'try again')); } };
 }
 async function tcCall(k, call, note) { const r = ((S.sheet && S.sheet.shadow) || []).find(x => shadowKey(x) === k); if (!r) return;
   try { await append('TC feedback', [[nowStamp(), r[1], k, call, note || '']]); toast('Saved. Your TC reads this on its next run.'); await loadSheet(); render(); tcSheet(r[1]); } catch (e) { toast('Not saved — try again.'); } }
@@ -579,6 +601,7 @@ function listingSheet(a) {
   sheet(`<p class="date">${esc(l.city || '')} · ${money(l.price)} · ${esc(l.status || '')}</p><h3>${esc(a)}</h3>
   <div class="group" style="margin-top:6px">
     ${offersFor(a).length ? `<button class="lrow" data-act="offers" data-a="${esc(a)}"><span class="body">${(acc => acc ? `<span class="t" style="display:block">Accepted offer</span><span class="s" style="display:block">${esc(offerWho(acc))} · ${money(acc[5])}${offersFor(a).length > 1 ? ' · ' + (offersFor(a).length - 1) + ' other saved' : ''}</span>` : `<span class="t" style="display:block">${offersFor(a).length > 1 ? 'Compare offers' : 'Offers to review'}</span><span class="s" style="display:block">${offersFor(a).length} offer${offersFor(a).length > 1 ? 's' : ''} · best ${money(Math.max(...offersFor(a).map(r => +String(r[5]).replace(/[^\d.]/g, '') || 0)))}</span>`)(offersFor(a).find(offerAccepted))}</span>${I.chev}</button>` : ''}
+    <button class="lrow" data-act="sellerdates" data-a="${esc(a)}"><span class="body"><span class="t" style="display:block">Under contract? Update the sellers’ portal</span><span class="s" style="display:block">Pending view, the road to closing and key dates</span></span>${I.chev}</button>
     ${(n => SIGN_SETS[n] ? `<div class="lrow" style="display:block"><span class="t" style="display:block">Open house sign-in signs</span><span class="acts" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">${SIGN_SETS[n].map(([k, t]) => `<a class="pill ghost" href="https://homes.ranchpnw.com/print/open-house-signs-${n}-${k}.pdf" target="_blank" rel="noopener">${t}</a>`).join('')}</span><span class="s" style="display:block;margin-top:6px">QR codes, letter size, ready to print.</span></div>` : '')((String(a).match(/^\d+/) || [''])[0])}
     ${desk ? `<a class="lrow" href="${esc(desk)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">The Desk</span><span class="s" style="display:block">Everything for this listing</span></span>${I.chev}</a>` : ''}
     ${l.page ? `<a class="lrow" href="${esc(l.page)}" target="_blank" rel="noopener"><span class="body"><span class="t" style="display:block">Public page</span><span class="s" style="display:block">${esc(l.page.replace('https://', ''))}</span></span>${I.chev}</a>` : ''}
@@ -976,6 +999,7 @@ document.addEventListener('click', async e => {
   else if (a === 'deal') dealSheet();
   else if (a === 'tc') tcSheet(x);
   else if (a === 'offers') offersSheet(x);
+  else if (a === 'sellerdates') sellerDatesSheet(x);
   else if (a === 'offeraccept') { const n = +b.dataset.r, r = ((S.sheet && S.sheet.offers) || [])[n - 1];
     if (!b.dataset.sure) { b.dataset.sure = '1'; b.textContent = 'Tap again: ' + offerWho(r || []) + ' accepted'; b.classList.remove('ghost'); return; }
     b.disabled = true; b.textContent = 'Saving…'; try { await offerSetStatus(x, n); toast('Marked accepted. The other offers stay saved.'); offersSheet(x); render(); } catch (err) { b.disabled = false; toast('Not saved — ' + (err.message || 'try again')); } }

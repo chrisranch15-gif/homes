@@ -34,6 +34,7 @@ const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
 const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day'];
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
+const TIMELINE_HEADERS = ['Date', 'Home', 'Milestone', 'Note', 'Status'];   // seller-safe deal dates, published from the Office; never buyer-agent details
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
 const MARKET_HEADERS = ['Month', 'Home', 'Area', 'Median sold price', 'Homes sold', 'Active listings', 'Median days on market', 'Months of inventory', 'Sale-to-list %', 'Source'];
@@ -564,6 +565,7 @@ function sellerView_(code) {
     updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),
     marketing: pick('Marketing', MARKETING_HEADERS, r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), reach: String(r[3]), notes: String(r[4]) })),
     schedule: schedule_(sel.home),
+    timeline: tab_('Seller timeline', TIMELINE_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home && r[0]).map(r => ({ at: new Date(r[0]).getTime(), what: String(r[2]), note: String(r[3] || ''), done: /done|complete/i.test(String(r[4] || '')) })),
     showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
     portals: latest_(tab_('Portals', PORTAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 2, r => ({ at: new Date(r[0]).getTime(), site: String(r[2]), views: num_(r[3]), saves: num_(r[4]), notes: String(r[5] || '') })),
     market: tab_('Market', MARKET_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home || String(r[1]) === '*').map(r => ({ month: r[0] instanceof Date ? Utilities.formatDate(r[0], 'America/Los_Angeles', 'yyyy-MM') : String(r[0]).slice(0, 7), area: String(r[2]), median: num_(r[3]), sold: num_(r[4]), active: num_(r[5]), dom: num_(r[6]), moi: num_(r[7]), stl: num_(r[8]), source: String(r[9] || '') })).sort((a, b) => a.month < b.month ? -1 : 1),

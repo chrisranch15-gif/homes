@@ -309,7 +309,7 @@ function render(d,code){
   useHome(d);
   var m=d.metrics||{},first=String(d.sellers||'').split(/ and | & /),listed=d.listed||null;
   var days=listed?Math.max(1,Math.ceil((Date.now()-listed)/864e5)):0;
-  var si=stageIndex(d.status),PEND=si===4;
+  var si=stageIndex(d.status),PEND=si===4||si===5,DONE=si===5;
   var auto=!listed?[]:[
     {at:listed,what:'Listed on NWMLS'+(H.price?' at '+H.price:''),reach:'every agent in the MLS'}].concat(STORY?[
     {at:listed+60000,what:'Your home’s page went live — '+STORY.replace(/^https?:\/\//,''),reach:'tap to open',link:STORY}]:[]).concat(H.guide?[
@@ -318,10 +318,10 @@ function render(d,code){
   var mk=(d.marketing||[]).concat(auto).sort(function(a,b){return b.at-a.at});
   var up=(d.updates||[])[0];
   var html='';
-  if(PEND)html+=pendingHtml(d);
+  if(DONE)html+=closedHtml(d);else if(PEND)html+=pendingHtml(d);
   else html+='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">'+(listed?'Day '+days+' on the market · '+esc(d.status||'Active'):'Getting ready to list')+'</p><h1>Welcome, '+esc(d.sellers)+'.</h1><p>'+esc(d.home)+(H.area?' · '+esc(H.area):'')+'</p>'+(STORY?'<div class="heroacts"><a class="btn light" href="'+STORY+'" target="_blank" rel="noopener">See your home’s page</a><a class="btn line" href="#share">Share it</a></div>':'')+'</div></div>';
   if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your journey</h2><ol class="journey">'+STAGES.map(function(s,i){return '<li class="'+(i<si?'done':i===si?'now':'')+'"><b>'+s[0]+'</b>'+s[1]+'</li>'}).join('')+'</ol></div></section>';
-  PSI=si;PDD=d;html+=prepHtml(si,d,code)+(PEND?'':factsHtml(d));
+  PSI=si;PDD=d;html+=(DONE?'':prepHtml(si,d,code))+(PEND?'':factsHtml(d));
   // across the web
   var P={};(d.portals||[]).forEach(function(x){P[x.site.toLowerCase()]=x});
   var soc=d.social||[],reach=0,has=false;soc.forEach(function(x){if(x.reach!=null||x.paidReach!=null){has=true;reach+=(x.reach||0)+(x.paidReach||0)}});
@@ -353,7 +353,7 @@ function render(d,code){
       +'<div class="shows">'+sc.slice().sort(function(a,b){return b.at-a.at}).slice(0,12).map(row).join('')+'</div>'
       +'<p class="note" style="margin-top:12px">Showings are booked through ShowingTime and update here on their own. Buyers’ agents’ details stay private, as they should. Chris follows up with each one for feedback.</p></div></section>';})();
   if(!PEND)html+='<section><div class="wrap"><p class="eyebrow">What buyers are saying</p><h2>Showing feedback</h2><div class="feedback">'+((d.showings||[]).length?d.showings.map(function(s){return '<div class="fb"><div class="meta">'+day(s.at)+(s.interest?' · '+esc(s.interest):'')+'</div><div>'+esc(s.feedback)+'</div></div>'}).join(''):'<p class="empty">Feedback will appear here as buyers’ agents share it.</p>')+'</div></div></section>';
-  html+='<section><div class="wrap"><p class="eyebrow">Anything on your mind?</p><h2>Message Chris</h2><form id="mf" style="display:grid;gap:12px;max-width:560px"><textarea id="msg" required placeholder="'+(PEND?'A question about closing, your move, anything at all…':'A question, a showing window that doesn’t work, something you noticed…')+'" aria-label="Your message"></textarea><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><div><button class="btn">Send to Chris</button></div></form></div></section>';
+  html+='<section><div class="wrap"><p class="eyebrow">Anything on your mind?</p><h2>Message Chris</h2><form id="mf" style="display:grid;gap:12px;max-width:560px"><textarea id="msg" required placeholder="'+(DONE?'Anything at all, I’m happy to help…':PEND?'A question about closing, your move, anything at all…':'A question, a showing window that doesn’t work, something you noticed…')+'" aria-label="Your message"></textarea><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><div><button class="btn">Send to Chris</button></div></form></div></section>';
   html+='<footer><div class="wrap">'+[STORY?'<a href="'+STORY+'">See your home’s page</a>':'',H.guide?'<a href="'+H.guide.url+'">'+esc(H.guide.short||H.guide.label)+'</a>':''].filter(Boolean).join(' · ')+'<br>The Ranch Real Estate Group · Keller Williams Realty Puget Sound<div style="margin-top:14px;font-size:12px;line-height:1.7;max-width:720px"><strong style="font-weight:500">Keller Williams Realty Puget Sound</strong> · 33434 8th Ave S, Suite 103, Federal Way, WA 98003 · Each Office Is Independently Owned and Operated.<br><span style="display:inline-flex;gap:8px;align-items:center;margin-top:8px"><svg width="26" height="26" viewBox="0 0 64 64" role="img" aria-label="Equal Housing Opportunity"><path d="M32 6 4 26h7v30h42V26h7z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="21" y="32" width="22" height="5" fill="currentColor"/><rect x="21" y="42" width="22" height="5" fill="currentColor"/></svg>Equal Housing Opportunity. Information deemed reliable but not guaranteed.</span></div></div></footer>';
   app.innerHTML=html;scrollTo(0,0);
   if(STORY&&!PEND){document.getElementById('cp').onclick=function(){copy(SHARE)};
@@ -361,6 +361,23 @@ function render(d,code){
   var sh=document.getElementById('sh');if(sh)sh.onclick=function(){navigator.share({title:H.shareTitle||'Our home',url:SHARE}).catch(function(){})};
   document.getElementById('mf').onsubmit=function(e){e.preventDefault();var f=e.target,b=f.querySelector('button'),t=document.getElementById('msg').value.trim();if(!t||f.website.value)return;b.disabled=true;b.textContent='Sending…';
     fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'seller-message',code:code,name:d.sellers,question:t,page:d.page,listing:d.home,source:'seller portal'})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;f.innerHTML='<p class="letter" style="margin:0">Sent. Chris will get back to you shortly.</p>'}).catch(function(){b.disabled=false;b.textContent='Send to Chris';toast('That didn’t go through — please try again.')})};
+}
+
+/* ---------- closed: thank you, what to keep, a review on Google, here for the next move ---------- */
+var REVIEW_URL='__REVIEW_URL__';
+function closedHtml(d){
+  var tl=(d.timeline||[]).filter(function(x){return x.at&&/clos/i.test(x.what)}),cd=d.closed||(tl.length?tl[tl.length-1].at:null);
+  var dl=function(t){return new Date(t).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})};
+  var h='<div class="hero"'+(H.hero?' style="background-image:url('+H.hero+')"':' style="min-height:250px"')+'><div class="wrap"><p class="eyebrow">Sold'+(cd?' · '+dl(cd):'')+'</p><h1>It’s done, '+esc(d.sellers)+'. Congratulations.</h1><p>Thank you for trusting me with '+esc(d.home)+'. It was a privilege to sell it for you.</p></div></div>';
+  h+='<section><div class="wrap"><p class="eyebrow">Keep these</p><h2>For your records</h2><ul class="chk" style="max-width:720px">'+[
+    'Your final settlement statement from escrow. Keep it with your tax papers for this year; your tax preparer will want it.',
+    'Your signed closing documents. Escrow sends a copy; save it somewhere you can find it.',
+    'Once the sale has recorded, it’s time to cancel your homeowner’s insurance and close out the utilities that are still in your name.',
+    'Make sure your mail is forwarded to your new address.'
+  ].map(function(t){return '<li style="padding:8px 0;border-top:1px solid var(--line)">'+esc(t)+'</li>'}).join('')+'</ul></div></section>';
+  if(REVIEW_URL&&REVIEW_URL.indexOf('__')!==0)h+='<section><div class="wrap"><div class="share"><p class="eyebrow" style="color:#E8D9C3">One small favor</p><h2 style="margin-bottom:6px">Would you share how it went?</h2><p style="opacity:.85;margin:0 0 18px">A few words on Google mean the world to a local business like ours, and they help the next family decide who to trust with their home.</p><a class="btn light" href="'+REVIEW_URL+'" target="_blank" rel="noopener">Leave a Google review</a></div></div></section>';
+  h+='<section><div class="wrap"><p class="eyebrow">From here</p><h2>I’m still here for you</h2><p style="max-width:720px">Questions after closing, a contractor you need, or what your next home is worth down the road: just send me a note below or call or text (253) 335-5630. This page stays here for you.</p></div></section>';
+  return h;
 }
 
 /* ---------- pending: congratulations, the road to closing, dates to remember, what to do now ---------- */

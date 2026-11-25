@@ -411,25 +411,34 @@ function conciergeContext_() {
   const sellers = tab_('Sellers', SELLER_HEADERS).getDataRange().getDisplayValues().slice(1).map(r => [r[1], r[2], r[5], r[6] ? 'photo day ' + r[6] : ''].filter(Boolean).join(' | '));
   return 'Listings (address, city, price, status, sellers, page):\n' + listings.slice(1).filter(r => r[0]).map(r => [r[0], r[1], r[2], r[3], r[4], r[5]].filter(Boolean).join(' | ')).join('\n')
     + '\n\nSellers with portals:\n' + sellers.join('\n')
-    + '\n\nSheet tabs you can read with read_tab: Leads, Listings, Sellers, Showings, Showing schedule, Open house feedback, Seller prep, Home facts, Unlisted buyers, Unlisted stories, Photo shoots, Seller updates.';
+    + '\n\nOffers (received | address | buyers | agent | brokerage | price | financing | earnest | credit asked | status | response due | notes | email | closing | inspection | SOC offered 17a | SOC asked 17b):\n' + (function () { const o = book_().getSheetByName('Offers'); return o ? o.getDataRange().getDisplayValues().slice(1).filter(r => r[0]).map(r => r.slice(0, 17).join(' | ')).join('\n') : 'none'; })()
+    + '\n\nYou can search and read his Gmail with search_email (read-only).'
+    + '\n\nSheet tabs you can read with read_tab: Offers, Deals, TC shadow, Leads, Listings, Sellers, Showings, Showing schedule, Open house feedback, Seller prep, Home facts, Unlisted buyers, Unlisted stories, Photo shoots, Seller updates.';
 }
 
 function conciergeTools_() {
   return [
     { name: 'read_tab', description: 'Read recent rows of one tab of the business Sheet. Use for leads, showings, feedback, checklists, Unlisted buyers and stories.',
       input_schema: { type: 'object', properties: { tab: { type: 'string' }, rows: { type: 'integer', description: 'How many of the newest rows (max 40)' } }, required: ['tab'] } },
+    { name: 'search_email', description: 'Search the agent\'s Gmail (read-only) and read the matching threads: offers, agents, lenders, escrow, clients. Use Gmail search syntax, e.g. "Elise Hughes newer_than:14d" or "19917 offer". Use it whenever he mentions an email, an offer, a person or a deal. Never claim you cannot see his email; search instead.',
+      input_schema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] } },
     { name: 'propose', description: 'Propose an action for the agent to approve with one tap: a drafted email or text, a seller update, a checklist item, publishing feedback, or launching a new listing. For launch_listing put the address in listing and a JSON object in body with any of address, city, price, sellers, photos, notes that the agent gave (leave out what they did not say). Nothing happens until they approve.',
-      input_schema: { type: 'object', properties: { kind: { type: 'string', enum: ['email_draft', 'text_draft', 'seller_update', 'checklist_item', 'publish_feedback', 'launch_listing', 'other'] },
+      input_schema: { type: 'object', properties: { kind: { type: 'string', enum: ['email_draft', 'text_draft', 'seller_update', 'checklist_item', 'publish_feedback', 'launch_listing', 'log_offer', 'other'] },
         to: { type: 'string' }, subject: { type: 'string' }, body: { type: 'string' }, listing: { type: 'string' } }, required: ['kind', 'body'] } }
   ];
 }
-const CONCIERGE_TABS = ['Leads', 'Listings', 'Sellers', 'Showings', 'Showing schedule', 'Open house feedback', 'Seller prep', 'Home facts', 'Unlisted buyers', 'Unlisted stories', 'Photo shoots', 'Seller updates'];
+const CONCIERGE_TABS = ['Offers', 'Deals', 'TC shadow', 'Leads', 'Listings', 'Sellers', 'Showings', 'Showing schedule', 'Open house feedback', 'Seller prep', 'Home facts', 'Unlisted buyers', 'Unlisted stories', 'Photo shoots', 'Seller updates'];
 function runConciergeTool_(name, input, proposals) {
   if (name === 'read_tab') {
     const tabName = String(input.tab || ''), n = Math.min(40, Math.max(1, Number(input.rows) || 15));
     if (CONCIERGE_TABS.indexOf(tabName) < 0) return { error: 'Not a tab I can read. Choose one of: ' + CONCIERGE_TABS.join(', ') };
     const sh = book_().getSheetByName(tabName); if (!sh) return { rows: [] };
     const v = sh.getDataRange().getDisplayValues(); return { header: v[0], rows: v.slice(1).slice(-n) };
+  }
+  if (name === 'search_email') {                         // read-only; nothing is sent, labeled or changed
+    const ts = GmailApp.search(clean_(input.query, 200) || 'newer_than:7d', 0, 5);
+    return { threads: ts.map(t => ({ subject: t.getFirstMessageSubject(), messages: t.getMessages().slice(-4).map(m => ({ from: m.getFrom(), date: Utilities.formatDate(m.getDate(), 'America/Los_Angeles', 'EEE MMM d h:mm a'),
+      body: m.getPlainBody().replace(/\n>.*$/gm, '').replace(/\n\s*On .{10,120}wrote:[\s\S]*$/, '').slice(0, 1800), attachments: m.getAttachments({ includeInlineImages: false }).map(a => a.getName()) })) })) };
   }
   if (name === 'propose') { proposals.push({ kind: clean_(input.kind, 30), to: clean_(input.to, 200), subject: clean_(input.subject, 200), body: String(input.body || '').slice(0, 4000), listing: clean_(input.listing, 120) });
     return { ok: true, note: 'Shown to the agent for approval.' }; }

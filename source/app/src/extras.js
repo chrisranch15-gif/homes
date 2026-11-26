@@ -232,6 +232,12 @@ Object.assign(FORMS, {
    ============================================================ */
 const LC_LISTED = 1795132800000;
 const LIVE_SHEET = '1ROkc-18VbSn7kkLZYrTyJYiooMDLbBxYR0SSWItll2E';
+// Desk jobs go on the Sheet's "To do" tab and start the one hourly check now (same as the Office; Chris, Nov 26, 2026)
+function deskJob(job, why) {
+  const when = new Date().toLocaleString('sv-SE', { timeZone: 'America/Los_Angeles' }).slice(0, 16);
+  return callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: "'To do'!A1", values: [[when, job, street(), why, job + '|desk:' + Date.now().toString(36), '', '', '']] })
+    .then(() => callTool('Claude Code Remote', 'fire_trigger', { trigger_id: 'trig_01HavDAbqKXYeY9L2VnxYPoi', text: 'From the Desk, do this now: ' + job + ' · ' + street() + ' · ' + why }).catch(() => { }));
+}
 const PORTAL_URL = 'https://homes.ranchpnw.com/sellers';
 const PORTAL_CODE = 'AH-QCRU9E';
 const MARKETING_PRESETS = [

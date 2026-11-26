@@ -992,7 +992,7 @@ async function tell(q) {
     { name: 'request_marketing_change', description: 'Ask for a change to this listing\'s marketing pieces (postcards, lookbook, room cards, silent talkers, open house signs, Instagram carousel, posts, films, agent email, listing page) or switch its look. It is logged for the team to make, and comes back to the agent for approval before anything is replaced. Never say the change is already made.', inputSchema: { type: 'object', properties: { piece: { type: 'string' }, change: { type: 'string' } }, required: ['change'] },
       execute: async ({ piece, change }) => { if (!caps.mcp) throw new Error('Open The Desk on claude.ai with Google Sheets allowed to request changes.');
         await callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: "'Marketing changes'!A1", values: [[liveNow(), street(), piece || 'all', change, 'Requested', '', '']] });
-        let now = false; try { await callTool('Claude Code Remote', 'fire_trigger', { trigger_id: 'trig_013MVf6ipKUJzSyGEJuYJkTY', text: `Chris just asked the Desk Concierge for a marketing change on ${street()} (${piece || 'all'}): ${change}. Do JOB 2 for it now.` }); now = true; } catch (e) {}
+        let now = false; try { await deskJob('marketing', (piece || 'all') + ': ' + change); now = true; } catch (e) {}
         return log('Marketing change requested: ' + (piece ? piece + ' · ' : '') + change, now ? 'Being made now; usually ready in a few minutes for your OK' : 'Made at the next hourly run, then back to you for an OK'); } },
     { name: 'request_price_change', description: 'Request a list price change. It is NEVER applied directly: it goes to The Desk for the agent to approve.', inputSchema: { type: 'object', properties: { to: { type: 'number' } }, required: ['to'] },
       execute: ({ to }) => { if (!(to > 50000)) throw new Error('Invalid price'); E.emit(LID, 'price.change.requested', { to: Math.round(to) }); return log('Price change to ' + LC.money(to), 'Waiting for your approval on The Desk'); } },
@@ -1351,7 +1351,7 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
   'check-drive': () => checkDrive(),
   'all-photos': () => { ui.allPhotos = !ui.allPhotos; render(); },
   'check-metricool': () => checkMetricool(),
-  'soc-now': () => { ui.socNow = true; render(); callTool('Claude Code Remote', 'fire_trigger', { trigger_id: 'trig_01HsnuhtZBs1vsjgVFT5a7rc', text: `${street()} is under contract. Make its pending social set now.` }).then(() => toast('Making them now. Nothing posts until you approve.')).catch(() => { ui.socNow = false; toast('Couldn’t start it here. It will still be made on the next check.'); render(); }); },
+  'soc-now': () => { ui.socNow = true; render(); deskJob('social', 'Under contract').then(() => toast('Making them now. Nothing posts until you approve.')).catch(() => { ui.socNow = false; toast('Couldn’t start it here. It will still be made on the next check.'); render(); }); },
   gmail: el => { const st = settings(); st.gmail = el.dataset.v; if (st.gmail === 'drafts') st.gmailSince = Date.now(); dirty = true; scheduleSave(); render(); if (st.gmail === 'drafts' && !L().sellers[0].email) toast('Add your seller’s email in step 4.'); },
   suggest: () => aiSuggest(),
   'do-suggest': el => { const x = (ui.suggest || ruleSuggestions())[el.dataset.i * 1]; if (!x) return;

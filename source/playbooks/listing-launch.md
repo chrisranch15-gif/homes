@@ -6,7 +6,7 @@ the agent is the hero, Chris's direct line only).
 
 A listing launches **on its own as soon as its photos are in** (Photo shoots tab Status "Ready" or "Delivered", or photos
 already in `photos/<key>/`); Chris doesn't need to tap anything (Chris, Nov 26, 2026: "Should I need to click launch
-listing?" No). The Office's Launch button just fires this task sooner, with the address. It also runs hourly, 8 AM to 6 PM. Chris, Nov 26, 2026: "Why not just start it." Start at once, do everything that
+listing?" No). The engine puts a "launch" row on the To do tab when photos arrive, and the hourly check (dispatch.md) runs this playbook; the Office's Launch button starts it sooner. Chris, Nov 26, 2026: "Why not just start it." Start at once, do everything that
 can be done, and leave clear notes in the Office for anything that's waiting on him.
 
 ## Each run

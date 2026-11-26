@@ -242,6 +242,7 @@ function syncShowings() {
     });
   } finally { lock.releaseLock(); }
   try { syncPhotos(); } catch (e) { console.log('syncPhotos: ' + e); }
+  try { watch_(); } catch (e) { console.log('watch: ' + e); }
 }
 
 /* ---------- Rainier Real Estate Photography (HD Photo Hub): orders and finished photos, from email ---------- */
@@ -252,6 +253,48 @@ function parseDownloadPage_(html) { // owner-preview page (/h/<id>) embeds every
   const out = [], re = /"nMediaTypeID":(\d+),"sMediaName":"([^"]*)","sOrigMediaKey":"([^"]+)"[^{}]*?"sExtension":"([a-z0-9]+)"/gi; let m;
   while ((m = re.exec(html))) if (m[1] === '1') out.push({ title: m[2], url: 'https://media.hd.pics/' + m[3] + '.' + m[4] });
   return out;
+}
+/* ---------------- the watcher: free checks every 15 minutes; Claude only runs when the "To do" tab has work ----------------
+   (Chris, Nov 26, 2026: "Is there a better way to do this where we don't eat up usage?") The hourly Claude task reads this tab
+   first and stops at once when nothing is waiting. Jobs: launch | tc | social | marketing | seller-question. Ref keeps each event to one row. */
+const TODO_HEADERS = ['When', 'Job', 'Address', 'Why', 'Ref', 'Status', 'Done at', 'Note'];
+function todo_(job, address, why, ref, seen) {
+  const key = job + '|' + ref; if (seen[key]) return; seen[key] = 1;
+  tab_('To do', TODO_HEADERS).appendRow([Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd HH:mm'), job, address || '', clean_(why, 200), key, seen._seed ? 'Before the switch' : '', '', '']);
+}
+function watch_() {
+  const ss = book_(), get = n => { const sh = ss.getSheetByName(n); return sh ? sh.getDataRange().getValues() : []; };
+  const seen = { _seed: !ss.getSheetByName('To do') }; get('To do').slice(1).forEach(r => { seen[r[4]] = 1; });   // the first run only records what's already there (all handled by the old tasks)
+  const tz = 'America/Los_Angeles', day = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd'), hour = Number(Utilities.formatDate(new Date(), tz, 'H'));
+  const listings = get('Listings').slice(1).filter(r => r[0] && !/removed/i.test(r[3]));
+  const offers = get('Offers').slice(1).filter(r => r[1]);
+  const accepted = r => /accept|mutual|pending|under contract/i.test(String(r[9] || '')) && !/not accepted|unaccepted/i.test(String(r[9] || ''));
+  // 1. photos are in -> the sellers' sneak peek and the launch
+  get('Photo shoots').slice(1).forEach(r => { if (r[1] && /ready|deliver/i.test(r[2])) todo_('launch', r[1], 'Photos are in', 'photos:' + r[0], seen); });
+  // 2. under contract and sold -> TC first 30 minutes, the posts, the pending package
+  const live = {};
+  offers.filter(accepted).forEach(r => { const a = String(r[1]); live[homeKey_(a)] = a;
+    todo_('tc', a, 'Mutual acceptance', 'mutual:' + homeKey_(a), seen); todo_('social', a, 'Under contract', 'pending:' + homeKey_(a), seen); todo_('marketing', a, 'Pending package', 'pending:' + homeKey_(a), seen); });
+  listings.forEach(r => { const a = String(r[0]), k = homeKey_(a), st = String(r[3]);
+    if (/pending|contract/i.test(st)) { live[k] = a; todo_('social', a, 'Under contract', 'pending:' + k, seen); todo_('marketing', a, 'Pending package', 'pending:' + k, seen); }
+    if (/sold|closed/i.test(st)) todo_('social', a, 'Sold', 'sold:' + k, seen); });
+  offers.filter(r => /received|countered/i.test(String(r[9] || ''))).forEach(r => { live[homeKey_(r[1])] = String(r[1]); });
+  get('Deals').slice(1).forEach(r => { if (r[0] && !/closed|cancel|terminat/i.test(r.join(' '))) live[homeKey_(r[0])] = String(r[0]); });
+  // 3. new email on a live deal or offer -> the TC drafts what to send (matched by street number; HOA board mail never matches)
+  const nums = Object.keys(live).map(k => k.split(' ')[0]).filter(n => /^\d{3,6}$/.test(n));
+  if (nums.length) GmailApp.search('newer_than:1d -from:me {' + nums.join(' ') + '}', 0, 40).forEach(t => {
+    const text = t.getFirstMessageSubject() + ' ' + t.getMessages().slice(-1)[0].getPlainBody().slice(0, 3000), n = nums.filter(x => new RegExp('\\b' + x + '\\b').test(text))[0]; if (!n) return;
+    const k = Object.keys(live).filter(x => x.indexOf(n + ' ') === 0)[0];
+    todo_('tc', live[k], 'New email: ' + t.getFirstMessageSubject(), 'mail:' + t.getId() + ':' + t.getMessageCount(), seen); });
+  // 4. deadlines: a TC deadline check three times a weekday while a deal is live (8 AM, noon, 4 PM); once at noon on weekends
+  const wk = /Sat|Sun/.test(Utilities.formatDate(new Date(), tz, 'EEE'));
+  if (Object.keys(live).length && (wk ? [12] : [8, 12, 16]).indexOf(hour) >= 0) todo_('tc', 'All live deals', 'Deadline check', 'deadlines:' + day + ':' + hour, seen);
+  // 5. Chris's notes on TC drafts, sellers' questions, marketing changes, sellers' upgrades, settlement statements
+  get('TC feedback').slice(1).forEach((r, i) => { if (r[0]) todo_('tc', r[1], 'Your note: ' + r[3], 'fb:' + (i + 2) + ':' + r[0], seen); });
+  get('Seller questions').slice(1).forEach((r, i) => { if (r[4] && /^(new|held)?$/i.test(String(r[8] || '').split(' ')[0])) todo_('seller-question', r[2], r[4], 'q:' + (i + 2), seen); });
+  get('Marketing changes').slice(1).forEach((r, i) => { if (r[3] && /^(requested|new)?$/i.test(String(r[4] || ''))) todo_('marketing', r[1], r[2] + ': ' + r[3], 'mc:' + (i + 2), seen); });
+  get('Home facts').slice(1).forEach(r => { if (r[0] && String(r[3] || '').trim()) todo_('marketing', r[1], 'Sellers saved upgrades', 'facts:' + r[0] + ':' + r[2], seen); });
+  get('Sellers').slice(1).forEach(r => { if (r[0] && /closed/i.test(r[5]) && !r[9]) todo_('marketing', r[2], 'Find the settlement statement', 'settle:' + r[0] + ':' + day, seen); });
 }
 function syncPhotos() {
   const shoots = tab_('Photo shoots', SHOOT_HEADERS), pics = tab_('Shoot photos', SHOOT_PHOTO_HEADERS);

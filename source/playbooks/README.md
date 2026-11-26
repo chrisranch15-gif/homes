@@ -35,3 +35,10 @@ Every job also follows:
    against saved examples (`tests/`) and committed here, with one-tap Undo. The next review reports whether they helped.
 
 Nothing in this loop ever loosens a locked rule, sends anything on its own, or stores client contact details.
+
+## How jobs start (Nov 26, 2026)
+One scheduled task, "Ranch hourly check", runs `dispatch.md`. The Google engine watches for free every 15 minutes and
+writes a row to the Sheet's **To do** tab when something happens (photos in, mutual acceptance, a new deal email, a seller
+question, a marketing change, a listing going pending or sold). The hourly check reads that tab first and stops at once if
+it's empty. Office and Desk taps add a row and start it right away. The old per-job hourly tasks are paused.
+Weekly and monthly tasks (weekly review, design round, researcher, town guides, tax notes) still run on their own.

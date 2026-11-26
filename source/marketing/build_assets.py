@@ -126,3 +126,15 @@ for k, v in out.items():
     if items: pend.append({'key': k, 'address': meta.get('address', k), 'contract': meta.get('contract', ''), 'look': meta.get('look', 'editorial'), 'items': items})
 open(os.path.join(R, 'source', 'office', 'pending.json'), 'w').write(json.dumps(pend, indent=0))
 print('pending packages:', len(pend))
+
+# ---------- Office: Business basics (stationery not tied to a listing: source/marketing/basics.py) ----------
+_basics = []
+_LN = {'editorial': 'Estate Editorial', 'arch': 'Modern Architectural', 'heritage': 'Warm Heritage'}
+for _look in ('editorial', 'arch', 'heritage'):
+    for _n, _t in [('thank-you-meeting', 'Thank-you card · after we meet'), ('thank-you-closing', 'Thank-you card · at closing'), ('thank-you-embossed', 'Thank-you card · embossed')]:
+        _p = os.path.join(R, 'marketing', 'basics', _look, _n + '.pdf')
+        if os.path.exists(_p): _basics.append({'g': 'Business basics', 't': _t, 's': _LN[_look] + (' · die art: marketing/basics/' + _look + '/emboss-die.pdf' if 'emboss' in _n else ' · A2 folded, prints flat 8.5×5.5'), 'u': SITE + os.path.relpath(_p, R), 'th': 'marketing/thumbs/' + os.path.basename(thumb_pdf(_p, 'site-basics-' + _look + '-' + _n))})
+_sj = os.path.join(R, 'source', 'office', 'sites.json')
+_cur = [x for x in json.load(open(_sj)) if x.get('g') != 'Business basics']
+json.dump(_cur + _basics, open(_sj, 'w'), indent=0)
+print('business basics:', len(_basics))

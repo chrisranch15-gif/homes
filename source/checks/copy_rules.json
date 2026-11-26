@@ -124,9 +124,9 @@
     "portal",
     "print"
    ],
-   "pattern": "\\b(perfect for (a )?famil(y|ies)|family[- ]friendly (neighborhood|community)|ideal for (young|a young|empty|retirees|singles|couples|professionals)|empty[- ]nesters?|young professionals|bachelor pad|adults? only|no (kids|children)|exclusive (neighborhood|community|area)|(safe|crime[- ]free) (neighborhood|area|community)|christian|near (the )?church|integrated neighborhood|ethnic|handicapped|able[- ]bodied)\\b",
+   "pattern": "\\b(perfect for (a )?famil(y|ies)|family[- ]friendly (neighborhood|community)|ideal for (young|a young|empty|retirees|singles|couples|professionals)|empty[- ]nesters?|young professionals|bachelor pad|adults? only|no (kids|children)|exclusive (neighborhood|community|area)|(safe|crime[- ]free) (neighborhood|area|community)|christian|near (the )?church|integrated neighborhood|ethnic|handicapped|able[- ]bodied|mature (persons?|adults?|couples?|individuals?)|adult (community|building|living|neighborhood)|singles only|no (wheelchairs|section 8)|physically fit|crippled|mentally ill|caucasian|oriental|hispanic (neighborhood|area|community|residence)|jewish (home|neighborhood|area)|catholic (home|neighborhood|area)|restricted (community|neighborhood|area)|perfect for (a )?(young )?(couples?|singles|retirees|empty[- ]nesters?|newlyweds))\\b",
    "flags": "i",
-   "why": "Fair Housing: describe the property, never the people who should live there (brain.md §8)."
+   "why": "Fair Housing (HUD 24 CFR 100.75, the 1989 HUD word list, the 1995 HUD advertising memo; WA RCW 49.60.222): describe the property, never the people who should live there (brain.md §8, library/compliance.md)."
   }
  ],
  "require": [

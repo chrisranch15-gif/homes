@@ -371,7 +371,7 @@ function render(d,code){
 }
 
 /* ---------- closed: thank you, what to keep, a review on Google, here for the next move ---------- */
-var REVIEW_URL='__REVIEW_URL__';
+var REVIEW_URL='https://maps.app.goo.gl/8PmuTL4396spj3tv7';   // Chris's Google Business Profile (opens it; Write a review is one tap)
 function closedHtml(d){
   var tl=(d.timeline||[]).filter(function(x){return x.at&&/clos/i.test(x.what)}),cd=d.closed||(tl.length?tl[tl.length-1].at:null);
   var dl=function(t){return new Date(t).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})};

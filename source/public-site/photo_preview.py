@@ -41,9 +41,8 @@ shot = datetime.date.fromisoformat(L['photo_day']).strftime('%A, %B %-d') if L.g
 credit = L.get('credit') or 'Anthony Jones / Rainier Real Estate Photography'
 photographer = credit.split('/')[0].strip().split(' ')[0]
 note = cfg.get('note') or [
-    f'{photographer} photographed your home{" on " + shot if shot else ""}, and the photos are back. They came out beautifully.',
-    'Take your time with them. Tap the heart on the ones you love most and send me your favorites. I’ll lead with them on your listing page and in the marketing.',
-    'If anything needs a second look, a light left on or something you’d rather not show, tell me and I’ll have it fixed before anyone else sees them.']
+    'Here’s your sneak peek.',
+    'We’re building your listing page and marketing around them now. There’s nothing you need to do. I’ll show you everything before anyone else sees it.']
 
 sections = ''.join(
     f'<section class="room" id="r{i}"><div class="rh"><h2>{e(t)}</h2><span>{len(ss)} photo{"s" if len(ss) > 1 else ""}</span></div>'
@@ -106,36 +105,32 @@ footer{{background:var(--night);color:#8f887d;font-size:12px;padding:0 0 110px}}
 </style></head><body>
 <header class="hero"><img src="{B}{hero}.webp" alt="{e(L["address"])}" fetchpriority="high">
 <div class="top"><span>The Ranch Real Estate Group</span><span>Private preview</span></div>
-<div class="cap"><p class="eyebrow" id="hi">Your photos are in</p><h1>{e(L["address"].split(" #")[0])},<br><em>photographed.</em></h1><p>{e(L.get("community") or L["city"])} · {e(L["city"])}, {e(L["state"])}</p></div>
+<div class="cap"><p class="eyebrow" id="hi">Your sneak peek</p><h1>{e(L["address"].split(" #")[0])},<br><em>photographed.</em></h1><p>{e(L.get("community") or L["city"])} · {e(L["city"])}, {e(L["state"])}</p></div>
 <a class="cue" href="#letter">Scroll ↓</a></header>
 <main>
 <div class="wrap">
-<section class="letter reveal" id="letter"><h2>First, take a look at <em>your home</em> the way buyers will.</h2>
+<section class="letter reveal" id="letter"><h2>We have your photos. <em>They look amazing.</em></h2>
 <div class="body">{"".join(f"<p>{e(p)}</p>" for p in note)}<div class="sig">Chris<small>Chris Ranch · The Ranch Real Estate Group</small></div></div></section>
 <div class="stats reveal"><div>{total}<span>Photos</span></div><div>{len(groups)}<span>Rooms &amp; views</span></div><div>{len(plans) or "—"}<span>Floor plans</span></div></div>
 <div class="trio reveal">{"".join(f"<figure data-s=\"{s}\">{img(s, sizes='(min-width:900px) 60vw, 100vw', alt='')}<button class=\"fav\" aria-label=\"Favorite\" data-s=\"{s}\">♡</button></figure>" for s in trio)}</div>
 {sections}{plan_html}
 </div>
-<section class="next"><div class="wrap"><h2>What happens next</h2><div class="steps">
-<div><b>1</b><p>Send me your favorites, or anything you’d like changed. Tap the hearts and use the button at the bottom.</p></div>
-<div><b>2</b><p>I build your listing page and marketing around these photos. You’ll see all of it before anyone else does.</p></div>
-<div><b>3</b><p>We pick the day it goes live together. Nothing is public until you’ve seen it and we’re both happy.</p></div>
-</div><div class="contact"><a href="sms:+12533355630" id="txt">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
+<section class="next"><div class="wrap"><h2>What happens next. <em style="color:var(--gold)">We’ve got it from here.</em></h2><div class="steps">
+<div><b>1</b><p>We build your listing page and marketing around these photos.</p></div>
+<div><b>2</b><p>You see all of it before anyone else does.</p></div>
+<div><b>3</b><p>We go live on the day we pick together. Until then, nothing is public.</p></div>
+</div><div class="contact"><a href="sms:+12533355630">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
 </main>
 <footer><div class="wrap"><span>Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</span><span>Photography: {e(credit)}</span></div></footer>
-<div class="tray" id="tray" role="status"><span id="tn">0 favorites</span><a href="#" id="send">Send them to me</a></div>
 <div class="lb" id="lb" role="dialog" aria-label="Photo"><img alt=""><button class="x" aria-label="Close">×</button><button class="p" aria-label="Previous">‹</button><button class="n" aria-label="Next">›</button><div class="c"></div></div>
 <script>
 (function(){{
   var K='fav-{key}',favs=[];try{{favs=JSON.parse(localStorage.getItem(K)||'[]')}}catch(e){{}}
   var who=decodeURIComponent((location.hash.match(/for=([^&]+)/)||[])[1]||'').replace(/[<>]/g,'');
-  if(who)document.getElementById('hi').textContent=who+', your photos are in';
+  if(who)document.getElementById('hi').textContent=who+', here’s your sneak peek';
   var all=[].slice.call(document.querySelectorAll('figure[data-s]')),order=[],seen={{}};all.forEach(function(f){{if(!seen[f.dataset.s]){{seen[f.dataset.s]=1;order.push(f.dataset.s)}}}});
   function num(s){{return order.indexOf(s)+1}}
   function paint(){{document.querySelectorAll('.fav').forEach(function(b){{var on=favs.indexOf(b.dataset.s)>=0;b.classList.toggle('on',on);b.textContent=on?'♥':'♡'}});
-    var t=document.getElementById('tray');t.classList.toggle('show',favs.length>0);document.getElementById('tn').textContent=favs.length+' favorite'+(favs.length==1?'':'s');
-    var body='My favorite photos for {e(L["address"].split(" #")[0])}: '+favs.map(num).sort(function(a,b){{return a-b}}).map(function(n){{return '#'+n}}).join(', ');
-    document.getElementById('send').href='sms:+12533355630'+(/iP(hone|ad)/.test(navigator.userAgent)?'&':'?')+'body='+encodeURIComponent(body);
     try{{localStorage.setItem(K,JSON.stringify(favs))}}catch(e){{}}}}
   document.addEventListener('click',function(ev){{var b=ev.target.closest('.fav');if(b){{ev.stopPropagation();var i=favs.indexOf(b.dataset.s);i<0?favs.push(b.dataset.s):favs.splice(i,1);paint();return}}
     var f=ev.target.closest('figure[data-s]');if(f)open(order.indexOf(f.dataset.s))}});

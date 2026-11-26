@@ -51,7 +51,7 @@ const SOCIAL_HEADERS = ['Checked', 'Home', 'Network', 'Posted', 'Post link', 'Im
 
 /** Run once: adds the hub's tabs (listings, deals, website checks, documents). Safe to run again. */
 function setupHub() {
-  const L = tab_('Listings', ['Address', 'City', 'Price', 'Status', 'Sellers', 'Page', 'Desk', 'Portal code', 'Listed', 'Photo']);
+  const L = tab_('Listings', ['Address', 'City', 'Price', 'Status', 'Sellers', 'Page', 'Desk', 'Portal code', 'Listed', 'Photo', 'Launch plan']);
   if (L.getLastRow() < 2) {
     L.appendRow(['19917 145th St E', 'Bonney Lake (Tehaleh)', 775000, 'Active', 'Aaron and Holly', 'https://homes.ranchpnw.com/19917', 'https://claude.ai/artifact/E6iKnuAbJ77ML5sArMqhEq#desk', 'AH-QCRU9E', '2026-11-19', 'https://homes.ranchpnw.com/photos/front-dusk-800.webp']);
     L.appendRow(['11532 SE 173rd St #53', 'Renton', 275000, 'Active', '', '', '', '', '', '']);

@@ -41,13 +41,18 @@ jobs:
       - name: Push and publish a new version
         if: steps.setup.outputs.ready == 'yes'
         run: |
-          npm install -g @google/clasp@2 >/dev/null 2>&1
           printf '%s' "$CLASPRC_JSON" > ~/.clasprc.json
+          # which clasp wrote the sign-in? (prints only the top-level key names, never values)
+          FMT=$(node -e "try{const j=JSON.parse(require('fs').readFileSync(process.env.HOME+'/.clasprc.json','utf8'));console.log(j.tokens?'v3':j.token?'v2':'unknown:'+Object.keys(j).join(','))}catch(e){console.log('not-json')}")
+          echo "Sign-in format: $FMT"
+          case "$FMT" in v3) V=3;; v2) V=2;; *) echo "::error::CLASPRC_JSON isn't a clasp sign-in ($FMT). Copy everything printed by: cat ~/.clasprc.json"; exit 1;; esac
+          npm install -g @google/clasp@$V >/dev/null 2>&1
           mkdir -p /tmp/engine && cd /tmp/engine
           printf '{"scriptId":"%s","rootDir":"."}' "$SCRIPT_ID" > .clasp.json
           clasp pull                       # brings the project's manifest (appsscript.json) and file list
           ls
           cp "$GITHUB_WORKSPACE/source/apps-script/Code.gs" Code.js
           clasp push --force
-          clasp deploy --deploymentId "$DEPLOYMENT_ID" --description "From GitHub ${GITHUB_SHA::7}"
+          if [ "$V" = 3 ]; then clasp update-deployment "$DEPLOYMENT_ID" --description "From GitHub ${GITHUB_SHA::7}"
+          else clasp deploy --deploymentId "$DEPLOYMENT_ID" --description "From GitHub ${GITHUB_SHA::7}"; fi
           rm -f ~/.clasprc.json

@@ -128,13 +128,13 @@ def daylight(c, S, L, q):
     c.setFillColor(NIGHT if gold else BRONZE); c.setFont('SansM', 10.5); c.drawCentredString(W / 2, 1.05 * 72, S['foot'])
     footer(c, True)
 
-def gallery(c, S, L, q):
+def gallery(c, S, L, q, NIGHT=NIGHT, GOLD=GOLD, CARD=None):
     gold = S.get('gold')
     photo(c, S['photo'], 0, 0, W, H)
     c.saveState(); c.setFillColor(NIGHT); c.setFillAlpha(.28); c.rect(0, 0, W, H, fill=1, stroke=0); c.restoreState()
     fade(c, 0, H * .42, NIGHT, up=True, power=1.2)  # darker toward the bottom for the footer
     cw, ch = 5.6 * 72, 6.9 * 72; cx, cy = (W - cw) / 2, 1.25 * 72
-    c.saveState(); c.setFillColor(GOLD if gold else Color(.09, .1, .11)); c.setFillAlpha(.97 if gold else .82)
+    c.saveState(); c.setFillColor(GOLD if gold else (CARD or Color(.09, .1, .11))); c.setFillAlpha(.97 if gold else .82)
     c.roundRect(cx, cy, cw, ch, 22, fill=1, stroke=0); c.restoreState()
     top = cy + ch - .55 * 72
     if gold: badge(c, 'UNLISTED  ·  OFF-MARKET BUYER PROGRAM', top, NIGHT, GOLD)
@@ -171,7 +171,11 @@ def tent(c, L, key, style, qs):
         c.setDash(2, 4); c.setStrokeColor(DIM); c.setLineWidth(.5); c.line(.3 * 72, y0 + panel / 2, W - .3 * 72, y0 + panel / 2); c.setDash()
     c.setStrokeColor(DIM); c.line(0, H / 2, W, H / 2)
 
-STYLES = dict(noir=noir, daylight=daylight, gallery=gallery)
+def heritage(c, S, L, q):   # Warm Heritage: the gallery layout in forest, cream and antique gold
+    gallery(c, S, L, q, NIGHT=HexColor('#1F2A24'), GOLD=HexColor('#C9A46A'), CARD=HexColor('#1F2A24'))
+
+STYLES = dict(noir=noir, daylight=daylight, gallery=gallery, heritage=heritage)
+LOOK_SIGNS = dict(editorial='noir', arch='daylight', heritage='heritage')   # one look per listing drives every piece
 
 def build(key, style, out_dir):
     L = LISTINGS[key]; os.makedirs(out_dir, exist_ok=True); tmp = os.path.join(out_dir, '.qr'); os.makedirs(tmp, exist_ok=True)

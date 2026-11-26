@@ -1,0 +1,44 @@
+{
+ "_note": "Launch-piece facts for 19917 (its listing page predates source/listings). Every line comes from the verified listing record. Talkers are written at launch from the photos, remarks and the seller's upgrade list; edit or remove any before printing.",
+ "key": "19917",
+ "address": "19917 145th St E",
+ "city": "Bonney Lake",
+ "area": "Tehaleh",
+ "price": 775000,
+ "beds": "5*",
+ "baths": "2.75",
+ "sqft": 2772,
+ "status": "Pending",
+ "listed": "2026-11-19",
+ "contract": "2026-11-24",
+ "look": "editorial",
+ "tagline": "A home that feels different.",
+ "hero": "photos/front-dusk.jpg",
+ "aerial": "photos/aerial-greenbelt.jpg",
+ "interior": "photos/great-room.jpg",
+ "facts_line": "5 bedrooms · 2.75 baths · 2,772 sq ft · backs to the greenbelt",
+ "pitch": "Over $100K in upgrades, a soaring great room, Mount Rainier from the upstairs windows and a new 24×22 covered deck over the greenbelt.",
+ "reasons": [
+  ["Mount Rainier", "from the primary suite and two more bedrooms."],
+  ["A new 24×22 covered deck", "with a plumbed fire pit, over the greenbelt."],
+  ["Over $100K in upgrades", "from the brass-and-shaker kitchen to the custom closets."]
+ ],
+ "agent_notes": "*The main-floor 5th bedroom/office has no closet. Showings through ShowingTime. Sumner-Bonney Lake School District.",
+ "rooms": [
+  {"title": "The kitchen", "photo": "photos/kitchen-wide.jpg", "photo2": "photos/kitchen-island.jpg", "story": "A soaring two-story great room with fireplace opens to the kitchen: an oversized island, white shaker cabinetry, brass hardware, a gas range and a walk-in pantry.", "note": "Open the walk-in pantry."},
+  {"title": "The great room", "photo": "photos/great-room.jpg", "story": "A two-story room with a fireplace, open to the kitchen. Custom millwork, designer accents and updated lighting run through the main floor.", "note": "Look up: two full stories of light."},
+  {"title": "The primary suite", "photo": "photos/primary-bed2.jpg", "photo2": "photos/primary-tub.jpg", "story": "Mount Rainier views, a soaking tub, a frameless glass shower and a custom closet system.", "note": "Look out the window on a clear morning."},
+  {"title": "The covered deck", "photo": "photos/covered-deck.jpg", "story": "New 24×22 covered outdoor living with composite decking and a plumbed fire pit, beside a large covered storage closet.", "note": "Picture a fall evening out here."},
+  {"title": "The greenbelt", "photo": "photos/greenbelt-yard.jpg", "story": "A generous fenced lot backing to recorded open-space greenbelt and towering evergreens.", "note": "Step out to the edge of the greenbelt."},
+  {"title": "The mudroom", "photo": "photos/mudroom.jpg", "story": "A beautifully appointed mudroom, plus an extra-long garage with kick-out storage.", "note": "The drop zone every family wants."}
+ ],
+ "talkers": [
+  {"eye": "Cloudy today?", "title": "Mount Rainier lives right here.", "line": "On a clear day, the mountain fills the upstairs windows.", "photo": "photos/mtn-alpenglow.jpg", "credit": false},
+  {"eye": "Did you notice?", "title": "Wired with Cat-6.", "line": "Fast, reliable wired internet for working from home, streaming and gaming."},
+  {"eye": "Hard to see from inside", "title": "Central air conditioning.", "line": "The unit sits outside, so it’s easy to miss. Summers stay comfortable."},
+  {"eye": "Step outside", "title": "The fire pit is plumbed in.", "line": "No propane tanks to haul. It’s part of the new 24×22 covered deck.", "photo": "photos/deck-fire.jpg"},
+  {"eye": "Did you notice?", "title": "An EV charger is already here.", "line": "Ready for an electric car on day one, with an extra-long garage."}
+ ],
+ "credit": "Anthony Jones, Rainier Real Estate Photography",
+ "print": ["postcard-listed", "postcard-contract", "lookbook", "room-cards", "talkers"]
+}

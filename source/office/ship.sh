@@ -13,6 +13,9 @@ DESK_URL=https://claude.ai/artifact/E6iKnuAbJ77ML5sArMqhEq
 [ -d "$OFFICE/.git" ] || { echo "Clone chrisranch15-gif/office to $OFFICE first"; exit 1; }
 
 # Marketing assets + Sites gallery data (thumbnails, ASSETS for the Desk, sites.json for the Office)
+# Launch pieces in all three looks: rebuilt when a listing's piece facts or the templates change
+for J in "$HOMES"/source/marketing/pieces/*.json; do K=$(basename "$J" .json); M="$HOMES/marketing/$K/pieces.json"
+  if [ ! -f "$M" ] || [ "$J" -nt "$M" ] || [ "$HOMES/source/marketing/pieces.py" -nt "$M" ]; then python3 "$HOMES/source/marketing/pieces.py" "$K"; fi; done
 python3 "$HOMES/source/marketing/build_assets.py"
 SRC=$(mktemp); python3 "$HOMES/source/office/inject_sites.py" "$HOMES/source/office/index.html" "$HOMES/source/office/sites.json" "$SRC"
 

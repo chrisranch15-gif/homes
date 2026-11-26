@@ -325,22 +325,30 @@ ${pendingDeal() ? `<details style="margin-top:12px"><summary class="btn ghost" s
 ${pendingDeal() ? '</div></details>' : ''}` : ''}</div>`;
 }
 /* ---------- marketing assets: every launch asset for this listing, as a gallery (source/marketing/build_assets.py) ---------- */
+const LOOK_NAMES = [['editorial', 'Estate Editorial'], ['arch', 'Modern Architectural'], ['heritage', 'Warm Heritage']];
+function activeLook() { const num = (String(street()).match(/^\d+/) || [''])[0]; return L().mode || (typeof ASSET_LOOK !== 'undefined' && ASSET_LOOK[num]) || 'editorial'; }
 function assetsBlock() {
   if (!isStaff() || typeof ASSETS === 'undefined') return '';
-  const num = (String(street()).match(/^\d+/) || [''])[0], all = ASSETS[num] || [];
+  const num = (String(street()).match(/^\d+/) || [''])[0], look = activeLook(), every = ASSETS[num] || [];
+  const all = every.filter(a => !a.look || a.look === look);
   if (!all.length) return '';
-  const order = [['Listing page', 'Pages'], ['Page', 'Pages'], ['Print', 'Print'], ['Film', 'Films'], ['Social', 'Social posts and stories']], groups = {};
+  const tile = a => `<div class="atile"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.th ? `<img src="${esc(a.th)}" alt="" loading="lazy">` : '<span class="ph"></span>'}<b>${esc(a.t)}</b></a><button class="chip" data-act="asset-copy" data-u="${esc(a.u)}">Copy link</button></div>`;
+  const order = [['Listing page', 'Ready now · pages'], ['Page', 'Ready now · pages'], ['Email', 'Ready now · agent email'], ['Carousel', 'Ready now · Instagram carousel'], ['Social', 'Ready now · posts and stories'], ['Film', 'Ready now · films'], ['Print', 'Print · pick what you want printed']], groups = {};
   order.forEach(([k, g]) => all.filter(a => a.kind === k).forEach(a => (groups[g] = groups[g] || []).push(a)));
-  return `<div class="sharebar" id="assets"><div class="eyebrow">Marketing assets · ${all.length}</div><p class="small muted" style="margin:6px 0 0">Everything made for this listing. Tap to open, or copy a link to send.</p>
-    ${Object.keys(groups).map(g => `<div class="small" style="font-weight:600;margin:16px 0 8px">${esc(g)}</div><div class="agrid">${groups[g].map(a => `<div class="atile"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.th ? `<img src="${esc(a.th)}" alt="" loading="lazy">` : '<span class="ph"></span>'}<b>${esc(a.t)}</b></a><button class="chip" data-act="asset-copy" data-u="${esc(a.u)}">Copy link</button></div>`).join('')}</div>`).join('')}</div>`;
+  const hasLooks = every.some(a => a.look);
+  return `<div class="sharebar" id="assets"><div class="eyebrow">Marketing assets · ${all.length}</div>
+    ${hasLooks ? `<div style="margin-top:10px"><span class="small muted">Look</span> <span class="seg" role="group" aria-label="Marketing look">${LOOK_NAMES.map(([k, n]) => `<button data-act="mode" data-v="${k}" aria-pressed="${look === k}">${n}</button>`).join('')}</span></div>
+    <p class="small muted" style="margin:8px 0 0">Every piece is made in all three looks at launch, so switching is instant. The look you pick here is the one you share and print.</p>` : '<p class="small muted" style="margin:6px 0 0">Everything made for this listing. Tap to open, or copy a link to send.</p>'}
+    ${Object.keys(groups).map(g => `<div class="small" style="font-weight:600;margin:16px 0 8px">${esc(g)}</div>${g.startsWith('Print') ? '<p class="small muted" style="margin:-4px 0 8px">Print-ready PDFs. Open the ones you want and send them to your printer or mail house.</p>' : ''}<div class="agrid">${groups[g].map(tile).join('')}</div>`).join('')}
+    <p class="small muted" style="margin-top:14px">Want a change? Tell the Concierge (“swap the postcard photo for the deck”). It’s logged, made, and comes back here for your OK.</p></div>`;
 }
-const SIGN_SETS = { '19917': [['gallery', 'Gallery'], ['noir', 'Noir'], ['daylight', 'Daylight']] }; // printed by source/print/open_house_signs.py
+const SIGN_SETS = { '19917': { editorial: 'noir', arch: 'daylight', heritage: 'heritage' } }; // look → sign style, printed by source/print/open_house_signs.py
 function ohBlock() {
   if (!isStaff()) return '';
   const up = L().openHouses.filter(o => o.status === 'scheduled');
   const nextSat = (() => { const d = new Date(); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7)); return d.toISOString().slice(0, 10); })();
   const opt = (sel) => OH_TIMES.map(([v, t]) => `<option value="${v}" ${v === sel ? 'selected' : ''}>${t}</option>`).join('');
-  const num = (String(street()).match(/^\d+/) || [''])[0], styles = SIGN_SETS[num] || [];
+  const num = (String(street()).match(/^\d+/) || [''])[0], ss = SIGN_SETS[num] || {}, styles = ss[activeLook()] ? [[ss[activeLook()], (LOOK_NAMES.find(x => x[0] === activeLook()) || [, ''])[1]]] : [];
   const signs = styles.length ? `<div style="margin-top:12px"><div class="small" style="font-weight:600">Sign-in signs with QR codes · print-ready</div><div class="chips" style="margin-top:8px">${styles.map(([k, t]) => `<a class="chip" href="https://homes.ranchpnw.com/print/open-house-signs-${num}-${k}.pdf" target="_blank" rel="noopener">${t}</a>`).join('')}</div><p class="small muted" style="margin-top:6px">Letter size, 4 pages each. Guests scan, sign in in about 20 seconds, and land in your Leads.</p></div>` : '<p class="small muted" style="margin-top:12px">No sign-in signs for this home yet. Ask your Concierge to make them.</p>';
   return `<div class="sharebar" id="openhouses"><div class="eyebrow">Open houses</div>${signs}
     ${up.length ? `<div class="list" style="margin-top:10px">${up.map(o => `<div><span aria-hidden="true">●</span><span><b>${esc(o.label)}</b><br><span class="small muted">On the listing page · comes off when it ends</span></span>${caps.mcp ? `<button class="btn text small" data-act="oh-cancel" data-id="${esc(o.id)}">Remove</button>` : ''}</div>`).join('')}</div>` : '<p class="small muted" style="margin:8px 0 0">Nothing scheduled. Add one below when the time is set — it won’t show anywhere until you publish it.</p>'}

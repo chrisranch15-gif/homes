@@ -1,0 +1,97 @@
+[
+{
+"key": "19917",
+"address": "19917 145th St E",
+"contract": "2026-11-24",
+"look": "editorial",
+"items": [
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-editorial-postcard-contract.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-post.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-post.jpg",
+"look": "editorial"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-story.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-story.jpg",
+"look": "editorial"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-square.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-square.jpg",
+"look": "editorial"
+},
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-arch-postcard-contract.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-post.jpg",
+"th": "marketing/thumbs/19917-arch-contract-post.jpg",
+"look": "arch"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-story.jpg",
+"th": "marketing/thumbs/19917-arch-contract-story.jpg",
+"look": "arch"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-square.jpg",
+"th": "marketing/thumbs/19917-arch-contract-square.jpg",
+"look": "arch"
+},
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-heritage-postcard-contract.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-post.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-post.jpg",
+"look": "heritage"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-story.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-story.jpg",
+"look": "heritage"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-square.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-square.jpg",
+"look": "heritage"
+}
+]
+}
+]

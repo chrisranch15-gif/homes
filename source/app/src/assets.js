@@ -47,21 +47,410 @@ const ASSETS = {
 },
 {
 "kind": "Print",
-"t": "Open house signs \u00b7 Daylight",
+"t": "Open house signs",
 "u": "https://homes.ranchpnw.com/print/open-house-signs-19917-daylight.pdf",
-"th": "marketing/thumbs/open-house-signs-19917-daylight.jpg"
+"th": "marketing/thumbs/open-house-signs-19917-daylight.jpg",
+"look": "arch",
+"pick": 1
 },
 {
 "kind": "Print",
-"t": "Open house signs \u00b7 Gallery",
+"t": "Open house signs",
 "u": "https://homes.ranchpnw.com/print/open-house-signs-19917-gallery.pdf",
-"th": "marketing/thumbs/open-house-signs-19917-gallery.jpg"
+"th": "marketing/thumbs/open-house-signs-19917-gallery.jpg",
+"look": "gallery",
+"pick": 1
 },
 {
 "kind": "Print",
-"t": "Open house signs \u00b7 Noir",
+"t": "Open house signs",
+"u": "https://homes.ranchpnw.com/print/open-house-signs-19917-heritage.pdf",
+"th": "marketing/thumbs/open-house-signs-19917-heritage.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Open house signs",
 "u": "https://homes.ranchpnw.com/print/open-house-signs-19917-noir.pdf",
-"th": "marketing/thumbs/open-house-signs-19917-noir.jpg"
+"th": "marketing/thumbs/open-house-signs-19917-noir.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Just Listed postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/postcard-listed.pdf",
+"th": "marketing/thumbs/19917-editorial-postcard-listed.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-editorial-postcard-contract.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighbors\u2019 preview invitation",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/preview-invite.pdf",
+"th": "marketing/thumbs/19917-editorial-preview-invite.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Lookbook",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/lookbook.pdf",
+"th": "marketing/thumbs/19917-editorial-lookbook.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Room story cards",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/room-cards.pdf",
+"th": "marketing/thumbs/19917-editorial-room-cards.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Silent talkers",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/talkers.pdf",
+"th": "marketing/thumbs/19917-editorial-talkers.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Email",
+"t": "Agent-to-agent email",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/agent-email.html",
+"th": "marketing/thumbs/19917-editorial-agent-email.jpg",
+"look": "editorial"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-post.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-post.jpg",
+"look": "editorial"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-story.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-story.jpg",
+"look": "editorial"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/contract-square.jpg",
+"th": "marketing/thumbs/19917-editorial-contract-square.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 1 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-1.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-1.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 2 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-2.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-2.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 3 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-3.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-3.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 4 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-4.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-4.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 5 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-5.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-5.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 6 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-6.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-6.jpg",
+"look": "editorial"
+},
+{
+"kind": "Carousel",
+"t": "Slide 7 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/carousel-7.jpg",
+"th": "marketing/thumbs/19917-editorial-carousel-7.jpg",
+"look": "editorial"
+},
+{
+"kind": "Print",
+"t": "Just Listed postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/postcard-listed.pdf",
+"th": "marketing/thumbs/19917-arch-postcard-listed.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-arch-postcard-contract.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighbors\u2019 preview invitation",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/preview-invite.pdf",
+"th": "marketing/thumbs/19917-arch-preview-invite.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Lookbook",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/lookbook.pdf",
+"th": "marketing/thumbs/19917-arch-lookbook.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Room story cards",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/room-cards.pdf",
+"th": "marketing/thumbs/19917-arch-room-cards.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Silent talkers",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/talkers.pdf",
+"th": "marketing/thumbs/19917-arch-talkers.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Email",
+"t": "Agent-to-agent email",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/agent-email.html",
+"th": "marketing/thumbs/19917-arch-agent-email.jpg",
+"look": "arch"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-post.jpg",
+"th": "marketing/thumbs/19917-arch-contract-post.jpg",
+"look": "arch"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-story.jpg",
+"th": "marketing/thumbs/19917-arch-contract-story.jpg",
+"look": "arch"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/contract-square.jpg",
+"th": "marketing/thumbs/19917-arch-contract-square.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 1 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-1.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-1.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 2 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-2.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-2.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 3 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-3.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-3.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 4 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-4.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-4.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 5 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-5.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-5.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 6 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-6.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-6.jpg",
+"look": "arch"
+},
+{
+"kind": "Carousel",
+"t": "Slide 7 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/carousel-7.jpg",
+"th": "marketing/thumbs/19917-arch-carousel-7.jpg",
+"look": "arch"
+},
+{
+"kind": "Print",
+"t": "Just Listed postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/postcard-listed.pdf",
+"th": "marketing/thumbs/19917-heritage-postcard-listed.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Under contract postcard",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/postcard-contract.pdf",
+"th": "marketing/thumbs/19917-heritage-postcard-contract.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighbors\u2019 preview invitation",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/preview-invite.pdf",
+"th": "marketing/thumbs/19917-heritage-preview-invite.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Lookbook",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/lookbook.pdf",
+"th": "marketing/thumbs/19917-heritage-lookbook.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Room story cards",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/room-cards.pdf",
+"th": "marketing/thumbs/19917-heritage-room-cards.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Silent talkers",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/talkers.pdf",
+"th": "marketing/thumbs/19917-heritage-talkers.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Email",
+"t": "Agent-to-agent email",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/agent-email.html",
+"th": "marketing/thumbs/19917-heritage-agent-email.jpg",
+"look": "heritage"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 post",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-post.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-post.jpg",
+"look": "heritage"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 story",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-story.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-story.jpg",
+"look": "heritage"
+},
+{
+"kind": "Pending",
+"t": "Under contract \u00b7 square",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/contract-square.jpg",
+"th": "marketing/thumbs/19917-heritage-contract-square.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 1 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-1.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-1.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 2 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-2.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-2.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 3 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-3.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-3.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 4 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-4.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-4.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 5 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-5.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-5.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 6 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-6.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-6.jpg",
+"look": "heritage"
+},
+{
+"kind": "Carousel",
+"t": "Slide 7 of 7",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/carousel-7.jpg",
+"th": "marketing/thumbs/19917-heritage-carousel-7.jpg",
+"look": "heritage"
 },
 {
 "kind": "Page",
@@ -157,3 +546,4 @@ const ASSETS = {
 }
 ]
 };
+const ASSET_LOOK = {"19917": "editorial"};   // each listing's launch look (the Desk toggle can switch it)

@@ -21,6 +21,8 @@ for J in "$HOMES"/source/marketing/pieces/*.json; do K=$(basename "$J" .json); M
 # Social posts (designer: social.py; copy: source/marketing/social/<key>-<event>.json), rebuilt when the copy or the design changes
 for J in "$HOMES"/source/marketing/social/*-*.json; do B=$(basename "$J" .json); K=${B%%-*}; EV=${B#*-}; M="$HOMES/marketing/$K/social-$EV.json"
   if [ ! -f "$M" ] || [ "$J" -nt "$M" ] || [ "$HOMES/source/marketing/social.py" -nt "$M" ]; then python3 "$HOMES/source/marketing/social.py" "$K" "$EV" all; fi; done
+# Every caption and slide passes the copy checker (source/checks/copy_rules.json) before it can ship
+python3 "$HOMES/source/checks/copy_check.py" --social
 python3 "$HOMES/source/marketing/build_assets.py"
 SRC=$(mktemp); python3 "$HOMES/source/office/inject_sites.py" "$HOMES/source/office/index.html" "$HOMES/source/office/sites.json" "$SRC"
 

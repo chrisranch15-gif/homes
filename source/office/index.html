@@ -126,6 +126,7 @@ const NET_AGENTS = '~600 agents in 10 offices';
 const KITS = { '19917 145th St E': { brochure: 'https://homes.ranchpnw.com/print/19917-145th-St-E-brochure.pdf', social: ['just-listed-post', 'greenbelt-post', 'inside-1', 'inside-2', 'inside-3', 'inside-4', 'just-listed-story', 'greenbelt-story', 'inside-story'].map(n => 'https://homes.ranchpnw.com/social/' + n + '.jpg') } };
 const caps = { mcp: null, sample: null, db: null };
 const SITES = __SITES__;
+const OFFICE_LAYOUT = __LAYOUT__;   // default section order (source/office/layout.json); Arrange on a device overrides it
 const SOCIAL = __SOCIAL__;   // social posts waiting for Chris's OK, from source/marketing/social.py via build_assets.py
 const PENDING_PACKS = __PENDING__;   // under-contract posts + postcard per listing, from source/marketing/build_assets.py   // generated from source/office/sites.json by source/marketing/build_assets.py; ship.sh fills it in
 const ASSET_BASE = /ranchpnw\.com$/.test(location.hostname) ? 'https://homes.ranchpnw.com/' : '';   // the claude.ai copy ships the thumbnails as its own files
@@ -520,6 +521,7 @@ function checks() {
 }
 function needs() {
   const out = [], sh = S.sheet || {};
+  if (typeof ImproveUI !== 'undefined') ImproveUI.needs().forEach(x => out.unshift(Object.assign({ ico: I.check || I.doc }, x)));
   if (typeof SocialUI !== 'undefined') SocialUI.waiting().forEach(w => { const n = w.posts.length;
     out.unshift({ ico: I.star || I.doc, t: `${w.set.title}: ${n} post${n > 1 ? 's' : ''} ready`, s: `Instagram, Facebook, stories and Google, made in this listing’s look. See each one as it will look, then Approve. Nothing posts until you do.`,
       acts: `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">${w.posts.map(p => `<img src="${esc(ASSET_BASE + p.th[0])}" alt="${esc(p.kind)}" style="width:64px;height:80px;object-fit:cover;border-radius:6px">`).join('')}</div><button class="pill" data-act="socopen" data-k="${esc(w.set.key)}">Review and approve</button>` }); });
@@ -673,6 +675,7 @@ function render() {
     ${biz.soon.length ? `<div class="group" style="margin-top:12px">${biz.soon.map(x => `<div class="row plain"><div class="body"><div class="t">${esc(x.address)}</div><div class="s">${esc(x.side)} · closes ${new Date(x.closing).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div></div></div>`).join('')}</div>` : ''}
     <p class="note">${biz.missingPct ? `Add your commission on ${biz.missingPct} deal${biz.missingPct > 1 ? 's' : ''} to see GCI. ` : ''}Deals live in your Ranch Sheet until KW Command is connected.</p></section>
   </div>
+  ${typeof ImproveUI !== 'undefined' ? `<div style="padding-bottom:96px">${ImproveUI.tools()}</div>` : ''}
   <div class="dock"><form id="tell" autocomplete="off"><input id="tellq" placeholder="Ask your Concierge… “who should I call today?”" aria-label="Ask your Concierge"><button aria-label="Go">${I.up}</button></form></div>`;
 }
 function tile(cls, live, k, s) { return `<div class="tile"><span class="live ${cls}">${esc(live)}</span><span style="font-size:16px;font-weight:500">${esc(k)}</span><span style="font-size:13px;color:var(--muted);line-height:1.4">${esc(s)}</span></div>`; }
@@ -1341,6 +1344,7 @@ function unlockSheet(msg) {
 }
 
 /*__SOCIAL_UI__*/
+/*__IMPROVE_UI__*/
 function socSheet(key) { S.socKey = key; const set = SOCIAL.find(x => x.key === key) || {}, pk = PENDING_PACKS.find(x => x.key === key), card = (pk && pk.items.find(a => a.kind === 'Print' && (!a.look || a.look === pk.look))) || null;
   sheet(`<p class="date">Social · approve to schedule</p><h3>${esc(set.address || key)}</h3><p class="s" style="margin:-4px 0 6px">Each post as it will look. Edit a caption or time if you like, then Approve. Nothing posts until you do.</p>${card ? `<p class="s" style="margin:0 0 6px">For the neighbors: <a href="${esc(card.u)}" target="_blank" rel="noopener">${esc(card.t)}</a> (print-ready).</p>` : ''}<div id="socbody">${SocialUI.html(key)}</div><div class="acts"><button class="pill ghost" data-act="close">Close</button></div>`);
   const c = $('#sheet .card'); if (c) { c.style.maxWidth = '1180px'; c.style.width = 'calc(100vw - 32px)'; c.style.maxHeight = '92vh'; c.style.overflow = 'auto'; } }
@@ -1363,6 +1367,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && Date.now() - (
     catch (err) { S.ready = true; render(); return unlockSheet(err.message === 'locked' ? '' : 'Couldn’t reach your engine: ' + err.message); }
   }
   S.ready = true;
+  if (typeof ImproveUI !== 'undefined') { ImproveUI.init({ call: tool, toast, sheet, close, where: 'Office', office: S.officeMode, render: () => render(), wrap: () => $('#root .wrap') }); const __r = render; render = function () { __r(); ImproveUI.arrange($('#root .wrap')); }; }
   if (typeof SocialUI !== 'undefined') SocialUI.init({ call: tool, toast, base: ASSET_BASE, where: 'Office', render: () => { const b = $('#socbody'); if (b) b.innerHTML = SocialUI.html(S.socKey); render(); } });
   if (caps.mcp) loadAll(); else render();
 })();

@@ -72,3 +72,12 @@ the Desk (Marketing assets → Look). Every piece is built in all three looks so
   link | Note). The hourly "Listing marketing" task copies the facts to `source/marketing/pieces/review/<key>.json`, applies the change,
   renders `--review` into `marketing/<key>/review/<look>/`, sets Ready + link; Chris taps Approve or Not quite in the Office; Approved
   replaces the live piece (copy the review JSON over, rebuild, ship) and the row becomes Done.
+
+## The self-improving loop (Nov 25, 2026)
+Every scheduled job follows a playbook in `source/playbooks/` (see its README for the list and the loop), plus
+`locked-rules.md` and `improve.md`. Sheet tabs: Papercuts, Edits, Seller questions, Seller check-ins, Portal notes,
+Improvement review, Deal history, Usage, Research. Shared UI: `source/app/src/improve.js` (weekly review, Something's off,
+Seller asked…, seller questions, Arrange, usage) is built into the Desk by `build.py` and into the Office by
+`inject_sites.py` (`/*__IMPROVE_UI__*/`, `__LAYOUT__` from `source/office/layout.json`). The copy checker
+(`source/checks/copy_check.py`, rules in `copy_rules.json`) runs in ship.sh on every social caption. The seller portal's
+"Ask Chris", "Good to know" notes and "How am I doing?" need the engine (`source/apps-script/Code.gs`) deployed.

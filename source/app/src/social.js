@@ -105,6 +105,8 @@ const SocialUI = (() => {
       const row = [new Date().toLocaleString('en-US', { timeZone: TZ }), set.key, set.event, p.id, p.network, when, 'Scheduled · approved by Chris in the ' + (H.where || 'Office'), link];
       (log = log || []).push(row); s.busy = false; s.edit = false;
       H.call('Google Sheets', 'append_values', { spreadsheetId: SHEET, range: `'${TAB}'!A1`, values: [row] }).catch(() => {});
+      if (text.trim() !== String(p.caption || '').trim()) H.call('Google Sheets', 'append_values', { spreadsheetId: SHEET, range: "'Edits'!A1", values: [[row[0], H.where || 'Office', 'caption', NET[p.network] || p.network, p.caption, text, set.key, set.event + ' · ' + p.id]] }).catch(() => {});
+      if (when !== p.when) H.call('Google Sheets', 'append_values', { spreadsheetId: SHEET, range: "'Edits'!A1", values: [[row[0], H.where || 'Office', 'post time', NET[p.network] || p.network, p.when, when, set.key, set.event + ' · ' + p.id]] }).catch(() => {});
       H.toast(`${NET[p.network] || p.network}: scheduled for ${nice(when)}.`);
     } catch (x) { s.busy = false; s.err = 'Metricool said: ' + ((x && (x.message || x.code)) || 'it couldn’t schedule this') + '. Nothing was posted.'; }
     H.render();

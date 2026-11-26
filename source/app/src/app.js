@@ -770,8 +770,8 @@ function desk() {
   const s = l.saved;
   return deskShell('desk', `<div class="narrow" style="padding:0">
   <p class="say">${pendingDeal() ? 'Under contract' + (pendingDeal()[13] ? ', closing ' + new Date(pendingDeal()[13] + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '') + '.' : esc(lead)} ${n <= 3 ? words[n] : n + ' decisions are yours.'}</p>
-  ${pendingDeal() ? dealBlock() + tcBlock() + offerBlock() + sellerBlock() + tellBlock() + assetsBlock() + shareBar() + showBlock() + `<div style="opacity:.6">${ohBlock()}</div>` + photoBlock()
-    : offerBlock() + tcBlock() + sellerBlock() + shareBar() + ohBlock() + assetsBlock() + showBlock() + tellBlock() + photoBlock()}
+  ${pendingDeal() ? dealBlock() + tcBlock() + offerBlock() + sellerBlock() + improveBlock() + tellBlock() + assetsBlock() + shareBar() + showBlock() + `<div style="opacity:.6">${ohBlock()}</div>` + photoBlock()
+    : offerBlock() + tcBlock() + sellerBlock() + improveBlock() + shareBar() + ohBlock() + assetsBlock() + showBlock() + tellBlock() + photoBlock()}
 
   ${n ? `<div class="decisions">${ds.slice(0, 2).map(decisionCard).join('')}</div>${n > 2 ? `<details style="margin-top:20px"><summary class="btn ghost" style="display:inline-flex">${n - 2} more</summary><div class="decisions" style="margin-top:20px">${ds.slice(2).map(decisionCard).join('')}</div></details>` : ''}`
     : `<div class="decision" style="margin-top:40px"><div class="t">All quiet. The Concierge is handling the rest.</div><div class="d">You’ll see something here only when a fact conflicts, a judgment call is needed, a connection breaks, or pricing and contracts are involved.</div></div>`}
@@ -1446,5 +1446,6 @@ render();
 if (SITE && SITE.api) fetch(SITE.api + '?api=layout&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.ok && (d.order.length || d.hidden.length || d.featured.length)) { applyLayout(d); render(); } }).catch(() => {});
 if (SITE && SITE.api) fetch(SITE.api + '?api=openhouses&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.rows) { applyOpenHouses(d.rows); render(); } }).catch(() => {});
 if (window.claude && claude.use) connect();
+if (typeof ImproveUI !== 'undefined') ImproveUI.init({ call: callTool, render: () => render(), toast, sheet, close: closeSheet, where: 'Desk', home: street() });
 if (typeof SocialUI !== 'undefined') SocialUI.init({ call: callTool, render: () => render(), toast, base: '', where: 'Desk' });
 }

@@ -742,3 +742,14 @@ Object.assign(FORMS, {
 });
 document.addEventListener('change', e => { if (e.target && e.target.id === 'lm-w') { const r = e.target.selectedOptions[0].dataset.reach, i = document.getElementById('lm-r'); if (i && r && !i.value) i.value = r; } });
 
+
+/* ---------- seller questions and the improvement tools for this home (source/app/src/improve.js) ---------- */
+function improveBlock() {
+  if (!isStaff() || typeof ImproveUI === 'undefined') return '';
+  const items = ImproveUI.needs().filter(x => !/^Weekly review/.test(x.t)), qs = ImproveUI.questionsFor(street());
+  const recent = qs.filter(x => x.r[4]).slice(-4).reverse();
+  return `<div class="sharebar" id="sellerq"><div class="eyebrow">Seller questions</div>
+    ${items.length ? items.map(x => `<div style="margin-top:12px"><div class="small" style="font-weight:600">${esc(x.t)}</div><div class="small muted" style="margin:4px 0 8px">${esc(x.s)}</div>${x.acts}</div>`).join('') : '<p class="small muted" style="margin:6px 0 0">Nothing waiting. Sellers ask in their portal (“Ask Chris”); facts from the contract are answered for you, anything else comes here.</p>'}
+    ${recent.length ? `<details style="margin-top:12px"><summary class="small muted" style="cursor:pointer">Recent questions (${recent.length})</summary>${recent.map(x => `<p class="small" style="margin:8px 0 0">“${esc(x.r[4])}”<br><span class="muted">${esc(x.r[6] || 'Not answered yet')}</span></p>`).join('')}</details>` : ''}
+    ${ImproveUI.tools()}</div>`;
+}

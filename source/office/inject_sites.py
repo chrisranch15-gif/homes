@@ -4,7 +4,10 @@ s = open(sys.argv[1]).read().replace('__SITES__', json.dumps(json.load(open(sys.
 import os
 pj = os.path.join(os.path.dirname(sys.argv[2]), 'pending.json')
 s = s.replace('__PENDING__', json.dumps(json.load(open(pj)) if os.path.exists(pj) else []), 1)
+lj = os.path.join(os.path.dirname(sys.argv[2]), 'layout.json')
+s = s.replace('__LAYOUT__', json.dumps(json.load(open(lj)) if os.path.exists(lj) else {}), 1)
 sj = os.path.join(os.path.dirname(sys.argv[2]), 'social.json')
 s = s.replace('__SOCIAL__', json.dumps(json.load(open(sj)) if os.path.exists(sj) else []), 1)
+s = s.replace('/*__IMPROVE_UI__*/', open(os.path.join(os.path.dirname(sys.argv[2]), '..', 'app', 'src', 'improve.js')).read(), 1)
 s = s.replace('/*__SOCIAL_UI__*/', open(os.path.join(os.path.dirname(sys.argv[2]), '..', 'app', 'src', 'social.js')).read(), 1)
 open(sys.argv[3], 'w').write(s)

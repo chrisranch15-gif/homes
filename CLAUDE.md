@@ -32,7 +32,7 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
    (`RUNWAYML_API_SECRET`) or the owner's own accounts, pasted by Chris himself.
 
 **Privacy**
-4. Sellers never see buyer's-agent names or contact details, and buyer's agents never see seller information.
+4. Sellers never see the buyer's, buyer's agent's or buyer's lender's names or contact details (if asked: "I'll reach out to them for you"), and buyer's agents never see seller information.
    The seller portal gets only "Showing schedule"; agent details stay in "Showing agents" for Chris.
 5. Launch plans and CMAs are private: unlisted pages, never emailed by the system, never in the sitemap.
 6. Chris's email address never goes in public source. His direct line (253) 335-5630 is approved for marketing;
@@ -73,6 +73,15 @@ Photo shoots, Shoot photos, Hub done, …). The Sheet ID and endpoints are not s
 19. The Office and the Desk always match everywhere, the same session (Chris's call: office.ranchpnw.com is the copy he may license
     to other agents). Every change to `source/office/` or `source/app/` ships with `bash source/office/ship.sh`, then push both
     repos (homes and chrisranch15-gif/office) and publish both claude.ai artifacts. No batching, no separate update cadence.
+
+**The self-improving loop** (Chris, Nov 25, 2026)
+20. Every recurring agent job follows a playbook in `source/playbooks/` (the scheduled task only points to it), plus
+    `source/playbooks/locked-rules.md` and `source/playbooks/improve.md`: file papercuts, save Chris's edits, run the
+    copy checker (`source/checks/copy_check.py`) on client-facing words, keep quiet hours (nothing reaches a client
+    8 PM–8 AM). Locked rules are changed only by Chris, in his own words. Playbooks change only through an approved
+    weekly-review item or a build session with Chris, and every change is tested against `source/playbooks/tests/`.
+21. One unlock (Chris, Nov 25, 2026): factual answers to a seller's "Ask Chris" question may appear in that seller's
+    portal without his approval, per `source/playbooks/seller-answers.md` only. Everything else still waits for him.
 
 ## For plugins and other agents
 - Extend, don't fork: add a new tab, function or plan file rather than rewriting working pieces.

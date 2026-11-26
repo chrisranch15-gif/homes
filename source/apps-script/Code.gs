@@ -34,7 +34,11 @@ const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
 const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day', 'Closed on', 'Emails', 'Settlement statement'];   // I: sellers' emails (private, for Chris's drafts) · J: Drive link to the final settlement statement, shared with the sellers
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
-const TIMELINE_HEADERS = ['Date', 'Home', 'Milestone', 'Note', 'Status'];   // seller-safe deal dates, published from the Office; never buyer-agent details
+const TIMELINE_HEADERS = ['Date', 'Home', 'Milestone', 'Note', 'Status'];
+// the improvement loop (source/playbooks/): sellers' "Ask Chris" questions, their check-ins, and approved "get ahead" notes
+const QUESTION_HEADERS = ['When asked', 'Seller code', 'Home', 'Stage', 'Question', 'Kind', 'Answer', 'Answered by', 'Status', 'Answered at', 'Source of the answer'];
+const CHECKIN_HEADERS = ['When', 'Seller code', 'Home', 'Stage', 'How are we doing? (1-5)', 'Their words'];
+const NOTE_HEADERS = ['Stage (listed / pending / closed)', 'From day', 'Title', 'Text', 'Active'];   // seller-safe deal dates, published from the Office; never buyer-agent details
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
 const SHOWING_HEADERS = ['When', 'Home', 'Interest', 'Feedback'];
 const MARKET_HEADERS = ['Month', 'Home', 'Area', 'Median sold price', 'Homes sold', 'Active listings', 'Median days on market', 'Months of inventory', 'Sale-to-list %', 'Source'];
@@ -90,6 +94,12 @@ function doPost(e) {
   if (d.website) return out_({ ok: true });               // hidden field: bots only
   if (type === 'seller-prep') return out_(sellerPrep_(d));
   if (type === 'seller-facts') return out_(sellerFacts_(d));
+  if (type === 'seller-checkin') {                         // "How are we doing?" from the portal: private to Chris, feeds the weekly review
+    const sel = seller_(d.code); if (!sel) return out_({ ok: false, reason: 'Please sign in again.' });
+    const score = Math.max(1, Math.min(5, Number(d.score) || 0)) || '';
+    tab_('Seller check-ins', CHECKIN_HEADERS).appendRow([new Date(), sel.code, sel.home, clean_(d.stage, 40), score, clean_(d.words, 1000)]);
+    return out_({ ok: true });
+  }
   if (type === 'open-house-notes' || type === 'open-house-feedback') {   // guest feedback: private to Chris; he decides what the sellers see
     const home = clean_(d.listing, 80), fb = clean_(d.feedback, 1200);
     if (!home || !fb) return out_({ ok: false, reason: 'Nothing to save' });
@@ -114,6 +124,7 @@ function doPost(e) {
   if (type === 'seller-message') {
     const sel = seller_(d.code); if (!sel) return out_({ ok: false, reason: 'Please sign in again.' });
     tab_('Leads', LEAD_HEADERS).appendRow([new Date(), t.label, sel.names, '', '', v.question, sel.home, sel.page, 'seller portal', 'New']);
+    tab_('Seller questions', QUESTION_HEADERS).appendRow([new Date(), sel.code, sel.home, '', v.question, '', '', '', 'New', '', '']);   // answered by Chris or, for contract facts, per seller-answers.md
     try { GmailApp.sendEmail(AGENT_EMAIL, 'Message from ' + sel.names + ' \u00b7 ' + sel.home, v.question, { htmlBody: shell_('<p style="margin:0 0 6px;font:12px Arial;letter-spacing:.18em;color:#8C6A43;text-transform:uppercase">From your seller portal</p><h1 style="font:400 28px/1.2 Georgia,serif;margin:0 0 14px">' + esc_(sel.names) + '</h1><p style="font:16px/1.65 Arial">' + esc_(v.question) + '</p>'), name: 'Ranch Leads' }); } catch (err) { console.error(err); }
     return out_({ ok: true });
   }
@@ -571,8 +582,25 @@ function sellerView_(code) {
     showings: pick('Showings', SHOWING_HEADERS, r => ({ at: new Date(r[0]).getTime(), interest: String(r[2]), feedback: String(r[3]) })),
     portals: latest_(tab_('Portals', PORTAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 2, r => ({ at: new Date(r[0]).getTime(), site: String(r[2]), views: num_(r[3]), saves: num_(r[4]), notes: String(r[5] || '') })),
     market: tab_('Market', MARKET_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home || String(r[1]) === '*').map(r => ({ month: r[0] instanceof Date ? Utilities.formatDate(r[0], 'America/Los_Angeles', 'yyyy-MM') : String(r[0]).slice(0, 7), area: String(r[2]), median: num_(r[3]), sold: num_(r[4]), active: num_(r[5]), dom: num_(r[6]), moi: num_(r[7]), stl: num_(r[8]), source: String(r[9] || '') })).sort((a, b) => a.month < b.month ? -1 : 1),
+    questions: sellerQuestions_(sel.code), notes: portalNotes_(), checkins: tab_('Seller check-ins', CHECKIN_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]).toUpperCase() === sel.code).map(r => String(r[3] || '')),
     social: latest_(tab_('Social', SOCIAL_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home), 4, r => ({ at: new Date(r[0]).getTime(), network: String(r[2]), posted: r[3] ? new Date(r[3]).getTime() : null, url: String(r[4]), image: String(r[5] || ''), reach: num_(r[6]), views: num_(r[7]), interactions: num_(r[8]), clicks: num_(r[9]), spend: num_(r[10]), paidReach: num_(r[11]) })),
     at: now };
+}
+
+// a seller's own questions and the answers they may see. Quiet hours: an answer written 8 PM–8 AM Pacific shows from 8 AM.
+function sellerQuestions_(code) {
+  const now = new Date();
+  const visible = at => { if (!at) return false; const t = new Date(at), h = Number(Utilities.formatDate(t, 'America/Los_Angeles', 'H'));
+    if (h >= 8 && h < 20) return true; const next = new Date(t.getTime() + (h >= 20 ? 24 * 36e5 : 0)), day = Utilities.formatDate(next, 'America/Los_Angeles', 'yyyy-MM-dd');
+    return Utilities.formatDate(now, 'America/Los_Angeles', 'yyyy-MM-dd HH') >= day + ' 08'; };
+  return tab_('Seller questions', QUESTION_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[1]).toUpperCase() === code)
+    .map(r => { const ok = /^(answered|fixed)/i.test(String(r[8])) && visible(r[9]); return { at: new Date(r[0]).getTime(), q: String(r[4]), a: ok ? String(r[6]) : '', pending: !ok }; })
+    .sort((a, b) => b.at - a.at).slice(0, 20);
+}
+// "get ahead" notes Chris approved in the weekly review: shown to every seller at that stage
+function portalNotes_() {
+  return tab_('Portal notes', NOTE_HEADERS).getDataRange().getValues().slice(1).filter(r => r[2] && r[3] && !/^no/i.test(String(r[4] || 'yes')))
+    .map(r => ({ stage: String(r[0]).toLowerCase(), from: Number(r[1]) || 0, title: String(r[2]), text: String(r[3]) }));
 }
 
 function num_(v) { const n = Number(String(v == null ? '' : v).replace(/[^\d.]/g, '')); return String(v) === '' || isNaN(n) ? null : n; }

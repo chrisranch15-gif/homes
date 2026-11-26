@@ -1,0 +1,19 @@
+{
+ "_note": "Rules for client-facing words (CLAUDE.md rules 6, 7, 16, 17 and locked-rules.md). The weekly review may add a rule here with Chris's approval. level: error (must fix) or warn (look again). kinds: which kinds of text the rule applies to (caption, client, pro, portal, print); missing = all.",
+ "agent_phone": "(253) 335-5630",
+ "rules": [
+  {"id": "ai-credit", "level": "error", "kinds": ["caption", "client", "portal", "print"], "pattern": "\\b(AI|A\\.I\\.|artificial intelligence|ChatGPT|Claude|chatbot|bot|automated|automation|our system|the system|algorithm)\\b", "flags": "", "why": "Client-facing words never credit AI, a system or automation (rule 16)."},
+  {"id": "other-phone", "level": "error", "kinds": ["caption", "client", "portal", "print"], "pattern": "\\(?\\b\\d{3}\\)?[ .-]?\\d{3}[ .-]?\\d{4}\\b", "allow": ["(253) 335-5630", "253-335-5630", "253.335.5630", "2533355630"], "why": "Only Chris's direct line goes in marketing and client messages; never the office line or anyone else's number."},
+  {"id": "email-address", "level": "error", "kinds": ["caption", "portal", "print"], "pattern": "[\\w.+-]+@[\\w-]+\\.[\\w.]+", "why": "No email addresses in posts, print or portal answers (Chris's address never in public; nobody else's contact details)."},
+  {"id": "contact-handoff", "level": "error", "kinds": ["portal"], "pattern": "\\b(lender|buyer'?s agent|buyers'? agent|the buyers?)\\b[^.]{0,60}\\b(phone|number|email|reach (him|her|them) at|call (him|her|them) at)\\b", "flags": "i", "why": "Sellers never get the buyer's, buyer's agent's or lender's contact details (locked rule 3)."},
+  {"id": "wires", "level": "error", "kinds": ["caption", "client", "portal", "print"], "pattern": "\\b(wire instructions|wiring instructions|routing number|account number)\\b", "flags": "i", "why": "Never give or confirm wiring details (locked rule 8). Escrow sends them to the buyer."},
+  {"id": "cliche", "level": "warn", "kinds": ["caption", "client", "print", "portal"], "pattern": "\\b(dream home|won'?t last|must see|nestled|boasts|turn[- ]key|priced to sell|act fast|hidden gem|oasis)\\b", "flags": "i", "why": "Specific beats superlative (copy brief)."},
+  {"id": "exclaim", "level": "warn", "kinds": ["caption", "client", "portal", "print"], "pattern": "!{2,}", "why": "No exclamation-mark runs."},
+  {"id": "offers", "level": "error", "kinds": ["caption", "print"], "pattern": "\\b(multiple offers|bidding war|\\d+ offers|over asking|above asking)\\b", "flags": "i", "why": "No offer counts or price talk in posts unless Chris says so (copy brief)."},
+  {"id": "placeholder", "level": "error", "pattern": "\\[(Chris:|TODO|TBD|name|amount|address)[^\\]]*\\]", "flags": "i", "kinds": ["caption", "portal", "print"], "why": "A placeholder is still in the text."}
+ ],
+ "require": [
+  {"id": "kw-disclosure", "level": "error", "kinds": ["print"], "pattern": "Keller Williams", "why": "Printed pieces carry the brokerage disclosure (rule 7)."}
+ ],
+ "long_sentence_words": 38
+}

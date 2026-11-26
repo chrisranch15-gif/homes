@@ -1,0 +1,539 @@
+{
+ "slug": "fife",
+ "name": "Fife",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-25",
+ "review": "https://claude.ai/artifact/ELWp1FMn6pEZ7Jg549wnDC",
+ "headline": "Fife: a valley city on I-5, between Tacoma and the Port of Tacoma.",
+ "lede": "Fife sits in the Puyallup River valley east of Tacoma and south of the Port of Tacoma, with Milton and Edgewood up the hill to the east and I-5 running through the middle. This guide covers getting around, parks and trails, schools, everyday errands, housing and city plans, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Fife, Washington",
+   "https://en.wikipedia.org/wiki/Fife,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Fife city, Washington",
+   "https://www.census.gov/quickfacts/fact/table/fifecitywashington/PST045224"
+  ],
+  "about": [
+   "City of Fife · About Fife",
+   "https://www.fifewa.gov/739/About-Fife"
+  ],
+  "dacca": [
+   "City of Fife · Dacca Park",
+   "https://www.fifewa.gov/668/Dacca-Park"
+  ],
+  "engine": [
+   "City of Fife · Fife Engine & Caboose",
+   "https://www.fifewa.gov/409/Fife-Engine-Caboose"
+  ],
+  "trails": [
+   "City of Fife · Trails",
+   "https://www.fifewa.gov/502/Trails"
+  ],
+  "brook": [
+   "ParentMap · Brookville Gardens Community Park in Fife",
+   "https://www.parentmap.com/article/new-park-brookville-community-gardens-fife-kids-play"
+  ],
+  "colburn": [
+   "City of Fife · Support Phase 2 of Colburn Park",
+   "https://www.fifewa.gov/597/Support-Phase-2-of-Colburn-Park"
+  ],
+  "aquatic": [
+   "City of Fife · Aquatic Center",
+   "https://www.fifewa.gov/150/Aquatic-Center"
+  ],
+  "center": [
+   "City of Fife · Fife Community Center",
+   "https://www.fifewa.gov/500/Fife-Community-Center"
+  ],
+  "citycenter": [
+   "City of Fife · City Center",
+   "https://www.fifewa.gov/232/City-Center"
+  ],
+  "comp": [
+   "City of Fife · Comprehensive Plan",
+   "https://www.fifewa.gov/245/Comprehensive-Plan"
+  ],
+  "police": [
+   "City of Fife · Police Department",
+   "https://www.fifewa.gov/273/Police-Department"
+  ],
+  "fire": [
+   "City of Tacoma · About the Tacoma Fire Department",
+   "https://cityoftacoma.org/government/city_departments/fire/About"
+  ],
+  "library": [
+   "Washington 211 · Pierce County Library Fife",
+   "https://search.wa211.org/search/078ba4aa-2fc8-5502-b329-cca415f1486f"
+  ],
+  "fifesd": [
+   "Wikipedia · Fife Public Schools",
+   "https://en.wikipedia.org/wiki/Fife_Public_Schools"
+  ],
+  "fifebound": [
+   "Fife Public Schools · Elementary Boundary Review",
+   "https://district.fifeschools.com/district/district_information/elementary_boundary_review/"
+  ],
+  "psd": [
+   "Wikipedia · Puyallup School District",
+   "https://en.wikipedia.org/wiki/Puyallup_School_District"
+  ],
+  "psdmaps": [
+   "Puyallup School District · District Maps",
+   "https://www.puyallupsd.org/about-us/district-maps"
+  ],
+  "tdle": [
+   "Sound Transit · Tacoma Dome Link Extension",
+   "https://www.soundtransit.org/tdlink"
+  ],
+  "tdletime": [
+   "Sound Transit · Tacoma Dome Link Extension timeline and milestones",
+   "https://soundtransit.org/system-expansion/tacoma-dome-link-extension/timeline-milestones"
+  ],
+  "tdlefife": [
+   "Sound Transit · Tacoma Dome Link Extension online open house: Fife",
+   "https://tdlink.participate.online/fife/"
+  ],
+  "sr167": [
+   "WSDOT · SR 167 Completion Project",
+   "https://wsdot.wa.gov/construction-planning/search-projects/sr-167-completion-project"
+  ],
+  "sr167open": [
+   "WSDOT · Opening Sept. 13: First section of SR 167 Expressway in north Pierce County",
+   "https://wsdot.wa.gov/about/news/2026/opening-sept-13-first-section-sr-167-expressway-north-pierce-county-0"
+  ],
+  "pt501": [
+   "Pierce Transit · Route 501",
+   "https://www.piercetransit.org/route-501-milton-tacoma"
+  ],
+  "dome": [
+   "Wikipedia · Tacoma Dome station",
+   "https://en.wikipedia.org/wiki/Tacoma_Dome_station"
+  ],
+  "fwlink": [
+   "Wikipedia · Federal Way Downtown station",
+   "https://en.wikipedia.org/wiki/Federal_Way_Transit_Center"
+  ],
+  "port": [
+   "Wikipedia · Port of Tacoma",
+   "https://en.wikipedia.org/wiki/Port_of_Tacoma"
+  ],
+  "eqc": [
+   "Wikipedia · Emerald Queen Casino",
+   "https://en.wikipedia.org/wiki/Emerald_Queen_Casino"
+  ],
+  "milton": [
+   "Wikipedia · Milton, Washington",
+   "https://en.wikipedia.org/wiki/Milton,_Washington"
+  ],
+  "edgewood": [
+   "Wikipedia · Edgewood, Washington",
+   "https://en.wikipedia.org/wiki/Edgewood,_Washington"
+  ],
+  "tacoma": [
+   "Wikipedia · Tacoma, Washington",
+   "https://en.wikipedia.org/wiki/Tacoma,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "10,999",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "1957",
+   "incorporated as a city, February 11",
+   "wiki"
+  ],
+  [
+   "5.76 sq mi",
+   "of land (2020)",
+   "census"
+  ],
+  [
+   "26.9 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "10,999 at the 2020 census; estimated 11,061 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "February 11, 1957, with about 850 residents",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "In North Pierce County, with the Port of Tacoma to the north and Milton and Edgewood to the east",
+   "about"
+  ],
+  [
+   "Main road",
+   "I-5 runs through the city; it opened through Fife on October 10, 1962, replacing the Pacific Highway (US 99)",
+   "wiki"
+  ],
+  [
+   "School districts",
+   "Most of the city is in Fife Public Schools; a large southeastern portion is in the Puyallup School District",
+   "about"
+  ],
+  [
+   "Land history",
+   "The 1854 Medicine Creek Treaty created the Puyallup Indian Reservation, which was later expanded to include modern-day Fife",
+   "wiki"
+  ],
+  [
+   "Government",
+   "Council–manager, with a seven-member elected City Council",
+   "about"
+  ],
+  [
+   "Distances",
+   "The City lists the Tacoma Dome at 2 miles, Sea-Tac Airport at 13 miles and Seattle at 28 miles",
+   "about"
+  ],
+  [
+   "Light rail",
+   "A Fife station is planned on Sound Transit’s Tacoma Dome Link Extension, with start of service listed for 2035",
+   "tdletime"
+  ]
+ ],
+ "notes": [
+  "Land area differs by source: the Census Bureau gives 5.76 square miles (2020), Wikipedia gives 5.83 square miles of land (5.97 total), and the City says roughly 5.7 square miles. This guide uses the Census figure.",
+  "The Census QuickFacts page as fetched showed a July 1, 2025 estimate of 11,061 and 2020–2024 survey figures; Wikipedia still shows a 2023 estimate of 10,723. This guide uses the newer Census figures, which the City also quotes.",
+  "Light rail timing is not final. Sound Transit lists start of service in 2035, with a Final EIS expected in 2027, after which the Board selects the project to be built. The Fife station site is the preferred alternative only, and the Fife parking garage is deferred until more funding is found.",
+  "WSDOT gives two end dates for the SR 167 Completion Project: its news release says the remaining 4 miles are scheduled to open in June 2029, while the project page lists expected completion in 2030, with some work continuing into that year. Tolling on the new section was announced to start in December 2026.",
+  "Brookville Gardens Community Park’s address is 6512 Valley Ave. E. on the City’s trails page and 6518 Valley Ave. E. in ParentMap; the 15-acre size comes from ParentMap only, because the City’s park list would not load. The guide gives the street name without a number.",
+  "The City’s trails page gives the Interurban Trail as 19.1 miles from Fife to Tukwila; TrailLink (cited in the Edgewood guide) gives about 14.8 miles for the main paved trail. The City figure is shown here.",
+  "The City’s About page names the groups of settlers who first farmed the area; that detail is left out because these guides describe places rather than people.",
+  "Several pages could not be read or did not state facts, so these angles were left out: utility providers (the City’s utility FAQ was blocked), the City’s park list and zoning page (server errors), the History Museum page (redirect blocked), the Fife High School Wikipedia page (not found), and whether Pierce Transit Route 500’s Pacific Highway stops are inside Fife.",
+  "The Fife Community Center page lists 2111 54th Ave. E. for the center and 5411 23rd Street East under its general contact block (which appears to be the City’s main address); the guide uses 2111 54th Ave. E."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "I-5 runs through the middle of Fife, and the first section of the new SR 167 Expressway opened here in September 2026. Census figures put the mean travel time to work for Fife residents at 26.9 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "I-5",
+     "Interstate 5 bisects the city. It opened through Fife on October 10, 1962, replacing the Pacific Highway (US 99), and its opening led to commercial growth in the city.",
+     "wiki"
+    ],
+    [
+     "SR 167 Expressway, first section",
+     "A 2-mile section between I-5 in Fife and SR 509 near the Port of Tacoma opened on September 13, 2026, with an exit and a new roundabout at 54th Avenue East. Tolling was set to start in December, at $1 per direction with a Good To Go! pass.",
+     "sr167open"
+    ],
+    [
+     "SR 167 Completion Project",
+     "WSDOT is building 6 new miles of tolled highway between Puyallup and the Port of Tacoma, including a new diverging diamond interchange over I-5. The stage between Puyallup and I-5 is expected to open in 2029, with full completion listed for 2030.",
+     "sr167"
+    ],
+    [
+     "Wapato Way East Bridge",
+     "The new Wapato Way East Bridge over I-5 opened in June 2021, replacing the old 70th Avenue East Bridge, as the first stage of the SR 167 work.",
+     "sr167"
+    ],
+    [
+     "Future Fife light rail station",
+     "Sound Transit’s preferred Fife station would sit west of 59th Avenue East between 15th Street East and 12th Street East, with bus stops and parking. It is projected to serve 2,080 daily riders by 2042.",
+     "tdlefife"
+    ],
+    [
+     "Tacoma Dome Link Extension",
+     "About 8.5 miles of mostly elevated light rail between Federal Way and Tacoma, with stations planned in the South Federal Way, Fife, East Tacoma and Tacoma Dome areas. The project is in environmental review.",
+     "tdle"
+    ],
+    [
+     "Pierce Transit Route 501",
+     "Runs between Commerce Street Station in Tacoma and Federal Way Downtown Station, with timed stops on 20th Street East at 51st and 54th avenues East, and on 70th Avenue East on weekdays. Trips run roughly once an hour.",
+     "pt501"
+    ],
+    [
+     "Tacoma Dome Station",
+     "The City puts the Tacoma Dome 2 miles away. The station has 13 weekday Sounder S Line round trips to Seattle’s King Street Station, Amtrak service, the T Line and 2,283 parking spaces in two garages.",
+     "dome"
+    ],
+    [
+     "Link light rail at Federal Way",
+     "Federal Way Downtown station became the southern end of the Link 1 Line on December 6, 2025, about 16 minutes from SeaTac/Airport. It is Pierce Transit’s northernmost hub, with local routes to Tacoma, Fife and Milton.",
+     "fwlink"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Fife’s parks sit along the valley floor, with paved trails that link parks to the library, a 3-mile nature trail and a connection to the Interurban Trail.",
+   "dark": false,
+   "items": [
+    [
+     "Dacca Park",
+     "At 2820 54th Avenue East, with a play area, basketball, tennis and pickleball courts, a sand volleyball court, walking trails, an off-leash dog park with a pond, and the nearby Dacca Park Sports Complex.",
+     "dacca"
+    ],
+    [
+     "Engine 684",
+     "An ALCO locomotive built in July 1968 is on permanent display at the Fife History Museum in Dacca Park. It hauled log trains to the Port of Tacoma from 1980 to 1992; only four of its kind survive.",
+     "engine"
+    ],
+    [
+     "Brookville Gardens Community Park",
+     "A 15-acre park on Valley Avenue East, entered over a bridge across Wapato Creek. It has 19 rain gardens, green-roofed shelters, a playground, a central field and a walking loop of more than a mile.",
+     "brook"
+    ],
+    [
+     "Hylebos Nature Trail",
+     "A 3-mile trail at 5802 4th Street East.",
+     "trails"
+    ],
+    [
+     "Interurban Trail",
+     "Reached from 70th Avenue East, the City describes it as a wide, paved trail running 19.1 miles from Fife to Tukwila.",
+     "trails"
+    ],
+    [
+     "Neighborhood trails",
+     "Paved trails include the Sheffield Trail (0.68 miles, from Brookville Park to the library), the Levee Pond Trail (0.44 miles, at 7400 48th Street East) and the Five Acre Park Trail (about 0.44 miles).",
+     "trails"
+    ],
+    [
+     "Colburn Park",
+     "The park’s next phase is planned to bring Fife its first universally accessible playground, with inclusive swings, covered picnic areas and better parking. Construction is planned to begin in 2027.",
+     "colburn"
+    ],
+    [
+     "Fife Aquatic Center",
+     "At 5410 20th Street East, with a lap pool and a teaching pool used for lessons, recreation swims and private rentals.",
+     "aquatic"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Fife is in Fife Public Schools, and a large southeastern portion is in the Puyallup School District. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Fife Public Schools",
+     "Established on December 22, 1899, with its district office at 5802 20th Street East in Fife. It reported 3,799 students in 2020–2021.",
+     "fifesd"
+    ],
+    [
+     "Grade levels",
+     "Discovery Primary (K–2), Fife Elementary (K–5), Hedden Elementary (3–5), Surprise Lake Middle School (6–7), Columbia Junior High (8–9) and Fife High School (10–12).",
+     "fifesd"
+    ],
+    [
+     "Area served",
+     "Most of Fife, all of Fife Heights and parts of Milton, Edgewood and Tacoma in Pierce County, plus most of Milton’s King County portion and parts of Lakeland South and Pacific.",
+     "fifesd"
+    ],
+    [
+     "Elementary boundary review",
+     "Fife Public Schools reviewed elementary attendance areas in fall 2020 to prepare for the new Fife Elementary School; secondary boundaries were not affected. The district points families to a school locator map.",
+     "fifebound"
+    ],
+    [
+     "Puyallup School District",
+     "Includes portions of Fife along with most of Puyallup and Edgewood, with 22 elementary schools and seven junior highs. High schools include Puyallup, Rogers and Emerald Ridge, plus the alternative E.B. Walker High School.",
+     "psd"
+    ],
+    [
+     "Finding an assigned school",
+     "The Puyallup School District posts elementary, junior high and high school boundary maps.",
+     "psdmaps"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "The library, the pool and the community center sit near 20th Street East and 54th Avenue East, with police on Pacific Highway East.",
+   "dark": false,
+   "items": [
+    [
+     "Fife Library",
+     "The Pierce County Library System’s Fife branch is at 6622 20th Street East.",
+     "library"
+    ],
+    [
+     "Fife Community Center",
+     "At 2111 54th Avenue East, with a banquet room that holds up to 225 guests and splits into three spaces for rentals.",
+     "center"
+    ],
+    [
+     "Police",
+     "The Fife Police Department is at 3737 Pacific Highway East, Suite 110.",
+     "police"
+    ],
+    [
+     "Fire and EMS",
+     "The Tacoma Fire Department provides contracted fire and emergency medical service to Fife.",
+     "fire"
+    ],
+    [
+     "Business base",
+     "The City describes Fife as a warehouse, distribution and transportation district. Major employers it lists include Amazon, Brown & Haley, Costco Business Center, FedEx, Milgard Windows & Doors and UPS.",
+     "about"
+    ],
+    [
+     "Emerald Queen Casino",
+     "The Puyallup Tribe’s Fife location opened in early 2005 in a former hotel, with a 140-room hotel and a 2007 expansion that added parking garages, a pool, a spa and a ballroom.",
+     "eqc"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Fife has a mix of single-family and multi-family housing, and the City is planning a walkable City Center around the future light rail station.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 46.3%, median owner-occupied home value $543,100 and median gross rent $1,889 (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "Households",
+     "4,078 households, with 2.68 persons per household (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "City Center",
+     "A planned subarea from 51st Avenue East to 62nd Avenue East and from 12th Street East to 23rd Street East, centered on the future light rail station. The City describes it as a walkable, transit-oriented neighborhood, planned for 2044 and beyond.",
+     "citycenter"
+    ],
+    [
+     "Comprehensive Plan",
+     "The City’s 2024 Comprehensive Plan includes a middle housing policy recommendation and a capacity analysis.",
+     "comp"
+    ],
+    [
+     "Room to grow",
+     "The City expects the SR 167 connection to I-5 to increase demand for vacant and redevelopable land inside city limits.",
+     "about"
+    ],
+    [
+     "Fife Heights",
+     "A primarily residential area on a hill beyond the city’s incorporated limits.",
+     "wiki"
+    ],
+    [
+     "From farmland to city",
+     "In 1940 the area was described as a berry-growing and truck-gardening district, with 135 residents. Commercial growth followed the opening of I-5.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Fife sits between Tacoma and the hill cities of Milton and Edgewood, with the Port of Tacoma along its northern side.",
+   "dark": true,
+   "items": [
+    [
+     "Tacoma",
+     "The seat of Pierce County and the third-largest city in Washington, with 219,346 people at the 2020 census.",
+     "tacoma"
+    ],
+    [
+     "Port of Tacoma",
+     "Created by a Pierce County vote on November 5, 1918, on Commencement Bay. Since 2015 it has run its marine terminals with the Port of Seattle as the Northwest Seaport Alliance. The Puyallup Reservation still legally includes all of Fife and some port land.",
+     "port"
+    ],
+    [
+     "Milton",
+     "Lies in both Pierce and King counties, with 8,697 people in 2020. Fife Public Schools serves most of Milton, including its entire Pierce County portion.",
+     "milton"
+    ],
+    [
+     "Edgewood",
+     "To the southeast, on North Hill, with 12,327 people at the 2020 census. It incorporated on February 28, 1996.",
+     "edgewood"
+    ],
+    [
+     "Federal Way",
+     "Federal Way Downtown station is the southern end of the Link 1 Line, about 56 minutes from Westlake in downtown Seattle.",
+     "fwlink"
+    ],
+    [
+     "Farther afield",
+     "The City lists Point Defiance Zoo and Aquarium at 12 miles, the Washington State Fair at 9 miles, Joint Base Lewis-McChord at 15 miles and Mount Rainier National Park at 80 miles.",
+     "about"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Fife in?",
+   "Fife is in North Pierce County, with the Port of Tacoma to the north and Milton and Edgewood to the east.",
+   "about"
+  ],
+  [
+   "What is the population of Fife, WA?",
+   "The 2020 census counted 10,999 people; the Census Bureau estimated 11,061 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "When did Fife become a city?",
+   "Fife incorporated on February 11, 1957, with about 850 residents.",
+   "wiki"
+  ],
+  [
+   "What school district is Fife in?",
+   "Most of Fife is in Fife Public Schools, and a large southeastern portion is in the Puyallup School District. Confirm with the district for any specific address.",
+   "about"
+  ],
+  [
+   "What grades does Fife High School serve?",
+   "Fife High School serves grades 10–12. Columbia Junior High serves grades 8–9 and Surprise Lake Middle School serves grades 6–7.",
+   "fifesd"
+  ],
+  [
+   "Will light rail come to Fife?",
+   "A Fife station is planned on Sound Transit’s Tacoma Dome Link Extension, with start of service listed for 2035. The project is still in environmental review.",
+   "tdletime"
+  ],
+  [
+   "Where would the Fife light rail station be?",
+   "Sound Transit’s preferred site is west of 59th Avenue East between 15th Street East and 12th Street East.",
+   "tdlefife"
+  ],
+  [
+   "Is the SR 167 Expressway open in Fife?",
+   "The first 2-mile section, between I-5 in Fife and SR 509 near the Port of Tacoma, opened on September 13, 2026. The remaining 4 miles are scheduled to open in June 2029.",
+   "sr167open"
+  ],
+  [
+   "How far is Fife from Seattle and Sea-Tac Airport?",
+   "The City lists Seattle at 28 miles and Sea-Tac International Airport at 13 miles.",
+   "about"
+  ],
+  [
+   "How long is the average commute from Fife?",
+   "The Census Bureau’s mean travel time to work for Fife residents is 26.9 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "What is the median home value in Fife?",
+   "The Census Bureau reports a median owner-occupied home value of $543,100 and median gross rent of $1,889 for 2020–2024.",
+   "census"
+  ],
+  [
+   "What is Fife’s City Center plan?",
+   "A planned walkable, transit-oriented subarea centered on the future light rail station, between 51st and 62nd avenues East and 12th and 23rd streets East.",
+   "citycenter"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

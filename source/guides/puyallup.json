@@ -1,0 +1,514 @@
+{
+ "slug": "puyallup",
+ "name": "Puyallup",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-25",
+ "review": "https://claude.ai/artifact/Tnba2HgMXdfmmZY48335qo",
+ "headline": "Puyallup: a river valley city below South Hill, home of the Washington State Fair.",
+ "lede": "Puyallup sits on the Puyallup River about 10 miles southeast of Tacoma and 35 miles south of Seattle, where SR 167 and SR 512 meet. This guide covers getting around, parks and trails, schools, everyday errands, housing and zoning, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Puyallup, Washington",
+   "https://en.wikipedia.org/wiki/Puyallup,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Puyallup city, Washington",
+   "https://www.census.gov/quickfacts/puyallupcitywashington"
+  ],
+  "fair": [
+   "Washington State Fair · About the Fair",
+   "https://www.thefair.com/about-us/"
+  ],
+  "puyst": [
+   "Wikipedia · Puyallup station",
+   "https://en.wikipedia.org/wiki/Puyallup_station"
+  ],
+  "sr167": [
+   "WSDOT · What is the SR 167 Completion Project",
+   "https://engage.wsdot.wa.gov/sr-167-completion-project/what-is-the-sr-167-completion-project"
+  ],
+  "sr167w": [
+   "Wikipedia · Washington State Route 167",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_167"
+  ],
+  "sr512": [
+   "Wikipedia · Washington State Route 512",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_512"
+  ],
+  "parks": [
+   "City of Puyallup · Explore Our Parks",
+   "https://www.puyallupwa.gov/1927/Explore-Our-Parks"
+  ],
+  "bradley": [
+   "City of Puyallup · Bradley Lake Park",
+   "https://www.puyallupwa.gov/2503/Bradley-Lake-Park"
+  ],
+  "clarks": [
+   "City of Puyallup · Clarks Creek Trail Map",
+   "https://www.puyallupwa.gov/DocumentCenter/View/25172/Clarks-Creek-Trail-Map"
+  ],
+  "riverwalk": [
+   "TrailLink · Puyallup Riverwalk Trail",
+   "https://www.traillink.com/trail/puyallup-riverwalk-trail"
+  ],
+  "foothills": [
+   "Pierce County · Foothills Trail: East Puyallup to McMillin",
+   "https://www.piercecountywa.gov/2339/East-Puyallup-to-McMillin"
+  ],
+  "psd": [
+   "Wikipedia · Puyallup School District",
+   "https://en.wikipedia.org/wiki/Puyallup_School_District"
+  ],
+  "psdmaps": [
+   "Puyallup School District · District Maps",
+   "https://www.puyallupsd.org/about-us/district-maps"
+  ],
+  "pierce": [
+   "Wikipedia · Pierce College (Washington)",
+   "https://en.wikipedia.org/wiki/Pierce_College_(Washington)"
+  ],
+  "library": [
+   "Wikipedia · Puyallup Public Library",
+   "https://en.wikipedia.org/wiki/Puyallup_Public_Library"
+  ],
+  "market": [
+   "Puyallup Main Street Association · 2026 Puyallup Farmers’ Market Applicant Handbook",
+   "https://s3-us-west-2.amazonaws.com/managemymarket.com/orgfiles/1257/2026_Puyallup_Farmers'_Market_Applicant_Handbook.pdf"
+  ],
+  "mall": [
+   "Wikipedia · South Hill Mall",
+   "https://en.wikipedia.org/wiki/South_Hill_Mall"
+  ],
+  "hospital": [
+   "Washington State Hospital Association · MultiCare Good Samaritan Hospital",
+   "https://wsha.org/members/multicare-good-samaritan-hospital"
+  ],
+  "annex": [
+   "Pierce County · City of Puyallup Hazard Mitigation Annex 2025–2030 (draft)",
+   "https://www.piercecountywa.gov/DocumentCenter/View/160502/City-of-Puyallup-Annex-2025-2030-DRAFT"
+  ],
+  "lahar": [
+   "Pierce County · Outdoor Warning System (Lahar Warning System)",
+   "https://www.piercecountywa.gov/5888/Lahar-Warning-System"
+  ],
+  "comp": [
+   "City of Puyallup · Comprehensive Plan",
+   "https://www.puyallupwa.gov/438/Comprehensive-Plan"
+  ],
+  "rezone": [
+   "City of Puyallup · Phase 1 Zoning Map and Code Updates",
+   "https://www.puyallupwa.gov/2499/Phase-1-Zoning-Map-Code-Updates"
+  ],
+  "zoning": [
+   "Puyallup Municipal Code · Chapter 20.20 Single-Family Residential Zones",
+   "https://codepublishing.com/WA/Puyallup/html/Puyallup20/Puyallup2020.html"
+  ],
+  "meeker": [
+   "Wikipedia · Meeker Mansion",
+   "https://en.wikipedia.org/wiki/Meeker_Mansion"
+  ],
+  "southhill": [
+   "Wikipedia · South Hill, Washington",
+   "https://en.wikipedia.org/wiki/South_Hill,_Washington"
+  ],
+  "sumner": [
+   "Wikipedia · Sumner, Washington",
+   "https://en.wikipedia.org/wiki/Sumner,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "42,973",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "1890",
+   "incorporated, with Ezra Meeker as first mayor",
+   "wiki"
+  ],
+  [
+   "14.14 sq mi",
+   "of land (2020)",
+   "census"
+  ],
+  [
+   "31.4 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "42,973 at the 2020 census, up from 37,022 in 2010; estimated 42,682 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "1890, with Ezra Meeker as the first mayor; Meeker platted the townsite in 1877",
+   "wiki"
+  ],
+  [
+   "Name",
+   "From the Puyallup people of the valley; the name means “the generous people” in Lushootseed",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "On the Puyallup River, about 10 miles southeast of Tacoma and 35 miles south of Seattle, with hills around the valley averaging 500 feet above sea level",
+   "wiki"
+  ],
+  [
+   "Neighbors",
+   "Sumner to the northeast, Fife and Edgewood to the north, Tacoma to the northwest, and South Hill, Graham and Frederickson to the south",
+   "wiki"
+  ],
+  [
+   "Highways",
+   "At the intersection of SR 167 and SR 512",
+   "wiki"
+  ],
+  [
+   "Train",
+   "Sounder S Line at Puyallup station, 13 weekday round trips",
+   "puyst"
+  ],
+  [
+   "School district",
+   "Puyallup School District, which serves the majority of Puyallup",
+   "psd"
+  ],
+  [
+   "Washington State Fair",
+   "A 20-day fair on a 165-acre campus, starting the Friday of Labor Day weekend",
+   "fair"
+  ]
+ ],
+ "notes": [
+  "Area differs by source: Wikipedia’s infobox gives 14.24 square miles total (14.14 land), its text gives 14.04, and Pierce County’s draft hazard annex says about 14.27. This guide uses the Census Bureau’s 14.14 square miles of land.",
+  "Census QuickFacts, when checked, showed a July 1, 2025 estimate of 42,682 and 2020–2024 survey figures for housing and commutes. Pierce County’s draft hazard annex gives a 2025 population of 43,730; this guide uses the Census figure.",
+  "District size differs: Wikipedia calls the Puyallup School District the ninth-largest in the state with over 22,534 students, while the district’s own page says sixth-largest with about 23,000. Wikipedia’s introduction also says three high schools but lists four (including the alternative E.B. Walker). This guide uses the district’s figures.",
+  "TrailLink says the Puyallup Riverwalk Trail was closed as of December 2025 because of flooding. Its current status was not confirmed; check with the City before going.",
+  "Puyallup’s zoning is being updated in phases after the 2044 Comprehensive Plan. Phase 1 took effect March 9, 2026 and Phase 2 is scheduled for a fall 2026 hearing, so the single-family lot sizes quoted from the code may change. The code page also lists ADU rules; those were left out because newer state ADU laws may supersede them and that could not be confirmed.",
+  "Good Samaritan Hospital’s expansion (160 more beds, reported by Becker’s in 2022 with completion scheduled for 2026) was left out because its current status could not be confirmed from an official page.",
+  "Fire, police and utility providers come from Pierce County’s draft 2025–2030 hazard mitigation annex for the City; the final version may differ.",
+  "Farmers’ market details are for the 2026 season from the organizer’s vendor handbook; 2027 dates were not yet posted.",
+  "Left out because no reliable page stated them: specific Pierce Transit route numbers, a Sea-Tac Airport distance, and a current list of South Hill Mall anchor stores."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Puyallup sits where SR 167 and SR 512 meet, with Sounder trains downtown and a new expressway to the Port of Tacoma under construction. Census figures put the mean travel time to work for Puyallup residents at 31.4 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "Sounder at Puyallup",
+     "Puyallup station at 131 West Main Avenue has 13 weekday Sounder S Line round trips; trains reach Seattle in about 49 minutes. A garage and pedestrian bridge opened March 27, 2023, part of 1,044 parking stalls in all.",
+     "puyst"
+    ],
+    [
+     "Buses from the station",
+     "Sound Transit Express route 578 runs from Puyallup north to downtown Seattle via Sumner, Auburn and Federal Way. Pierce Transit routes connect the station to South Hill Mall, Tacoma, Milton and Federal Way.",
+     "puyst"
+    ],
+    [
+     "Microtransit",
+     "Pierce Transit buses serve the city, along with a microtransit zone that launched in 2023.",
+     "wiki"
+    ],
+    [
+     "SR 167 (Valley Freeway)",
+     "SR 167 runs from Tacoma to Puyallup, then north as a freeway to Renton. Its HOT lanes carry variable tolls of $1 to $15 for non-carpool traffic, starting northbound in Auburn.",
+     "sr167w"
+    ],
+    [
+     "SR 512",
+     "A 12-mile freeway from I-5 in Lakewood to SR 167 in Puyallup. It passes South Hill Mall, shares a stretch with SR 161 from 31st Avenue Southwest, and curves around downtown.",
+     "sr512"
+    ],
+    [
+     "SR 167 Completion Project",
+     "WSDOT is building 6 miles of new tolled expressway between Puyallup and the Port of Tacoma, with a rebuilt SR 167/SR 161 to SR 410 interchange in Puyallup. Full completion is planned for 2029.",
+     "sr167"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Puyallup’s parks run from a lake park on South Hill to creekside trails and a paved path along the river, with the Foothills Trail starting at the city’s east edge.",
+   "dark": false,
+   "items": [
+    [
+     "Bradley Lake Park",
+     "At 531 31st Avenue SE, a 59-acre site with a 12-acre lake, bought with a 1997 bond. It has fishing, trails, a walking track, a playground, ball fields, a picnic shelter and restrooms.",
+     "bradley"
+    ],
+    [
+     "Clarks Creek Park",
+     "A 55-acre park beside Clarks Creek with a 1.17-mile trail, four lighted tennis courts, a lighted softball field, a playground and an off-leash dog area. The south entrance is at 1700 12th Avenue SW.",
+     "clarks"
+    ],
+    [
+     "Puyallup Riverwalk Trail",
+     "A 4.1-mile asphalt trail along the Puyallup River in northern Puyallup, from River Road East and 20th Street NW to near the East Main Avenue Bridge. TrailLink noted it was closed in December 2025 for flooding.",
+     "riverwalk"
+    ],
+    [
+     "Foothills Trail",
+     "The East Puyallup trailhead at 13810 80th Street has 23 parking spaces and restrooms. The trail runs 15 continuous miles through McMillin and Orting to South Prairie.",
+     "foothills"
+    ],
+    [
+     "Pioneer Park",
+     "Downtown, with the public library, a playground, walking paths and a bronze statue of Ezra Meeker.",
+     "wiki"
+    ],
+    [
+     "More city parks",
+     "The City’s list also includes DeCoursey, Sam Peach, Van Lierop, Wildwood and Veteran’s parks, the Kiwanis Kids Spray Park, a skatepark, off-leash dog parks and the Puyallup Valley Sports Complex.",
+     "parks"
+    ],
+    [
+     "spuyaləpabš Trail",
+     "Part of WSDOT’s SR 167 work: a multi-use trail, about 8 of its 12 miles between Puyallup and Tacoma, with artwork by Coast Salish artists.",
+     "sr167"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "The Puyallup School District serves the majority of Puyallup, and Pierce College has a campus in the city. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Puyallup School District",
+     "Formed in 1854, the district covers 54 square miles and serves about 23,000 students. It has 22 elementary schools, seven junior highs, three comprehensive high schools, an alternative high school and online programs.",
+     "psdmaps"
+    ],
+    [
+     "Area served",
+     "The majority of Puyallup and most of Edgewood, North Puyallup, South Hill and Waller, plus portions of Alderton, Fife, Graham, Summit, Summit View and Sumner.",
+     "psd"
+    ],
+    [
+     "High schools",
+     "Puyallup High School, Rogers High School and Emerald Ridge High School, plus the alternative E.B. Walker High School.",
+     "psd"
+    ],
+    [
+     "Newer buildings",
+     "Dessie F. Evans Elementary opened in 2019 as the district’s newest school, and Firgrove and Northwood elementaries got new buildings that year. Dr. Vitt P. Ferrucci Junior High is getting a $25.7 million expansion.",
+     "psd"
+    ],
+    [
+     "Pierce College Puyallup",
+     "The Puyallup campus opened in fall 1990 with one building, the Gaspard Education Center. It is one of Pierce College’s two primary colleges, about 20 miles from Fort Steilacoom.",
+     "pierce"
+    ],
+    [
+     "Finding an assigned school",
+     "The district posts elementary, junior high and high school boundary maps, with a GIS link if a map does not load.",
+     "psdmaps"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown holds the library and the weekly market around Pioneer Park, and South Hill Mall sits on Meridian to the south.",
+   "dark": false,
+   "items": [
+    [
+     "Puyallup Public Library",
+     "At 324 South Meridian, in a two-floor, 39,500-square-foot building on the west side of Pioneer Park that opened August 30, 2002. It is independent of the Tacoma and Pierce County library systems.",
+     "library"
+    ],
+    [
+     "Farmers’ market",
+     "The Puyallup Main Street Association holds the Puyallup Farmers’ Market at Pioneer Park, 300 South Meridian. In 2026 it ran 25 Saturdays, April 18 to October 10, 9 a.m. to 2 p.m.",
+     "market"
+    ],
+    [
+     "South Hill Mall",
+     "At 3500 South Meridian, opened in 1988, with 1,074,230 square feet of leasable space. Sears closed in 2018 and Macy’s in March 2025.",
+     "mall"
+    ],
+    [
+     "Hospital",
+     "MultiCare Good Samaritan Hospital is at 401 15th Avenue SE.",
+     "hospital"
+    ],
+    [
+     "Fire, EMS and police",
+     "Central Pierce Fire and Rescue provides emergency medical services, and the City has its own police department.",
+     "annex"
+    ],
+    [
+     "Utilities",
+     "The City’s Public Works Department runs the water utility and wastewater collection and treatment; Puget Sound Energy provides power.",
+     "annex"
+    ],
+    [
+     "Washington State Fair",
+     "The fair began in 1900 and welcomes more than a million guests a year. It runs 20 days from the Friday of Labor Day weekend (closed Tuesdays), with an 8-day Spring Fair each April.",
+     "fair"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Puyallup adopted an updated Comprehensive Plan in July 2025 and is rezoning in phases to match it. Much of the valley floor sits in flood and lahar hazard areas, so location matters.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 52.1%, median owner-occupied home value $551,800 and median gross rent $1,812 (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "Comprehensive Plan",
+     "The City adopted a major update to its Comprehensive Plan in July 2025; the plan was first adopted in September 1994.",
+     "comp"
+    ],
+    [
+     "Zoning updates",
+     "Phase 1 rezoning took effect March 9, 2026, bringing more housing choices to some neighborhoods and new areas that mix homes, shops and offices. Phase 2 is scheduled for a Planning Commission hearing in fall 2026.",
+     "rezone"
+    ],
+    [
+     "Single-family zones",
+     "The code’s single-family zones range from RS-35 (35,000-square-foot minimum lot) through RS-10, RS-08 and RS-06 to RS-04 (4,000 square feet).",
+     "zoning"
+    ],
+    [
+     "Duplexes and triplexes",
+     "Duplexes and triplexes are permitted outright in the RS-04 and RS-06 zones on larger minimum lots, and duplexes are conditionally permitted in RS-08.",
+     "zoning"
+    ],
+    [
+     "Floodplain",
+     "Pierce County’s draft hazard annex counts 1,296 parcels in the City touched by regulated floodplains. Ask about flood zones and insurance for any specific property.",
+     "annex"
+    ],
+    [
+     "Lahar zone",
+     "Downtown and nearby neighborhoods are in the lahar hazard zone for a moderate or large eruption of Mount Rainier.",
+     "wiki"
+    ],
+    [
+     "Warning sirens",
+     "Pierce County runs 42 outdoor warning sirens in the Puyallup and Nisqually river valleys, tested at noon on the first Monday of every month.",
+     "lahar"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Puyallup is ringed by South Hill to the south, Sumner to the east and Tacoma to the northwest, with the Foothills Trail leading toward Mount Rainier country.",
+   "dark": true,
+   "items": [
+    [
+     "Meeker Mansion",
+     "Ezra Meeker’s Italianate Victorian home, finished in December 1890, is now a house museum owned and operated by the Puyallup Historical Society.",
+     "meeker"
+    ],
+    [
+     "South Hill",
+     "An unincorporated census-designated place immediately south of Puyallup, with 64,708 people in 2020. Its shopping runs along Meridian Avenue (SR 161), and its addresses use Puyallup.",
+     "southhill"
+    ],
+    [
+     "Sumner",
+     "East of Puyallup, with 10,621 people in 2020. It calls itself the “Rhubarb Pie Capital of the World.”",
+     "sumner"
+    ],
+    [
+     "Edgewood and Fife",
+     "North of Puyallup across the valley, with Tacoma to the northwest.",
+     "wiki"
+    ],
+    [
+     "Orting and South Prairie",
+     "Reached on the Foothills Trail from the East Puyallup trailhead, through McMillin and Orting to South Prairie.",
+     "foothills"
+    ],
+    [
+     "Puyallup River",
+     "The river flows 45 miles from glaciers on Mount Rainier to Commencement Bay in Tacoma.",
+     "wiki"
+    ],
+    [
+     "Daffodil Parade",
+     "Puyallup hosts part of the annual Daffodil Parade alongside Tacoma, Sumner and Orting.",
+     "wiki"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Puyallup in?",
+   "Puyallup is in Pierce County, about 10 miles southeast of Tacoma.",
+   "wiki"
+  ],
+  [
+   "What is the population of Puyallup, WA?",
+   "The 2020 census counted 42,973 people; the Census Bureau estimated 42,682 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "Is South Hill part of the city of Puyallup?",
+   "No. South Hill is an unincorporated area immediately south of the city, though its addresses use Puyallup.",
+   "southhill"
+  ],
+  [
+   "What school district is Puyallup in?",
+   "The Puyallup School District serves the majority of Puyallup. Confirm school assignment with the district for any specific address.",
+   "psd"
+  ],
+  [
+   "Is there a train from Puyallup to Seattle?",
+   "Yes. Sounder S Line trains stop at Puyallup station with 13 weekday round trips, reaching Seattle in about 49 minutes.",
+   "puyst"
+  ],
+  [
+   "How long is the average commute from Puyallup?",
+   "The Census Bureau’s mean travel time to work for Puyallup residents is 31.4 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "What is the median home value in Puyallup?",
+   "The Census Bureau reports a median owner-occupied home value of $551,800 and median gross rent of $1,812 for 2020–2024.",
+   "census"
+  ],
+  [
+   "When is the Washington State Fair?",
+   "The 20-day fair starts the Friday of Labor Day weekend and is closed Tuesdays. An 8-day Spring Fair is held each April.",
+   "fair"
+  ],
+  [
+   "Is Puyallup in a lahar zone?",
+   "Downtown and nearby neighborhoods are in the lahar hazard zone for a moderate or large eruption of Mount Rainier. Ask about any specific address.",
+   "wiki"
+  ],
+  [
+   "How often are the lahar sirens tested?",
+   "Pierce County tests its outdoor warning sirens at noon on the first Monday of every month.",
+   "lahar"
+  ],
+  [
+   "Where does the Foothills Trail start?",
+   "At the East Puyallup trailhead, 13810 80th Street, with 23 parking spaces and restrooms.",
+   "foothills"
+  ],
+  [
+   "Does Puyallup have its own library?",
+   "Yes. The Puyallup Public Library at 324 South Meridian is independent of the Tacoma and Pierce County library systems.",
+   "library"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

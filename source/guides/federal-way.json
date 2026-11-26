@@ -1,0 +1,557 @@
+{
+ "slug": "federal-way",
+ "name": "Federal Way",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-25",
+ "review": "https://claude.ai/artifact/3ZmK42ZrqaokUfqZvyDdTv",
+ "headline": "Federal Way: a plateau city between Puget Sound and the Green River Valley, now on the Link 1 Line.",
+ "lede": "Federal Way sits in the southwest corner of King County, about 25 miles south of downtown Seattle and eight miles north of downtown Tacoma. This guide covers getting around, parks and the shoreline, schools, everyday errands, housing and zoning, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Federal Way, Washington",
+   "https://en.wikipedia.org/wiki/Federal_Way,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Federal Way city, Washington",
+   "https://www.census.gov/quickfacts/fact/table/federalwaycitywashington/PST045224"
+  ],
+  "profile": [
+   "City of Federal Way · City Profile",
+   "https://www.federalwaywa.gov/page/city-profile"
+  ],
+  "about": [
+   "City of Federal Way · About Federal Way",
+   "https://www.federalwaywa.gov/page/about-federal-way"
+  ],
+  "parks": [
+   "City of Federal Way · Our Parks",
+   "https://www.federalwaywa.gov/page/our-parks"
+  ],
+  "celebration": [
+   "Wikipedia · Celebration Park, Federal Way",
+   "https://en.wikipedia.org/wiki/Celebration_Park,_Federal_Way"
+  ],
+  "dashpoint": [
+   "Washington State Parks · Dash Point State Park",
+   "https://parks.wa.gov/find-parks/state-parks/dash-point-state-park"
+  ],
+  "rhodo": [
+   "Wikipedia · Rhododendron Species Foundation and Botanical Garden",
+   "https://en.wikipedia.org/wiki/Rhododendron_Species_Foundation_and_Botanical_Garden"
+  ],
+  "aquatic": [
+   "Wikipedia · Weyerhaeuser King County Aquatic Center",
+   "https://en.wikipedia.org/wiki/Weyerhaeuser_King_County_Aquatic_Center"
+  ],
+  "fwlink": [
+   "Wikipedia · Federal Way Downtown station",
+   "https://en.wikipedia.org/wiki/Federal_Way_Downtown_station"
+  ],
+  "stopen": [
+   "Sound Transit · Link 1 Line service to Federal Way begins Dec. 6",
+   "https://www.soundtransit.org/get-to-know-us/news-events/news-releases/link-1-line-service-to-federal-way-begins-dec-6"
+  ],
+  "tod": [
+   "Sound Transit · Federal Way Downtown Station TOD",
+   "https://soundtransit.org/system-expansion/creating-vibrant-stations/transit-oriented-development/projects/federal-way"
+  ],
+  "starlake": [
+   "Wikipedia · Star Lake station",
+   "https://en.wikipedia.org/wiki/Star_Lake_station"
+  ],
+  "rra": [
+   "Wikipedia · RapidRide A Line",
+   "https://en.wikipedia.org/wiki/RapidRide_A_Line"
+  ],
+  "i5": [
+   "Wikipedia · Interstate 5 in Washington",
+   "https://en.wikipedia.org/wiki/Interstate_5_in_Washington"
+  ],
+  "sr18": [
+   "Wikipedia · Washington State Route 18",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_18"
+  ],
+  "sr509": [
+   "Wikipedia · Washington State Route 509",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_509"
+  ],
+  "fwps": [
+   "Wikipedia · Federal Way Public Schools",
+   "https://en.wikipedia.org/wiki/Federal_Way_Public_Schools"
+  ],
+  "hsnights": [
+   "Federal Way Public Schools · 2026 High School Planning Nights",
+   "https://evergreen.fwps.org/story/~board/news/post/2026-high-school-planning-nights-february-11-19"
+  ],
+  "newstudents": [
+   "Federal Way Public Schools · New Students",
+   "https://www.fwps.org/enrollment/new-students"
+  ],
+  "choice": [
+   "Federal Way Public Schools · Choice Enrollment",
+   "https://www.fwps.org/enrollment/choice-enrollment"
+  ],
+  "lib320": [
+   "King County Library System · Federal Way 320th",
+   "https://kcls.org/locations/federal-way-320th/"
+  ],
+  "lib320about": [
+   "King County Library System · About Federal Way 320th Library",
+   "https://kcls.org/about-federal-way-320th-library"
+  ],
+  "libfw": [
+   "King County Library System · About Federal Way Library",
+   "https://kcls.org/about-federal-way-library"
+  ],
+  "fire": [
+   "Washington 211 · South King Fire, Station 62 and Headquarters",
+   "https://search.wa211.org/search/71b254b7-3dfe-57f0-b86a-02c59c64e04f"
+  ],
+  "stfrancis": [
+   "Virginia Mason Franciscan Health · St. Francis Hospital",
+   "https://vmfh.org/our-hospitals/st-francis-hospital"
+  ],
+  "garbage": [
+   "City of Federal Way · Residential Curbside Service",
+   "https://federalwaywa.gov/page/residential-services"
+  ],
+  "lakehaven": [
+   "Alliance for Water Efficiency · Lakehaven Water and Sewer District",
+   "https://allianceforwaterefficiency.org/node/571"
+  ],
+  "commons": [
+   "Wikipedia · The Commons at Federal Way",
+   "https://en.wikipedia.org/wiki/The_Commons_at_Federal_Way"
+  ],
+  "paec": [
+   "City of Federal Way · Performing Arts and Event Center",
+   "https://www.federalwaywa.gov/page/performing-arts-event-center-1"
+  ],
+  "wildwaves": [
+   "Wikipedia · Wild Waves Theme Park",
+   "https://en.wikipedia.org/wiki/Wild_Waves_Theme_Park"
+  ],
+  "wwclose": [
+   "FOX 13 Seattle · Wild Waves Theme and Water Park to close in 2026",
+   "https://www.fox13seattle.com/news/wild-waves-shut-down-2026"
+  ],
+  "zoning": [
+   "Federal Way Revised Code · Chapter 19.200 Single-Family Residential",
+   "https://www.codepublishing.com/WA/FederalWay/html/FederalWay19/FederalWay19200.html"
+  ],
+  "desmoines": [
+   "Wikipedia · Des Moines, Washington",
+   "https://en.wikipedia.org/wiki/Des_Moines,_Washington"
+  ],
+  "auburn": [
+   "Wikipedia · Auburn, Washington",
+   "https://en.wikipedia.org/wiki/Auburn,_Washington"
+  ],
+  "milton": [
+   "Wikipedia · Milton, Washington",
+   "https://en.wikipedia.org/wiki/Milton,_Washington"
+  ],
+  "dpcomm": [
+   "Wikipedia · Dash Point, Washington",
+   "https://en.wikipedia.org/wiki/Dash_Point,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "101,030",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "1990",
+   "incorporated as a city, February 28",
+   "wiki"
+  ],
+  [
+   "32.1 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ],
+  [
+   "$552,800",
+   "median value of owner-occupied homes, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "101,030 at the 2020 census; estimated 99,729 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Land area",
+   "22.30 square miles (2020)",
+   "census"
+  ],
+  [
+   "Incorporated",
+   "February 28, 1990, after voters turned down incorporation in 1971, 1981 and 1985",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "On a plateau between Puget Sound and the Green River Valley, about 25 miles south of downtown Seattle and eight miles north of downtown Tacoma",
+   "profile"
+  ],
+  [
+   "Elevation",
+   "From sea level to 515 feet",
+   "profile"
+  ],
+  [
+   "Highways",
+   "I-5, with exits at South 348th, 320th and 272nd Streets, and SR 99 (Pacific Highway South)",
+   "wiki"
+  ],
+  [
+   "Light rail",
+   "Federal Way Downtown station, the southern end of the Link 1 Line since December 6, 2025",
+   "stopen"
+  ],
+  [
+   "School district",
+   "Federal Way Public Schools, which covers all of Federal Way and parts of Kent, Des Moines and Auburn",
+   "fwps"
+  ],
+  [
+   "Parks",
+   "31 developed parks and 19 open space parks, about 1,141 acres in all",
+   "profile"
+  ]
+ ],
+ "notes": [
+  "Population and area differ by source. The Census Bureau counts 101,030 people in 2020 and 22.30 square miles of land; the City’s profile page says 101,300 people and about 21.5 square miles. This guide uses the Census figures.",
+  "The City’s park figures differ between its own pages: the City Profile lists 31 developed and 19 open space parks covering about 1,141 acres, while the About page says 33 developed parks in a 1,094-acre system. The guide uses the City Profile numbers.",
+  "Sound Transit’s opening release gives about 46 minutes from Federal Way Downtown to Seattle; Wikipedia gives about 56 minutes to Westlake. The guide uses Sound Transit’s 16 minutes to the airport and leaves the Seattle time general.",
+  "Wikipedia’s Federal Way article says Federal Way High School opened in 1930; the Federal Way Public Schools article says 1938. Neither date is used.",
+  "Wild Waves was announced to close permanently on November 1, 2026. The sources checked state the planned date; no source was found confirming the closing day itself or a new use for the land, which the property owner called preliminary.",
+  "Census housing, rent and commute figures are 2020–2024 American Community Survey estimates as shown on QuickFacts when checked. The PAEC’s City page is older and still describes the building as under construction; its August 2017 opening comes from Wikipedia.",
+  "Left out because no fetched source stated them clearly: a full list of cities bordering Federal Way, electric and gas utility providers, and Lakehaven’s exact service boundary."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "I-5 and Pacific Highway South run the length of Federal Way, and Link light rail now reaches downtown. Census figures put the mean travel time to work for Federal Way residents at 32.1 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "Link light rail",
+     "The 7.8-mile Federal Way Link Extension opened December 6, 2025, with new stations at Kent Des Moines, Star Lake and Federal Way Downtown. Trains run every 8 minutes at peak, about 16 minutes to Sea-Tac Airport.",
+     "stopen"
+    ],
+    [
+     "Federal Way Downtown station",
+     "At 31621 23rd Avenue South, with 13 bus bays and a five-story garage of 1,500 stalls. King County Metro, Pierce Transit and Sound Transit Express buses serve it.",
+     "fwlink"
+    ],
+    [
+     "Star Lake station",
+     "In southwestern Kent near I-5 and South 272nd Street, with a 1,100-space garage, King County Metro and Sound Transit Express buses. It opened with the extension on December 6, 2025.",
+     "starlake"
+    ],
+    [
+     "RapidRide A Line",
+     "Runs about 11 miles on Pacific Highway South (SR 99) between Tukwila International Boulevard station and Federal Way Downtown station, every 10 minutes at peak and every 15 minutes off-peak.",
+     "rra"
+    ],
+    [
+     "I-5",
+     "I-5 enters Federal Way after climbing out of the Puyallup River valley, running parallel to SR 99. The HOV lanes have a direct off-ramp to the transit center and The Commons at Federal Way.",
+     "i5"
+    ],
+    [
+     "SR 18",
+     "Starts as South 348th Street at SR 99 and runs northeast, mostly as a freeway, through Auburn, Kent, Covington and Maple Valley to I-90 west of North Bend. It is 28.41 miles long.",
+     "sr18"
+    ],
+    [
+     "SR 509 (Dash Point Road)",
+     "SR 509 travels east as Dash Point Road through Federal Way, passing Decatur and Federal Way high schools before meeting SR 99. To the west it runs through Dash Point toward Tacoma.",
+     "sr509"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Federal Way’s parks run from a Puget Sound state park and a wetland preserve to lakes, ballfields and the BPA Trail. The City lists about 1,141 acres of parks and open space.",
+   "dark": false,
+   "items": [
+    [
+     "Dash Point State Park",
+     "At 5700 SW Dash Point Road, with 461 acres, 3,301 feet of saltwater shoreline, forested hiking and biking trails, camping and cabins. Wikipedia calls it the only developed waterfront park within city limits.",
+     "dashpoint"
+    ],
+    [
+     "Steel Lake Park",
+     "A 52-acre park at 2410 South 312th Street with a swimming beach, skate park, playground, sand volleyball, seasonal fishing and a boat launch.",
+     "parks"
+    ],
+    [
+     "Celebration Park",
+     "83.5 acres at 1095 South 324th Street, with four lighted baseball fields, four lighted soccer fields, a playground and about 1.88 miles of trails connecting to the BPA Trail.",
+     "parks"
+    ],
+    [
+     "West Hylebos Wetlands",
+     "A 120-acre park at 411 South 348th Street with interpretive nature trails, observation platforms and about 1.01 miles of trail.",
+     "parks"
+    ],
+    [
+     "BPA Trail",
+     "A walking and biking path of about 3.64 miles that connects parks and neighborhoods across the city.",
+     "parks"
+    ],
+    [
+     "Town Square Park",
+     "A 3.91-acre downtown park at 31600 Pete von Reichbauer Way South, with a splash pad, playground and open lawn.",
+     "parks"
+    ],
+    [
+     "French Lake Off-Leash Dog Park",
+     "10 acres at 31531 1st Avenue South. The City says it is the only City park where off-leash use is approved.",
+     "parks"
+    ],
+    [
+     "Rhododendron Species Botanical Garden",
+     "Moved to Federal Way in 1974 on land provided by Weyerhaeuser’s headquarters. It covers 22 to 24 acres, sits next to the Pacific Bonsai Museum, and held 850 rhododendron species by 2019.",
+     "rhodo"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Federal Way Public Schools covers all of Federal Way, plus parts of Kent, Des Moines and Auburn. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Federal Way Public Schools",
+     "Covers 35 square miles in King County, with 21 elementary, 3 K–8, 6 middle and 4 high schools listed. The district was formed on May 22, 1929, when five small districts consolidated.",
+     "fwps"
+    ],
+    [
+     "The name",
+     "Federal Way takes its name from the school district, which adopted the name of U.S. Route 99, the federal highway, when it consolidated in 1929.",
+     "wiki"
+    ],
+    [
+     "High schools",
+     "The district’s planning nights list Todd Beamer, Federal Way, Decatur and Thomas Jefferson (in Auburn) high schools, plus Career Academy at Truman, TAF@Saghalie, Internet Academy and Open Doors.",
+     "hsnights"
+    ],
+    [
+     "Other options",
+     "Federal Way Public Academy serves grades 6–10 and TAF@Saghalie grades 6–12. The district also requires 24 hours of community service to graduate, adopted in 2021.",
+     "fwps"
+    ],
+    [
+     "Finding an assigned school",
+     "The district’s School Lookup Tool finds the neighborhood school for a home address, and its Enrollment Support Team can help.",
+     "newstudents"
+    ],
+    [
+     "Choice Enrollment",
+     "Families can apply for a school outside their assigned attendance area if space allows. Approval is not guaranteed, and families provide transportation to a Choice school.",
+     "choice"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown Federal Way, around South 320th Street and Pacific Highway South, holds the mall, a library, the transit hub and the performing arts center.",
+   "dark": false,
+   "items": [
+    [
+     "The Commons at Federal Way",
+     "The city’s only indoor shopping center, at 1928 South Commons. It opened August 14, 1975, as SeaTac Mall and was renamed in 2003; Target and Kohl’s are among its anchors.",
+     "commons"
+    ],
+    [
+     "Libraries",
+     "The King County Library System’s Federal Way 320th branch is at 848 South 320th Street; its current building opened in September 2013.",
+     "lib320"
+    ],
+    [
+     "Federal Way Library",
+     "A second King County Library System branch opened in 1991 and was expanded to 34,500 square feet in 2010.",
+     "libfw"
+    ],
+    [
+     "Hospital",
+     "St. Francis Hospital at 34515 9th Avenue South offers emergency services 24 hours a day, seven days a week, and a family birth center.",
+     "stfrancis"
+    ],
+    [
+     "Fire and EMS",
+     "South King Fire provides fire, emergency medical and rescue service to Federal Way and Des Moines, with headquarters at 31617 1st Avenue South.",
+     "fire"
+    ],
+    [
+     "Garbage and recycling",
+     "Waste Management handles residential curbside service: garbage weekly, recycling every other week, and optional weekly yard and food waste.",
+     "garbage"
+    ],
+    [
+     "Water",
+     "Lakehaven Water and Sewer District has served the Federal Way area for more than 50 years, with about 400 miles of mainline and 22 wells.",
+     "lakehaven"
+    ],
+    [
+     "Farmers market",
+     "Saturdays, May through September, 9 a.m. to 2 p.m., on the Civic Plaza Lawn next to the Performing Arts and Event Center.",
+     "about"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Federal Way began as a logging settlement and grew along Highway 99, then I-5. Today its code allows several homes per single-family lot, and new housing is planned beside the light rail station.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 55.3%, median owner-occupied home value $552,800 and median gross rent $1,797 (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "How it grew",
+     "The first homestead was established in 1871 near today’s Redondo. I-5 opened through the area in October 1962, and the city annexed the Northlake, East Redondo and Parkway neighborhoods in 2004.",
+     "wiki"
+    ],
+    [
+     "Single-family zones",
+     "The RS zones run from RS 35.0 (35,000-square-foot minimum lots) through RS 15.0, RS 9.6 and RS 7.2 down to RS 5.0 (5,000 square feet).",
+     "zoning"
+    ],
+    [
+     "Middle housing and ADUs",
+     "A single-family lot may hold up to six homes, as middle housing or a mix with a house and ADUs, limited by water and sewer. Up to two ADUs per lot are allowed, each up to 1,000 square feet.",
+     "zoning"
+    ],
+    [
+     "Septic areas",
+     "Where only on-site septic serves an area, the code caps development at two units per lot until sewer is available. Ask about sewer or septic for any specific property.",
+     "zoning"
+    ],
+    [
+     "Station-area housing",
+     "Sound Transit plans about 230 homes in two buildings on vacant land next to Federal Way Downtown station, for households earning 30% to 60% of area median income. Developers aim to break ground in 2028.",
+     "tod"
+    ],
+    [
+     "Downtown landmarks",
+     "The Performing Arts and Event Center, a 44,000-square-foot building with a two-tiered, 716-seat theatre, sits at South 316th Street and Pete von Reichbauer Way South.",
+     "paec"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Federal Way borders Des Moines to the north and Auburn’s West Hill to the east, with the Pierce County line to the south and Puget Sound to the west.",
+   "dark": true,
+   "items": [
+    [
+     "Des Moines",
+     "Borders Federal Way to the north, with 32,888 people in 2020. It has a city marina with 838 berths, Highline College and the Kent Des Moines light rail station.",
+     "desmoines"
+    ],
+    [
+     "Auburn",
+     "Auburn’s West Hill borders Federal Way. The city counted 87,256 people in 2020 and has a Sounder station with trains to downtown Seattle in about 30 minutes, plus Emerald Downs and The Outlet Collection.",
+     "auburn"
+    ],
+    [
+     "Milton",
+     "Lies in northern Pierce County and southern King County, with 8,697 people in 2020. Federal Way Public Schools serves parts of its King County portion.",
+     "milton"
+    ],
+    [
+     "Dash Point",
+     "An unincorporated Pierce County community of 963 people (2020), north of Tacoma across Commencement Bay. Dash Point State Park borders it on the King County side.",
+     "dpcomm"
+    ],
+    [
+     "Weyerhaeuser King County Aquatic Center",
+     "Opened April 18, 1990, with an Olympic-size competition pool and a 17-foot diving well. It has hosted U.S. Olympic Diving Team Trials and NCAA championships.",
+     "aquatic"
+    ],
+    [
+     "Wild Waves",
+     "The theme and water park at 36201 Enchanted Parkway South opened in 1977 as The Enchanted Village. Its owner announced it would close permanently on November 1, 2026, after the 2026 season.",
+     "wwclose"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Federal Way in?",
+   "Federal Way is in King County, in its southwest corner, about 25 miles south of downtown Seattle and eight miles north of downtown Tacoma.",
+   "profile"
+  ],
+  [
+   "What is the population of Federal Way, WA?",
+   "The 2020 census counted 101,030 people; the Census Bureau estimated 99,729 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "When did Federal Way become a city?",
+   "Federal Way incorporated on February 28, 1990, after earlier votes in 1971, 1981 and 1985 failed.",
+   "wiki"
+  ],
+  [
+   "Why is it called Federal Way?",
+   "The name comes from U.S. Route 99, the federal highway, which a local school district adopted when it consolidated in 1929.",
+   "wiki"
+  ],
+  [
+   "Does light rail go to Federal Way?",
+   "Yes. The Link 1 Line has run to Federal Way Downtown station since December 6, 2025, about 16 minutes from Sea-Tac Airport.",
+   "stopen"
+  ],
+  [
+   "Where can I park for light rail in Federal Way?",
+   "Federal Way Downtown station has a five-story garage with 1,500 stalls, plus 13 bus bays for connecting buses.",
+   "fwlink"
+  ],
+  [
+   "What school district is Federal Way in?",
+   "Federal Way Public Schools, which covers all of the city. Its School Lookup Tool finds the assigned school for an address; confirm with the district before you rely on it.",
+   "newstudents"
+  ],
+  [
+   "How long is the average commute from Federal Way?",
+   "The Census Bureau’s mean travel time to work for Federal Way residents is 32.1 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "What is the median home value in Federal Way?",
+   "The Census Bureau reports a median owner-occupied home value of $552,800 and median gross rent of $1,797 for 2020–2024.",
+   "census"
+  ],
+  [
+   "Can I build an ADU in Federal Way?",
+   "The single-family code allows up to two ADUs per lot, each up to 1,000 square feet, with no review process required. Confirm details with the City for a specific lot.",
+   "zoning"
+  ],
+  [
+   "Is there a beach in Federal Way?",
+   "Dash Point State Park, at 5700 SW Dash Point Road, has 461 acres and 3,301 feet of saltwater shoreline.",
+   "dashpoint"
+  ],
+  [
+   "Is Wild Waves still open?",
+   "Its owner announced the park would close permanently on November 1, 2026, after the 2026 season.",
+   "wwclose"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

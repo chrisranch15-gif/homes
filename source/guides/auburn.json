@@ -1,0 +1,519 @@
+{
+ "slug": "auburn",
+ "name": "Auburn",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-25",
+ "review": "https://claude.ai/artifact/TQcUswDCZ8KXgWWDSn5gek",
+ "headline": "Auburn: a south King County city shaped by the Green and White rivers.",
+ "lede": "Auburn sits in the valley where SR 167 and SR 18 meet, with Lea Hill, West Hill and Lakeland Hills rising around it and a small part reaching into Pierce County. This guide covers getting around, parks and rivers, schools, everyday errands, housing and neighborhoods, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Auburn, Washington",
+   "https://en.wikipedia.org/wiki/Auburn,_Washington"
+  ],
+  "census": [
+   "U.S. Census Bureau · QuickFacts: Auburn city, Washington",
+   "https://www.census.gov/quickfacts/auburncitywashington"
+  ],
+  "station": [
+   "Wikipedia · Auburn station (Sound Transit)",
+   "https://en.wikipedia.org/wiki/Auburn_station_(Sound_Transit)"
+  ],
+  "stgarage": [
+   "Sound Transit · Auburn Station Parking and Access Improvements",
+   "https://soundtransit.org/node/520"
+  ],
+  "sr167": [
+   "Wikipedia · Washington State Route 167",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_167"
+  ],
+  "sr18": [
+   "Wikipedia · Washington State Route 18",
+   "https://en.wikipedia.org/wiki/Washington_State_Route_18"
+  ],
+  "fwlink": [
+   "Wikipedia · Federal Way Downtown station",
+   "https://en.wikipedia.org/wiki/Federal_Way_Downtown_station"
+  ],
+  "airport": [
+   "Wikipedia · Auburn Municipal Airport (Washington)",
+   "https://en.wikipedia.org/wiki/Auburn_Municipal_Airport_(Washington)"
+  ],
+  "parks": [
+   "City of Auburn · Parks & Trails",
+   "https://www.cityofauburnwa.gov/visitors/parks___trails"
+  ],
+  "gamefarm": [
+   "City of Auburn · Game Farm Park",
+   "https://cityofauburnwa.gov/city_hall/parks_arts_recreation/parks_trails/game_farm"
+  ],
+  "envpark": [
+   "City of Auburn · Auburn Environmental Park",
+   "https://auburnwa.gov/city_hall/parks_arts_recreation/parks_trails/auburn_environmental_park"
+  ],
+  "lesgove": [
+   "City of Auburn · Les Gove Park",
+   "https://www.cityofauburnwa.gov/city_hall/parks_arts_recreation/parks_trails/les_gove/"
+  ],
+  "asd": [
+   "Auburn School District · About Us",
+   "https://www.auburn.wednet.edu/our-district/about-us"
+  ],
+  "asdwiki": [
+   "Wikipedia · Auburn School District",
+   "https://en.wikipedia.org/wiki/Auburn_School_District"
+  ],
+  "dieringer": [
+   "Dieringer School District · School Board",
+   "https://dieringer.wednet.edu/our_district/school_board/"
+  ],
+  "grc": [
+   "Wikipedia · Green River College",
+   "https://en.wikipedia.org/wiki/Green_River_College"
+  ],
+  "library": [
+   "King County Library System · About Auburn Library",
+   "https://kcls.org/about-auburn-library"
+  ],
+  "hospital": [
+   "King County Find Human Services · MultiCare Auburn Medical Center",
+   "https://find-human-services.kingcounty.gov/search/35b31d8f-1ad4-557d-a31a-521f662a74e8"
+  ],
+  "fire": [
+   "Washington 211 · Valley Regional Fire Authority, Station 31 and Headquarters",
+   "https://search.wa211.org/search/cd1a702b-75f0-51f2-a886-f5d57fff0f0b"
+  ],
+  "utilities": [
+   "City of Auburn · Utilities",
+   "https://www.cityofauburnwa.gov/utilities"
+  ],
+  "market": [
+   "City of Auburn · Auburn Farmers Market bulletin (September 2025)",
+   "https://content.govdelivery.com/accounts/WAAUBURN/bulletins/3f10998"
+  ],
+  "wrvm": [
+   "Wikipedia · White River Valley Museum",
+   "https://en.wikipedia.org/wiki/White_River_Valley_Museum"
+  ],
+  "emerald": [
+   "Wikipedia · Emerald Downs",
+   "https://en.wikipedia.org/wiki/Emerald_Downs"
+  ],
+  "kent": [
+   "Wikipedia · Kent, Washington",
+   "https://en.wikipedia.org/wiki/Kent,_Washington"
+  ],
+  "pacific": [
+   "Wikipedia · Pacific, Washington",
+   "https://en.wikipedia.org/wiki/Pacific,_Washington"
+  ],
+  "algona": [
+   "Wikipedia · Algona, Washington",
+   "https://en.wikipedia.org/wiki/Algona,_Washington"
+  ],
+  "sumner": [
+   "Wikipedia · Sumner, Washington",
+   "https://en.wikipedia.org/wiki/Sumner,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "87,256",
+   "people at the 2020 census",
+   "census"
+  ],
+  [
+   "~1,000",
+   "acres of park land managed by the City",
+   "parks"
+  ],
+  [
+   "30.5 min",
+   "mean travel time to work, 2020–2024",
+   "census"
+  ],
+  [
+   "$547,900",
+   "median value of owner-occupied homes, 2020–2024",
+   "census"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "87,256 at the 2020 census; estimated 86,301 on July 1, 2025",
+   "census"
+  ],
+  [
+   "Land area",
+   "29.58 square miles (2020)",
+   "census"
+  ],
+  [
+   "Counties",
+   "Mostly King County. A small part at the south end, where Lakeland Hills straddles the county line, is in Pierce County. Auburn voted in 1997 to annex portions of Pierce County",
+   "wiki"
+  ],
+  [
+   "Founded",
+   "Incorporated June 13, 1891, as Slaughter; renamed Auburn on February 21, 1893",
+   "wiki"
+  ],
+  [
+   "Rivers",
+   "The Green and White rivers shaped the city’s history; Mud Mountain Dam and Howard A. Hanson Dam ended the flooding that had held back growth",
+   "wiki"
+  ],
+  [
+   "Highways",
+   "SR 167 (the Valley Freeway) and SR 18 meet in Auburn; SR 164 runs east from town",
+   "wiki"
+  ],
+  [
+   "Sounder",
+   "Auburn station at 23 A Street Southwest, with 13 weekday round trips",
+   "station"
+  ],
+  [
+   "School districts",
+   "Mostly Auburn School District; parts of northern Auburn are in the Kent and Federal Way districts, and the Pierce County part is listed under the Dieringer School District",
+   "wiki"
+  ],
+  [
+   "Largest employer",
+   "The Boeing Auburn Plant, opened in 1966, with 3,600 employees",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "Land area differs by source: the Census Bureau gives 29.58 square miles of land (2020), while Wikipedia’s infobox gives 29.824. This guide uses the Census figure.",
+  "Census QuickFacts showed a July 1, 2025 population estimate of 86,301 and 2020–2024 survey figures when checked; Wikipedia lists a 2024 estimate of 85,513. This guide uses the Census figures.",
+  "Sounder travel time to Seattle differs: Wikipedia’s Auburn article says about 30 minutes to downtown Seattle, while the Auburn station article says approximately 35 minutes to King Street Station. This guide uses the station article.",
+  "The new Sound Transit garage: Wikipedia says 500 stalls, first expected by 2024 and delayed to 2027. Sound Transit’s project page says construction continues and completion is expected by 2027, but it does not give a stall count, so the guide does not state one.",
+  "School districts need a closer look. Wikipedia’s Auburn article says the Pierce County part of Auburn is served by the Dieringer School District, but the Auburn School District lists Lake Tapps among the communities it serves and has a Lakeland Hills Elementary. The Dieringer boundary map is a PDF that was not read. Kent and Federal Way service in northern Auburn comes from Wikipedia only.",
+  "Wikipedia’s Auburn School District article is internally inconsistent (14 elementary schools in its summary, 16 in its list). The district’s own page says 16 elementary, 4 middle and 4 high schools, and 17,125 K–12 students; this guide uses the district figures.",
+  "The City’s parks page gives two trail figures, “over 20 linear miles” and “over 26 miles of trails.” The Game Farm Park page names both the Stuck River and the White River as nearby; the Environmental Park page gives the boardwalk as 1,200 feet and as a quarter mile. This guide uses the less contested figures.",
+  "The farmers market details come from a City bulletin for the 2025 season (Sundays through September 14). The 2026 season was not checked.",
+  "Pierce Transit route 497 and the Metro routes are listed as Wikipedia states them; routes change often, so confirm with King County Metro, Pierce Transit or Sound Transit."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Auburn sits where SR 167 and SR 18 meet, with Sounder trains and regional buses at a downtown station. Census figures put the mean travel time to work for Auburn residents at 30.5 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "SR 167, the Valley Freeway",
+     "SR 167 runs past The Outlet Collection, along Mill Creek and the Interurban Trail west of downtown, then past Emerald Downs and the airport before crossing the Green River into Kent. It continues north to Renton and south to I-5 in Tacoma.",
+     "sr167"
+    ],
+    [
+     "SR 167 express toll lanes",
+     "The northbound HOT lane begins in Auburn and the southbound lane ends in Pacific. Solo drivers pay a variable toll of $1 to $15.",
+     "sr167"
+    ],
+    [
+     "SR 18",
+     "A mostly four-lane freeway that meets SR 167 in Auburn, runs west to I-5 and SR 99 in Federal Way, and east through Covington and Maple Valley to I-90 near Snoqualmie.",
+     "sr18"
+    ],
+    [
+     "Sounder at Auburn station",
+     "Auburn station at 23 A Street Southwest has 13 weekday Sounder S Line round trips, north to Seattle’s King Street Station in approximately 35 minutes and south to Tacoma Dome or Lakewood. It has 633 parking spaces, 520 of them in a six-story garage.",
+     "station"
+    ],
+    [
+     "A second station garage",
+     "Sound Transit is building a new garage at 1st Street Northwest, along with walking, biking and bus access improvements. The project is expected to be complete by 2027.",
+     "stgarage"
+    ],
+    [
+     "Buses from the station",
+     "ST Express 566 runs north on SR 167 to Kent, Renton, Bellevue and Overlake, and 578 links Puyallup and Seattle. King County Metro 180, 181 and 186 serve Green River College, Enumclaw, Federal Way, Kent and Sea-Tac Airport.",
+     "station"
+    ],
+    [
+     "Link light rail at Federal Way",
+     "Federal Way Downtown station became the southern end of the Link 1 Line on December 6, 2025, about 16 minutes to SeaTac/Airport and about 56 minutes to Westlake in downtown Seattle.",
+     "fwlink"
+    ],
+    [
+     "Auburn Municipal Airport",
+     "A City-owned airport two miles north of downtown, with one 3,842-foot runway and no scheduled airline service. In 2019, 264 aircraft were based there.",
+     "airport"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "The City’s Parks Department manages nearly 1,000 acres of park land, including 33 developed parks, with river access along the Green and White rivers.",
+   "dark": false,
+   "items": [
+    [
+     "Les Gove Park",
+     "20.86 acres at 910 9th Street SE, home to the Auburn Community & Event Center, the Senior Activity Center, the library and the White River Valley Museum. It also has the Discovery Playground and a summer spray playground.",
+     "lesgove"
+    ],
+    [
+     "Game Farm Park",
+     "At 3030 R Street SE: 53 acres plus 86.17 acres of open space, with 2 soccer fields, 4 softball fields, a one-mile paved loop trail and the Len Chapman Amphitheater.",
+     "gamefarm"
+    ],
+    [
+     "Game Farm Wilderness",
+     "At 2401 Stuck River Drive SE, with river access, trails, camping, a picnic shelter and a free 18-hole disc golf course. A pedestrian bridge crosses the White River.",
+     "parks"
+    ],
+    [
+     "Auburn Environmental Park",
+     "At 413 Western Avenue NW, a wetland park with an elevated boardwalk trail, interpretive signs and a bird-viewing tower.",
+     "envpark"
+    ],
+    [
+     "Fenster Nature Park",
+     "At 2033 4th Street SE, with swimming and tubing access to the Green River, public fishing access and trail access.",
+     "parks"
+    ],
+    [
+     "Interurban Trail",
+     "Auburn’s portion of the regional Interurban Trail is 4.5 miles long.",
+     "parks"
+    ],
+    [
+     "Centennial Viewpoint",
+     "At 402 Mountain View Drive, with a sculpture and views of Mount Rainier and the Auburn valley.",
+     "parks"
+    ],
+    [
+     "Auburn Golf Course",
+     "A full-service 18-hole, par 71 course at 29630 Green River Road SE, just over 6,450 yards.",
+     "parks"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Auburn is in the Auburn School District, with parts of northern Auburn in the Kent or Federal Way districts and the Pierce County part listed under Dieringer. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Auburn School District",
+     "Serves 17,125 K–12 students across a 62-mile area in parts of King and Pierce counties, including Auburn, Algona, Pacific and Lake Tapps. It has 16 elementary schools, 4 middle schools and 4 high schools.",
+     "asd"
+    ],
+    [
+     "High schools",
+     "Auburn High School, Auburn Riverside High School and Auburn Mountainview High School, plus West Auburn High School.",
+     "asdwiki"
+    ],
+    [
+     "Middle schools",
+     "Cascade, Mt. Baker, Olympic and Rainier middle schools.",
+     "asdwiki"
+    ],
+    [
+     "Other districts",
+     "Portions of northern Auburn are served by the Federal Way and Kent school districts, and the Pierce County portion by the Dieringer School District.",
+     "wiki"
+    ],
+    [
+     "Dieringer School District",
+     "Based in Lake Tapps, it lists three schools: Dieringer Heights Elementary, Lake Tapps Elementary and North Tapps Middle School.",
+     "dieringer"
+    ],
+    [
+     "Finding an assigned school",
+     "The Auburn School District posts attendance area maps on its website, along with a bus stop finder.",
+     "asd"
+    ],
+    [
+     "Green River College",
+     "A public community college whose main campus is on Lea Hill, with satellite campuses in downtown Auburn, Enumclaw and Kent.",
+     "grc"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown and the Les Gove Park campus hold the library, museum and Sunday market, with the hospital near the station.",
+   "dark": false,
+   "items": [
+    [
+     "Auburn Library",
+     "The King County Library System’s Auburn Library opened in Les Gove Park in 2000 and was expanded to 20,000 square feet in 2012.",
+     "library"
+    ],
+    [
+     "Hospital",
+     "MultiCare Auburn Medical Center at 202 North Division Street has a 24-hour emergency department with Level III trauma designation.",
+     "hospital"
+    ],
+    [
+     "Fire and EMS",
+     "Valley Regional Fire Authority provides fire and emergency medical services to Auburn, Algona and Pacific, with headquarters and Station 31 at 1101 D Street NE.",
+     "fire"
+    ],
+    [
+     "Utilities",
+     "The City of Auburn provides water, sewer, storm drainage and garbage, recycling and yard and food waste services, depending on address. Waste Management is the listed garbage hauler.",
+     "utilities"
+    ],
+    [
+     "Farmers market",
+     "The 2025 Auburn Farmers Market ran Sundays, 10 a.m. to 3 p.m., at Les Gove Park, 1140 Auburn Way South, through September 14.",
+     "market"
+    ],
+    [
+     "Shopping",
+     "The Outlet Collection Seattle, formerly the SuperMall of the Great Northwest, opened in 1995.",
+     "wiki"
+    ],
+    [
+     "White River Valley Museum",
+     "At 918 H Street SE, covering local history, Northwest Indian culture, Japanese-American history and the Northern Pacific Railroad. Exhibits include the 1924 Auburn Depot and a 1915 Japanese farmhouse.",
+     "wrvm"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Auburn grew from a downtown hops and railroad town into the surrounding hills, mostly through annexations since the late 1990s.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 60.6%, median owner-occupied home value $547,900 and median gross rent $1,786 (Census, 2020–2024).",
+     "census"
+    ],
+    [
+     "Neighborhoods",
+     "The city lists Downtown, North Auburn, River’s Bend, Christopher/Thomas, Lea Hill, Hazelwood, West Valley, West Hill, South Auburn, Terminal Park, Forest Villa, Lakeland Hills and Hidden Valley.",
+     "wiki"
+    ],
+    [
+     "Lea Hill and West Hill",
+     "Auburn annexed West Hill and Lea Hill in 2008, adding 15,000 residents and expanding its land area by 26%.",
+     "wiki"
+    ],
+    [
+     "Lakeland Hills",
+     "A master-planned community at the city’s southern end, on both sides of the King–Pierce county line. Construction began in 1985; by 2007 it had 3,600 homes.",
+     "wiki"
+    ],
+    [
+     "The Bridges",
+     "On January 1, 2024, Auburn annexed the 155-acre Bridges neighborhood from Kent.",
+     "wiki"
+    ],
+    [
+     "Name and history",
+     "Founded as Slaughter in 1891 and renamed in 1893 after Auburn, New York, a town that also relied on hops farming.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Auburn sits between Kent to the north, Federal Way to the west, Algona and Pacific to the south and the Muckleshoot Indian Reservation to the south and southeast.",
+   "dark": true,
+   "items": [
+    [
+     "Kent",
+     "A south King County city of 136,588 people in 2020, with its own Sounder station and the 6,500-seat accesso ShoWare Center. SR 167 crosses the Green River from Auburn into downtown Kent.",
+     "kent"
+    ],
+    [
+     "Federal Way",
+     "West of Auburn’s West Hill. Federal Way Downtown station is the southern end of the Link 1 Line, with 13 bus bays and a five-story garage.",
+     "fwlink"
+    ],
+    [
+     "Algona",
+     "Bordered by Auburn to the north and east and by Pacific to the south, with 3,290 people in 2020. It incorporated in 1955.",
+     "algona"
+    ],
+    [
+     "Pacific",
+     "Mostly in King County with a part in Pierce County, with 7,235 people in 2020. The lower White River runs through its east side, between Auburn and Sumner.",
+     "pacific"
+    ],
+    [
+     "Sumner",
+     "In northern Pierce County, south of Auburn, with 10,621 people in 2020 and a Sounder stop downtown.",
+     "sumner"
+    ],
+    [
+     "Emerald Downs",
+     "A Thoroughbred racetrack about half a mile east of SR 167, opened in 1996, with live racing in spring and summer. The Muckleshoot Indian Tribe bought the land in 2002.",
+     "emerald"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Auburn, WA in?",
+   "Auburn is mostly in King County. A small part at the south end, including part of Lakeland Hills, extends into Pierce County.",
+   "wiki"
+  ],
+  [
+   "What is the population of Auburn, WA?",
+   "The 2020 census counted 87,256 people; the Census Bureau estimated 86,301 on July 1, 2025.",
+   "census"
+  ],
+  [
+   "When was Auburn founded?",
+   "It incorporated on June 13, 1891, as Slaughter, and was renamed Auburn on February 21, 1893.",
+   "wiki"
+  ],
+  [
+   "What school district is Auburn in?",
+   "Mostly the Auburn School District. Parts of northern Auburn are in the Kent and Federal Way districts, and the Pierce County part is listed under Dieringer. Confirm with the district for any specific address.",
+   "wiki"
+  ],
+  [
+   "How many schools does the Auburn School District have?",
+   "The district lists 16 elementary schools, 4 middle schools and 4 high schools, with 17,125 K–12 students.",
+   "asd"
+  ],
+  [
+   "Does Auburn have a Sounder train?",
+   "Yes. Auburn station at 23 A Street Southwest has 13 weekday Sounder S Line round trips, about 35 minutes to Seattle’s King Street Station.",
+   "station"
+  ],
+  [
+   "Is a new parking garage coming to Auburn station?",
+   "Sound Transit is building a new garage at 1st Street Northwest and expects the project to be complete by 2027.",
+   "stgarage"
+  ],
+  [
+   "How long is the average commute from Auburn?",
+   "The Census Bureau’s mean travel time to work for Auburn residents is 30.5 minutes (2020–2024).",
+   "census"
+  ],
+  [
+   "What is the median home value in Auburn?",
+   "The Census Bureau reports a median owner-occupied home value of $547,900 and median gross rent of $1,786 for 2020–2024.",
+   "census"
+  ],
+  [
+   "What is Lakeland Hills?",
+   "A master-planned community at Auburn’s southern end, on both sides of the King–Pierce county line, begun in 1985.",
+   "wiki"
+  ],
+  [
+   "Which highways serve Auburn?",
+   "SR 167, the Valley Freeway, runs north–south through the city, and SR 18 meets it in Auburn, linking I-5 in Federal Way with I-90 near Snoqualmie.",
+   "sr18"
+  ],
+  [
+   "How much park land does Auburn have?",
+   "The City’s Parks Department manages nearly 1,000 acres of park land, including 33 developed parks.",
+   "parks"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

@@ -24,7 +24,7 @@ const SocialUI = (() => {
   function caption(set, p) { const s = S(pk(set, p)); return s.text != null ? s.text : p.caption; }
   function whenVal(set, p) { const s = S(pk(set, p)); return s.when || p.when; }
   function nice(w) { const d = new Date(w); return isNaN(d) ? w : d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
-  const img = (set, p, i) => e((H.base || '') + p.th[i]);
+  const img = (set, p, i) => e(((H && H.base) || '') + p.th[i]);
 
   /* ---- the previews: drawn the way each network shows a post ---- */
   function slider(set, p, k, ratio) {
@@ -65,7 +65,7 @@ const SocialUI = (() => {
       ${s.err ? `<p class="socp-err">${e(s.err)}</p>` : ''}
       <div class="socp-acts">${local ? `<span class="socp-note">Approve from your Office in the Claude app, where Metricool is connected.</span>` : `<button class="socp-btn" data-soc="approve" data-k="${e(k)}" ${s.busy ? 'disabled' : ''}>${s.busy ? 'Scheduling…' : 'Approve'}</button>`}
         <button class="socp-btn ghost" data-soc="edit" data-k="${e(k)}">${s.edit ? 'Done editing' : 'Edit'}</button>
-        <a class="socp-btn ghost" href="${e(p.urls[0])}" target="_blank" rel="noopener">Full size</a>${typeof ImproveUI !== 'undefined' ? ImproveUI.toneLink(H.where || 'Office', `${set.key} ${set.event} · ${p.id}`, caption(set, p), p.trail) : ''}</div>
+        <a class="socp-btn ghost" href="${e(p.urls[0])}" target="_blank" rel="noopener">Full size</a>${typeof ImproveUI !== 'undefined' ? ImproveUI.toneLink((H && H.where) || 'Office', `${set.key} ${set.event} · ${p.id}`, caption(set, p), p.trail) : ''}</div>
       ${!local ? `<p class="socp-note">Approve schedules it for the time above${p.network === 'gmb' ? '' : ''}. Want a different photo or line? Tell the Concierge and it comes back here for your OK.</p>` : ''}`}
     </div>`;
   }

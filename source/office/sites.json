@@ -43,6 +43,14 @@
 },
 {
 "g": "Town guides",
+"t": "Auburn",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/TQcUswDCZ8KXgWWDSn5gek",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
 "t": "Bonney Lake",
 "s": "Draft, waiting for your review",
 "u": "https://claude.ai/artifact/2ghqvwiU7gqf6aaihJHyvq",
@@ -75,6 +83,22 @@
 },
 {
 "g": "Town guides",
+"t": "Federal Way",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/3ZmK42ZrqaokUfqZvyDdTv",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Fife",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/ELWp1FMn6pEZ7Jg549wnDC",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
 "t": "Gig Harbor",
 "s": "Draft, waiting for your review",
 "u": "https://claude.ai/artifact/MLC1bspEE5Ao4GtYAVPjeu",
@@ -94,6 +118,14 @@
 "t": "Port Orchard",
 "s": "Draft, waiting for your review",
 "u": "https://claude.ai/artifact/9KwHB6FZ1qnYiKdDCMzjAo",
+"th": "",
+"draft": true
+},
+{
+"g": "Town guides",
+"t": "Puyallup",
+"s": "Draft, waiting for your review",
+"u": "https://claude.ai/artifact/Tnba2HgMXdfmmZY48335qo",
 "th": "",
 "draft": true
 },

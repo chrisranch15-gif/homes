@@ -9,7 +9,7 @@ const ImproveUI = (() => {
   const e = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const now = () => new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
   const vals = r => (r && (r.values || (r.valueRanges && r.valueRanges[0] && r.valueRanges[0].values))) || [];
-  const local = () => !(window.claude && window.claude.use) && !H.office;
+  const local = () => !(window.claude && window.claude.use) && !(H && H.office);
   const store = (k, v) => { try { if (v === undefined) return JSON.parse(localStorage.getItem('imp:' + k) || 'null'); localStorage.setItem('imp:' + k, JSON.stringify(v)); } catch (x) { return null; } };
   const homeNum = s => (String(s || '').match(/^\d{3,6}/) || [''])[0];
 
@@ -55,8 +55,8 @@ const ImproveUI = (() => {
   }
 
   /* ---- seller questions ---- */
-  const forChris = () => (qs || []).filter(x => /^for chris/i.test(x.r[8] || '') && (!H.home || homeNum(x.r[2]) === homeNum(H.home)));
-  const autoRecent = () => (qs || []).filter(x => /^auto/i.test(x.r[7] || '') && /^answered/i.test(x.r[8] || '') && (!H.home || homeNum(x.r[2]) === homeNum(H.home)) && (Date.now() - new Date(x.r[9] || x.r[0]).getTime()) < 4 * 864e5);
+  const forChris = () => (qs || []).filter(x => /^for chris/i.test(x.r[8] || '') && (!(H && H.home) || homeNum(x.r[2]) === homeNum(H.home)));
+  const autoRecent = () => (qs || []).filter(x => /^auto/i.test(x.r[7] || '') && /^answered/i.test(x.r[8] || '') && (!(H && H.home) || homeNum(x.r[2]) === homeNum(H.home)) && (Date.now() - new Date(x.r[9] || x.r[0]).getTime()) < 4 * 864e5);
   function questionHtml(x, mode) {
     const r = x.r, b = busy['q' + x.row];
     return `<div class="imp-card"><div class="imp-t">${e(r[2])}${r[3] ? ` <span class="imp-s">· ${e(r[3])}</span>` : ''}</div><p class="imp-q">“${e(r[4])}”</p>

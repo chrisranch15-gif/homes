@@ -4,20 +4,23 @@ Read `source/marketing/brain/brain.md` first. Also follow `locked-rules.md` and 
 (every fact verified, photos only of the home, credit Anthony Jones / Rainier Real Estate Photography, KW disclosure,
 the agent is the hero, Chris's direct line only).
 
-Chris launches a listing from the Office ("Launch a listing"). The Office fires this task right away with the address;
-it also runs hourly as a safety net. Chris, Nov 26, 2026: "Why not just start it." Start at once, do everything that
+A listing launches **on its own as soon as its photos are in** (Photo shoots tab Status "Ready" or "Delivered", or photos
+already in `photos/<key>/`); Chris doesn't need to tap anything (Chris, Nov 26, 2026: "Should I need to click launch
+listing?" No). The Office's Launch button just fires this task sooner, with the address. It also runs hourly, 8 AM to 6 PM. Chris, Nov 26, 2026: "Why not just start it." Start at once, do everything that
 can be done, and leave clear notes in the Office for anything that's waiting on him.
 
 ## Each run
-1. **Find launches to work on.** Listings tab rows with Status "Preparing" (or a "Launch requested" row on the Marketing
-   tab) whose page isn't built yet. The message from the Office names one; do it first. Key = street number.
+1. **Find launches to work on.** Listings tab rows with Status "Preparing" whose page isn't built yet (and any
+   "Launch requested" row on the Marketing tab). If the Office's message names one, do it first. A listing whose photos
+   aren't in yet just gets "waiting for photos" (step 3). Key = street number.
 2. **Facts.** `source/listings/<key>.json` (see `source/listings/README.md`). If it doesn't exist, create it from what's
    verified: the Listings tab (address, city, price, sellers), public record (Realist, if a session can reach it),
    the photo shoot and the Launch notes. If two sources disagree (price, square feet, beds), don't pick: keep the
    field hidden (e.g. `sqft_note`), file a papercut, and add a Needs-you row for Chris (Marketing tab: [now, address,
    "Launch: needs your answer", "<the question in one line>", ""]). Never invent a fact.
-3. **Photos.** If `photos/<key>/` is missing and the "Shoot photos" tab (or the Photo shoots row) has the delivered
-   Drive photos, write `source/photos/<key>.json` (same shape as the others) and push: the "Listing photos from Drive"
+3. **Photos.** If `photos/<key>/` is missing, get them from the "Shoot photos" tab, or from the Photo shoots row's
+   download page (column I, Rainier's delivery page: open it in a browser, use its "download all" link). When the
+   delivered Drive photos are known, write `source/photos/<key>.json` (same shape as the others) and push: the "Listing photos from Drive"
    action downloads and sizes them. Wait for it (check photos/<key>/index.json after a few minutes). If photos aren't
    delivered yet, note "waiting for photos" and stop here for this listing.
 4. **Write the page's words** (lede, features, groups, story, details) from the photos and verified facts, per the brain
@@ -31,7 +34,8 @@ can be done, and leave clear notes in the Office for anything that's waiting on 
 6. **Ship** per CLAUDE.md rule 19 (ship.sh, push both repos, publish the Office and the Desk). Don't add the page to the
    public index, sitemap or llms.txt until it has an MLS number and Chris has approved it.
 7. **Tell Chris in the Office:** Marketing tab row [now, address, "Launch ready for your review", "<what's ready>",
-   "<preview link>"], and set the Listings tab Status to "Ready for review". When Chris approves (Marketing tab or the
+   "<preview link>"], set the Listings tab Status to "Ready for review", and set its Photo column (J) to the front
+   photo's URL so the Office shows the home instead of a blank square. When Chris approves (Marketing tab or the
    Concierge), add the MLS number when he gives it, rebuild (it goes public and indexed), and set Status "Active".
 
 Never post, send, email or publish anything public without Chris's OK. File papercuts for anything that slowed you down.

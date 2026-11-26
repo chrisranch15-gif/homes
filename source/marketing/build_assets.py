@@ -24,7 +24,7 @@ LOOKS = {'editorial': 'Estate Editorial', 'arch': 'Modern Architectural', 'herit
 SIGN_LOOK = {'noir': 'editorial', 'daylight': 'arch', 'heritage': 'heritage'}   # 'gallery' is the retired fourth sign style
 PIECES = [('postcard-listed', 'Just Listed postcard'), ('postcard-contract', 'Under contract postcard'), ('postcard-sold', 'Just sold postcard'),
           ('preview-invite', 'Neighbors’ preview invitation'), ('lookbook', 'Lookbook'), ('room-cards', 'Room story cards'), ('talkers', 'Silent talkers'),
-          ('flyer', 'Take-one flyer'), ('guide', 'Neighborhood guide booklet'),
+          ('flyer', 'Take-one flyer'), ('house-cards', 'House business cards'), ('guide', 'Neighborhood guide booklet'),
           ('shoes', 'Please remove your shoes'), ('bootie-card', 'Shoe covers card'), ('sign-rider', 'QR sign rider (24×6)'), ('window-cling', 'Front window QR'),
           ('thanks-card', 'Thanks for touring card'), ('showing-sheet', 'Showing instructions'), ('offer-sheet', 'Offer instructions'),
           ('upgrades', 'Upgrades sheet'), ('costs', 'Cost of ownership'), ('rules', 'Home rules signs')]

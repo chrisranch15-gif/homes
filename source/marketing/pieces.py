@@ -518,6 +518,31 @@ def guide_booklet(L, d):
 <div style="margin-top:.35in">{agent_block(L)}</div><p class="fine" style="margin-top:.2in">{DISCLOSE}</p></div></div>"""
     return pages + [flow]
 
+def house_cards(L, d):
+    """Business cards for the house (3.5×2): sellers hand them to friends, coworkers, the barista."""
+    fr = '<div style="position:absolute;inset:6px;border:1px solid rgba(217,188,133,.8)"></div>' if L['frame'] else ''
+    hi = (d.get('reasons') or [[r['title'], ''] for r in d['rooms'][:3]])[:2]
+    if L.get('light'):
+        front = f"""<div class="pg" style="background:{L['paper']};padding:.1in;display:grid;grid-template-columns:1.6in 1fr;gap:.12in">
+<img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover">
+<div style="display:flex;flex-direction:column;padding:.04in 0"><p class="eye" style="font-size:5.5pt;font-weight:600;color:{L['accent']}">For sale · {esc(d['area'])}</p>
+<p class="h" style="font-size:{hs(L, 17)};line-height:1.05;margin-top:5px;color:{L['ink']}">{esc(d['address'])}</p>
+<p style="margin:4px 0 0;font-size:6pt;line-height:1.35;color:{L['sub']}">{esc(d['facts_line'])}</p>
+<p style="margin:auto 0 0;font-size:6pt;font-weight:600;color:{L['accent']}">Pass it on: someone you know may be looking.</p></div></div>"""
+    else:
+        front = f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(d['hero'])}">{fr}
+<div style="position:absolute;inset:0;background:linear-gradient(to top,{L['dark']}ee,{L['dark']}00 70%)"></div>
+<div style="position:absolute;left:.16in;right:.16in;bottom:.13in;color:{L['paper']}"><p class="eye" style="font-size:5.5pt;color:{L['onDark']}">For sale · {esc(d['area'])}</p>
+<p class="h" style="font-size:{hs(L, 19)};margin-top:4px">{esc(d['address'])}</p>
+<p style="margin:3px 0 0;font-size:6pt;color:{L['onDark']}">{esc(d['facts_line'])}</p><p style="margin:5px 0 0;font-size:6pt;font-weight:600;letter-spacing:.06em;color:{L['paper']}">Pass it on: someone you know may be looking.</p></div></div>"""
+    back = f"""<div class="pg" style="background:{L['paper']};padding:.13in .15in;display:grid;grid-template-columns:1fr .95in;gap:.1in">
+<div style="display:flex;flex-direction:column"><p class="h" style="font-size:{hs(L, 12.5)};line-height:1.1;color:{L['ink']}">Know someone who’d love it here?</p><p style="margin:2px 0 0;font-size:6.2pt;color:{L['accent']}">Hand them this card, or send them the link.</p>
+<ul style="margin:5px 0 0;padding-left:10px;font-size:6.1pt;line-height:1.33;color:{L['sub']}">{''.join(f'<li>{esc(a)}{(" " + esc(b)) if b else ""}</li>' for a, b in hi)}</ul>
+<p style="margin:auto 0 0;font-size:6.5pt;line-height:1.3;color:{L['ink']}"><b>{AGENT['name']}</b> · {AGENT['phone']}<br><span style="color:{L['muted']}">{AGENT['team']} · {AGENT['brokerage']}</span></p></div>
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center"><img src="{qr(SITE + d['key'] + '?src=card', L['ink'])}" style="width:.9in;height:.9in">
+<p style="margin:3px 0 0;font-size:5pt;text-align:center;color:{L['sub']}">{short_url(d)}</p></div></div>"""
+    return [front, back]
+
 PRINT = [('postcard-listed', 'Just Listed postcard', postcard_listed, 9, 6), ('postcard-contract', 'Under contract postcard', postcard_contract, 9, 6),
          ('postcard-sold', 'Just sold postcard', postcard_sold, 9, 6), ('preview-invite', 'Neighbors’ preview invitation', preview_invite, 5, 7),
          ('lookbook', 'Lookbook', lookbook, 11, 8.5), ('room-cards', 'Room story cards', room_cards, 4, 6), ('talkers', 'Silent talkers', talkers, 5, 3),
@@ -526,7 +551,7 @@ PRINT = [('postcard-listed', 'Just Listed postcard', postcard_listed, 9, 6), ('p
          ('thanks-card', 'Thanks for touring card', thanks_card, 5, 3), ('showing-sheet', 'Showing instructions (agents)', showing_sheet, 8.5, 11),
          ('offer-sheet', 'Offer instructions (agents)', offer_sheet, 8.5, 11), ('upgrades', 'Upgrades sheet', upgrades_sheet, 8.5, 11),
          ('costs', 'Cost of ownership', costs_sheet, 8.5, 11), ('rules', 'Home rules signs', rules_signs, 8.5, 11),
-         ('flyer', 'Take-one flyer', flyer, 8.5, 11), ('guide', 'Neighborhood guide booklet', guide_booklet, 5.5, 8.5)]
+         ('flyer', 'Take-one flyer', flyer, 8.5, 11), ('house-cards', 'House business cards (3.5×2)', house_cards, 3.5, 2), ('guide', 'Neighborhood guide booklet', guide_booklet, 5.5, 8.5)]
 LABEL = {k: t for k, t, *_ in PRINT} | {'agent-email': 'Agent email', 'carousel': 'Instagram carousel'}
 
 TMP = '/tmp/ranch-pieces.html'

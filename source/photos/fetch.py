@@ -22,6 +22,9 @@ def get(fid):
 
 def main(plan):
     p = json.load(open(plan)); out = os.path.join('photos', p['listing']); os.makedirs(out, exist_ok=True)
+    done = os.path.join(out, 'index.json')
+    if os.path.exists(done) and len(json.load(open(done)).get('photos', [])) == len(p['files']):
+        print('already sized, skipping', p['listing']); return  # e.g. brought in through the Drive connector
     index = []
     for f in sorted(p['files'], key=lambda x: x['name']):
         s = slug(f['name'])

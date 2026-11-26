@@ -43,6 +43,8 @@ LOOKS = {
 }
 
 def esc(s): return html.escape(str(s or ''), quote=True)
+def place(d, sep=' · '):  # 'Tehaleh · Bonney Lake', or just 'Edgewood' when area and city are the same
+    return esc(d['area']) + (sep + esc(d['city']) if d.get('city') and d.get('city') != d.get('area') else '')
 
 REVIEW = False   # --review: read source/marketing/pieces/review/<key>.json, write marketing/<key>/review/<look>/ (a change waiting for Chris's OK)
 def load(key):
@@ -53,14 +55,17 @@ def load(key):
         s = json.load(open(os.path.join(R, 'source', 'listings', key + '.json')))
         ph = lambda n: next((f'photos/{key}/{n}{x}' for x in ('.jpg', '.webp') if os.path.exists(os.path.join(R, 'photos', key, n + x))), '')
         feats = [dict(title=c, photo=ph(n), story='', note='') for c, n in s.get('features', [])]
-        d = dict(key=key, address=s['address'], city=s.get('city', ''), area=s.get('city', ''), price=s.get('price'),
-                 beds=s.get('beds'), baths=s.get('baths'), sqft=s.get('sqft'), status=s.get('status', 'Active'),
+        d = dict(key=key, address=s['address'], city=s.get('city', ''), area=(s.get('area') or s.get('city', '')).split(',')[0].strip(), price=s.get('price'),
+                 beds=s.get('beds'), baths=s.get('baths'), sqft=None if s.get('sqft_note') else s.get('sqft'), status=s.get('status', 'Active'),
                  hero=ph(s.get('hero', '')), interior=feats[1]['photo'] if len(feats) > 1 else ph(s.get('hero', '')),
                  tagline='', pitch=s.get('lede', ''), rooms=feats, talkers=s.get('talkers', []), reasons=[],
                  credit=s.get('credit', ''), look=s.get('look', 'editorial'), print=s.get('print', []))
         pl = lambda n, w: f"{n} {w}" + ('' if str(n) in ('1', '1.0') else 's')
-        d['facts_line'] = f"{pl(d['beds'], 'bedroom')} · {pl(d['baths'], 'bath')} · {d['sqft']:,} sq ft" if d.get('sqft') else ''
+        d['facts_line'] = ' · '.join(x for x in (pl(d['beds'], 'bedroom') if d.get('beds') else '', pl(d['baths'], 'bath') if d.get('baths') else '',
+                                                 f"{d['sqft']:,} sq ft" if d.get('sqft') else '') if x)  # sqft_note = disputed: stays off every piece
     d.setdefault('area', d.get('city', ''))
+    # Pieces mention 'the film' only when the listing has one (a shot plan in source/video/shots/).
+    d['film'] = any(f.startswith(key + '-') for f in os.listdir(os.path.join(R, 'source', 'video', 'shots')))
     return d
 
 def photo(rel):  # absolute file URL for printing
@@ -134,7 +139,7 @@ def light_front(L, d, eyebrow, title, line, img, size=54, extra=''):
 def postcard_listed(L, d):
     fr = '<div class="frame"></div>' if L['frame'] else ''
     if L.get('light'):
-        q = f'<div style="display:flex;gap:12px;align-items:center;margin-top:16px"><img src="{qr(SITE + d["key"], L["ink"])}" style="width:.9in;height:.9in"><p style="margin:0;font-size:9pt;line-height:1.4;color:{L["sub"]}">Every photo, the film and the price</p></div>'
+        q = f'<div style="display:flex;gap:12px;align-items:center;margin-top:16px"><img src="{qr(SITE + d["key"], L["ink"])}" style="width:.9in;height:.9in"><p style="margin:0;font-size:9pt;line-height:1.4;color:{L["sub"]}">{'Every photo, the film and the price' if d.get('film') else 'Every photo and the price'}</p></div>'
         return [light_front(L, d, 'Just listed · ' + esc(d['area']), 'Now’s your chance to pick your neighbor.', f"{esc(d['address'])} · {esc(d['facts_line'])}", d['hero'], 44, q)] + postcard_listed_back(L, d)
     front = f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(d['hero'])}">{fr}
 <div style="position:absolute;left:0;right:0;bottom:0;height:3.2in;background:linear-gradient(to top,{L['dark']}e6,{L['dark']}00)"></div>
@@ -150,7 +155,7 @@ def postcard_listed_back(L, d):
 <h2 class="h" style="font-size:{hs(L, 30)};line-height:1.08;color:{L['ink']}">A home on your street just came to market, and you get to help choose who moves in.</h2>"""
     body = esc(d['pitch']) + ' Know someone who has always wanted to live near you? Send them the link.'
     thumbs = [r.get('photo') for r in d['rooms'][:3]]
-    return [mail_back(L, d, title, body, SITE + d['key'], 'Every photo, the film and the price.', thumbs)]
+    return [mail_back(L, d, title, body, SITE + d['key'], ('Every photo, the film and the price.' if d.get('film') else 'Every photo and the price.'), thumbs)]
 
 def postcard_contract(L, d):
     if not (d.get('listed') and d.get('contract')): return None
@@ -228,13 +233,13 @@ def lookbook(L, d):
 <div style="position:absolute;inset:0;background:linear-gradient(to right,{L['dark']}dd 0%,{L['dark']}55 46%,{L['dark']}00 72%)"></div>
 <div style="position:absolute;left:.65in;top:.65in;bottom:.65in;width:4.6in;display:flex;flex-direction:column;color:{L['paper']}">
 <p class="h" style="font-size:{hs(L, 18)};color:{L['onDark']}">{AGENT['team']}</p>
-<p class="eye" style="margin-top:auto;color:{L['onDark']}">{esc(d['area'])} · {esc(d['city'])}</p>
+<p class="eye" style="margin-top:auto;color:{L['onDark']}">{place(d)}</p>
 <h1 class="h" style="font-size:{hs(L, 68)};line-height:.98;margin-top:12px">{esc(d['address'])}</h1>
 {f'<p class="it" style="margin:14px 0 0;font-size:24px;color:{L["onDark"]}">{esc(d["tagline"])}</p>' if d.get('tagline') else ''}
 <p style="margin:22px 0 0;font-size:10.5pt;letter-spacing:.1em;text-transform:uppercase">{esc(d['facts_line'])}</p></div></div>"""
     if L.get('light'):
         cover = f"""<div class="pg" style="background:{L['paper']};padding:.55in;display:flex;flex-direction:column">
-<div style="display:flex;justify-content:space-between;font-size:8.5pt;font-weight:600;letter-spacing:.26em;text-transform:uppercase"><span>{AGENT['team']}</span><span style="color:{L['accent']}">{esc(d['area'])} · {esc(d['city'])}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:8.5pt;font-weight:600;letter-spacing:.26em;text-transform:uppercase"><span>{AGENT['team']}</span><span style="color:{L['accent']}">{place(d)}</span></div>
 <div style="position:relative;margin-top:.3in;height:4.7in"><img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:12px;border:1px solid rgba(255,255,255,.85)"></div></div>
 <div style="margin-top:.32in;display:flex;justify-content:space-between;align-items:flex-end;gap:.4in">
 <h1 class="h" style="font-size:{hs(L, 60)};line-height:.98;white-space:nowrap;color:{L['ink']}">{esc(d['address'])}</h1>
@@ -253,7 +258,7 @@ def lookbook(L, d):
 {side}
 <p class="fine" style="margin-top:auto">{esc(d['address'])} · {AGENT['name']} · {AGENT['phone']}</p></div></div>""")
     pages.append(f"""<div class="pg" style="background:{L['dark']};color:{L['paper']};padding:.8in;display:flex;flex-direction:column;align-items:flex-start">{fr}
-<p class="eye" style="color:{L['onDark']}">See every room, the film and the floor plans</p>
+<p class="eye" style="color:{L['onDark']}">{'See every room, the film and the floor plans' if d.get('film') else 'See every room and the floor plans'}</p>
 <h2 class="h" style="font-size:{hs(L, 48)};margin-top:14px;max-width:6.5in;line-height:1.02">{esc(d['address'])}</h2>
 <div style="margin-top:.4in;display:flex;gap:.4in;align-items:center"><img src="{qr(SITE + d['key'], L['dark'])}" style="width:1.4in;height:1.4in;background:#fff">
 <div>{agent_block(L, True, 56)}</div></div>
@@ -272,7 +277,7 @@ def room_cards(L, d):
 {f'<p style="margin:0;font-size:10pt;line-height:1.5;color:{L["sub"]}">{esc(r["story"])}</p>' if r.get('story') else ''}
 {f'<p class="it" style="margin:0;font-size:15px;color:{L["accent"]}">{esc(r["note"])}</p>' if r.get('note') else ''}
 <div style="margin-top:auto;padding-top:8px;border-top:1px solid {L['rule']};display:flex;align-items:center;gap:10px">
-<img src="{qr(SITE + d['key'], L['ink'])}" style="width:.5in;height:.5in"><p style="margin:0;font-size:8pt;line-height:1.35;color:{L['sub']}">Every room, the film and floor plans<br>{AGENT['name']} · {AGENT['phone']}</p></div></div></div>""")
+<img src="{qr(SITE + d['key'], L['ink'])}" style="width:.5in;height:.5in"><p style="margin:0;font-size:8pt;line-height:1.35;color:{L['sub']}">{'Every room, the film and floor plans' if d.get('film') else 'Every room and the floor plans'}<br>{AGENT['name']} · {AGENT['phone']}</p></div></div></div>""")
     return out or None
 
 def talkers(L, d):
@@ -314,7 +319,7 @@ def carousel_slides(L, d):
     s.append(f"""<div class="pg" style="background:{L['dark']};color:{L['paper']};padding:80px;display:flex;flex-direction:column">{fr}
 <img src="{photo(d['rooms'][-1]['photo'] if d['rooms'] and d['rooms'][-1].get('photo') else d['hero'])}" style="width:100%;height:620px;object-fit:cover">
 <p class="eye" style="font-size:24px;margin-top:50px;color:{L['onDark']}">Last slide</p>
-<h2 class="h" style="font-size:{hs(L, 84)};margin-top:16px;line-height:1.02">See every room, and the film</h2>
+<h2 class="h" style="font-size:{hs(L, 84)};margin-top:16px;line-height:1.02">{'See every room, and the film' if d.get('film') else 'See every room'}</h2>
 <p style="margin:26px 0 0;font-size:32px;color:{L['onDark']}">Link in bio · or DM me “{esc(d['key'])}”</p>
 <p style="margin:auto 0 0;font-size:22px;color:{L['onDarkSub']}">{AGENT['name']} · {AGENT['team']} · {AGENT['brokerage']} · {AGENT['phone']}</p></div>""")
     return s
@@ -358,14 +363,14 @@ def agent_email(L, d):
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:{L['ink']}">
 <tr><td style="background:{L['dark']};padding:16px 24px;color:{L['onDark']};font-family:{hf};font-size:18px">{AGENT['team']}<span style="float:right;font-family:Arial;font-size:11px;letter-spacing:3px;padding-top:4px">FOR AGENTS</span></td></tr>
 <tr><td><img src="{u(d['hero'])}" width="600" style="display:block;width:100%;height:auto" alt="{esc(d['address'])}"></td></tr>
-<tr><td style="padding:26px 24px 6px"><p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:{L['accent']}">New to market · {esc(d['area'])}, {esc(d['city'])}</p>
+<tr><td style="padding:26px 24px 6px"><p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:{L['accent']}">New to market · {place(d, ', ')}</p>
 <h1 style="margin:10px 0 0;font-family:{hf};font-weight:normal;font-size:34px;line-height:1.1">{esc(d['address'])}</h1>
 <p style="margin:8px 0 0;font-size:22px;font-weight:bold">{money(d.get('price'))}</p>
 <p style="margin:8px 0 0;font-size:14px;color:{L['muted']}">{esc(d['facts_line'])}</p>
 <h2 style="margin:22px 0 10px;font-family:{hf};font-weight:normal;font-size:22px">Why your buyers will love it</h2>
 <ul style="margin:0;padding-left:20px;font-size:15px;line-height:1.55;color:{L['sub']}">{reasons}</ul></td></tr>
 <tr><td style="padding:16px 20px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>{grid}</tr></table></td></tr>
-<tr><td style="padding:20px 24px 0"><a href="{SITE}{d['key']}" style="display:block;background:{L['dark']};color:#ffffff;text-decoration:none;text-align:center;padding:15px;font-size:15px;font-weight:bold">Photos, film &amp; details</a></td></tr>
+<tr><td style="padding:20px 24px 0"><a href="{SITE}{d['key']}" style="display:block;background:{L['dark']};color:#ffffff;text-decoration:none;text-align:center;padding:15px;font-size:15px;font-weight:bold">{'Photos, film &amp; details' if d.get('film') else 'Photos &amp; details'}</a></td></tr>
 {f'<tr><td style="padding:18px 24px 0"><p style="margin:0;padding:14px 16px;background:{L["paper"]};font-size:14px;line-height:1.55;color:{L["sub"]}"><b>Agent notes:</b> {esc(d["agent_notes"])}</p></td></tr>' if d.get('agent_notes') else ''}
 <tr><td style="padding:22px 24px"><p style="margin:0;font-size:15px;line-height:1.5"><b>{AGENT['name']}</b> · {AGENT['phone']}<br><span style="color:{L['muted']};font-size:13px">{AGENT['team']} · {AGENT['brokerage']}</span></p></td></tr>
 <tr><td style="padding:12px 24px 20px;border-top:1px solid {L['rule']};font-size:11px;line-height:1.5;color:{L['muted']}">{credit(d).strip()} Each office independently owned and operated. Equal Housing Opportunity. Information deemed reliable but not guaranteed.</td></tr>
@@ -405,7 +410,7 @@ def sign_rider(L, d):
     bg, fg, sub = (L['dark'], L['paper'], L['onDark']) if dark else (L['paper'], L['ink'], L['accent'])
     return [f"""<div class="pg" style="background:{bg};color:{fg};display:flex;align-items:center;gap:.5in;padding:0 .55in">
 <img src="{qr(SITE + d['key'] + '?src=rider', '#000000')}" style="width:4.9in;height:4.9in;background:#fff;padding:.08in">
-<div style="flex:1"><p style="margin:0;font-family:{L['head']};font-weight:{L['hw']};font-size:{hs(L, 150)};line-height:1;letter-spacing:{L['ls']}">Scan for photos, film &amp; price</p>
+<div style="flex:1"><p style="margin:0;font-family:{L['head']};font-weight:{L['hw']};font-size:{hs(L, 150)};line-height:1;letter-spacing:{L['ls']}">{'Scan for photos, film &amp; price' if d.get('film') else 'Scan for photos &amp; price'}</p>
 <p style="margin:.22in 0 0;font-size:64px;font-weight:600;letter-spacing:.02em;color:{sub}">{short_url(d)}</p></div></div>"""]
 
 def window_cling(L, d):
@@ -478,14 +483,14 @@ def flyer(L, d):
     return [f"""<div class="pg" style="background:{L['paper']};display:flex;flex-direction:column">
 <div style="position:relative;height:4.6in"><img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover">{'<div class="frame"></div>' if L['frame'] else ''}</div>
 <div style="padding:.4in .55in .35in;display:flex;flex-direction:column;flex:1">
-<p class="eye" style="color:{L['accent']}">{esc(d['area'])} · {esc(d['city'])}</p>
+<p class="eye" style="color:{L['accent']}">{place(d)}</p>
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.3in;margin-top:8px"><h1 class="h" style="font-size:{hs(L, 44)};color:{L['ink']}">{esc(d['address'])}</h1>
 {f'<p class="h" style="font-size:{hs(L, 34)};color:{L["ink"]};white-space:nowrap">{money(d["price"])}</p>' if d.get('price') and d.get('status', 'Active') in ('Active', 'Coming soon') else ''}</div>
 <p style="margin:8px 0 0;font-size:11.5pt;color:{L['sub']}">{esc(d['facts_line'])}</p>
 <p style="margin:14px 0 0;font-size:11pt;line-height:1.55;color:{L['sub']}">{esc(d['pitch'])}</p>
 <div style="display:flex;gap:10px;margin-top:.22in">{th}</div>
 <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:.2in">{agent_block(L)}
-<div style="display:flex;gap:10px;align-items:center"><p style="margin:0;font-size:9pt;text-align:right;color:{L['sub']}">Every photo<br>and the film</p><img src="{qr(SITE + d['key'] + '?src=flyer', L['ink'])}" style="width:.95in;height:.95in"></div></div>
+<div style="display:flex;gap:10px;align-items:center"><p style="margin:0;font-size:9pt;text-align:right;color:{L['sub']}">{'Every photo<br>and the film' if d.get('film') else 'Every photo<br>and the price'}</p><img src="{qr(SITE + d['key'] + '?src=flyer', L['ink'])}" style="width:.95in;height:.95in"></div></div>
 <p class="fine" style="margin-top:8px">{DISCLOSE}{credit(d)} Information deemed reliable but not guaranteed.</p></div></div>"""]
 
 def guide_booklet(L, d):
@@ -558,7 +563,7 @@ LABEL = {k: t for k, t, *_ in PRINT} | {'agent-email': 'Agent email', 'carousel'
 def og_card(d):
     """Link preview (1200×630): what shows when the listing link is texted or posted. Same design as 19917's."""
     L = LOOKS['arch']; st = d.get('status', 'Active')
-    eyebrow = {'Pending': 'Under contract', 'Sold': 'Sold', 'Closed': 'Sold', 'Coming soon': 'Coming soon'}.get(st, 'For sale')
+    eyebrow = {'Pending': 'Under contract', 'Sold': 'Sold', 'Closed': 'Sold', 'Coming soon': 'Coming soon', 'Preparing': 'Coming soon'}.get(st, 'For sale')
     return f"""<div class="pg" style="background:#16191B"><img class="cover" src="{photo(d.get('interior') or d['hero'])}">
 <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,16,18,.86),rgba(14,16,18,.15) 58%,rgba(14,16,18,.35))"></div>
 <div style="position:absolute;top:44px;right:64px;text-align:right;color:#F6F2EB"><p style="margin:0;font-family:'Playfair Display',serif;font-size:21px;letter-spacing:.14em;text-transform:uppercase">{AGENT['team']}</p><p style="margin:4px 0 0;font-size:16px;opacity:.85">Keller Williams Puget Sound</p></div>

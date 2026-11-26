@@ -69,7 +69,7 @@ section.s{{padding:clamp(46px,7vw,84px) 0;border-top:1px solid var(--line)}}
 .spec{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #1E2327;border-bottom:1px solid #1E2327;margin-top:34px}}
 .story{{max-width:760px;margin-top:30px;font-size:17px;line-height:1.7;color:#2B2F33}}.story p{{margin:0 0 14px}}.dets{{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0 28px;margin:26px 0 0;max-width:980px}}.dets div{{border-bottom:1px solid var(--line);padding:10px 0}}.dets dt{{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}}.dets dd{{margin:2px 0 0;font-size:16px}}
 .spec div{{padding:16px 12px 16px 0}}.spec b{{display:block;font-family:var(--serif);font-weight:400;font-size:28px}}.spec span{{font-size:13px;color:var(--muted)}}
-ul.feats{{list-style:none;padding:0;margin:30px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+ul.feats{{list-style:none;padding:0;margin:30px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}ul.feats.n4{{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .ft{{all:unset;cursor:pointer;display:block}}.ft img{{aspect-ratio:4/3;object-fit:cover;width:100%;border-radius:4px}}.ft span{{display:block;margin-top:10px;font-weight:500}}
 .ft:focus-visible,.ph:focus-visible{{outline:2px solid var(--brass);outline-offset:3px}}
 .g{{margin-top:30px}}.g h3{{font-size:24px;margin-bottom:14px}}.grid{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}}
@@ -87,7 +87,7 @@ input,select,textarea{{font:inherit;font-size:16px;padding:12px 14px;border-radi
 .lb img{{max-width:94vw;max-height:84vh;object-fit:contain}}.lb p{{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#ddd;font-size:14px;margin:0}}
 .lb button{{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:48px;height:48px;border-radius:999px;font-size:22px;cursor:pointer}}
 .lb .x{{top:16px;right:16px}}.lb .pv{{left:14px;top:50%}}.lb .nx{{right:14px;top:50%}}
-.brand{{min-width:0}}@media(max-width:760px){{.brand{{font-size:15px}}.spec{{grid-template-columns:repeat(2,minmax(0,1fr))}}ul.feats{{grid-template-columns:repeat(2,minmax(0,1fr))}}.grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}.two{{grid-template-columns:1fr}}}}
+.brand{{min-width:0}}@media(max-width:760px){{.brand{{font-size:15px}}.spec{{grid-template-columns:repeat(2,minmax(0,1fr))}}ul.feats,ul.feats.n4{{grid-template-columns:repeat(2,minmax(0,1fr))}}.grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}.two{{grid-template-columns:1fr}}}}
 </style></head><body>
 <header class="hero"><img src="photos/{key}/{L['hero']}.webp" alt="{E(addr)}, {E(place)}" fetchpriority="high">
 <div class="top"><div class="wrap"><span class="brand">{E(A['team'])}</span><a class="call" href="tel:{A['tel']}">{E(A['phone'])}</a></div></div>
@@ -97,7 +97,7 @@ input,select,textarea{{font:inherit;font-size:16px;padding:12px 14px;border-radi
 <main>
 <section class="s"><div class="wrap"><p class="eb">{E(L.get('eyebrow', 'The home'))}</p><p class="lede">{E(L['lede'])}</p>
 <div class="spec">{spec}</div>{more}
-<ul class="feats">{feats}</ul></div></section>
+<ul class="feats{" n4" if len(L["features"]) == 4 else ""}">{feats}</ul></div></section>
 <section class="s" id="photos"><div class="wrap"><p class="eb">Every photo</p><h2 style="font-size:clamp(30px,4vw,44px);margin-top:10px">Take the tour from here</h2>{gal}{credit}</div></section>
 <section class="s dark" id="tour"><div class="wrap"><p class="eb">See it in person</p><h2 style="font-size:clamp(30px,4vw,44px);margin-top:10px">Let's get you inside.</h2>
 <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" aria-selected="true" data-t="tour">Request a tour</button><button type="button" class="tab" role="tab" aria-selected="false" data-t="question">Ask a question</button><button type="button" class="tab" role="tab" aria-selected="false" data-t="follow">Follow this home</button></div>

@@ -58,7 +58,8 @@ def load(key):
                  hero=ph(s.get('hero', '')), interior=feats[1]['photo'] if len(feats) > 1 else ph(s.get('hero', '')),
                  tagline='', pitch=s.get('lede', ''), rooms=feats, talkers=s.get('talkers', []), reasons=[],
                  credit=s.get('credit', ''), look=s.get('look', 'editorial'), print=s.get('print', []))
-        d['facts_line'] = f"{d['beds']} bedrooms · {d['baths']} baths · {d['sqft']:,} sq ft" if d.get('sqft') else ''
+        pl = lambda n, w: f"{n} {w}" + ('' if str(n) in ('1', '1.0') else 's')
+        d['facts_line'] = f"{pl(d['beds'], 'bedroom')} · {pl(d['baths'], 'bath')} · {d['sqft']:,} sq ft" if d.get('sqft') else ''
     d.setdefault('area', d.get('city', ''))
     return d
 
@@ -554,6 +555,17 @@ PRINT = [('postcard-listed', 'Just Listed postcard', postcard_listed, 9, 6), ('p
          ('flyer', 'Take-one flyer', flyer, 8.5, 11), ('house-cards', 'House business cards (3.5×2)', house_cards, 3.5, 2), ('guide', 'Neighborhood guide booklet', guide_booklet, 5.5, 8.5)]
 LABEL = {k: t for k, t, *_ in PRINT} | {'agent-email': 'Agent email', 'carousel': 'Instagram carousel'}
 
+def og_card(d):
+    """Link preview (1200×630): what shows when the listing link is texted or posted. Same design as 19917's."""
+    L = LOOKS['arch']; st = d.get('status', 'Active')
+    eyebrow = {'Pending': 'Under contract', 'Sold': 'Sold', 'Closed': 'Sold', 'Coming soon': 'Coming soon'}.get(st, 'For sale')
+    return f"""<div class="pg" style="background:#16191B"><img class="cover" src="{photo(d.get('interior') or d['hero'])}">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,16,18,.86),rgba(14,16,18,.15) 58%,rgba(14,16,18,.35))"></div>
+<div style="position:absolute;top:44px;right:64px;text-align:right;color:#F6F2EB"><p style="margin:0;font-family:'Playfair Display',serif;font-size:21px;letter-spacing:.14em;text-transform:uppercase">{AGENT['team']}</p><p style="margin:4px 0 0;font-size:16px;opacity:.85">Keller Williams Puget Sound</p></div>
+<div style="position:absolute;left:64px;right:64px;bottom:52px;color:#F6F2EB"><p style="margin:0;font-size:20px;letter-spacing:.2em;text-transform:uppercase">{eyebrow} · {esc(d['area'])}{(', ' + esc(d['city'])) if d.get('city') and d.get('city') != d.get('area') else ''}</p>
+<p style="margin:14px 0 0;font-family:'Playfair Display',serif;font-size:76px;line-height:1">{esc(d['address'])}</p>
+<p style="margin:16px 0 0;font-size:24px">{esc(d['facts_line'])}</p></div></div>"""
+
 TMP = '/tmp/ranch-pieces.html'
 def show(pg, html_text):   # load from a file:// page so local photos and fonts are allowed
     open(TMP, 'w').write(html_text); pg.goto('file://' + TMP, wait_until='load')
@@ -595,7 +607,20 @@ def build(key, only=None):
     json.dump({'look': d.get('look', 'editorial'), 'print': d.get('print', []), 'address': d['address'], 'status': d.get('status', ''), 'contract': d.get('contract', '')}, open(os.path.join(R, 'marketing', key, 'pieces.json'), 'w'))
     return made
 
+def build_og(key, force=False):
+    out = os.path.join(R, 'photos', f'og-{key}.jpg')
+    if os.path.exists(out) and not force: return None
+    from playwright.sync_api import sync_playwright
+    d = load(key)
+    with sync_playwright() as p:
+        b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1200, 'height': 630})
+        show(pg, doc(LOOKS['arch'], 12.5, 6.5625, [og_card(d)], '.pg{width:1200px;height:630px}'))
+        pg.screenshot(path=out, type='jpeg', quality=86, clip=dict(x=0, y=0, width=1200, height=630)); b.close()
+    return out
+
 if __name__ == '__main__':
+    if len(sys.argv) > 2 and sys.argv[2] == 'og':
+        print(build_og(sys.argv[1], '--force' in sys.argv) or 'og exists'); sys.exit(0)
     args = [a for a in sys.argv[1:] if a != '--review']; REVIEW = '--review' in sys.argv
     key = args[0] if args else '19917'
     m = build(key, args[1] if len(args) > 1 else None)

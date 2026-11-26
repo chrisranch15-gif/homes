@@ -41,7 +41,7 @@ def build(key):
 <title>{E(addr)}, {E(place)} · {price} · {E(A['team'])}</title>
 <meta name="description" content="{E(desc)}"><link rel="canonical" href="{url}">{'<meta name="robots" content="noindex,nofollow">' if soon else ''}
 <meta property="og:type" content="website"><meta property="og:site_name" content="{E(A['team'])}"><meta property="og:title" content="{E(addr)} · {price}">
-<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{A['origin']}/photos/{key}/{L['hero']}.jpg">
+<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{url}">{('<meta property="og:image" content="' + A['origin'] + '/photos/og-' + key + '.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">') if os.path.exists(os.path.join(R, 'photos', 'og-' + key + '.jpg')) else ('<meta property="og:image" content="' + A['origin'] + '/photos/' + key + '/' + L['hero'] + '.jpg">')}
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316191B'/%3E%3Ctext x='32' y='44' font-family='Georgia' font-size='36' fill='%23D9C2A0' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

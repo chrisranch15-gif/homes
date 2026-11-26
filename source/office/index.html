@@ -126,6 +126,7 @@ const NET_AGENTS = '~600 agents in 10 offices';
 const KITS = { '19917 145th St E': { brochure: 'https://homes.ranchpnw.com/print/19917-145th-St-E-brochure.pdf', social: ['just-listed-post', 'greenbelt-post', 'inside-1', 'inside-2', 'inside-3', 'inside-4', 'just-listed-story', 'greenbelt-story', 'inside-story'].map(n => 'https://homes.ranchpnw.com/social/' + n + '.jpg') } };
 const caps = { mcp: null, sample: null, db: null };
 const SITES = __SITES__;
+const SOCIAL = __SOCIAL__;   // social posts waiting for Chris's OK, from source/marketing/social.py via build_assets.py
 const PENDING_PACKS = __PENDING__;   // under-contract posts + postcard per listing, from source/marketing/build_assets.py   // generated from source/office/sites.json by source/marketing/build_assets.py; ship.sh fills it in
 const ASSET_BASE = /ranchpnw\.com$/.test(location.hostname) ? 'https://homes.ranchpnw.com/' : '';   // the claude.ai copy ships the thumbnails as its own files
 const KIT = [
@@ -518,7 +519,10 @@ function checks() {
 }
 function needs() {
   const out = [], sh = S.sheet || {};
-  PENDING_PACKS.forEach(p => { if (doneIds().has('pend:' + p.key)) return;   // went pending: Chris posts these (nothing posts on its own)
+  if (typeof SocialUI !== 'undefined') SocialUI.waiting().forEach(w => { const n = w.posts.length;
+    out.unshift({ ico: I.star || I.doc, t: `${w.set.title}: ${n} post${n > 1 ? 's' : ''} ready`, s: `Instagram, Facebook, stories and Google, made in this listing’s look. See each one as it will look, then Approve. Nothing posts until you do.`,
+      acts: `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">${w.posts.map(p => `<img src="${esc(ASSET_BASE + p.th[0])}" alt="${esc(p.kind)}" style="width:64px;height:80px;object-fit:cover;border-radius:6px">`).join('')}</div><button class="pill" data-act="socopen" data-k="${esc(w.set.key)}">Review and approve</button>` }); });
+  PENDING_PACKS.forEach(p => { if (doneIds().has('pend:' + p.key) || (typeof SOCIAL !== 'undefined' && SOCIAL.some(x => x.key === p.key && x.event === 'pending'))) return;   // went pending: Chris posts these (nothing posts on its own)
     const look = p.look, its = p.items.filter(a => !a.look || a.look === look);
     out.unshift({ ico: I.star || I.doc, t: `Under contract · ${p.address}: post it`, s: `Your pending package is ready: ${its.filter(a => a.kind === 'Pending').length} social graphics and the under contract postcard for the neighbors. Post them on Instagram and Facebook.`,
       acts: `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">${its.map(a => `<a href="${esc(a.u)}" target="_blank" rel="noopener" title="${esc(a.t)}"><img src="${esc(ASSET_BASE + a.th)}" alt="${esc(a.t)}" style="width:72px;height:90px;object-fit:cover;border-radius:6px"></a>`).join('')}</div><button class="pill" data-act="pendposted" data-k="${esc(p.key)}">I posted them</button>` }); });
@@ -1168,6 +1172,7 @@ document.addEventListener('click', async e => {
   else if (a === 'prep') prepSheet(x);
   else if (a === 'files') filesSheet(x);
   else if (a === 'launch') launchSheet(x);
+  else if (a === 'socopen') socSheet(b.dataset.k);
   else if (a === 'pendposted') { append('Hub done', [[nowStamp(), 'pend:' + b.dataset.k, 'pending package posted', '']]).then(() => { toast('Nice. Marked posted.'); loadSheet().then(render); }).catch(() => toast('Not saved. Try again.')); }
   else if (a === 'mchg') { const row = b.dataset.row, v2 = b.dataset.v;
     tool('Google Sheets', 'update_values', { spreadsheetId: SHEET, range: "'Marketing changes'!E" + row, values: [[v2]] })
@@ -1329,6 +1334,10 @@ function unlockSheet(msg) {
   $('#keyf').onsubmit = async e => { e.preventDefault(); store('officeKey', e.target.k.value.trim()); try { const p = await engine({ op: 'ping' }); close(); if (/desk=1/.test(location.search)) return location.replace('/desk/#desk'); caps.mcp = officeCaps.mcp; caps.sample = p.ai ? officeCaps.sample : null; S.office = p; if (!CALENDARS.length && p.emails) CALENDARS = p.emails; loadAll(); toast('Welcome back, Chris.'); } catch (err) { unlockSheet('That password didn’t work. After 8 wrong tries the office locks for an hour.'); } };
 }
 
+/*__SOCIAL_UI__*/
+function socSheet(key) { S.socKey = key; const set = SOCIAL.find(x => x.key === key) || {}, pk = PENDING_PACKS.find(x => x.key === key), card = (pk && pk.items.find(a => a.kind === 'Print' && (!a.look || a.look === pk.look))) || null;
+  sheet(`<p class="date">Social · approve to schedule</p><h3>${esc(set.address || key)}</h3><p class="s" style="margin:-4px 0 6px">Each post as it will look. Edit a caption or time if you like, then Approve. Nothing posts until you do.</p>${card ? `<p class="s" style="margin:0 0 6px">For the neighbors: <a href="${esc(card.u)}" target="_blank" rel="noopener">${esc(card.t)}</a> (print-ready).</p>` : ''}<div id="socbody">${SocialUI.html(key)}</div><div class="acts"><button class="pill ghost" data-act="close">Close</button></div>`);
+  const c = $('#sheet .card'); if (c) { c.style.maxWidth = '1180px'; c.style.width = 'calc(100vw - 32px)'; c.style.maxHeight = '92vh'; c.style.overflow = 'auto'; } }
 /* ---------- start ---------- */
 S.theme = store('theme') || 'daylight';
 try { const c = JSON.parse(store('sheet') || 'null'); if (c && c.out && Date.now() - c.at < 7 * 864e5) { S.sheet = c.out; S.at = c.at; } } catch (e) { }
@@ -1348,6 +1357,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && Date.now() - (
     catch (err) { S.ready = true; render(); return unlockSheet(err.message === 'locked' ? '' : 'Couldn’t reach your engine: ' + err.message); }
   }
   S.ready = true;
+  if (typeof SocialUI !== 'undefined') SocialUI.init({ call: tool, toast, base: ASSET_BASE, where: 'Office', render: () => { const b = $('#socbody'); if (b) b.innerHTML = SocialUI.html(S.socKey); render(); } });
   if (caps.mcp) loadAll(); else render();
 })();
 </script>

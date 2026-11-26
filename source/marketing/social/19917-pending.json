@@ -1,0 +1,42 @@
+{
+ "_note": "Copy for the under-contract posts. Every fact is from source/marketing/pieces/19917.json (listed 2026-11-19, mutual 2026-11-24, reasons). No buyer or seller names, no price talk, no claims about offers.",
+ "title": "Under contract · 19917 145th St E",
+ "link": "https://homes.ranchpnw.com/sell.html",
+ "posts": [
+  {
+   "id": "ig", "network": "instagram", "kind": "Carousel", "format": "feed", "when": "2026-11-27T18:30",
+   "slides": [
+    {"layout": "cover", "photo": "photos/front-dusk.jpg", "eyebrow": "Under contract", "head": "Five days on the market.", "line": "19917 145th St E", "line2": "Tehaleh · Bonney Lake"},
+    {"layout": "statement", "eyebrow": "The timeline", "lines": ["Listed Thursday, November 19.", "Under contract Tuesday, November 24."], "photo": "photos/kitchen-wide.jpg", "size": 88},
+    {"layout": "list", "eyebrow": "What set it apart", "head": "What made it different.", "items": [["Mount Rainier", "From the primary suite and two more bedrooms."], ["A new 24×22 covered deck", "With a plumbed fire pit, over the greenbelt."], ["Over $100K in upgrades", "From the brass-and-shaker kitchen to the custom closets."]]},
+    {"layout": "close", "eyebrow": "Thinking about your next move?", "head": "Your home has a story. Let’s tell it well.", "line": "I’ll show you exactly how we’d launch yours: the photos, the film, the plan for the first week."}
+   ],
+   "caption": "Under contract in five days.\n\n19917 145th St E in Tehaleh went live on Thursday, November 19, and was under contract the following Tuesday.\n\nMount Rainier from the upstairs windows. A new covered deck with a plumbed fire pit, right over the greenbelt. Over $100K in upgrades, from the kitchen to the closets. A home like this deserves a launch to match, and it got one.\n\nThinking about selling in Tehaleh or Bonney Lake? Send me a message. I’ll walk you through exactly how we’d launch yours.\n\nChris Ranch · The Ranch Real Estate Group · (253) 335-5630\nKeller Williams Realty Puget Sound\n\n#Tehaleh #BonneyLake #BonneyLakeHomes #PierceCountyRealEstate #PugetSoundHomes"
+  },
+  {
+   "id": "fb", "network": "facebook", "kind": "Album", "format": "feed", "when": "2026-11-27T18:30", "same_as": "ig",
+   "slides": [
+    {"layout": "cover", "photo": "photos/front-dusk.jpg", "eyebrow": "Under contract", "head": "Five days on the market.", "line": "19917 145th St E", "line2": "Tehaleh · Bonney Lake"},
+    {"layout": "statement", "eyebrow": "The timeline", "lines": ["Listed Thursday, November 19.", "Under contract Tuesday, November 24."], "photo": "photos/kitchen-wide.jpg", "size": 88},
+    {"layout": "list", "eyebrow": "What set it apart", "head": "What made it different.", "items": [["Mount Rainier", "From the primary suite and two more bedrooms."], ["A new 24×22 covered deck", "With a plumbed fire pit, over the greenbelt."], ["Over $100K in upgrades", "From the brass-and-shaker kitchen to the custom closets."]]},
+    {"layout": "close", "eyebrow": "Thinking about your next move?", "head": "Your home has a story. Let’s tell it well.", "line": "I’ll show you exactly how we’d launch yours: the photos, the film, the plan for the first week."}
+   ],
+   "caption": "Under contract in five days.\n\n19917 145th St E in Tehaleh went live on Thursday, November 19, and was under contract the following Tuesday. Mount Rainier from the upstairs windows, a new covered deck over the greenbelt, and over $100K in upgrades. A home like this deserves a launch to match.\n\nIf you’re thinking about selling in Tehaleh or Bonney Lake this winter or spring, I’d love to show you how we’d launch yours. Call or text me at (253) 335-5630, or start here: https://homes.ranchpnw.com/sell.html\n\nChris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound"
+  },
+  {
+   "id": "story", "network": "instagram,facebook", "kind": "Story", "format": "story", "when": "2026-11-27T18:35",
+   "slides": [
+    {"layout": "cover", "photo": "photos/front-dusk.jpg", "eyebrow": "Under contract", "head": "Five days on the market.", "line": "19917 145th St E · Tehaleh", "size": 128},
+    {"layout": "close", "photo": "photos/deck-fire.jpg", "eyebrow": "Thinking about selling?", "head": "Let’s talk about yours.", "line": "Send me a message. I’ll show you how we’d launch it."}
+   ],
+   "caption": ""
+  },
+  {
+   "id": "gbp", "network": "gmb", "kind": "Update", "format": "gbp", "when": "2026-11-27T18:30",
+   "slides": [
+    {"layout": "cover", "photo": "photos/front-dusk.jpg", "eyebrow": "Under contract · Tehaleh", "head": "Five days on the market.", "line": "19917 145th St E, Bonney Lake", "size": 96}
+   ],
+   "caption": "Under contract in five days in Tehaleh. 19917 145th St E went live on November 19 and was under contract on November 24. Mount Rainier from the upstairs windows, a new 24×22 covered deck with a plumbed fire pit over the greenbelt, and over $100K in upgrades.\n\nThinking about selling in Tehaleh or Bonney Lake? Call or text Chris Ranch at (253) 335-5630 and we’ll walk you through how we’d launch your home."
+  }
+ ]
+}

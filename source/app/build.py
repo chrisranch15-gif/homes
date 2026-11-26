@@ -2,7 +2,7 @@ import os
 import sys
 url = sys.argv[1] if len(sys.argv) > 1 else '__ARTIFACT_URL__'
 css = open('src/styles.css').read()
-js = [open('vendor/node_modules/qrcode-generator/qrcode.js').read(), open('src/engine.js').read(), open('src/tests.js').read(), open('src/app.js').read().replace('/* ---------- start ---------- */', open('src/extras.js').read() + '\n' + open('src/towns.js').read() + '\n' + (open('src/assets.js').read() if os.path.exists('src/assets.js') else '') + '\n/* ---------- start ---------- */').replace('__ARTIFACT_URL__', url)]
+js = [open('vendor/node_modules/qrcode-generator/qrcode.js').read(), open('src/engine.js').read(), open('src/tests.js').read(), open('src/app.js').read().replace('/* ---------- start ---------- */', open('src/extras.js').read() + '\n' + open('src/social.js').read() + '\n' + open('src/towns.js').read() + '\n' + (open('src/assets.js').read() if os.path.exists('src/assets.js') else '') + '\n/* ---------- start ---------- */').replace('__ARTIFACT_URL__', url)]
 html = f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

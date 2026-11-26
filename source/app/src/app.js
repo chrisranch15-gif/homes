@@ -1445,4 +1445,5 @@ render();
 if (SITE && SITE.api) fetch(SITE.api + '?api=layout&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.ok && (d.order.length || d.hidden.length || d.featured.length)) { applyLayout(d); render(); } }).catch(() => {});
 if (SITE && SITE.api) fetch(SITE.api + '?api=openhouses&page=' + encodeURIComponent(SITE.page)).then(r => r.json()).then(d => { if (d && d.rows) { applyOpenHouses(d.rows); render(); } }).catch(() => {});
 if (window.claude && claude.use) connect();
+if (typeof SocialUI !== 'undefined') SocialUI.init({ call: callTool, render: () => render(), toast, base: '', where: 'Desk' });
 }

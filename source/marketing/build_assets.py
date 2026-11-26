@@ -127,6 +127,24 @@ for k, v in out.items():
 open(os.path.join(R, 'source', 'office', 'pending.json'), 'w').write(json.dumps(pend, indent=0))
 print('pending packages:', len(pend))
 
+# ---------- Social posts waiting for Chris's OK (source/marketing/social.py → marketing/<key>/social-<event>.json) ----------
+soc = []
+for f in sorted(glob.glob(os.path.join(R, 'marketing', '*', 'social-*.json'))):
+    d = json.load(open(f))
+    for p in d['posts']:
+        p['th'] = []
+        for i, rel in enumerate(p['images']):
+            src = os.path.join(R, rel); name = 'soc-%s-%s-%s-%d' % (d['key'], d['event'], p['id'], i + 1); out_t = os.path.join(THUMBS, name + '.jpg')
+            if not os.path.exists(out_t) or os.path.getmtime(out_t) < os.path.getmtime(src):
+                from PIL import Image
+                im = Image.open(src).convert('RGB'); im.thumbnail((720, 720)); im.save(out_t, quality=82)
+            p['th'].append('marketing/thumbs/' + name + '.jpg')
+        p.pop('images', None); p.pop('look', None)
+    soc.append({'key': d['key'], 'address': d['address'], 'event': d['event'], 'title': d['title'], 'area': d.get('area', ''), 'posts': d['posts']})
+open(os.path.join(R, 'source', 'office', 'social.json'), 'w').write(json.dumps(soc, indent=0))
+with open(os.path.join(R, 'source', 'app', 'src', 'assets.js'), 'a') as fa: fa.write('\nconst SOCIAL = ' + json.dumps(soc) + ';\n')
+print('social sets:', len(soc))
+
 # ---------- Office: Business basics (stationery not tied to a listing: source/marketing/basics.py) ----------
 _basics = []
 _LN = {'editorial': 'Estate Editorial', 'arch': 'Modern Architectural', 'heritage': 'Warm Heritage'}

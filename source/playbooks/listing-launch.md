@@ -23,6 +23,11 @@ can be done, and leave clear notes in the Office for anything that's waiting on 
    delivered Drive photos are known, write `source/photos/<key>.json` (same shape as the others) and push: the "Listing photos from Drive"
    action downloads and sizes them. Wait for it (check photos/<key>/index.json after a few minutes). If photos aren't
    delivered yet, note "waiting for photos" and stop here for this listing.
+3b. **Photo preview for the sellers.** As soon as the photos are in, run `python3 source/public-site/photo_preview.py <key>`
+   (set `preview` in the facts file first: hero, a trio of the best three, room groups, near-duplicates in `skip`).
+   Look at it on a phone. Then add a Marketing tab row [now, address, "Photo preview ready", "Send the sellers their
+   photos", "<preview link>#for=<seller first names>"] and draft the email to the sellers in Chris's voice (Gmail
+   draft only, in his KW mailbox; never sent by you). The seller names go only in the link's #for= part, never in the repo.
 4. **Write the page's words** (lede, features, groups, story, details) from the photos and verified facts, per the brain
    (the client is the hero; specific beats superlative; Fair Housing). Run the copy checker (`--kind print`).
 5. **Build:** `python3 source/public-site/listing.py <key>` (a listing with no MLS number builds as a private preview:

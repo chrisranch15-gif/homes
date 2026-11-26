@@ -165,6 +165,11 @@ button,input{font:inherit;color:inherit}
 .me b{display:block;color:#fff;font-weight:500;font-size:15.5px}
 .me span{color:rgba(255,255,255,.6);font-size:13px;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .me .edit{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:8px 14px;font-size:13px;cursor:pointer}
+.bp{border-radius:22px;overflow:hidden;background:linear-gradient(150deg,#2A2F34,#16191B);border:1px solid rgba(201,168,119,.55);box-shadow:0 24px 50px -24px rgba(0,0,0,.6)}
+.bp-top{display:flex;justify-content:space-between;padding:16px 20px;font:600 10.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border-bottom:1px dashed rgba(201,168,119,.35)}
+.bp-body{padding:18px 20px 20px}.bp-body h4{margin:0 0 8px}.bp-body ul{margin:12px 0 16px;padding:0;list-style:none;display:grid;gap:8px}
+.bp-body li{font-size:14.5px;color:rgba(255,255,255,.78);padding-left:22px;position:relative}.bp-body li::before{content:"";position:absolute;left:2px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.bp-code{font:400 32px/1 var(--serif);letter-spacing:.06em;color:#fff;margin:6px 0 4px}
 .ncp{border-radius:22px;padding:22px 22px 20px;background:#F7F2EA;color:var(--night);box-shadow:0 24px 50px -24px rgba(0,0,0,.5);border:1px solid rgba(201,168,119,.6)}
 .ncp-top{display:flex;justify-content:space-between;font:600 10.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#8A6A3A}
 .ncp-name{font:400 30px/1.1 var(--serif);margin:16px 0 2px}.ncp-agent{font:400 26px/1.1 var(--serif);margin:10px 0 2px}
@@ -233,6 +238,7 @@ const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('
 
 // Until the email engine is updated, sign-ins still reach Chris as a message, written so the guest's copy reads naturally
 function fallbackNote(type, x) {
+  if (type === 'buyer-pass') return 'I’d like a Buyer Pass (I signed in at today’s open house and I’m not working with an agent).';
   if (type === 'open-house') return 'I signed in at today’s open house. Working with an agent: ' + (x.agent || 'not given') + '.' +
     (x.offmarket ? ' I’d like to talk about Unlisted, your off-market buyer program.' : '') + (x.value && x.address ? ' I’d also like an updated value report for ' + x.address + '.' : '');
   if (type === 'off-market') return 'I’d like to book a consult for Unlisted, your off-market buyer program. Best way to meet: ' + (x.meeting || 'in person') + (x.when ? ', ' + x.when.toLowerCase() : '') + '.' +
@@ -328,6 +334,15 @@ function renderDone(app) {
       ${S.consult ? `<span class="go">${I.check.replace('currentColor','#16191B')} Requested</span>` : `<span class="go" id="o1go">Book your consult ${I.arrow}</span>
       <div class="more vin" id="cp">${consultPicker()}<button class="cta dark" id="cs" style="margin-top:18px">Request my consult ${I.arrow}</button>
       <p class="fine" style="color:rgba(22,25,27,.6);text-align:left">For buyers not currently working with an agent.</p></div>`}</div></div>`}
+
+    ${S.agent === 'Yes' ? '' : `<div class="sect"><div class="bp"><div class="bp-top"><span>Buyer Pass</span><span>${S.pass ? esc(S.pass) : 'Free · Private'}</span></div><div class="bp-body">
+      ${S.pass ? `<p class="mono" style="color:var(--gold)">Your pass is ready</p><p class="bp-code">${esc(S.pass)}</p><p class="s" style="margin:0 0 16px">Your private buyer portal. Save this code, or just tap below. It opens on any phone.</p>
+        <a class="cta light" style="text-decoration:none" href="https://homes.ranchpnw.com/buyers.html#code=${encodeURIComponent(S.pass)}">Open my buyer portal ${I.arrow}</a>`
+      : S.passSoon ? `<h4>You’re on the list.</h4><p class="s" style="margin:0">I’ll text you your Buyer Pass shortly.</p>`
+      : `<h4>Keep the hunt going after today.</h4><p class="s" style="margin:0">Start your Buyer Pass: one private place for your whole search.</p>
+        <ul><li>Homes picked for you, some before they’re on the market</li><li>Send the ones that got away, so I find the next one like it</li><li>A few quick taps instead of long forms</li></ul>
+        <button class="cta light" id="bps">Start my Buyer Pass ${I.arrow}</button><p class="fine" style="text-align:left;margin-top:10px">Free, private, and no obligation. Tapping starts your pass with the details you signed in with.</p>`}
+    </div></div></div>`}
 
     <div class="sect"><p class="mono" style="color:var(--gold)">As you tour</p><h4>Which room won you over?</h4><p class="s">Tap your favorite. I’ll let the sellers know.</p>
       <div class="rooms">${H.rooms.map(([n, f]) => `<button class="room${S.room===n?' sel':S.room?' dim':''}" data-room="${esc(n)}"><img src="photos/${f}-800.webp" alt="${esc(n)}" loading="lazy"><i class="h">${I.heart}</i><span>${esc(n)}</span></button>`).join('')}</div></div>
@@ -475,6 +490,9 @@ function sendFeedback() {
 }
 
 function wireDone() {
+  if ($('#bps')) $('#bps').onclick = async () => { const b = $('#bps'); b.disabled = true; b.textContent = 'Starting your pass…';
+    try { const r = await post('buyer-pass', { agent: S.agent, offmarket: !!(S.off || S.consult), verdict: S.verdict || '' }); if (r.code) S.pass = r.code; else S.passSoon = true; keep(); render(); }
+    catch (e) { b.disabled = false; b.innerHTML = 'Try again ' + I.arrow; toast(e.message); } };
   if ($('#sh')) $('#sh').onclick = async () => {
     const url = H.page + '?ref=friend', text = 'Thought you might love this home: ' + H.address + ', ' + H.area.replace(' · ', ', ') + '.';
     try { if (navigator.share) return await navigator.share({ title: H.address, text, url }); } catch (e) { if (e && e.name === 'AbortError') return; }

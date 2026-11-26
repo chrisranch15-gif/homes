@@ -92,6 +92,7 @@ function doPost(e) {
     return out_({ ok: true, saved: rows.length });
   }
   if (d.website) return out_({ ok: true });               // hidden field: bots only
+  if (/^buyer-(answer|home|take|pass)$/.test(type)) return out_(buyerPost_(type, d));
   if (type === 'seller-prep') return out_(sellerPrep_(d));
   if (type === 'seller-facts') return out_(sellerFacts_(d));
   if (type === 'seller-checkin') {                         // "How are we doing?" from the portal: private to Chris, feeds the weekly review
@@ -158,6 +159,7 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.api === 'ping') return out_({ ok: true, at: new Date().toISOString() });
   if (p.api === 'seller') return out_(sellerView_(p.code));
+  if (p.api === 'buyer') return out_(buyerView_(p.code));
   if (p.api === 'openhouses') return out_(openHouses_(p.page));
   if (p.api === 'layout') return out_(photoLayout_(p.page));
   if (p.api === 'unsub' && p.e && p.t === token_(p.e)) {
@@ -943,3 +945,127 @@ function officePost_(d) {
   } catch (err) { return { ok: false, reason: String(err && err.message || err).slice(0, 300) }; }
 }
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+/* ---------------- buyer portal (buyers.html) ----------------
+   One row per buyer in "Buyers". The code is their sign-in; the agent column picks whose name and phone they see.
+   Questions come one at a time: the standard set below, plus any row in "Buyer asks" (Code = a buyer's code, or * for everyone).
+   Answers land in "Buyer answers". Photos, screenshots and files are emailed to the agent who runs this script (never to anyone else)
+   so they stay in Chris's own Gmail; the row records that they came. Homes (suggested, loved, or loved-but-sold) live in "Buyer homes". */
+const BUYER_HEADERS = ['Code', 'Buyers', 'Agent', 'Started', 'Stage', 'Areas', 'Price', 'Top 3', 'Unlisted', 'Phone', 'Email', 'Came from', 'Notes'];
+const BUYER_ASK_HEADERS = ['When', 'Code', 'Key', 'Question', 'Why we ask', 'Kind', 'Options', 'Status'];
+const BUYER_ANSWER_HEADERS = ['When', 'Code', 'Key', 'Question', 'Answer', 'Files', 'Seen'];
+const BUYER_HOME_HEADERS = ['When', 'Code', 'Address', 'Link', 'Note', 'Their take', 'Added by', 'Status'];
+const BUYER_UPDATE_HEADERS = ['When', 'Code', 'Title', 'Message', 'From'];
+const AGENT_HEADERS = ['Key', 'Name', 'Phone', 'Team'];
+const BUYER_STAGES = ['Getting started', 'Consult', 'Pre-approved', 'Searching', 'Touring', 'Offer', 'Under contract', 'Keys'];
+const BUYER_ASKS = [   // the standard first questions; kind: pick (one), many (up to max), text, photo
+  { key: 'top3', q: 'If you could only have three things, what would they be?', why: 'Your top three decide which homes I show you, so we see four great ones instead of forty.', kind: 'many', max: 3,
+    options: ['Location', 'Yard', 'Single level', 'Garage or shop', 'A view', 'Schools', 'Short commute', 'New construction', 'Room to grow', 'Move-in ready', 'Character', 'Under budget'] },
+  { key: 'where', q: 'Where do you picture yourself?', why: 'I watch these areas every morning, on and off the market.', kind: 'many', max: 6,
+    options: ['Gig Harbor', 'Fox Island', 'Tacoma', 'Bonney Lake / Tehaleh', 'Lake Tapps', 'Puyallup', 'Federal Way', 'Enumclaw', 'Open to ideas'] },
+  { key: 'when', q: 'When would you love to be moved in?', why: 'Timing changes the strategy, and sometimes the best home is one that isn\u2019t listed yet.', kind: 'pick',
+    options: ['As soon as possible', '1 to 3 months', '3 to 6 months', '6 to 12 months', 'Just exploring'] },
+  { key: 'lender', q: 'Have you talked with a lender yet?', why: 'A strong pre-approval is what makes a seller say yes. If you haven\u2019t, I\u2019ll connect you with someone great.', kind: 'pick',
+    options: ['Yes, I\u2019m pre-approved', 'Talked, not approved yet', 'Not yet', 'Paying cash'] },
+  { key: 'price', q: 'What price range feels right?', why: 'Just a starting point. We\u2019ll fine-tune it together.', kind: 'text', placeholder: 'e.g. $650K to $750K' },
+  { key: 'sell', q: 'Do you have a home to sell first?', why: 'If you do, we plan both moves together so you only move once.', kind: 'pick', options: ['Yes', 'No', 'I rent'] },
+  { key: 'inspo', q: 'Show me a home you love.', why: 'A screenshot from any app, a listing link or a photo tells me more than a checklist ever could.', kind: 'photo' },
+  { key: 'last', q: 'If you\u2019ve bought before, how did it go?', why: 'Tell me what you loved and what you\u2019d change, and I\u2019ll do it your way.', kind: 'text', placeholder: 'Optional', optional: true }
+];
+function agents_() {
+  const sh = tab_('Agents', AGENT_HEADERS);
+  if (sh.getLastRow() < 2) { sh.appendRow(['Chris', 'Chris Ranch', '(253) 335-5630', BRAND]); sh.appendRow(['Hannah', 'Hannah Ranch', '(253) 709-9633', BRAND]); }
+  const out = {}; sh.getDataRange().getValues().slice(1).forEach(r => { if (r[0]) out[String(r[0])] = { name: String(r[1]), phone: String(r[2]), tel: '+1' + String(r[2]).replace(/\D/g, '').slice(-10), team: String(r[3] || BRAND) }; });
+  return out;
+}
+function buyer_(code) {
+  code = String(code || '').trim().toUpperCase(); if (code.length < 6) return null;
+  const sh = tab_('Buyers', BUYER_HEADERS), rows = sh.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) if (String(rows[i][0]).toUpperCase() === code) { const r = rows[i];
+    return { row: i + 1, code, names: String(r[1]), agent: String(r[2] || 'Chris'), stage: String(r[4] || 'Getting started'), areas: String(r[5] || ''), price: String(r[6] || ''), top3: String(r[7] || ''), unlisted: String(r[8] || ''), email: String(r[10] || '') }; }
+  return null;
+}
+function newBuyerCode_(names) {
+  const ini = (String(names).match(/\b[A-Za-z]/g) || ['B']).slice(0, 2).join('').toUpperCase().padEnd(2, 'X');
+  return ini + '-' + Utilities.getUuid().replace(/[^A-Z0-9]/gi, '').toUpperCase().replace(/[O0I1]/g, '').slice(0, 6);
+}
+function buyerAsks_(b) {
+  const done = {}; tab_('Buyer answers', BUYER_ANSWER_HEADERS).getDataRange().getValues().slice(1).forEach(r => { if (String(r[1]).toUpperCase() === b.code) done[String(r[2])] = 1; });
+  const extra = tab_('Buyer asks', BUYER_ASK_HEADERS).getDataRange().getValues().slice(1)
+    .filter(r => (String(r[1]).toUpperCase() === b.code || String(r[1]) === '*') && !/off|done/i.test(String(r[7] || '')) && r[3])
+    .map(r => ({ key: String(r[2] || 'ask-' + new Date(r[0]).getTime()), q: String(r[3]), why: String(r[4] || ''), kind: /photo|file|upload/i.test(r[5]) ? 'photo' : /many/i.test(r[5]) ? 'many' : /pick|choice/i.test(r[5]) ? 'pick' : 'text', options: String(r[6] || '').split('|').map(s => s.trim()).filter(Boolean), from: 'agent' }));
+  const all = extra.concat(BUYER_ASKS);   // the agent's own questions come first
+  return { open: all.filter(a => !done[a.key]), total: all.length, answered: all.filter(a => done[a.key]).length };
+}
+function buyerView_(code) {
+  const cache = CacheService.getScriptCache(), tries = Number(cache.get('buyerTries') || 0);
+  if (tries > 60) return { ok: false, reason: 'Too many attempts. Try again in a few minutes.' };
+  const b = buyer_(code);
+  if (!b) { cache.put('buyerTries', String(tries + 1), 600); return { ok: false, reason: 'That code didn\u2019t match.' }; }
+  const ag = agents_(), agent = ag[b.agent] || ag.Chris, mine = (name, H) => tab_(name, H).getDataRange().getValues().slice(1).filter(r => String(r[1]).toUpperCase() === b.code);
+  return { ok: true, code: b.code, names: b.names, agent, stage: b.stage, stages: BUYER_STAGES, top3: b.top3, areas: b.areas, price: b.price, unlisted: b.unlisted,
+    asks: buyerAsks_(b),
+    homes: mine('Buyer homes', BUYER_HOME_HEADERS).filter(r => !/removed/i.test(r[7])).map(r => ({ at: new Date(r[0]).getTime(), address: String(r[2]), link: /^https?:\/\//.test(r[3]) ? String(r[3]) : '', note: String(r[4] || ''), take: String(r[5] || ''), by: String(r[6] || ''), status: String(r[7] || '') })).sort((x, y) => y.at - x.at).slice(0, 40),
+    updates: mine('Buyer updates', BUYER_UPDATE_HEADERS).map(r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4] || agent.name) })).sort((x, y) => y.at - x.at).slice(0, 20),
+    at: Date.now() };
+}
+// files from the buyer: emailed to the agent's own inbox; returns a short note for the sheet
+function buyerFiles_(b, what, files) {
+  const list = (Array.isArray(files) ? files : []).slice(0, 4), blobs = [];
+  let total = 0;
+  list.forEach((f, i) => { const data = String(f && f.data || ''); total += data.length; if (!data || total > 24e6) return;
+    const type = /^(image\/(jpeg|png|webp|heic|heif|gif)|application\/pdf)$/.test(String(f.type)) ? String(f.type) : 'application/octet-stream';
+    try { blobs.push(Utilities.newBlob(Utilities.base64Decode(data), type, clean_(f.name, 80) || ('file-' + (i + 1)))); } catch (e) {} });
+  if (!blobs.length) return '';
+  const subject = 'Buyer portal \u00b7 ' + b.names + ' \u00b7 ' + clean_(what, 80) + ' \u00b7 ' + b.code;
+  try { GmailApp.sendEmail(AGENT_EMAIL, subject, b.names + ' sent ' + blobs.length + ' file(s) from their buyer portal: ' + what, { attachments: blobs, name: 'Ranch buyer portal' }); }
+  catch (e) { console.error('buyer files', e); return 'Files didn\u2019t save'; }
+  return blobs.length + ' file(s) in your Gmail: "' + subject + '"';
+}
+function buyerPost_(type, d) {
+  if (type === 'buyer-pass') return buyerPass_(d);
+  const b = buyer_(d.code); if (!b) return { ok: false, reason: 'Please sign in again.' };
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(15000)) return { ok: false, reason: 'Busy for a moment \u2014 please try again.' };
+  try {
+    if (type === 'buyer-answer') {
+      const key = clean_(d.key, 60), ans = clean_(d.answer, 1500), q = clean_(d.question, 300);
+      const files = buyerFiles_(b, q || key, d.files);
+      if (!ans && !files && !d.skip) return { ok: false, reason: 'Nothing to save yet.' };
+      tab_('Buyer answers', BUYER_ANSWER_HEADERS).appendRow([new Date(), b.code, key, q, d.skip ? '(skipped)' : ans, files, '']);
+      const sh = tab_('Buyers', BUYER_HEADERS), col = { top3: 8, where: 6, price: 7 }[key];
+      if (col && ans) sh.getRange(b.row, col).setValue(ans);
+      return { ok: true, asks: buyerAsks_(b) };
+    }
+    if (type === 'buyer-home') {   // a home they love, or one that sold before they could see it
+      const link = clean_(d.link, 400), note = clean_(d.note, 800), gone = !!d.gotaway;
+      const files = buyerFiles_(b, (gone ? 'A home that got away' : 'A home they love') + (link ? ': ' + link : ''), d.files);
+      if (!link && !note && !files) return { ok: false, reason: 'Add a link, a screenshot or a note.' };
+      tab_('Buyer homes', BUYER_HOME_HEADERS).appendRow([new Date(), b.code, clean_(d.address, 160) || (link ? 'Shared link' : 'Shared screenshot'), /^https?:\/\//.test(link) ? link : '', note + (files ? (note ? ' \u00b7 ' : '') + files : ''), gone ? 'Loved it' : '', 'Buyer', gone ? 'Got away' : 'They love']);
+      return { ok: true };
+    }
+    if (type === 'buyer-take') {
+      const sh = tab_('Buyer homes', BUYER_HOME_HEADERS), rows = sh.getDataRange().getValues(), at = Number(d.at) || 0, take = clean_(d.take, 40);
+      for (let i = rows.length - 1; i > 0; i--) if (String(rows[i][1]).toUpperCase() === b.code && new Date(rows[i][0]).getTime() === at && String(rows[i][2]) === clean_(d.address, 160)) { sh.getRange(i + 1, 6).setValue(take); return { ok: true }; }
+      return { ok: false, reason: 'That home moved. Pull to refresh.' };
+    }
+  } finally { lock.releaseLock(); }
+  return { ok: false, reason: 'Unknown request' };
+}
+// the open house Buyer Pass: a guest with no agent starts their portal in one tap; the same email gets the same pass
+function buyerPass_(d) {
+  const name = clean_(d.name, 80), email = clean_(d.email, 120).toLowerCase(), phone = clean_(d.phone, 30);
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return { ok: false, reason: 'Please sign in first.' };
+  if (/^yes/i.test(String(d.agent || ''))) return { ok: false, reason: 'Your Buyer Pass is for buyers not already working with an agent.' };
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(15000)) return { ok: false, reason: 'Busy for a moment \u2014 please try again.' };
+  try {
+    const sh = tab_('Buyers', BUYER_HEADERS), rows = sh.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) if (String(rows[i][10]).toLowerCase() === email) return { ok: true, code: String(rows[i][0]).toUpperCase(), again: true };
+    const code = newBuyerCode_(name), home = clean_(d.listing, 160);
+    sh.appendRow([code, name, 'Chris', new Date(), 'Getting started', '', '', '', d.offmarket ? 'Consult requested' : '', phone, email, 'Open house \u00b7 ' + home, clean_(d.verdict, 200)]);
+    if (home) tab_('Buyer homes', BUYER_HOME_HEADERS).appendRow([new Date(), code, home, '', 'Toured at the open house', clean_(d.verdict, 40), 'Open house', 'Toured']);
+    tab_('Leads', LEAD_HEADERS).appendRow([new Date(), 'Buyer Pass started', name, phone, email, 'Started a Buyer Pass at the open house (code ' + code + ')', home, clean_(d.page, 30), clean_(d.source, 40), 'New']);
+    return { ok: true, code };
+  } finally { lock.releaseLock(); }
+}
+/** Run once (optional): adds the buyer tabs and the Agents tab. Safe to run again. */
+function setupBuyers() { tab_('Buyers', BUYER_HEADERS); tab_('Buyer asks', BUYER_ASK_HEADERS); tab_('Buyer answers', BUYER_ANSWER_HEADERS); tab_('Buyer homes', BUYER_HOME_HEADERS); tab_('Buyer updates', BUYER_UPDATE_HEADERS); agents_(); return 'Buyer tabs ready'; }

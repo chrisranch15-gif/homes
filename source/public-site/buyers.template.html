@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Your buyer portal · The Ranch Real Estate Group</title>
+<meta name="theme-color" content="#16191B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--ink:#1E2327;--ground:#F7F5F1;--accent:#8C6A43;--gold:#C8A96E;--night:#16191B;--muted:#5E584E;--line:#D9D2C6;--card:#fff;--soft:#EFEBE4;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ground);color:var(--ink)}
+body{font:16px/1.6 var(--sans);-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;line-height:1.15}
+a{color:inherit}button{font:inherit}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0}
+.muted{color:var(--muted)}.small{font-size:13px}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 24px;border:1px solid var(--ink);background:var(--ink);color:var(--ground);font-size:15px;cursor:pointer;text-decoration:none;border-radius:999px;transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}.btn.ghost{background:transparent;color:var(--ink)}
+.btn.light{background:var(--ground);color:var(--ink);border-color:var(--ground)}.btn.light:hover{background:transparent;color:var(--ground)}
+.btn[disabled]{opacity:.45;cursor:default}
+.link{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:4px;cursor:pointer;font-size:14px}
+input,textarea{font:inherit;width:100%;padding:14px 16px;border:1px solid var(--line);background:#fff;border-radius:14px;color:var(--ink)}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.top{background:var(--night);color:var(--ground)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:62px;gap:12px}
+.brand{font-family:var(--serif);font-size:18px}.brand small{display:block;font:11px var(--sans);letter-spacing:.22em;text-transform:uppercase;opacity:.65}
+.top button{background:none;border:0;color:var(--ground);opacity:.7;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.hero{position:relative;background:var(--night) center/cover no-repeat;color:#fff;min-height:360px;display:flex;align-items:flex-end}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,25,27,.15) 10%,rgba(22,25,27,.85))}
+.hero .wrap{position:relative;z-index:1;padding-bottom:36px;width:100%}
+.hero h1{font-size:clamp(34px,7vw,52px);margin:10px 0 8px}.hero .eyebrow{color:#E8D9C3}.hero p{margin:0;opacity:.9;max-width:520px}
+section{padding:42px 0;border-bottom:1px solid var(--line)}
+section h2{font-size:30px;margin:8px 0 12px}
+.lede{color:var(--muted);margin:0 0 20px;max-width:560px}
+/* the one-at-a-time question card */
+.ask{background:var(--night);color:#fff;border-radius:24px;padding:26px 24px 24px;position:relative;overflow:hidden;box-shadow:0 30px 60px -36px rgba(0,0,0,.7)}
+.ask .eyebrow{color:var(--gold)}
+.ask h3{font-size:clamp(26px,5.6vw,34px);margin:12px 0 10px}
+.ask .why{color:rgba(255,255,255,.66);font-size:15px;line-height:1.5;margin:0 0 20px;padding-left:14px;border-left:2px solid var(--gold)}
+.prog{display:flex;gap:5px;margin:0 0 16px}.prog i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.16)}.prog i.on{background:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;border-radius:999px;padding:11px 17px;cursor:pointer;font-size:15px;transition:all .2s var(--ease)}
+.chip:active{transform:scale(.96)}.chip.sel{background:var(--gold);border-color:var(--gold);color:var(--night)}
+.ask input,.ask textarea{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22);color:#fff}
+.ask input::placeholder,.ask textarea::placeholder{color:rgba(255,255,255,.45)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+.ask .link{color:rgba(255,255,255,.6)}
+.count{font-size:13px;color:rgba(255,255,255,.55)}
+.slide{animation:in .45s var(--ease) both}@keyframes in{from{opacity:0;transform:translateX(24px)}}
+/* drop zone: drag, tap, or paste a screenshot */
+.drop{display:flex;align-items:center;gap:14px;border:1.5px dashed rgba(255,255,255,.3);border-radius:16px;padding:16px;margin-top:16px;cursor:pointer;transition:all .2s}
+.drop.big{flex-direction:column;text-align:center;padding:34px 18px;gap:8px}
+.drop.over{border-color:var(--gold);background:rgba(200,169,110,.1)}
+.drop svg{width:26px;height:26px;stroke:var(--gold);flex:none}
+.drop b{display:block;font-weight:500}.drop small{display:block;color:rgba(255,255,255,.55);font-size:13px}
+.light .drop{border-color:var(--line)}.light .drop small{color:var(--muted)}.light .drop.over{background:var(--soft)}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.thumb{position:relative;width:76px;height:76px;border-radius:12px;overflow:hidden;background:#2A3035;display:grid;place-items:center;font-size:12px;color:#fff}
+.thumb img{width:100%;height:100%;object-fit:cover}.thumb button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;line-height:1}
+.done-card{text-align:center;padding:34px 24px}.done-card h3{margin-bottom:8px}
+/* journey */
+.journey{display:flex;margin:0;padding:0;list-style:none;overflow-x:auto;scrollbar-width:none}
+.journey li{flex:1 0 96px;padding:14px 10px 0 0;border-top:2px solid var(--line);font-size:13px;color:var(--muted);position:relative}
+.journey li:before{content:"";position:absolute;top:-6px;left:0;width:10px;height:10px;border-radius:50%;background:var(--line)}
+.journey li.done{border-color:var(--ink);color:var(--ink)}.journey li.done:before{background:var(--ink)}
+.journey li.now{border-color:var(--accent);color:var(--ink);font-weight:600}.journey li.now:before{background:var(--accent);box-shadow:0 0 0 4px rgba(140,106,67,.2)}
+.wants{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.want{background:var(--card);padding:18px}.want .l{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.want .v{font-family:var(--serif);font-size:20px;line-height:1.3;margin-top:6px}
+@media(max-width:620px){.wants{grid-template-columns:1fr}}
+/* homes */
+.homes{display:grid;gap:12px}
+.home{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.home .a{font-family:var(--serif);font-size:21px}.home .n{color:var(--muted);font-size:14.5px;margin:4px 0 0}
+.home .tag{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.takes{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.take{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 15px;cursor:pointer;font-size:14px}.take.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* got away */
+.away{background:linear-gradient(160deg,#20252A,#16191B);color:#fff;border-radius:24px;padding:28px 24px}
+.away .eyebrow{color:var(--gold)}.away h2{color:#fff}.away .lede{color:rgba(255,255,255,.68)}
+.away input,.away textarea{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22);color:#fff;margin-top:10px}
+.away input::placeholder,.away textarea::placeholder{color:rgba(255,255,255,.45)}
+.gone{display:grid;gap:8px;margin-top:20px}.gone div{border-top:1px solid rgba(255,255,255,.12);padding-top:10px;font-size:14.5px;color:rgba(255,255,255,.8)}
+.vip{background:var(--gold);color:var(--night);border-radius:24px;padding:26px 24px}
+.vip .badge{font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.75}.vip h2{margin:10px 0 8px}.vip p{margin:0 0 18px;color:rgba(22,25,27,.78)}
+.vip .btn{background:var(--night);border-color:var(--night);color:#fff}
+.upd{list-style:none;margin:0;padding:0}.upd li{padding:14px 0;border-top:1px solid var(--line)}.upd li:first-child{border-top:0}.upd b{display:block;font-weight:600}.upd small{color:var(--muted)}
+.agent{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.agent h3{font-size:26px}.agent .acts{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.login{min-height:calc(100vh - 62px);display:grid;place-items:center;padding:40px 22px;background:var(--night) url('photos/mtn-alpenglow-800.webp') center/cover}
+.login .card{background:rgba(22,25,27,.82);backdrop-filter:blur(8px);color:#fff;border-radius:24px;padding:32px 26px;max-width:420px;width:100%}
+.login h1{font-size:38px;margin:10px 0}.login p{color:rgba(255,255,255,.7)}.login .eyebrow{color:var(--gold)}
+.login input{margin:18px 0 10px;text-align:center;letter-spacing:.2em;text-transform:uppercase;font-size:18px}
+.err{color:#E3A08F;font-size:14px;min-height:20px;margin:0 0 10px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--night);color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;opacity:0;transition:all .3s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.cap{font-size:12px;color:rgba(255,255,255,.55);position:absolute;right:16px;bottom:10px;z-index:1}
+@media (prefers-reduced-motion:reduce){.slide{animation:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand">The Ranch Real Estate Group<small>Your buyer portal</small></div><button id="out" hidden>Sign out</button></div></header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+var API='__API__',KEY='ranch.buyer.code',app=document.getElementById('app');
+var D=null,Q=0,SEL=[],FILES=[],GA=[];
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function put(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},2600)}
+function first(n){return String(n||'').split(/\s+(?:and|&)\s+/).map(function(x){return x.split(' ')[0]}).join(' & ')}
+var UP='<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg>';
+var DEMO={ok:true,demo:true,code:'DEMO',names:'Sample Buyer',agent:{name:'Chris Ranch',phone:'(253) 335-5630',tel:'+12533355630',team:'The Ranch Real Estate Group'},stage:'Searching',
+  stages:['Getting started','Consult','Pre-approved','Searching','Touring','Offer','Under contract','Keys'],top3:'Yard, A view, Short commute',areas:'Gig Harbor, Fox Island',price:'$750K to $900K',unlisted:'Inside Track',
+  asks:{open:[{key:'shop',q:'How big a shop or garage do you need?',why:'If an off-market owner has a big shop, this tells me to call them first.',kind:'pick',options:['Two-car is fine','Three-car','A real shop','Room for an RV'],from:'agent'},
+    {key:'inspo',q:'Show me a home you love.',why:'A screenshot from any app, a listing link or a photo tells me more than a checklist ever could.',kind:'photo',options:[]}],total:9,answered:7},
+  homes:[{at:3,address:'Example: a Gig Harbor home with a shop',note:'Not on the market yet. The owners are open to a private showing.',take:'',by:'Chris',status:'For you'},
+    {at:2,address:'Example: a Fox Island home near the water',note:'Big yard and the view you asked for.',take:'Love',by:'Chris',status:'For you'}],
+  updates:[{at:Date.now()-864e5,title:'Example update',text:'Your weekly note from your agent shows here: what we found, who we called, what’s next.',from:''}],at:Date.now()};
+if(/agent=hannah/.test(location.search))DEMO.agent={name:'Hannah Ranch',phone:'(253) 709-9633',tel:'+12537099633',team:'The Ranch Real Estate Group'};
+
+function login(msg){
+  $('#out').hidden=true;
+  app.innerHTML='<div class="login"><div class="card"><p class="eyebrow">The Ranch Real Estate Group</p><h1>Your home search, in one place.</h1><p>Enter the code from your Buyer Pass or from your agent.</p><form id="lf"><input id="code" autocomplete="one-time-code" autocapitalize="characters" placeholder="Your code" aria-label="Your code" required><div class="err">'+esc(msg||'')+'</div><button class="btn light" style="width:100%">Open my portal</button></form></div></div>';
+  var h=(location.hash.match(/code=([A-Za-z0-9-]+)/)||[])[1];if(h)$('#code').value=h.toUpperCase();
+  $('#lf').onsubmit=function(e){e.preventDefault();var c=$('#code').value.trim().toUpperCase();if(c)load(c)};
+}
+function load(code){
+  if(code==='DEMO'){D=DEMO;return render()}
+  app.innerHTML='<div class="login"><div class="card"><p class="eyebrow">One moment</p><h1>Opening your portal…</h1></div></div>';
+  fetch(API+'?api=buyer&code='+encodeURIComponent(code)).then(function(r){return r.json()}).then(function(d){
+    if(!d.ok){put(KEY,null);return login(d.reason)}
+    put(KEY,code);if(location.hash)history.replaceState(null,'',location.pathname);D=d;render();
+  }).catch(function(){login('We couldn’t reach the portal. Check your connection and try again.')});
+}
+function post(body){
+  if(D&&D.demo)return Promise.resolve({ok:true,demo:true});
+  return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({code:D.code},body))}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw j;return j});
+}
+
+/* files: drag in, tap to pick, or paste a screenshot. Photos are made smaller on the phone first. */
+function shrink(f){
+  return new Promise(function(res){
+    if(!/^image\//.test(f.type)||/gif/.test(f.type))return read(f).then(res);
+    var img=new Image(),u=URL.createObjectURL(f);
+    img.onload=function(){var m=1800,s=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      res({name:(f.name||'photo').replace(/\.\w+$/,'')+'.jpg',type:'image/jpeg',data:c.toDataURL('image/jpeg',.82).split(',')[1],preview:c.toDataURL('image/jpeg',.5)})};
+    img.onerror=function(){URL.revokeObjectURL(u);read(f).then(res)};img.src=u;
+  });
+}
+function read(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){var s=String(r.result);res({name:f.name||'file',type:f.type,data:s.split(',')[1],preview:/^image\//.test(f.type)?s:''})};r.readAsDataURL(f)})}
+function addFiles(list,arr,box){
+  var fs=[].slice.call(list||[]).filter(function(f){return /^image\/|pdf$/.test(f.type)});
+  if(!fs.length)return toast('Photos, screenshots or PDFs work best.');
+  fs.slice(0,4-arr.length).forEach(function(f){if(f.size>15e6)return toast(f.name+' is too large.');shrink(f).then(function(x){arr.push(x);thumbs(arr,box)})});
+}
+function thumbs(arr,box){
+  var el=document.getElementById(box);if(!el)return;
+  el.innerHTML=arr.map(function(x,i){return '<div class="thumb">'+(x.preview?'<img src="'+x.preview+'" alt="">':'PDF')+'<button data-rm="'+i+'" aria-label="Remove">×</button></div>'}).join('');
+  [].forEach.call(el.querySelectorAll('[data-rm]'),function(b){b.onclick=function(e){e.stopPropagation();arr.splice(+b.dataset.rm,1);thumbs(arr,box)}});
+}
+function drop(id,arr,box,big,label){
+  return {html:'<label class="drop'+(big?' big':'')+'" id="'+id+'" tabindex="0">'+UP+'<span><b>'+(label||'Add a photo or screenshot')+'</b><small>Drag it here, tap to choose, or paste</small></span><input type="file" accept="image/*,application/pdf" multiple hidden></label><div class="thumbs" id="'+box+'"></div>',
+    wire:function(){var z=document.getElementById(id);if(!z)return;var inp=z.querySelector('input');
+      inp.onchange=function(){addFiles(inp.files,arr,box);inp.value=''};
+      ['dragenter','dragover'].forEach(function(t){z.addEventListener(t,function(e){e.preventDefault();z.classList.add('over')})});
+      ['dragleave','drop'].forEach(function(t){z.addEventListener(t,function(e){e.preventDefault();z.classList.remove('over')})});
+      z.addEventListener('drop',function(e){addFiles(e.dataTransfer.files,arr,box)});thumbs(arr,box)}};
+}
+var PASTE=null;document.addEventListener('paste',function(e){var f=[].slice.call((e.clipboardData||{}).files||[]);if(f.length&&PASTE){e.preventDefault();PASTE(f)}});
+
+/* the question card */
+function askHtml(){
+  var A=D.asks,a=A.open[Q],ag=first(D.agent.name);
+  var bars='';for(var i=0;i<A.total;i++)bars+='<i class="'+(i<A.answered?'on':'')+'"></i>';
+  if(!a)return '<div class="ask done-card slide"><div class="prog">'+bars+'</div><p class="eyebrow">All caught up</p><h3>That’s everything for now.</h3><p class="why" style="border:0;padding:0;margin:0 auto;max-width:420px">Thank you. This is exactly what I need to find the right one. If anything changes, send it below.</p></div>';
+  var body='';
+  if(a.kind==='pick'||a.kind==='many')body='<div class="chips" id="ch">'+a.options.map(function(o){return '<button class="chip'+(SEL.indexOf(o)>-1?' sel':'')+'" data-o="'+esc(o)+'">'+esc(o)+'</button>'}).join('')+'</div>'+(a.kind==='many'?'<p class="count" id="cn" style="margin:12px 0 0">'+(a.max?'Pick up to '+a.max:'Pick any')+'</p>':'');
+  if(a.kind==='text')body='<input id="tx" placeholder="'+esc(a.placeholder||'Type your answer')+'" autocomplete="off">';
+  var dz=drop('dz',FILES,'th',a.kind==='photo',a.kind==='photo'?'Drop a screenshot or photo':'');
+  if(a.kind==='photo')body='<input id="tx" placeholder="Or paste a link to any listing" inputmode="url" autocomplete="off">';
+  var showNext=a.kind!=='pick';
+  return '<div class="ask slide" id="ask"><div class="prog">'+bars+'</div><p class="eyebrow">'+(a.from==='agent'?'A quick one from '+esc(ag):'Help me find your home · '+(A.answered+1)+' of '+A.total)+'</p><h3>'+esc(a.q)+'</h3>'+(a.why?'<p class="why">'+esc(a.why)+'</p>':'')+body+
+    (a.kind==='photo'?dz.html:'<details style="margin-top:14px"><summary class="link" style="list-style:none;color:rgba(255,255,255,.6)">+ Add a photo or screenshot</summary>'+dz.html+'</details>')+
+    '<div class="row"><button class="link" id="sk">'+(a.optional?'Skip':'Skip for now')+'</button>'+(showNext?'<button class="btn light" id="nx">Next</button>':'<span class="count">Tap one to continue</span>')+'</div></div>';
+}
+function wireAsk(){
+  var a=D.asks.open[Q];if(!a)return;var dz=drop('dz',FILES,'th');dz.wire();PASTE=function(f){addFiles(f,FILES,'th');var d=document.querySelector('#ask details');if(d)d.open=true};
+  [].forEach.call(document.querySelectorAll('#ch .chip'),function(c){c.onclick=function(){var o=c.dataset.o,i=SEL.indexOf(o);
+    if(a.kind==='pick'){SEL=[o];[].forEach.call(document.querySelectorAll('#ch .chip'),function(x){x.classList.toggle('sel',x===c)});
+      if(!FILES.length)return setTimeout(function(){save(a)},260);
+      if(!$('#nx')){document.querySelector('#ask .row .count').outerHTML='<button class="btn light" id="nx">Next</button>';$('#nx').onclick=function(){save(a)}}return}
+    if(i>-1)SEL.splice(i,1);else{if(a.max&&SEL.length>=a.max)return toast('Just your top '+a.max+'.');SEL.push(o)}c.classList.toggle('sel');var n=$('#cn');if(n)n.textContent=SEL.length?SEL.length+(a.max?' of '+a.max:'')+' picked':(a.max?'Pick up to '+a.max:'Pick any')}});
+  if($('#nx'))$('#nx').onclick=function(){save(a)};
+  $('#sk').onclick=function(){save(a,true)};
+  if($('#tx'))$('#tx').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();save(a)}};
+}
+function save(a,skip){
+  var ans=a.kind==='pick'||a.kind==='many'?SEL.join(', '):(($('#tx')||{}).value||'').trim();
+  if(!skip&&!ans&&!FILES.length)return toast(a.kind==='photo'?'Add a screenshot or a link, or skip for now.':'Pick or type an answer, or skip for now.');
+  var b=$('#nx');if(b){b.disabled=true;b.textContent=FILES.length?'Sending…':'Saving…'}
+  post({type:'buyer-answer',key:a.key,question:a.q,answer:skip?'':ans,skip:!!skip,files:FILES.map(function(f){return{name:f.name,type:f.type,data:f.data}})}).then(function(j){
+    if(!skip){if(a.key==='top3')D.top3=ans;if(a.key==='where')D.areas=ans;if(a.key==='price')D.price=ans}
+    var sent=FILES.length;if(j.asks){D.asks=j.asks;Q=0}else{D.asks.open.splice(Q,1);D.asks.answered++}
+    SEL=[];FILES.length=0;
+    $('#askbox').innerHTML=askHtml();wireAsk();renderWants();
+    if(!skip)toast(sent?'Sent. Thank you.':'Got it. Thank you.');
+  }).catch(function(j){if(b){b.disabled=false;b.textContent='Try again'}toast((j&&j.reason)||'That didn’t save. Please try again.')});
+}
+
+function renderWants(){var w=$('#wants');if(!w)return;
+  w.innerHTML=[['Your top 3',D.top3],['Where',D.areas],['Price range',D.price]].map(function(x){return '<div class="want"><div class="l">'+x[0]+'</div><div class="v">'+(x[1]?esc(x[1]):'<span class="muted" style="font-size:16px">Still to come</span>')+'</div></div>'}).join('')}
+
+function render(){
+  $('#out').hidden=!!D.demo;Q=0;SEL=[];
+  var ag=D.agent,af=first(ag.name),st=D.stages.indexOf(D.stage);if(st<0)st=0;
+  var mine=D.homes.filter(function(h){return h.status!=='Got away'}),gone=D.homes.filter(function(h){return h.status==='Got away'});
+  var gz=drop('gz',GA,'gt',true,'Drop a screenshot of the listing');
+  app.innerHTML=
+  '<div class="hero" style="background-image:url(photos/mtn-alpenglow-800.webp)"><div class="wrap"><p class="eyebrow">Your buyer portal'+(D.demo?' · sample':'')+'</p><h1>Welcome, '+esc(first(D.names))+'.</h1><p>Everything we’re doing to find your home, in one place.</p></div></div>'+
+  '<section><div class="wrap" id="askbox">'+askHtml()+'</div></section>'+
+  '<section><div class="wrap"><p class="eyebrow">Where we are</p><h2>Your path home</h2><ol class="journey">'+D.stages.map(function(s,i){return '<li class="'+(i<st?'done':i===st?'now':'')+'"><b>'+esc(s)+'</b></li>'}).join('')+'</ol></div></section>'+
+  '<section><div class="wrap"><p class="eyebrow">What we’re hunting for</p><h2>Your search, in your words</h2><div class="wants" id="wants"></div></div></section>'+
+  '<section><div class="wrap"><p class="eyebrow">Homes for you</p><h2>Picked for you</h2><p class="lede">Homes I think fit, including some that aren’t on the market. Tell me how each one lands. Every answer sharpens the next pick.</p><div class="homes">'+
+    (mine.length?mine.map(function(h,i){return '<div class="home"><span class="tag">'+esc(h.status==='Toured'?'You toured':h.by==='Buyer'?'You shared':'From '+af)+'</span><div class="a">'+(h.link?'<a href="'+esc(h.link)+'" target="_blank" rel="noopener">'+esc(h.address)+'</a>':esc(h.address))+'</div>'+(h.note?'<p class="n">'+esc(h.note)+'</p>':'')+
+      '<div class="takes">'+['Love','Maybe','Not for me'].map(function(t){return '<button class="take'+(h.take===t?' sel':'')+'" data-h="'+i+'" data-t="'+t+'">'+t+'</button>'}).join('')+'</div></div>'}).join(''):'<p class="muted">Your first picks will show up here.</p>')+'</div></div></section>'+
+  '<section><div class="wrap"><div class="away"><p class="eyebrow">The ones that got away</p><h2>Loved a home that already sold?</h2><p class="lede">Send it here. Homes that got away show me exactly what you love: the price, the street, the light, the layout. Then I go find the next one like it, on or off the market.</p>'+
+    '<input id="gl" placeholder="Paste the link (Zillow, Redfin, anywhere)" inputmode="url" autocomplete="off"><textarea id="gn" rows="2" placeholder="What did you love about it? (optional)"></textarea>'+gz.html+
+    '<div class="row"><span class="count">Screenshots work great.</span><button class="btn light" id="gs">Send it to '+esc(af)+'</button></div>'+
+    (gone.length?'<div class="gone">'+gone.map(function(h){return '<div>'+(h.link?'<a href="'+esc(h.link)+'" target="_blank" rel="noopener">'+esc(h.address)+'</a>':esc(h.address))+(h.note?' · <span style="opacity:.7">'+esc(h.note.split(' · ')[0])+'</span>':'')+'</div>'}).join('')+'</div>':'')+'</div></div></section>'+
+  '<section><div class="wrap"><div class="vip"><span class="badge">Unlisted'+(D.unlisted?' · '+esc(D.unlisted):'')+'</span><h2>Homes before the market.</h2><p>Most agents wait for the right home to come on the market. We go hunting for it. We reach out in the neighborhoods you love to find owners who would sell to the right buyer, before anyone else knows.</p>'+
+    '<a class="btn" href="sms:'+esc(ag.tel)+'&body='+encodeURIComponent('Hi '+af+', it’s '+first(D.names)+'. I’d love to talk about Unlisted.')+'">'+(D.unlisted?'Ask how the hunt is going':'Ask '+esc(af)+' about Unlisted')+'</a></div></div></section>'+
+  (D.updates.length?'<section><div class="wrap"><p class="eyebrow">From '+esc(af)+'</p><h2>Latest</h2><ul class="upd">'+D.updates.map(function(u){return '<li><b>'+esc(u.title)+'</b>'+esc(u.text)+'<br><small>'+new Date(u.at).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</small></li>'}).join('')+'</ul></div></section>':'')+
+  '<section style="border-bottom:0"><div class="wrap agent"><div><p class="eyebrow">Your agent</p><h3>'+esc(ag.name)+'</h3><p class="muted small" style="margin:4px 0 0">'+esc(ag.team)+' · Keller Williams Realty Puget Sound</p></div><div class="acts"><a class="btn" href="sms:'+esc(ag.tel)+'">Text '+esc(af)+'</a><a class="btn ghost" href="tel:'+esc(ag.tel)+'">'+esc(ag.phone)+'</a></div></div></section>';
+  wireAsk();renderWants();gz.wire();
+  [].forEach.call(document.querySelectorAll('.take'),function(b){b.onclick=function(){var h=mine[+b.dataset.h];h.take=b.dataset.t;[].forEach.call(b.parentNode.children,function(x){x.classList.toggle('sel',x===b)});post({type:'buyer-take',at:h.at,address:h.address,take:h.take}).then(function(){toast('Noted. Thank you.')}).catch(function(j){toast((j&&j.reason)||'That didn’t save.')})}});
+  $('#gl').onfocus=$('#gn').onfocus=function(){PASTE=function(f){addFiles(f,GA,'gt')}};
+  $('#gz').onmouseenter=function(){PASTE=function(f){addFiles(f,GA,'gt')}};
+  $('#gs').onclick=function(){var l=$('#gl').value.trim(),n=$('#gn').value.trim(),b=$('#gs');if(!l&&!GA.length)return toast('Paste a link or add a screenshot.');
+    b.disabled=true;b.textContent='Sending…';
+    post({type:'buyer-home',gotaway:true,link:l,note:n,address:l?(l.replace(/^https?:\/\/(www\.)?/,'').split('/')[0]):'',files:GA.map(function(f){return{name:f.name,type:f.type,data:f.data}})}).then(function(){
+      D.homes.unshift({at:Date.now(),address:l?'A home you shared':'A screenshot you shared',link:/^https?:/.test(l)?l:'',note:n,status:'Got away',by:'Buyer'});GA.length=0;render();toast('Got it. I’ll find the next one like it.');var x=$('#gs');x&&x.scrollIntoView({block:'center'});
+    }).catch(function(j){b.disabled=false;b.textContent='Try again';toast((j&&j.reason)||'That didn’t send. Please try again.')})};
+}
+$('#out').onclick=function(){put(KEY,null);D=null;login()};
+var h=(location.hash.match(/code=([A-Za-z0-9-]+)/)||[])[1];
+if(location.hash==='#demo')load('DEMO');else if(h)load(h.toUpperCase());else if(get(KEY))load(get(KEY));else login();
+})();
+</script>
+</body>
+</html>

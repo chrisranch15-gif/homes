@@ -41,7 +41,7 @@ shot = datetime.date.fromisoformat(L['photo_day']).strftime('%A, %B %-d') if L.g
 credit = L.get('credit') or 'Anthony Jones / Rainier Real Estate Photography'
 photographer = credit.split('/')[0].strip().split(' ')[0]
 note = cfg.get('note') or [
-    'This is a preview of your photos. I’m excited to get your home live and on the market.']
+    'Here’s a first look at your home, room by room. Tap any photo to see it full size.']
 
 sections = ''.join(
     f'<section class="room" id="r{i}"><div class="rh"><h2>{e(t)}</h2><span>{len(ss)} photo{"s" if len(ss) > 1 else ""}</span></div>'
@@ -114,7 +114,7 @@ footer{{background:var(--night);color:#8f887d;font-size:12px;padding:0 0 110px}}
 <div class="trio reveal">{"".join(f"<figure data-s=\"{s}\">{img(s, sizes='(min-width:900px) 60vw, 100vw', alt='')}<button class=\"fav\" aria-label=\"Favorite\" data-s=\"{s}\">♡</button></figure>" for s in trio)}</div>
 {sections}{plan_html}
 </div>
-<section class="next"><div class="wrap"><h2>Excited to get your home <em style="color:var(--gold)">live and on the market.</em></h2><div class="contact"><a href="sms:+12533355630">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
+<section class="next"><div class="wrap"><h2>We’re so excited to get your home <em style="color:var(--gold)">live and on the market.</em></h2><div class="contact"><a href="sms:+12533355630">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
 </main>
 <footer><div class="wrap"><span>Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</span><span>Photography: {e(credit)}</span></div></footer>
 <div class="lb" id="lb" role="dialog" aria-label="Photo"><img alt=""><button class="x" aria-label="Close">×</button><button class="p" aria-label="Previous">‹</button><button class="n" aria-label="Next">›</button><div class="c"></div></div>

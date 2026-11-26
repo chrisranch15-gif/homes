@@ -290,7 +290,7 @@ function watch_() {
   const wk = /Sat|Sun/.test(Utilities.formatDate(new Date(), tz, 'EEE'));
   if (Object.keys(live).length && (wk ? [12] : [8, 12, 16]).indexOf(hour) >= 0) todo_('tc', 'All live deals', 'Deadline check', 'deadlines:' + day + ':' + hour, seen);
   // 5. Chris's notes on TC drafts, sellers' questions, marketing changes, sellers' upgrades, settlement statements
-  get('TC feedback').slice(1).forEach((r, i) => { if (r[0]) todo_('tc', r[1], 'Your note: ' + r[3], 'fb:' + (i + 2) + ':' + r[0], seen); });
+  get('TC feedback').slice(1).forEach((r, i) => { if (r[0] && /change it/i.test(r[3])) todo_('tc', r[1], 'Your note: ' + r[3], 'fb:' + (i + 2) + ':' + r[0], seen); });
   get('Seller questions').slice(1).forEach((r, i) => { if (r[4] && /^(new|held)?$/i.test(String(r[8] || '').split(' ')[0])) todo_('seller-question', r[2], r[4], 'q:' + (i + 2), seen); });
   get('Marketing changes').slice(1).forEach((r, i) => { if (r[3] && /^(requested|new)?$/i.test(String(r[4] || ''))) todo_('marketing', r[1], r[2] + ': ' + r[3], 'mc:' + (i + 2), seen); });
   get('Home facts').slice(1).forEach(r => { if (r[0] && String(r[3] || '').trim()) todo_('marketing', r[1], 'Sellers saved upgrades', 'facts:' + r[0] + ':' + r[2], seen); });

@@ -32,7 +32,7 @@ const OFFMARKET_HEADERS = ['Requested', 'Name', 'Phone', 'Email', 'Meeting', 'Be
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
-const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day', 'Closed on', 'Emails', 'Settlement statement'];   // I: sellers' emails (private, for Chris's drafts) · J: Drive link to the final settlement statement, shared with the sellers
+const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day', 'Closed on', 'Emails', 'Settlement statement'];   // I: sellers' emails (private, for Chris's drafts) - J: Drive link to the final settlement statement, shared with the sellers
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
 const TIMELINE_HEADERS = ['Date', 'Home', 'Milestone', 'Note', 'Status'];
 // the improvement loop (source/playbooks/): sellers' "Ask Chris" questions, their check-ins, and approved "get ahead" notes
@@ -587,7 +587,7 @@ function sellerView_(code) {
     at: now };
 }
 
-// a seller's own questions and the answers they may see. Quiet hours: an answer written 8 PM–8 AM Pacific shows from 8 AM.
+// a seller's own questions and the answers they may see. Quiet hours: an answer written 8 PM to 8 AM Pacific shows from 8 AM.
 function sellerQuestions_(code) {
   const now = new Date();
   const visible = at => { if (!at) return false; const t = new Date(at), h = Number(Utilities.formatDate(t, 'America/Los_Angeles', 'H'));

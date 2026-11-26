@@ -30,3 +30,13 @@ photography, story over specs, the lifestyle and the place, discretion for the s
 **Fair Housing advertising (HUD guidance).** Describe the property and amenities, not the people who should live
 there. Words about who belongs (family status, religion, national origin, disability, sex, race, color) are out.
 "Walking distance" and descriptions of features are fine.
+
+**NLP (neuro-linguistic programming).** Popular in sales training. Its research support is weak, and some of its
+techniques (hidden commands, covert anchoring) work by getting around a person's judgment, which doesn't fit a
+fiduciary. The parts that hold up overlap with the frameworks above: matching the client's own words (rapport),
+helping them picture the outcome (future pacing), reframing a worry, and rich sensory description of a home. We use
+those, named plainly, and leave out the covert ones (brain.md §2c).
+
+**Motivational interviewing (William Miller and Stephen Rollnick).** A well-researched way to help people decide
+on change: open questions, reflecting back what they said, drawing out their own reasons rather than pushing. A good
+fit for long-term nurtures of future sellers and for a future lead converter.

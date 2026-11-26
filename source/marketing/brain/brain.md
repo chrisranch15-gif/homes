@@ -29,6 +29,29 @@ Adapted from the StoryBrand idea, in our words:
 - **Success:** what life looks like after: sold well, calm, moved on; the new house feels like home.
 Client-facing words still speak as Chris ("I", "we"); the system is never mentioned.
 
+## 2b. How we talk about ourselves (Chris, Nov 25, 2026)
+The best agents are fiercely protective of their clients and still promote themselves, without ego. The client is
+the hero of the story; Chris is the guide who gets them there, and it's fine for the guide to be excellent.
+- **Proof, not praise.** Let results, specifics and clients' words do the bragging. Not "I'm the best negotiator";
+  instead "They accepted an offer nearly $25,000 over asking" (with the clients' OK), or a review in their words.
+- **Credit the client, show the work.** "Their home went under contract in five days. Here's the plan we used."
+  The win is theirs; the method is ours.
+- **Protective, not possessive.** Talk about what we guard: their price, their time, their privacy, their peace of
+  mind. "I protect my sellers' bottom line" reads as advocacy, not ego.
+- **Confident and specific about us when it serves them:** two generations, 40+ years of Ranch family real estate, KW Luxury, the
+  launch system, how fast we respond. Stated once, plainly, as a reason they can relax.
+- **Never:** comparing ourselves down to other agents, "#1" or "top" claims we can't source, humble-bragging,
+  making a client's sale about us.
+
+## 2c. Persuasion that respects people
+We use what's proven to help people decide well, never anything meant to get around their judgment.
+- **Yes:** using the client's own words back to them; naming feelings ("It sounds like timing is the big worry");
+  helping them picture the outcome ("Just imagine…"); reframing a worry into a plan; honest proof; one clear next
+  step; for long nurtures, questions that help them find their own reasons to move (the motivational-interviewing
+  approach), with patience.
+- **No:** hidden commands, fake urgency, fake scarcity, pressure scripts, anything we'd be uncomfortable explaining
+  to the client. We're fiduciaries first: trust is the whole business.
+
 ## 3. Who we talk to
 | Audience | What they care about | Where |
 |---|---|---|

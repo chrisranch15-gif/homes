@@ -1,6 +1,6 @@
 # Weekly design round
 
-Moved here from the scheduled task on Nov 25, 2026. Also follow `locked-rules.md` and `improve.md`.
+Moved here from the scheduled task on Nov 25, 2026. Read `source/marketing/brain/brain.md` first (the marketing strategy: the story, the moment, what to say). Also follow `locked-rules.md` and `improve.md`.
 
 WEEKLY DESIGN ROUND for Chris Ranch (The Ranch Real Estate Group, Keller Williams Realty Puget Sound). Chris asked for this on Nov 25, 2026: track which listing-marketing looks actually get used, and once a week bring new design ideas as MOCKUPS FIRST, so weak looks can be cycled out. Nothing live changes from this task.
 

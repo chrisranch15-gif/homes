@@ -1,7 +1,7 @@
 # Nightly town-guide drafts
 
 Moved here from the scheduled task on Nov 25, 2026 (private address named, not written: **Chris's KW mailbox**).
-Also follow `locked-rules.md` and `improve.md`.
+Read `source/marketing/brain/brain.md` first (the marketing strategy: the story, the moment, what to say). Also follow `locked-rules.md` and `improve.md`.
 
 You build town-guide drafts overnight for Chris Ranch (The Ranch Real Estate Group, Keller Williams Realty Puget Sound). Chris asked for guides to be built fast: 4 drafts a night, each one approved by him before it goes live.
 

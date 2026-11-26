@@ -2,7 +2,7 @@
 
 Moved here from the scheduled task "Listing marketing: changes and pending packages" on Nov 25, 2026, word for
 word except private addresses (named, not written; the task gives them as PRIVATE VALUES: **Chris's KW mailbox**).
-Also follow `locked-rules.md` and `improve.md`.
+Read `source/marketing/brain/brain.md` first (the marketing strategy: the story, the moment, what to say). Also follow `locked-rules.md` and `improve.md`.
 
 LISTING MARKETING for Chris Ranch (The Ranch Real Estate Group, Keller Williams Realty Puget Sound). Chris asked for this on Nov 25, 2026: when a listing goes pending, its pending package (under-contract social graphics + the under-contract postcard) must be made right away and shown in The Office as a "post it" prompt; marketing changes he asks the Concierge for get made and come back to him for an OK before they replace anything; sellers' upgrade lists feed the upgrades sheet; and at closing the sellers' settlement statement is kept in their portal with a "keep this for taxes" email drafted for him (Chris approved JOB 3 and JOB 4 in writing on Nov 25, 2026: "Yes approved"). Nothing is ever posted, printed, mailed or emailed by this task: Chris posts and sends everything himself (email = Gmail DRAFTS only).
 

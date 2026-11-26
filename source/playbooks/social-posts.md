@@ -1,6 +1,6 @@
 # Social posts for listing moments
 
-Also follow `locked-rules.md`, `improve.md` and the copy brief `source/marketing/social/README.md`.
+Read `source/marketing/brain/brain.md` first (the marketing strategy: the story, the moment, what to say). Also follow `locked-rules.md`, `improve.md` and the copy brief `source/marketing/social/README.md`.
 
 Chris asked for this on 2026-11-25: "all the socials must be done up front, at least the just listed type of social graphics and captions... when we go pending, that should trigger the pending social designs and captions." A listing may go pending a day before the MLS shows it, so the contract itself is the trigger, not the MLS status. When the Office, the Desk or the TC fires this task, its message names the listing and the moment; handle that one first, then check the rest.
 

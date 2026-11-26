@@ -27,6 +27,13 @@ the Undo as an item.
   opened in 3+ weeks.
 - **Deal history**: repeated trouble with the same lender, title company or inspector.
 - **Research** rows with Chris's call "Approve" that haven't been built.
+- **Marketing brain inbox** rows with Status "New" (links, screenshots, ideas Chris sent): read each (WebFetch for links),
+  write a short summary in our own words with the source into `source/marketing/brain/library/<topic>.md`, set Status
+  "Summarized", and if it should change what we make, propose that as an item (with a before/after example from a real
+  recent piece). Never paste an article or book in; one short quote at most.
+- **Marketing results**: which hooks, calls to action, moments and looks earned saves, shares, messages and leads;
+  add measured facts to `source/marketing/brain/evidence.md` (facts only; rule changes go to brain.md via an item).
+- **Answer engines** (first review of each month): run the monthly check in `source/playbooks/pages-aeo.md`.
 
 ## 3. Pick at most 5 improvements, most valuable first
 Kinds of change you may propose:
@@ -36,6 +43,8 @@ Kinds of change you may propose:
   (title, the stage and day it appears, the text in Chris's voice);
 - moving or hiding an Office/Desk section;
 - a copy-checker rule (`source/checks/copy_rules.json`);
+- a change to the marketing brain (`source/marketing/brain/brain.md`) or a page's words, FAQs or structured data
+  (`pages-aeo.md`; the design is locked);
 - a fix for a papercut;
 - "What's working" examples for the social copy brief (the best-performing posts, with numbers).
 Never propose loosening a locked rule. If a locked rule causes friction, you may say so plainly as

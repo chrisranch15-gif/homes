@@ -14,8 +14,11 @@ this repo). That way every instruction has a history, a review, and one place to
 | Weekly improvement review | `weekly-review.md` | Mondays, morning |
 | Monthly researcher | `researcher.md` | the 2nd of each month |
 | Weekly design round | `design-round.md` | Mondays |
+| Pages and answer engines (AEO) | `pages-aeo.md` | monthly, inside the weekly review |
 | Tax-season notes | `tax-season.md` | Feb 2 every year |
 | Nightly town-guide drafts | `town-guides.md` | nightly |
+
+Every marketing job first reads the marketing brain: `source/marketing/brain/brain.md` (strategy) and its README (how Chris teaches it).
 
 Every job also follows:
 - `locked-rules.md`: rules no job and no review may loosen. Only Chris changes them, in his own words.

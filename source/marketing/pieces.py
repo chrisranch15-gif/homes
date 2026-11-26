@@ -44,8 +44,9 @@ LOOKS = {
 
 def esc(s): return html.escape(str(s or ''), quote=True)
 
+REVIEW = False   # --review: read source/marketing/pieces/review/<key>.json, write marketing/<key>/review/<look>/ (a change waiting for Chris's OK)
 def load(key):
-    p = os.path.join(R, 'source', 'marketing', 'pieces', key + '.json')
+    p = os.path.join(R, 'source', 'marketing', 'pieces', 'review' if REVIEW else '', key + '.json')
     if os.path.exists(p):
         d = json.load(open(p))
     else:
@@ -275,9 +276,9 @@ def carousel_slides(L, d):
 
 def contract_social(L, d):
     """Pending package: under-contract graphics for Instagram/Facebook (post 4:5, story 9:16, square)."""
-    if not (d.get('listed') and d.get('contract')): return []
-    days = (datetime.date.fromisoformat(d['contract']) - datetime.date.fromisoformat(d['listed'])).days
-    dtxt = f'in {days} day' + ('s' if days != 1 else '')
+    if not d.get('contract'): return []
+    days = (datetime.date.fromisoformat(d['contract']) - datetime.date.fromisoformat(d['listed'])).days if d.get('listed') else None
+    dtxt = (f'in {days} day' + ('s' if days != 1 else '')) if days is not None else ''
     fr = '<div class="frame" style="inset:30px"></div>' if L['frame'] else ''
     def card(w, h, big, img):
         return (w, h, f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(img)}">{fr}
@@ -285,7 +286,7 @@ def contract_social(L, d):
 <p class="h" style="position:absolute;top:70px;left:80px;font-size:{hs(L, 34)};color:{L['paper']}">{AGENT['team']}</p>
 <div style="position:absolute;left:80px;right:80px;bottom:{int(h * .09)}px;color:{L['paper']}">
 <p class="eye" style="font-size:26px;color:{L['onDark']}">Under contract · {esc(d['area'])}</p>
-<h1 class="h" style="font-size:{hs(L, big)};line-height:.98;margin-top:22px">Under contract {dtxt}.</h1>
+<h1 class="h" style="font-size:{hs(L, big)};line-height:.98;margin-top:22px">Under contract{' ' + dtxt if dtxt else ''}.</h1>
 <p style="margin:26px 0 0;font-size:34px;color:{L['onDark']}">{esc(d['address'])}</p>
 <p style="margin:18px 0 0;font-size:26px;color:{L['onDarkSub']}">Thinking about selling? Let’s talk. {AGENT['phone']}</p></div></div>""")
     return [('contract-post', *card(1080, 1350, 128, d['hero'])), ('contract-story', *card(1080, 1920, 140, d.get('aerial') or d['hero'])),
@@ -333,7 +334,7 @@ def build(key, only=None):
     with sync_playwright() as p:
         b = p.chromium.launch(); pg = b.new_page()
         for look, L in LOOKS.items():
-            out = os.path.join(R, 'marketing', key, look); os.makedirs(out, exist_ok=True)
+            out = os.path.join(R, 'marketing', key, 'review', look) if REVIEW else os.path.join(R, 'marketing', key, look); os.makedirs(out, exist_ok=True)
             for k, _, fn, w, h in PRINT:
                 if only and only != k: continue
                 pages = fn(L, d); f = os.path.join(out, k + '.pdf')
@@ -359,10 +360,12 @@ def build(key, only=None):
                 pg.set_viewport_size({'width': 640, 'height': 900}); show(pg, agent_email(L, d).replace('src="' + SITE, 'src="file://' + R + '/'))
                 pg.screenshot(path=f[:-5] + '.jpg', type='jpeg', quality=80, full_page=True)
         b.close()
+    if REVIEW: return made
     json.dump({'look': d.get('look', 'editorial'), 'print': d.get('print', []), 'address': d['address'], 'status': d.get('status', ''), 'contract': d.get('contract', '')}, open(os.path.join(R, 'marketing', key, 'pieces.json'), 'w'))
     return made
 
 if __name__ == '__main__':
-    key = sys.argv[1] if len(sys.argv) > 1 else '19917'
-    m = build(key, sys.argv[2] if len(sys.argv) > 2 else None)
+    args = [a for a in sys.argv[1:] if a != '--review']; REVIEW = '--review' in sys.argv
+    key = args[0] if args else '19917'
+    m = build(key, args[1] if len(args) > 1 else None)
     print(f'{key}: {len(m)} files in marketing/{key}/')

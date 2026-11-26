@@ -56,3 +56,19 @@ remote images, so publish the thumbnails with each artifact (Office: `site-*.jpg
 - **Deal inbox** on ranchpnw.com, forwarded into Chris's deal inbox with a label so the TC reads one inbox.
 - **Buyer side**: the same TC timeline, drafts and watcher for deals where the Ranch team represents the buyer (a buyer view instead of the seller portal).
 - Standing TC rules (fire reviews, signed addenda for date changes, appraisal tracking, county/septic documents, wire fraud) live as "All deals" rows on the TC feedback tab.
+
+## Launch pieces in three looks (source/marketing/pieces.py)
+One look per listing: **Estate Editorial** (`editorial`, pairs with Noir signs), **Modern Architectural** (`arch`, Daylight signs),
+**Warm Heritage** (`heritage`, Heritage signs). Chris picks it at launch (Office launch sheet or the Desk launch flow) and switches it on
+the Desk (Marketing assets → Look). Every piece is built in all three looks so switching is instant.
+- Facts: `source/marketing/pieces/<key>.json` (else `source/listings/<key>.json`). Rooms, talkers (silent talkers, 3×5) and reasons are
+  written at launch from the photos, remarks and the seller's upgrade list; every line must be verified. Missing facts skip a piece.
+- Build: `python3 source/marketing/pieces.py <key>` → `marketing/<key>/<look>/`. ship.sh rebuilds when the facts or templates change.
+- Print (Chris picks): postcard-listed, postcard-contract, postcard-sold (only after closing, with the sellers' OK), preview-invite,
+  lookbook, room-cards, talkers. Digital (always made): agent-email.html, carousel-N.jpg, and the pending package
+  (contract-post / contract-story / contract-square.jpg) once `contract` (mutual date) is set.
+- Pending: the Office shows "Under contract · <address>: post it" with the package until Chris taps "I posted them" (Hub done `pend:<key>`).
+- Changes: the Concierge (Office or Desk) logs a row on the "Marketing changes" tab (When | Listing | Piece | Change asked | Status | Result
+  link | Note). The hourly "Listing marketing" task copies the facts to `source/marketing/pieces/review/<key>.json`, applies the change,
+  renders `--review` into `marketing/<key>/review/<look>/`, sets Ready + link; Chris taps Approve or Not quite in the Office; Approved
+  replaces the live piece (copy the review JSON over, rebuild, ship) and the row becomes Done.

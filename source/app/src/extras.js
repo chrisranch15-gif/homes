@@ -440,9 +440,40 @@ const tcKey = r => [r[0], r[1], String(r[2] || '').slice(0, 60)].join(' · ');
 function tcDraftIdOf(r) { const m = /msg-a:(r-?\d+)/.exec(String(r[5] || '')); return /^gmail draft created/i.test(r[2] || '') && m ? m[1] : ''; }
 function tcWaiting() { const k = homeKeyJs(street()), calls = ui.tcCalls || {};
   return (ui.tcRows || []).filter(r => homeKeyJs(r[1]) === k && tcDraftIdOf(r) && !calls[tcKey(r)] && !r[8]).reverse(); }
-const tcFilesOf = d => ((d && d.attachments) || []).filter(x => x.filename && !x.inline);
+/* Files on a Gmail draft, read from its RAW form (the regular view of a draft doesn't list attachments). null = couldn't read it. */
+function mimeFiles(raw) {
+  let t; try { t = atob(String(raw || '').replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '')); } catch (e) { return null; }
+  if (!/\r?\n\r?\n/.test(t)) return null;
+  const words = s => s.replace(/=\?([^?]+)\?([BbQq])\?([^?]*)\?=/g, (m, cs, enc, x) => { try { const bin = /b/i.test(enc) ? atob(x) : x.replace(/_/g, ' ').replace(/=([0-9A-F]{2})/gi, (q, h) => String.fromCharCode(parseInt(h, 16)));
+    return new TextDecoder(cs).decode(Uint8Array.from(bin, c => c.charCodeAt(0))); } catch (e) { return m; } });
+  const qp = s => s.replace(/=\r?\n/g, '').replace(/=([0-9A-F]{2})/gi, (m, h) => String.fromCharCode(parseInt(h, 16)));
+  const out = [], seen = {}, bs = [...new Set([...t.matchAll(/boundary="?([^";\r\n]+)"?/gi)].map(m => m[1].trim()))];
+  bs.forEach(b => t.split('--' + b).forEach(seg => {
+    const i = seg.search(/\r?\n\r?\n/); if (i < 0) return;
+    const h = seg.slice(0, i).replace(/\r?\n[ \t]+/g, ' '), body = seg.slice(i).replace(/^\r?\n\r?\n/, '').replace(/\r?\n$/, '');
+    if (/content-type:\s*multipart\//i.test(h) || /^\s*-*\s*$/.test(h)) return;
+    const f = /filename\*=(?:utf-8'[^']*')?("?)([^";\r\n]+)\1/i.exec(h) || /filename=("?)([^";\r\n]+)\1/i.exec(h) || /\bname=("?)([^";\r\n]+)\1/i.exec(h);
+    if (!f) return;
+    let name = f[2].trim(); try { if (/filename\*=/i.test(f[0])) name = decodeURIComponent(name); } catch (e) { } name = words(name);
+    const type = ((/content-type:\s*([^;\s]+)/i.exec(h) || [])[1] || 'application/octet-stream').toLowerCase(), enc = ((/content-transfer-encoding:\s*([^;\s]+)/i.exec(h) || [])[1] || '').toLowerCase();
+    let content; try { content = enc === 'base64' ? body.replace(/[^A-Za-z0-9+/=]/g, '') : btoa(enc === 'quoted-printable' ? qp(body) : body); } catch (e) { return; }
+    const disp = /content-disposition:\s*(attachment|inline)/i.exec(h), inline = disp ? /inline/i.test(disp[1]) : /content-id:/i.test(h);
+    const key = name + ':' + content.length; if (seen[key]) return; seen[key] = 1;
+    out.push({ filename: name, mimeType: type, content, inline, size: Math.floor(content.length * 3 / 4) });
+  }));
+  return out;
+}
+// a draft as it is in Gmail right now, with its files (null files = couldn't read them, so never send it from here)
+async function gmailDraftDesk(id) { const d = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' });
+  if (!d || !(d.subject || d.plaintextBody || d.toRecipients)) return null;
+  let files = null; try { const r = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'RAW' }); files = mimeFiles(r && r.raw); } catch (e) { }
+  return Object.assign({}, d, { files }); }
+const tcFilesOf = d => ((d && d.files) || []).filter(x => !x.inline);
+const tcAttOf = d => ((d && d.files) || []).map(x => { const o = { content: x.content, filename: x.filename, mimeType: x.mimeType }; if (x.inline) o.inline = true; return o; });
+const kbOf = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+function tcUrlOf(x) { ui.tcUrls = ui.tcUrls || {}; const k = x.filename + x.content.length; if (!ui.tcUrls[k]) { const b = atob(x.content), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); ui.tcUrls[k] = URL.createObjectURL(new Blob([u], { type: x.mimeType })); } return ui.tcUrls[k]; }
 async function tcDraftFetch(id) { ui.tcDraft = ui.tcDraft || {}; if (ui.tcDraft[id]) return; ui.tcDraft[id] = 'loading';
-  try { const d = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' }); ui.tcDraft[id] = d && (d.subject || d.plaintextBody || d.toRecipients) ? d : { error: 'gone' }; }
+  try { ui.tcDraft[id] = (await gmailDraftDesk(id)) || { error: 'gone' }; }
   catch (e) { ui.tcDraft[id] = { error: /not ?found|404|no draft/i.test((e && e.message) || '') ? 'gone' : ((e && e.message) || 'not available') }; }
   render(); }
 function tcBlock() {
@@ -454,41 +485,49 @@ function tcBlock() {
     if (!d || d === 'loading') { if (!d) setTimeout(() => tcDraftFetch(id)); inner = '<p class="small muted" style="margin:8px 0 0">Opening the draft…</p>'; }
     else if (d.error) inner = d.error === 'gone' ? '<p class="small muted" style="margin:8px 0 0">This draft isn’t in Gmail anymore (sent or deleted there). Tap Handled to clear it.</p>'
       : `<p class="small muted" style="margin:8px 0 0">Couldn’t open it here (${esc(d.error)}). <a href="${link}" target="_blank" rel="noopener noreferrer">Open in Gmail</a></p>`;
-    else if (ui.tcEdit === k) inner = `<form data-form="tc-edit" data-k="${esc(k)}" style="margin-top:8px"><p class="small muted" style="margin:0 0 8px">To: ${esc((d.toRecipients || []).join(', '))}</p>
+    else if (ui.tcEdit === k) { const f = tcFilesOf(d);
+      inner = `<form data-form="tc-edit" data-k="${esc(k)}" style="margin-top:8px"><p class="small muted" style="margin:0 0 8px">To: ${esc((d.toRecipients || []).join(', '))}${f.length ? ' · keeps ' + esc(f.map(x => x.filename).join(', ')) : ''}</p>
         <div class="field"><label>Subject</label><input name="subject" value="${esc(d.subject || '')}"></div>
         <div class="field"><label>Message</label><textarea name="body" rows="16" style="min-height:320px">${esc(String(d.plaintextBody || '').trim())}</textarea></div>
         <div class="chips"><button class="btn" type="submit">Save to the draft</button><button class="chip" type="button" data-act="tc-editx">Cancel</button></div>
-        <p class="small muted" style="margin-top:8px">Saving updates the same Gmail draft. Nothing sends until you tap Send. Your TC learns from what you change.</p></form>`;
-    else { const f = tcFilesOf(d), to = (d.toRecipients || []).join(', ');
+        <p class="small muted" style="margin-top:8px">Saving updates the same Gmail draft${f.length ? ' and keeps its attachment' : ''}. Nothing sends until you tap Send. Your TC learns from what you change.</p></form>`; }
+    else { const f = tcFilesOf(d), to = (d.toRecipients || []).join(', '), unread = d.files == null;
+      const files = f.map((x, i) => { const open = ui.tcView === k + '#' + i;
+        return `<div style="margin-top:8px"><div class="small">📎 ${esc(x.filename)} <span class="muted">· ${kbOf(x.size)}</span></div><div class="chips" style="margin:6px 0 0">${/pdf/.test(x.mimeType) ? `<button class="chip" data-act="tc-view" data-k="${esc(k)}" data-i="${i}">${open ? 'Hide' : 'Open the PDF'}</button>` : ''}<a class="chip" href="${tcUrlOf(x)}" download="${esc(x.filename)}">Download</a></div>
+          ${open ? `<iframe src="${tcUrlOf(x)}" title="${esc(x.filename)}" style="width:100%;height:70vh;border:1px solid var(--line);margin-top:8px;background:#fff"></iframe>` : ''}</div>`; }).join('');
       inner = `<div style="padding:12px 14px;margin-top:8px;background:var(--paper2,rgba(128,120,108,.08));border-radius:10px"><div class="small"><b>${esc(d.subject || '(no subject)')}</b></div>
-        <div class="small muted" style="margin-top:4px">To: ${esc(to)}${(d.ccRecipients || []).length ? ' · CC: ' + esc(d.ccRecipients.join(', ')) : ''}${f.length ? ' · Attached: ' + esc(f.map(x => x.filename).join(', ')) : ''}</div>
-        <div class="small" style="white-space:pre-wrap;margin-top:8px;line-height:1.5">${esc(String(d.plaintextBody || '').trim())}</div></div>
-        <div class="chips" style="margin:10px 0 0">${f.length ? `<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Send in Gmail (has an attachment)</a>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) : 'Send'}</button><button class="chip" data-act="tc-edit" data-k="${esc(k)}">Edit here</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>`; }
+        <div class="small muted" style="margin-top:4px">To: ${esc(to)}${(d.ccRecipients || []).length ? ' · CC: ' + esc(d.ccRecipients.join(', ')) : ''}</div>
+        <div class="small" style="white-space:pre-wrap;margin-top:8px;line-height:1.5">${esc(String(d.plaintextBody || '').trim())}</div>${files}</div>
+        <div class="chips" style="margin:10px 0 0">${unread ? `<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Send in Gmail (couldn’t check its attachments here)</a>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) + (f.length ? ' with ' + f.length + ' attachment' + (f.length > 1 ? 's' : '') : '') : 'Send'}</button><button class="chip" data-act="tc-edit" data-k="${esc(k)}">Edit here</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>`; }
     return `<div style="padding:14px 0 6px;border-top:1px solid var(--line)"><div><b>${title}</b></div>${inner}</div>`; };
   return `<div class="sharebar" id="tcdrafts"><div class="eyebrow">Ready to send · ${rs.length} email${rs.length > 1 ? 's' : ''} from your TC</div>${rs.map(card).join('')}
     <p class="small muted" style="margin-top:10px">Nothing goes out until you tap Send. The same drafts are in your Gmail drafts and in the Office.</p></div>`;
 }
-const tcTextOf = d => 'Subject: ' + ((d && d.subject) || '') + '\n\n' + String((d && d.plaintextBody) || '').trim();
+const tcTextOf = d => 'Subject: ' + ((d && d.subject) || '') + '\n\n' + String((d && d.plaintextBody) || '').trim() + (tcFilesOf(d).length ? '\n\n[Attached: ' + tcFilesOf(d).map(x => x.filename).join(', ') + ']' : '');
 async function tcSaveDesk(k, subject, body) { const r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; const id = tcDraftIdOf(r);
-  try { const before = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' });
-    if (tcFilesOf(before).length) throw new Error('it has an attachment, so edit it in Gmail');
-    await callTool('Gmail', 'update_draft', { draftId: id, subject, body });
-    const after = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' }); (ui.tcDraft = ui.tcDraft || {})[id] = after || { error: 'gone' }; ui.tcEdit = null;
-    if (tcTextOf(before) !== tcTextOf(after)) await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Edited', ('Edited on the Desk.\n\nBEFORE:\n' + tcTextOf(before) + '\n\nAFTER:\n' + tcTextOf(after)).slice(0, 45000)], 'Saved to the draft.');
-    else toast('Saved to the draft.');
+  try { const before = await gmailDraftDesk(id); if (!before) throw new Error('the draft is gone');
+    if (before.files == null) throw new Error('couldn’t read its attachments, so edit it in Gmail');
+    const up = { draftId: id, subject, body }; if (before.files.length) up.attachments = tcAttOf(before);   // update_draft drops files unless they're sent again
+    await callTool('Gmail', 'update_draft', up);
+    const after = await gmailDraftDesk(id); (ui.tcDraft = ui.tcDraft || {})[id] = after || { error: 'gone' }; ui.tcEdit = null;
+    const msg = after && tcFilesOf(after).length !== tcFilesOf(before).length ? 'Check the attachment in Gmail: it didn’t carry over.' : 'Saved to the draft.';
+    if (after && tcTextOf(before) !== tcTextOf(after)) await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Edited', ('Edited on the Desk.\n\nBEFORE:\n' + tcTextOf(before) + '\n\nAFTER:\n' + tcTextOf(after)).slice(0, 45000)], msg);
+    else toast(msg);
   } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); }
   render(); }
 async function tcSendDesk(k) { const r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; const id = tcDraftIdOf(r);
   if (ui.tcSure !== k) { ui.tcSure = k; return render(); }
   ui.tcSure = null; toast('Sending…');
-  try { const d = await callTool('Gmail', 'get_draft', { draftId: id, messageFormat: 'FULL_CONTENT' });   // re-read: what goes out is what's in Gmail right now
-    if (!d || !(d.toRecipients || []).length) throw new Error('the draft has no recipient');
-    if (tcFilesOf(d).length) { (ui.tcDraft = ui.tcDraft || {})[id] = d; render(); return toast('It has an attachment now. Send it in Gmail.'); }
+  try { const d = await gmailDraftDesk(id);   // re-read: what goes out is what's in Gmail right now, attachments included
+    if (!d) throw new Error('the draft is gone');
+    if (!(d.toRecipients || []).length) throw new Error('the draft has no recipient');
+    if (d.files == null) { (ui.tcDraft = ui.tcDraft || {})[id] = d; render(); return toast('Couldn’t read its attachments, so send it in Gmail.'); }
     const msg = { to: d.toRecipients, subject: d.subject || '', body: d.plaintextBody || '' };
     if ((d.ccRecipients || []).length) msg.cc = d.ccRecipients; if ((d.bccRecipients || []).length) msg.bcc = d.bccRecipients; if (d.htmlBody) msg.htmlBody = d.htmlBody;
+    if (d.files.length) msg.attachments = tcAttOf(d);
     await callTool('Gmail', 'send_message', msg);
     await callTool('Gmail', 'delete_draft', { draftId: id }).catch(() => null);
-    (ui.tcDraft = ui.tcDraft || {})[id] = { error: "gone" }; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Sent' });
+    (ui.tcDraft = ui.tcDraft || {})[id] = { error: 'gone' }; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Sent' });
     await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Sent', ('Sent from the Desk.\n\nAS SENT:\n' + tcTextOf(d)).slice(0, 45000)], 'Sent.');
   } catch (e) { toast('Not sent — ' + ((e && e.message) || 'try again') + '.'); }
   render(); }
@@ -585,6 +624,7 @@ Object.assign(A, {
   'offer-reopen': async () => { try { await offerSetStatus(0); toast('Back to comparing offers.'); } catch (e) { toast('Not saved — ' + ((e && e.message) || 'try again') + '.'); } render(); },
   'tc-edit': (el) => { ui.tcEdit = el.dataset.k; ui.tcSure = null; render(); },
   'tc-editx': () => { ui.tcEdit = null; render(); },
+  'tc-view': (el) => { const v = el.dataset.k + '#' + el.dataset.i; ui.tcView = ui.tcView === v ? null : v; render(); },
   'tc-send': (el) => { el.disabled = true; tcSendDesk(el.dataset.k); },
   'tc-handled': async (el) => { const k = el.dataset.k, r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Handled' }); render();
     await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Handled', 'Marked on the Desk'], 'Cleared.'); },

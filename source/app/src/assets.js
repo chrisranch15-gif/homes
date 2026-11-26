@@ -110,7 +110,7 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Room story cards",
 "u": "https://homes.ranchpnw.com/marketing/19917/editorial/room-cards.pdf",
 "th": "marketing/thumbs/19917-editorial-room-cards.jpg",
@@ -118,10 +118,98 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Silent talkers",
 "u": "https://homes.ranchpnw.com/marketing/19917/editorial/talkers.pdf",
 "th": "marketing/thumbs/19917-editorial-talkers.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Take-one flyer",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/flyer.pdf",
+"th": "marketing/thumbs/19917-editorial-flyer.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighborhood guide booklet",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/guide.pdf",
+"th": "marketing/thumbs/19917-editorial-guide.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Please remove your shoes",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/shoes.pdf",
+"th": "marketing/thumbs/19917-editorial-shoes.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Shoe covers card",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/bootie-card.pdf",
+"th": "marketing/thumbs/19917-editorial-bootie-card.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "QR sign rider (24\u00d76)",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/sign-rider.pdf",
+"th": "marketing/thumbs/19917-editorial-sign-rider.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Front window QR",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/window-cling.pdf",
+"th": "marketing/thumbs/19917-editorial-window-cling.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Thanks for touring card",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/thanks-card.pdf",
+"th": "marketing/thumbs/19917-editorial-thanks-card.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Showing instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/showing-sheet.pdf",
+"th": "marketing/thumbs/19917-editorial-showing-sheet.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Offer instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/offer-sheet.pdf",
+"th": "marketing/thumbs/19917-editorial-offer-sheet.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Upgrades sheet",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/upgrades.pdf",
+"th": "marketing/thumbs/19917-editorial-upgrades.jpg",
+"look": "editorial",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Home rules signs",
+"u": "https://homes.ranchpnw.com/marketing/19917/editorial/rules.pdf",
+"th": "marketing/thumbs/19917-editorial-rules.jpg",
 "look": "editorial",
 "pick": 1
 },
@@ -235,7 +323,7 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Room story cards",
 "u": "https://homes.ranchpnw.com/marketing/19917/arch/room-cards.pdf",
 "th": "marketing/thumbs/19917-arch-room-cards.jpg",
@@ -243,10 +331,98 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Silent talkers",
 "u": "https://homes.ranchpnw.com/marketing/19917/arch/talkers.pdf",
 "th": "marketing/thumbs/19917-arch-talkers.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Take-one flyer",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/flyer.pdf",
+"th": "marketing/thumbs/19917-arch-flyer.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighborhood guide booklet",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/guide.pdf",
+"th": "marketing/thumbs/19917-arch-guide.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Please remove your shoes",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/shoes.pdf",
+"th": "marketing/thumbs/19917-arch-shoes.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Shoe covers card",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/bootie-card.pdf",
+"th": "marketing/thumbs/19917-arch-bootie-card.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "QR sign rider (24\u00d76)",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/sign-rider.pdf",
+"th": "marketing/thumbs/19917-arch-sign-rider.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Front window QR",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/window-cling.pdf",
+"th": "marketing/thumbs/19917-arch-window-cling.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Thanks for touring card",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/thanks-card.pdf",
+"th": "marketing/thumbs/19917-arch-thanks-card.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Showing instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/showing-sheet.pdf",
+"th": "marketing/thumbs/19917-arch-showing-sheet.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Offer instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/offer-sheet.pdf",
+"th": "marketing/thumbs/19917-arch-offer-sheet.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Upgrades sheet",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/upgrades.pdf",
+"th": "marketing/thumbs/19917-arch-upgrades.jpg",
+"look": "arch",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Home rules signs",
+"u": "https://homes.ranchpnw.com/marketing/19917/arch/rules.pdf",
+"th": "marketing/thumbs/19917-arch-rules.jpg",
 "look": "arch",
 "pick": 1
 },
@@ -360,7 +536,7 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Room story cards",
 "u": "https://homes.ranchpnw.com/marketing/19917/heritage/room-cards.pdf",
 "th": "marketing/thumbs/19917-heritage-room-cards.jpg",
@@ -368,10 +544,98 @@ const ASSETS = {
 "pick": 1
 },
 {
-"kind": "Print",
+"kind": "Onsite",
 "t": "Silent talkers",
 "u": "https://homes.ranchpnw.com/marketing/19917/heritage/talkers.pdf",
 "th": "marketing/thumbs/19917-heritage-talkers.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Take-one flyer",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/flyer.pdf",
+"th": "marketing/thumbs/19917-heritage-flyer.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Print",
+"t": "Neighborhood guide booklet",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/guide.pdf",
+"th": "marketing/thumbs/19917-heritage-guide.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Please remove your shoes",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/shoes.pdf",
+"th": "marketing/thumbs/19917-heritage-shoes.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Shoe covers card",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/bootie-card.pdf",
+"th": "marketing/thumbs/19917-heritage-bootie-card.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "QR sign rider (24\u00d76)",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/sign-rider.pdf",
+"th": "marketing/thumbs/19917-heritage-sign-rider.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Front window QR",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/window-cling.pdf",
+"th": "marketing/thumbs/19917-heritage-window-cling.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Thanks for touring card",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/thanks-card.pdf",
+"th": "marketing/thumbs/19917-heritage-thanks-card.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Showing instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/showing-sheet.pdf",
+"th": "marketing/thumbs/19917-heritage-showing-sheet.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Offer instructions",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/offer-sheet.pdf",
+"th": "marketing/thumbs/19917-heritage-offer-sheet.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Upgrades sheet",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/upgrades.pdf",
+"th": "marketing/thumbs/19917-heritage-upgrades.jpg",
+"look": "heritage",
+"pick": 1
+},
+{
+"kind": "Onsite",
+"t": "Home rules signs",
+"u": "https://homes.ranchpnw.com/marketing/19917/heritage/rules.pdf",
+"th": "marketing/thumbs/19917-heritage-rules.jpg",
 "look": "heritage",
 "pick": 1
 },

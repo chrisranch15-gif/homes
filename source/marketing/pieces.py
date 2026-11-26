@@ -82,6 +82,7 @@ html,body{{margin:0;padding:0}}
 body{{font-family:Inter,sans-serif;color:{L['ink']};-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .pg{{width:{w}in;height:{h}in;position:relative;overflow:hidden;page-break-after:always;break-after:page}}
 .pg:last-child{{page-break-after:auto;break-after:auto}}
+.flow{{width:{w}in;box-sizing:border-box}}
 .h{{font-family:{L['head']};font-weight:{L['hw']};letter-spacing:{L['ls']};margin:0;line-height:1}}
 .it{{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400}}
 .eye{{font-size:9pt;letter-spacing:.28em;text-transform:uppercase;margin:0}}
@@ -369,9 +370,163 @@ def agent_email(L, d):
 <tr><td style="padding:12px 24px 20px;border-top:1px solid {L['rule']};font-size:11px;line-height:1.5;color:{L['muted']}">{credit(d).strip()} Each office independently owned and operated. Equal Housing Opportunity. Information deemed reliable but not guaranteed.</td></tr>
 </table></td></tr></table></body></html>"""
 
+
+# ---------------- launch-day kit: what goes in and around the home on day one ----------------
+def welcome_url(d): return SITE + 'welcome' + ('' if d['key'] == '19917' else '?home=' + d['key'])
+def short_url(d): return 'homes.ranchpnw.com/' + d['key']
+
+def foot(L, d, extra=''):
+    return f'<p class="fine" style="margin-top:auto">{esc(d["address"])} · {AGENT["name"]}, {AGENT["team"]} · {AGENT["phone"]}{extra}</p>'
+
+def sign_page(L, d, title, sub, img=None, eyebrow=''):
+    """Letter-size sign: photo on top, one big line, one small line."""
+    top = (f'<div style="position:relative;height:5.6in"><img src="{photo(img)}" style="width:100%;height:100%;object-fit:cover">'
+           + ('<div class="frame"></div>' if L['frame'] else '') + '</div>') if img else ''
+    return f"""<div class="pg" style="background:{L['paper']};display:flex;flex-direction:column">{top}
+<div style="flex:1;padding:.55in .6in .45in;display:flex;flex-direction:column">{'' if img else '<div style="flex:1"></div>'}
+{f'<p class="eye" style="color:{L["accent"]}">{eyebrow}</p>' if eyebrow else ''}
+<h1 class="h" style="font-size:{hs(L, 64 if img else 84)};line-height:1;margin-top:12px;color:{L['ink']}">{title}</h1>
+<p style="margin:18px 0 0;font-size:16pt;line-height:1.4;color:{L['sub']}">{sub}</p>
+<p style="margin:auto 0 0;font-size:9pt;letter-spacing:.16em;text-transform:uppercase;color:{L['muted']}">{AGENT['team']}</p></div></div>"""
+
+def shoes(L, d):
+    return [sign_page(L, d, 'Please remove your shoes.', 'Thank you for helping keep this home beautiful for its next owners.', d['hero'], 'Welcome to ' + esc(d['address']))]
+
+def bootie_card(L, d):
+    return [f"""<div class="pg" style="background:{L['dark']};color:{L['paper']};padding:.3in .36in;display:flex;flex-direction:column">
+<p class="eye" style="font-size:7.5pt;color:{L['onDark']}">Welcome</p>
+<h1 class="h" style="font-size:{hs(L, 34)};margin-top:8px">Shoe covers here</h1>
+<p style="margin:8px 0 0;font-size:11pt;color:{L['onDarkSub']}">Please slip a pair on, or leave your shoes by the door. Thank you.</p>
+<p style="margin:auto 0 0;font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:{L['onDark']}">{AGENT['team']}</p></div>"""]
+
+def sign_rider(L, d):
+    dark = not L.get('light')
+    bg, fg, sub = (L['dark'], L['paper'], L['onDark']) if dark else (L['paper'], L['ink'], L['accent'])
+    return [f"""<div class="pg" style="background:{bg};color:{fg};display:flex;align-items:center;gap:.5in;padding:0 .55in">
+<img src="{qr(SITE + d['key'] + '?src=rider', '#000000')}" style="width:4.9in;height:4.9in;background:#fff;padding:.08in">
+<div style="flex:1"><p style="margin:0;font-family:{L['head']};font-weight:{L['hw']};font-size:{hs(L, 150)};line-height:1;letter-spacing:{L['ls']}">Scan for photos, film &amp; price</p>
+<p style="margin:.22in 0 0;font-size:64px;font-weight:600;letter-spacing:.02em;color:{sub}">{short_url(d)}</p></div></div>"""]
+
+def window_cling(L, d):
+    return [f"""<div class="pg" style="background:{L['paper']};padding:.5in;display:flex;flex-direction:column;align-items:center;text-align:center">
+<p class="eye" style="color:{L['accent']}">{esc(d['address'])}</p>
+<h1 class="h" style="font-size:{hs(L, 46)};margin-top:10px;color:{L['ink']}">See inside</h1>
+<img src="{qr(SITE + d['key'] + '?src=window', L['ink'])}" style="width:4.4in;height:4.4in;margin-top:.25in">
+<p style="margin:.2in 0 0;font-size:15pt;font-weight:600;color:{L['ink']}">{short_url(d)}</p>
+<p style="margin:auto 0 0;font-size:10pt;color:{L['sub']}">{AGENT['name']} · {AGENT['phone']}</p></div>"""]
+
+def thanks_card(L, d):
+    return [f"""<div class="pg" style="background:{L['paper']};padding:.28in .32in;display:grid;grid-template-columns:1fr 1.45in;gap:.22in;align-items:center">
+<div><p class="eye" style="font-size:7.5pt;color:{L['accent']}">Thanks for touring</p>
+<h1 class="h" style="font-size:{hs(L, 28)};line-height:1.05;margin-top:8px;color:{L['ink']}">What did you think?</h1>
+<p style="margin:8px 0 0;font-size:9.5pt;line-height:1.45;color:{L['sub']}">Scan to share a few words. It takes 30 seconds and helps the sellers a lot.</p>
+<p style="margin:10px 0 0;font-size:8pt;color:{L['muted']}">{esc(d['address'])} · {AGENT['name']} · {AGENT['phone']}</p></div>
+<img src="{qr(welcome_url(d), L['ink'])}" style="width:1.45in;height:1.45in"></div>"""]
+
+def sheet(L, d, eyebrow, title, rows, note='', two=False):
+    """Letter-size information sheet: a heading and a clean list."""
+    li = ''.join(f'<li style="padding:10px 0;border-bottom:1px solid {L["rule"]};display:flex;gap:18px;justify-content:space-between"><span>{a}</span>' + (f'<span style="color:{L["muted"]};white-space:nowrap">{b}</span>' if b else '') + '</li>' for a, b in rows)
+    return f"""<div class="pg" style="background:{L['paper']};padding:.65in .7in .5in;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;font-size:8.5pt;letter-spacing:.24em;text-transform:uppercase"><span style="color:{L['accent']};font-weight:600">{eyebrow}</span><span style="color:{L['muted']}">{AGENT['team']}</span></div>
+<h1 class="h" style="font-size:{hs(L, 46)};line-height:1.02;margin-top:.3in;color:{L['ink']}">{title}</h1>
+<p style="margin:10px 0 0;font-size:12pt;color:{L['sub']}">{esc(d['address'])}</p>
+<ul style="list-style:none;margin:.3in 0 0;padding:0;font-size:12pt;line-height:1.4;color:{L['ink']};{'columns:2;column-gap:.5in' if two else ''}">{li}</ul>
+{f'<p style="margin:.25in 0 0;font-size:10.5pt;line-height:1.5;color:{L["sub"]}">{note}</p>' if note else ''}
+{foot(L, d)}</div>"""
+
+def upgrades_sheet(L, d):
+    ups = d.get('upgrades') or []
+    if not ups: return None
+    return [sheet(L, d, 'What the sellers have done', 'Upgrades and improvements', [(esc(u[0]), esc(u[1]) if len(u) > 1 and u[1] else '') for u in ups],
+                  'From the sellers and our listing records. Ask your agent for receipts or warranties where available.')]
+
+def costs_sheet(L, d):
+    c = d.get('costs') or []
+    if not c: return None   # only what the sellers or county records confirm
+    return [sheet(L, d, 'Cost of ownership', 'What it costs to live here', [(esc(a), esc(b)) for a, b, *_ in c],
+                  'Utility amounts are the sellers’ recent averages; yours will vary. Taxes are from the county assessor. Confirm details with your lender and agent.')]
+
+def showing_sheet(L, d):
+    rows = [(esc(x), '') for x in (d.get('showing') or [])] + [(x, '') for x in [
+        'Please leave lights as you found them and turn off any you turned on.',
+        'Lock every door you opened, including the slider and the garage entry.',
+        'Close interior and exterior gates behind you.',
+        'Please don’t adjust the thermostat.',
+        'Questions on the home, HOA or disclosures: call or text me any time.']]
+    return [sheet(L, d, 'For agents', 'Showing this home', rows, f'Thank you for showing {esc(d["address"])}. Feedback helps the sellers: scan the card by the door, or text me.')]
+
+def offer_sheet(L, d):
+    rows = [(esc(x), '') for x in (d.get('offers') or [])] + [(x, '') for x in [
+        'Please call or text me before you write, so I can tell you where things stand.',
+        'Include your buyer’s pre-approval or proof of funds with the offer.',
+        'Include the seller disclosure (Form 17) receipt and any addenda your buyer needs.',
+        'I’ll confirm receipt and keep you posted on timing.']]
+    return [sheet(L, d, 'For agents', 'Writing an offer', rows, f'{AGENT["name"]} · {AGENT["team"]} · {AGENT["phone"]}')]
+
+def rules_signs(L, d):
+    out = []
+    if d.get('fenced', True): out.append(sign_page(L, d, 'Please keep the gate closed.', 'Thank you for latching it behind you.'))
+    if d.get('pets'): out.append(sign_page(L, d, 'Pets inside.', 'Please don’t open interior doors marked with this sign, and don’t let them out.'))
+    if d.get('cameras'): out.append(sign_page(L, d, 'Video recording may be in use.', 'This home may have security cameras. Please keep conversations about the home for after your visit.'))
+    out.append(sign_page(L, d, 'Thank you for visiting.', 'Please turn off any lights you turned on and lock the doors you opened.'))
+    return out
+
+def flyer(L, d):
+    rooms = [r for r in d['rooms'] if r.get('photo')][:3]
+    th = ''.join(f'<img src="{photo(r["photo"])}" style="flex:1;min-width:0;height:1.7in;object-fit:cover">' for r in rooms)
+    return [f"""<div class="pg" style="background:{L['paper']};display:flex;flex-direction:column">
+<div style="position:relative;height:4.6in"><img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover">{'<div class="frame"></div>' if L['frame'] else ''}</div>
+<div style="padding:.4in .55in .35in;display:flex;flex-direction:column;flex:1">
+<p class="eye" style="color:{L['accent']}">{esc(d['area'])} · {esc(d['city'])}</p>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:.3in;margin-top:8px"><h1 class="h" style="font-size:{hs(L, 44)};color:{L['ink']}">{esc(d['address'])}</h1>
+{f'<p class="h" style="font-size:{hs(L, 34)};color:{L["ink"]};white-space:nowrap">{money(d["price"])}</p>' if d.get('price') and d.get('status', 'Active') in ('Active', 'Coming soon') else ''}</div>
+<p style="margin:8px 0 0;font-size:11.5pt;color:{L['sub']}">{esc(d['facts_line'])}</p>
+<p style="margin:14px 0 0;font-size:11pt;line-height:1.55;color:{L['sub']}">{esc(d['pitch'])}</p>
+<div style="display:flex;gap:10px;margin-top:.22in">{th}</div>
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:.2in">{agent_block(L)}
+<div style="display:flex;gap:10px;align-items:center"><p style="margin:0;font-size:9pt;text-align:right;color:{L['sub']}">Every photo<br>and the film</p><img src="{qr(SITE + d['key'] + '?src=flyer', L['ink'])}" style="width:.95in;height:.95in"></div></div>
+<p class="fine" style="margin-top:8px">{DISCLOSE}{credit(d)} Information deemed reliable but not guaranteed.</p></div></div>"""]
+
+def guide_booklet(L, d):
+    """The town guide as a take-home booklet (5.5×8.5), left on the counter for the whole listing."""
+    slug = d.get('guide')
+    p = os.path.join(R, 'source', 'guides', f'{slug}.json') if slug else ''
+    if not slug or not os.path.exists(p): return None
+    g = json.load(open(p)); draft = g.get('status') != 'published'
+    src = g.get('sources', {}); S = lambda k: esc(src.get(k, ['', ''])[0]) if k else ''
+    stamp = f'<div style="position:absolute;top:.25in;right:.25in;background:#B3261E;color:#fff;font-size:8pt;font-weight:700;letter-spacing:.12em;padding:5px 9px;z-index:4">DRAFT · APPROVE THE {esc(g["name"]).upper()} GUIDE BEFORE PRINTING</div>' if draft else ''
+    pages = [f"""<div class="pg" style="background:{L['dark']};color:{L['paper']}">{stamp}<img class="cover" src="{photo(d['hero'])}" style="opacity:.55">{'<div class="frame"></div>' if L['frame'] else ''}
+<div style="position:absolute;left:.45in;right:.45in;bottom:.55in"><p class="eye" style="color:{L['onDark']}">A local’s guide</p>
+<h1 class="h" style="font-size:{hs(L, 54)};line-height:1;margin-top:10px">{esc(g['name'])}</h1>
+<p class="it" style="margin:12px 0 0;font-size:20px;color:{L['onDark']}">{esc(g.get('headline', ''))}</p>
+<p style="margin:18px 0 0;font-size:9pt;letter-spacing:.14em;text-transform:uppercase">Left for you at {esc(d['address'])}</p></div></div>"""]
+    flow = f"""<div class="flow" style="padding:.5in .5in;color:{L['ink']}">
+<p style="font-size:11pt;line-height:1.6;color:{L['sub']};margin:0 0 .2in">{esc(g.get('lede', ''))}</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:.25in">{''.join(f'<div style="border-top:1px solid {L["rule"]};padding-top:8px"><p class="h" style="font-size:{hs(L, 26)}">{esc(v)}</p><p style="margin:3px 0 0;font-size:8.5pt;color:{L["muted"]}">{esc(t)}</p></div>' for v, t, *_ in g.get('stats', []))}</div>
+<h2 class="h" style="font-size:{hs(L, 24)};margin:0 0 8px">At a glance</h2>
+<table style="width:100%;border-collapse:collapse;font-size:9.5pt;line-height:1.4">{''.join(f'<tr><td style="padding:6px 10px 6px 0;border-top:1px solid {L["rule"]};color:{L["muted"]};vertical-align:top;width:34%">{esc(a)}</td><td style="padding:6px 0;border-top:1px solid {L["rule"]}">{esc(b)}</td></tr>' for a, b, *_ in g.get('glance', []))}</table>"""
+    for ch in g.get('chapters', []):
+        flow += f"""<div style="break-before:page;page-break-before:always"><p class="eye" style="color:{L['accent']}">{esc(g['name'])}</p><h2 class="h" style="font-size:{hs(L, 30)};margin:8px 0 10px">{esc(ch.get('title', ''))}</h2>
+{f'<p style="margin:0 0 12px;font-size:10.5pt;line-height:1.55;color:{L["sub"]}">{esc(ch.get("intro", ""))}</p>' if ch.get('intro') else ''}
+{''.join(f'<div style="padding:8px 0;border-top:1px solid {L["rule"]};break-inside:avoid"><p style="margin:0;font-size:10.5pt;font-weight:600">{esc(it[0])}</p><p style="margin:3px 0 0;font-size:9.5pt;line-height:1.5;color:{L["sub"]}">{esc(it[1]) if len(it) > 1 else ""}</p></div>' for it in ch.get('items', []))}</div>"""
+    faq = g.get('faq', [])[:6]
+    if faq:
+        flow += f"""<div style="break-before:page;page-break-before:always"><h2 class="h" style="font-size:{hs(L, 30)};margin:0 0 10px">Good questions</h2>{''.join(f'<div style="padding:8px 0;border-top:1px solid {L["rule"]};break-inside:avoid"><p style="margin:0;font-size:10.5pt;font-weight:600">{esc(q)}</p><p style="margin:3px 0 0;font-size:9.5pt;line-height:1.5;color:{L["sub"]}">{esc(a)}</p></div>' for q, a, *_ in faq)}</div>"""
+    flow += f"""<div style="break-before:page;page-break-before:always"><h2 class="h" style="font-size:{hs(L, 22)};margin:0 0 8px">Sources</h2>
+<p style="font-size:7.5pt;line-height:1.5;color:{L['muted']}">{' · '.join(esc(v[0]) for v in src.values())}. Checked {esc(g.get('checked', ''))}. {esc(g.get('fine', ''))}</p>
+<div style="margin-top:.4in;display:flex;gap:16px;align-items:center"><img src="{qr(SITE + 'guides/' + slug, L['ink'])}" style="width:1.1in;height:1.1in"><p style="margin:0;font-size:10pt;line-height:1.45">The full guide, with maps and links:<br><b>homes.ranchpnw.com/guides/{esc(slug)}</b></p></div>
+<div style="margin-top:.35in">{agent_block(L)}</div><p class="fine" style="margin-top:.2in">{DISCLOSE}</p></div></div>"""
+    return pages + [flow]
+
 PRINT = [('postcard-listed', 'Just Listed postcard', postcard_listed, 9, 6), ('postcard-contract', 'Under contract postcard', postcard_contract, 9, 6),
          ('postcard-sold', 'Just sold postcard', postcard_sold, 9, 6), ('preview-invite', 'Neighbors’ preview invitation', preview_invite, 5, 7),
-         ('lookbook', 'Lookbook', lookbook, 11, 8.5), ('room-cards', 'Room story cards', room_cards, 4, 6), ('talkers', 'Silent talkers', talkers, 5, 3)]
+         ('lookbook', 'Lookbook', lookbook, 11, 8.5), ('room-cards', 'Room story cards', room_cards, 4, 6), ('talkers', 'Silent talkers', talkers, 5, 3),
+         ('shoes', 'Please remove your shoes sign', shoes, 8.5, 11), ('bootie-card', 'Shoe covers card', bootie_card, 5, 3),
+         ('sign-rider', 'QR sign rider (24×6)', sign_rider, 24, 6), ('window-cling', 'Front window QR (8×10)', window_cling, 8, 10),
+         ('thanks-card', 'Thanks for touring card', thanks_card, 5, 3), ('showing-sheet', 'Showing instructions (agents)', showing_sheet, 8.5, 11),
+         ('offer-sheet', 'Offer instructions (agents)', offer_sheet, 8.5, 11), ('upgrades', 'Upgrades sheet', upgrades_sheet, 8.5, 11),
+         ('costs', 'Cost of ownership', costs_sheet, 8.5, 11), ('rules', 'Home rules signs', rules_signs, 8.5, 11),
+         ('flyer', 'Take-one flyer', flyer, 8.5, 11), ('guide', 'Neighborhood guide booklet', guide_booklet, 5.5, 8.5)]
 LABEL = {k: t for k, t, *_ in PRINT} | {'agent-email': 'Agent email', 'carousel': 'Instagram carousel'}
 
 TMP = '/tmp/ranch-pieces.html'
@@ -392,7 +547,7 @@ def build(key, only=None):
                 if not pages:
                     if os.path.exists(f): os.remove(f)
                     continue
-                show(pg, doc(L, w, h, pages))
+                show(pg, doc(L, w, h, pages, '@page{margin:.5in .45in}@page :first{margin:0}.flow{width:auto;padding:0!important}' if k == 'guide' else ''))
                 pg.pdf(path=f, width=f'{w}in', height=f'{h}in', print_background=True, prefer_css_page_size=True); made.append(f)
             if not only or only == 'carousel':
                 for old in [x for x in os.listdir(out) if x.startswith('carousel-')]: os.remove(os.path.join(out, old))

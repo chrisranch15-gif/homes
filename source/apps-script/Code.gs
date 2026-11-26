@@ -32,7 +32,7 @@ const OFFMARKET_HEADERS = ['Requested', 'Name', 'Phone', 'Email', 'Meeting', 'Be
 const LEAD_HEADERS = ['Received', 'Type', 'Name', 'Phone', 'Email', 'Details', 'Home', 'Page', 'Came from', 'Status'];
 const ACTIVITY_HEADERS = ['When', 'What', 'Page', 'Came from', 'Visitor', 'Sign'];
 const FOLLOWER_HEADERS = ['Since', 'Name', 'Phone', 'Email', 'Home', 'Unsubscribed'];
-const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day', 'Closed on'];
+const SELLER_HEADERS = ['Code', 'Sellers', 'Home', 'Page', 'Listed', 'Status', 'Photo day', 'Closed on', 'Emails', 'Settlement statement'];   // I: sellers' emails (private, for Chris's drafts) · J: Drive link to the final settlement statement, shared with the sellers
 const UPDATE_HEADERS = ['When', 'Home', 'Title', 'Message', 'From'];
 const TIMELINE_HEADERS = ['Date', 'Home', 'Milestone', 'Note', 'Status'];   // seller-safe deal dates, published from the Office; never buyer-agent details
 const MARKETING_HEADERS = ['When', 'Home', 'What', 'Reach', 'Notes'];
@@ -559,8 +559,9 @@ function sellerView_(code) {
   const leads = tab_('Leads', LEAD_HEADERS).getDataRange().getValues().slice(1).filter(r => String(r[6]) === sel.home && r[8] !== 'test');
   const count = label => leads.filter(r => r[1] === label).length;
   const pick = (name, headers, map) => tab_(name, headers).getDataRange().getValues().slice(1).filter(r => String(r[1]) === sel.home).map(map).sort((a, b) => b.at - a.at).slice(0, 25);
-  const closedOn = (tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1).filter(x => String(x[0]).toUpperCase() === sel.code)[0] || [])[7];
-  return { ok: true, sellers: sel.names, home: sel.home, page: sel.page, listed: sel.listed, status: sel.status, closed: closedOn ? new Date(closedOn).getTime() : null,
+  const srow = tab_('Sellers', SELLER_HEADERS).getDataRange().getValues().slice(1).filter(x => String(x[0]).toUpperCase() === sel.code)[0] || [], closedOn = srow[7];
+  const stmt = /^https:\/\/(drive|docs)\.google\.com\//.test(String(srow[9] || '')) ? String(srow[9]) : '';   // only a Google Drive link, only after closing
+  return { ok: true, sellers: sel.names, home: sel.home, page: sel.page, listed: sel.listed, status: sel.status, closed: closedOn ? new Date(closedOn).getTime() : null, statement: closedOn ? stmt : '',
     photoDay: sel.photoDay, prep: prepView_(sel.code), facts: factsView_(sel.code),
     metrics: { visitors: Object.keys(seen).length, visitors7: Object.keys(seen7).length, shared, scans, tours: count('Tour request'), following: count('Following the home'), questions: count('Question about the home') },
     updates: pick('Seller updates', UPDATE_HEADERS, r => ({ at: new Date(r[0]).getTime(), title: String(r[2]), text: String(r[3]), from: String(r[4]) })),

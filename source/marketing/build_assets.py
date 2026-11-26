@@ -23,7 +23,12 @@ os.makedirs(THUMBS, exist_ok=True)
 LOOKS = {'editorial': 'Estate Editorial', 'arch': 'Modern Architectural', 'heritage': 'Warm Heritage'}
 SIGN_LOOK = {'noir': 'editorial', 'daylight': 'arch', 'heritage': 'heritage'}   # 'gallery' is the retired fourth sign style
 PIECES = [('postcard-listed', 'Just Listed postcard'), ('postcard-contract', 'Under contract postcard'), ('postcard-sold', 'Just sold postcard'),
-          ('preview-invite', 'Neighbors’ preview invitation'), ('lookbook', 'Lookbook'), ('room-cards', 'Room story cards'), ('talkers', 'Silent talkers')]
+          ('preview-invite', 'Neighbors’ preview invitation'), ('lookbook', 'Lookbook'), ('room-cards', 'Room story cards'), ('talkers', 'Silent talkers'),
+          ('flyer', 'Take-one flyer'), ('guide', 'Neighborhood guide booklet'),
+          ('shoes', 'Please remove your shoes'), ('bootie-card', 'Shoe covers card'), ('sign-rider', 'QR sign rider (24×6)'), ('window-cling', 'Front window QR'),
+          ('thanks-card', 'Thanks for touring card'), ('showing-sheet', 'Showing instructions'), ('offer-sheet', 'Offer instructions'),
+          ('upgrades', 'Upgrades sheet'), ('costs', 'Cost of ownership'), ('rules', 'Home rules signs')]
+ONSITE = {'shoes', 'bootie-card', 'sign-rider', 'window-cling', 'thanks-card', 'showing-sheet', 'offer-sheet', 'upgrades', 'costs', 'rules', 'room-cards', 'talkers'}
 
 def thumb_pdf(path, name):
     out = os.path.join(THUMBS, name + '.jpg')
@@ -67,7 +72,7 @@ for k in keys:
         if not os.path.isdir(d): continue
         for name, label in PIECES:
             p = os.path.join(d, name + '.pdf')
-            if os.path.exists(p): a.append({'kind': 'Print', 't': label, 'u': SITE + os.path.relpath(p, R), 'th': thumb_pdf(p, f'{k}-{look}-{name}'), 'look': look, 'pick': 1})
+            if os.path.exists(p): a.append({'kind': 'Onsite' if name in ONSITE else 'Print', 't': label, 'u': SITE + os.path.relpath(p, R), 'th': thumb_pdf(p, f'{k}-{look}-{name}'), 'look': look, 'pick': 1})
         ae = os.path.join(d, 'agent-email.html')
         if os.path.exists(ae): a.append({'kind': 'Email', 't': 'Agent-to-agent email', 'u': SITE + os.path.relpath(ae, R), 'th': thumb_img(ae[:-5] + '.jpg', f'{k}-{look}-agent-email'), 'look': look})
         for name, label in [('contract-post', 'Under contract · post'), ('contract-story', 'Under contract · story'), ('contract-square', 'Under contract · square')]:

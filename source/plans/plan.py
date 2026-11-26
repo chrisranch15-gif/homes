@@ -231,7 +231,7 @@ dialog.gal{{border:0;padding:0;width:min(1100px,100vw);max-width:100vw;max-heigh
 <section class="s"><div class="wrap"><p class="eyebrow">From here</p><h2>Your timeline.</h2><ol class="tl">{tl}</ol></div></section>
 {prep_html()}
 <section class="s stone"><div class="wrap portal"><div><p class="eyebrow">You'll see everything</p><h2>Your seller portal.</h2>
-<p class="lede">The day you list, you get a private link and a code. Showings, feedback, online views, your social posts and the competition, all in one place, always current.</p></div>
+<p class="lede">As soon as we sign, you get a private link and a code. Start there before we list: tell me everything you’ve updated or improved (roof, furnace, kitchen, deck, rough years and costs are fine). It becomes the upgrades sheet buyers take home from every showing. Once we’re live, showings, feedback, online views, your social posts and the competition are all in one place, always current.</p></div>
 <div class="ph"><img src="../marketing/ph-portal-2.webp" alt="Seller portal: your home across the web" loading="lazy"><img src="../marketing/ph-portal-5.webp" alt="Seller portal: market charts" loading="lazy"></div></div></section>
 <section class="s"><div class="wrap chris"><img src="../photos/chris-ranch.jpg" alt="Chris Ranch" loading="lazy">
 <div><p class="eyebrow">Next step</p><h2>Ready when you are, {E(d['sellers'])}.</h2>

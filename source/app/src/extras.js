@@ -491,14 +491,14 @@ function tcBlock() {
         <div class="field"><label>Message</label><textarea name="body" rows="16" style="min-height:320px">${esc(String(d.plaintextBody || '').trim())}</textarea></div>
         <div class="chips"><button class="btn" type="submit">Save to the draft</button><button class="chip" type="button" data-act="tc-editx">Cancel</button></div>
         <p class="small muted" style="margin-top:8px">Saving updates the same Gmail draft${f.length ? ' and keeps its attachment' : ''}. Nothing sends until you tap Send. Your TC learns from what you change.</p></form>`; }
-    else { const f = tcFilesOf(d), to = (d.toRecipients || []).join(', '), unread = d.files == null;
+    else { const f = tcFilesOf(d), to = (d.toRecipients || []).join(', '), blank = /\[\s*chris\s*:/i.test((d.subject || '') + ' ' + (d.plaintextBody || ''));
       const files = f.map((x, i) => { const open = ui.tcView === k + '#' + i;
-        return `<div style="margin-top:8px"><div class="small">📎 ${esc(x.filename)} <span class="muted">· ${kbOf(x.size)}</span></div><div class="chips" style="margin:6px 0 0">${/pdf/.test(x.mimeType) ? `<button class="chip" data-act="tc-view" data-k="${esc(k)}" data-i="${i}">${open ? 'Hide' : 'Open the PDF'}</button>` : ''}<a class="chip" href="${tcUrlOf(x)}" download="${esc(x.filename)}">Download</a></div>
+        return `<div style="margin-top:8px"><div class="small">📎 ${esc(x.filename)} <span class="muted">· ${kbOf(x.size)}</span></div><div class="chips" style="margin:6px 0 0">${/pdf/.test(x.mimeType) ? `<button class="chip" data-act="tc-view" data-k="${esc(k)}" data-i="${i}">${open ? 'Hide' : 'Open the PDF'}</button>` : ''}</div>
           ${open ? `<iframe src="${tcUrlOf(x)}" title="${esc(x.filename)}" style="width:100%;height:70vh;border:1px solid var(--line);margin-top:8px;background:#fff"></iframe>` : ''}</div>`; }).join('');
       inner = `<div style="padding:12px 14px;margin-top:8px;background:var(--paper2,rgba(128,120,108,.08));border-radius:10px"><div class="small"><b>${esc(d.subject || '(no subject)')}</b></div>
         <div class="small muted" style="margin-top:4px">To: ${esc(to)}${(d.ccRecipients || []).length ? ' · CC: ' + esc(d.ccRecipients.join(', ')) : ''}</div>
         <div class="small" style="white-space:pre-wrap;margin-top:8px;line-height:1.5">${esc(String(d.plaintextBody || '').trim())}</div>${files}</div>
-        <div class="chips" style="margin:10px 0 0">${unread ? `<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Send in Gmail (couldn’t check its attachments here)</a>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) + (f.length ? ' with ' + f.length + ' attachment' + (f.length > 1 ? 's' : '') : '') : 'Send'}</button><button class="chip" data-act="tc-edit" data-k="${esc(k)}">Edit here</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>`; }
+        <div class="chips" style="margin:10px 0 0">${blank ? `<button class="chip" data-act="tc-edit" data-k="${esc(k)}">Fill in your decision first</button>` : `<button class="chip" data-act="tc-send" data-k="${esc(k)}">${ui.tcSure === k ? 'Tap again to send to ' + esc(to) + (f.length ? ' with ' + f.length + ' attachment' + (f.length > 1 ? 's' : '') : '') : 'Send'}</button><button class="chip" data-act="tc-edit" data-k="${esc(k)}">Edit here</button>`}<a class="chip" href="${link}" target="_blank" rel="noopener noreferrer">Edit in Gmail</a><button class="chip" data-act="tc-handled" data-k="${esc(k)}">Handled</button></div>${blank ? '<p class="small muted" style="margin:6px 0 0">This one has a [Chris: …] spot for your decision. Fill it in, then Send appears.</p>' : ''}`; }
     return `<div style="padding:14px 0 6px;border-top:1px solid var(--line)"><div><b>${title}</b></div>${inner}</div>`; };
   return `<div class="sharebar" id="tcdrafts"><div class="eyebrow">Ready to send · ${rs.length} email${rs.length > 1 ? 's' : ''} from your TC</div>${rs.map(card).join('')}
     <p class="small muted" style="margin-top:10px">Nothing goes out until you tap Send. The same drafts are in your Gmail drafts and in the Office.</p></div>`;
@@ -521,12 +521,8 @@ async function tcSendDesk(k) { const r = (ui.tcRows || []).find(x => tcKey(x) ==
   try { const d = await gmailDraftDesk(id);   // re-read: what goes out is what's in Gmail right now, attachments included
     if (!d) throw new Error('the draft is gone');
     if (!(d.toRecipients || []).length) throw new Error('the draft has no recipient');
-    if (d.files == null) { (ui.tcDraft = ui.tcDraft || {})[id] = d; render(); return toast('Couldn’t read its attachments, so send it in Gmail.'); }
-    const msg = { to: d.toRecipients, subject: d.subject || '', body: d.plaintextBody || '' };
-    if ((d.ccRecipients || []).length) msg.cc = d.ccRecipients; if ((d.bccRecipients || []).length) msg.bcc = d.bccRecipients; if (d.htmlBody) msg.htmlBody = d.htmlBody;
-    if (d.files.length) msg.attachments = tcAttOf(d);
-    await callTool('Gmail', 'send_message', msg);
-    await callTool('Gmail', 'delete_draft', { draftId: id }).catch(() => null);
+    if (/\[\s*chris\s*:/i.test((d.subject || '') + ' ' + (d.plaintextBody || ''))) { (ui.tcDraft = ui.tcDraft || {})[id] = d; render(); return toast('Fill in your decision first.'); }
+    await callTool('Gmail', 'send_message', { draftId: id });   // Gmail sends the draft exactly as it is (attachments, reply thread) and removes it
     (ui.tcDraft = ui.tcDraft || {})[id] = { error: 'gone' }; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Sent' });
     await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Sent', ('Sent from the Desk.\n\nAS SENT:\n' + tcTextOf(d)).slice(0, 45000)], 'Sent.');
   } catch (e) { toast('Not sent — ' + ((e && e.message) || 'try again') + '.'); }

@@ -15,7 +15,11 @@ can be done, and leave clear notes in the Office for anything that's waiting on 
    aren't in yet just gets "waiting for photos" (step 3). Key = street number.
 2. **Facts.** `source/listings/<key>.json` (see `source/listings/README.md`). If it doesn't exist, create it from what's
    verified: the Listings tab (address, city, price, sellers), public record (Realist, if a session can reach it),
-   the photo shoot and the Launch notes. If two sources disagree (price, square feet, beds), don't pick: keep the
+   the photo shoot and the Launch notes. **Square feet: always use the larger number** when public record and the
+   floor plan (or any two sources) disagree; no note, papercut or question needed (Chris, Nov 26, 2026: "We will use
+   the larger square footage. As long as we source public record on the MLS listing, you do not need to worry about
+   sourcing the public record or the square footage situation. Just make sure it's the larger one always.").
+   If two sources disagree on anything else (price, beds), don't pick: keep the
    field hidden (e.g. `sqft_note`), file a papercut, and add a Needs-you row for Chris (Marketing tab: [now, address,
    "Launch: needs your answer", "<the question in one line>", ""]). Never invent a fact.
 3. **Photos.** If `photos/<key>/` is missing, get them from the "Shoot photos" tab, or from the Photo shoots row's

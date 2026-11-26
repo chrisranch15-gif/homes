@@ -13,3 +13,4 @@ names, emails, phone numbers or deal numbers: use [seller], [agent], [amount].
 | `seller-answers.md` | seller-answers | fact vs strategy vs contact; quiet hours; wording |
 | `social-pending-19917.md` | social-posts | the approved 19917 under-contract set: facts, voice, rules |
 | `tc-mutual-packet.md` | tc-shadow | the mutual packet email Chris approved Nov 25, 2026 |
+| `listing-launch-sqft.md` | listing-launch | square feet: always the larger number when sources disagree |

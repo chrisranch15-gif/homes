@@ -35,8 +35,8 @@ LOOKS = {
                       accent='#8C6A43', onDark='#E8D9C3', onDarkSub='#D8D0C4', rule='#CFC5B7', head="'Cormorant Garamond', serif",
                       hw=500, hs=1, ls='0', frame=False),
     'arch':      dict(name='Modern Architectural', dark='#1A1A1A', paper='#FFFFFF', ink='#1A1A1A', sub='#2A2826', muted='#5F5B55',
-                      accent='#8C6A43', onDark='#E8D9C3', onDarkSub='#D8D2C8', rule='#E2DED7', head="Inter, sans-serif",
-                      hw=800, hs=.8, ls='-.03em', frame=False),
+                      accent='#8C6A43', onDark='#E8D9C3', onDarkSub='#D8D2C8', rule='#E2DED7', head="'Playfair Display', serif",
+                      hw=400, hs=.92, ls='-.01em', frame=False, light=True),
     'heritage':  dict(name='Warm Heritage', dark='#1F2A24', paper='#F3EBDD', ink='#1F2A24', sub='#3B3A2B', muted='#5F5A48',
                       accent='#8A6A2F', onDark='#D9BC85', onDarkSub='#DDD3C2', rule='#CDBF9F', head="'Cormorant Garamond', serif",
                       hw=600, hs=1, ls='0', frame=True),
@@ -73,7 +73,8 @@ def money(n): return f'${n:,.0f}' if isinstance(n, (int, float)) else str(n or '
 
 def css(L, w, h):
     f = lambda n, wt, st='normal': f"@font-face{{font-family:'Cormorant Garamond';font-style:{st};font-weight:{wt};src:url('file://{FONTS}/cormorant-garamond-latin-{wt}-{st}.woff2')}}"
-    fonts = ''.join(f('x', wt, st) for wt in (400, 500, 600) for st in ('normal', 'italic'))
+    fonts = ''.join(f('x', wt, st) for wt in (400, 500, 600) for st in ('normal', 'italic')) + ''.join(
+        f"@font-face{{font-family:'Playfair Display';font-style:{st};font-weight:400 700;src:url('file://{FONTS}/playfair-display-latin-400-{st}.woff2')}}" for st in ('normal', 'italic'))
     return f"""{fonts}
 @page{{size:{w}in {h}in;margin:0}}
 *{{box-sizing:border-box}}
@@ -117,8 +118,22 @@ def mail_back(L, d, title, body, qr_url, qr_label, thumbs):
 
 # ---------------- pieces ----------------
 
+def light_front(L, d, eyebrow, title, line, img, size=54, extra=''):
+    """Modern Architectural: white page, photo inset with a hairline frame, words set below in Playfair + Inter."""
+    return f"""<div class="pg" style="background:{L['paper']};padding:.32in;display:grid;grid-template-columns:1.25fr 1fr;gap:.32in">
+<div style="position:relative"><img src="{photo(img)}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:10px;border:1px solid rgba(255,255,255,.85)"></div></div>
+<div style="display:flex;flex-direction:column;padding:.06in 0">
+<p class="eye" style="font-size:8pt;font-weight:600;color:{L['accent']}">{eyebrow}</p>
+<h1 class="h" style="font-size:{hs(L, size)};line-height:1.02;margin-top:14px;color:{L['ink']}">{title}</h1>
+<div style="width:46px;height:1px;background:{L['accent']};margin:18px 0"></div>
+<p style="margin:0;font-size:10.5pt;line-height:1.5;color:{L['sub']}">{line}</p>{extra}
+<p style="margin:auto 0 0;font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:{L['ink']}">{AGENT['team']}</p></div></div>"""
+
 def postcard_listed(L, d):
     fr = '<div class="frame"></div>' if L['frame'] else ''
+    if L.get('light'):
+        q = f'<div style="display:flex;gap:12px;align-items:center;margin-top:16px"><img src="{qr(SITE + d["key"], L["ink"])}" style="width:.9in;height:.9in"><p style="margin:0;font-size:9pt;line-height:1.4;color:{L["sub"]}">Every photo, the film and the price</p></div>'
+        return [light_front(L, d, 'Just listed · ' + esc(d['area']), 'Now’s your chance to pick your neighbor.', f"{esc(d['address'])} · {esc(d['facts_line'])}", d['hero'], 44, q)] + postcard_listed_back(L, d)
     front = f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(d['hero'])}">{fr}
 <div style="position:absolute;left:0;right:0;bottom:0;height:3.2in;background:linear-gradient(to top,{L['dark']}e6,{L['dark']}00)"></div>
 <p class="h" style="position:absolute;top:.32in;left:.5in;font-size:{hs(L, 17)};color:{L['paper']}">{AGENT['team']}</p>
@@ -126,18 +141,23 @@ def postcard_listed(L, d):
 <p class="eye" style="color:{L['onDark']}">Just listed · now’s your chance to pick your neighbor</p>
 <h1 class="h" style="font-size:{hs(L, 58)};margin-top:10px">{esc(d['address'])}</h1>
 <p style="margin:10px 0 0;font-size:12pt;color:{L['onDark']}">{esc(d['area'])} · {esc(d['facts_line'])}</p></div></div>"""
+    return [front] + postcard_listed_back(L, d)
+
+def postcard_listed_back(L, d):
     title = f"""<p class="eye" style="color:{L['accent']}">Dear neighbor</p>
 <h2 class="h" style="font-size:{hs(L, 30)};line-height:1.08;color:{L['ink']}">A home on your street just came to market, and you get to help choose who moves in.</h2>"""
     body = esc(d['pitch']) + ' Know someone who has always wanted to live near you? Send them the link.'
     thumbs = [r.get('photo') for r in d['rooms'][:3]]
-    return [front, mail_back(L, d, title, body, SITE + d['key'], 'Every photo, the film and the price.', thumbs)]
+    return [mail_back(L, d, title, body, SITE + d['key'], 'Every photo, the film and the price.', thumbs)]
 
 def postcard_contract(L, d):
     if not (d.get('listed') and d.get('contract')): return None
     days = (datetime.date.fromisoformat(d['contract']) - datetime.date.fromisoformat(d['listed'])).days
     fr = '<div class="frame"></div>' if L['frame'] else ''
     img = d.get('aerial') or d['hero']
-    front = f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(img)}">{fr}
+    if L.get('light'):
+        front = light_front(L, d, 'Under contract · ' + esc(d['address']), f"Under contract in {days} day{'s' if days != 1 else ''}.", 'Your neighborhood is in demand. Here’s what that means for you →', img, 50)
+    else: front = f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(img)}">{fr}
 <div style="position:absolute;inset:0;background:linear-gradient(to top,{L['dark']}ee,{L['dark']}10 70%)"></div>
 <p class="h" style="position:absolute;top:.32in;left:.5in;font-size:{hs(L, 17)};color:{L['paper']}">{AGENT['team']}</p>
 <div style="position:absolute;left:.5in;right:.5in;bottom:.45in;color:{L['paper']}">
@@ -177,6 +197,15 @@ def preview_invite(L, d):
 <h1 class="h" style="font-size:{hs(L, 40)};line-height:1.02;margin-top:8px">A private preview, for neighbors first</h1>
 <p class="it" style="margin:12px 0 0;font-size:18px;color:{L['onDark']}">Before anyone else sees it.</p>
 <p style="margin:auto 0 0;font-size:10pt;letter-spacing:.08em">{esc(d['address'])} · {esc(d['area'])}</p></div>"""
+    if L.get('light'):
+        front = f"""<div class="pg" style="background:{L['paper']};padding:.22in"><div style="height:100%;border:1px solid {L['accent']};outline:1px solid {L['accent']};outline-offset:-6px;padding:.4in .34in;display:flex;flex-direction:column;align-items:center;text-align:center">
+<p class="eye" style="font-size:7.5pt;font-weight:600;color:{L['accent']}">{AGENT['team']}</p>
+<p class="it" style="margin:.3in 0 0;font-size:22px;color:{L['muted']}">The pleasure of your company</p>
+<h1 class="h" style="font-size:{hs(L, 40)};line-height:1.02;margin-top:10px;color:{L['ink']}">A neighbors’ first look</h1>
+<div style="width:46px;height:1px;background:{L['accent']};margin:.22in 0"></div>
+<img src="{photo(d.get('interior') or d['hero'])}" style="width:3.2in;height:2.1in;object-fit:cover">
+<p style="margin:.22in 0 0;font-size:10.5pt;line-height:1.5;color:{L['sub']}">{esc(d['address'])}<br>[DAY, DATE] · [TIME]</p>
+<p style="margin:auto 0 0;font-size:8pt;letter-spacing:.2em;text-transform:uppercase;color:{L['muted']}">Before it opens to the public</p></div></div>"""
     rsvp = f"sms:{AGENT['sms']}?&body=" + f"RSVP for the neighbors’ preview at {d['address']}"
     back = f"""<div class="pg" style="background:{L['paper']};padding:.42in;display:flex;flex-direction:column;gap:14px">
 <p class="eye" style="color:{L['accent']}">Neighbors’ preview</p>
@@ -201,6 +230,14 @@ def lookbook(L, d):
 <h1 class="h" style="font-size:{hs(L, 68)};line-height:.98;margin-top:12px">{esc(d['address'])}</h1>
 {f'<p class="it" style="margin:14px 0 0;font-size:24px;color:{L["onDark"]}">{esc(d["tagline"])}</p>' if d.get('tagline') else ''}
 <p style="margin:22px 0 0;font-size:10.5pt;letter-spacing:.1em;text-transform:uppercase">{esc(d['facts_line'])}</p></div></div>"""
+    if L.get('light'):
+        cover = f"""<div class="pg" style="background:{L['paper']};padding:.55in;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;font-size:8.5pt;font-weight:600;letter-spacing:.26em;text-transform:uppercase"><span>{AGENT['team']}</span><span style="color:{L['accent']}">{esc(d['area'])} · {esc(d['city'])}</span></div>
+<div style="position:relative;margin-top:.3in;height:4.7in"><img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:12px;border:1px solid rgba(255,255,255,.85)"></div></div>
+<div style="margin-top:.32in;display:flex;justify-content:space-between;align-items:flex-end;gap:.4in">
+<h1 class="h" style="font-size:{hs(L, 60)};line-height:.98;white-space:nowrap;color:{L['ink']}">{esc(d['address'])}</h1>
+<div style="text-align:right;min-width:0">{f'<p class="it" style="margin:0;font-size:22px;color:{L["muted"]}">{esc(d["tagline"])}</p>' if d.get('tagline') else ''}
+<p style="margin:8px 0 0;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;color:{L['ink']}">{esc(d['facts_line'])}</p></div></div></div>"""
     pages = [cover]
     for i, r in enumerate(d['rooms']):
         if not r.get('photo'): continue
@@ -253,7 +290,13 @@ def talkers(L, d):
 
 def carousel_slides(L, d):
     fr = '<div class="frame" style="inset:28px"></div>' if L['frame'] else ''
-    s = [f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(d['hero'])}">{fr}
+    if L.get('light'):
+        s = [f"""<div class="pg" style="background:{L['paper']};padding:60px;display:flex;flex-direction:column">
+<div style="position:relative;height:760px"><img src="{photo(d['hero'])}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:16px;border:2px solid rgba(255,255,255,.85)"></div></div>
+<p class="eye" style="font-size:24px;font-weight:600;margin-top:54px;color:{L['accent']}">Just listed · {esc(d['area'])}</p>
+<h1 class="h" style="font-size:{hs(L, 104)};line-height:1;margin-top:18px;color:{L['ink']}">{esc(d.get('tagline') or d['address'])}</h1>
+<p style="margin:auto 0 0;font-size:30px;color:{L['sub']}">Swipe for the rooms that make it →</p></div>"""]
+    else: s = [f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(d['hero'])}">{fr}
 <div style="position:absolute;inset:0;background:linear-gradient(to top,{L['dark']}e0,{L['dark']}05 60%)"></div>
 <div style="position:absolute;left:80px;right:80px;bottom:90px;color:{L['paper']}">
 <p class="eye" style="font-size:26px;color:{L['onDark']}">Just listed · {esc(d['area'])}</p>
@@ -281,6 +324,14 @@ def contract_social(L, d):
     dtxt = (f'in {days} day' + ('s' if days != 1 else '')) if days is not None else ''
     fr = '<div class="frame" style="inset:30px"></div>' if L['frame'] else ''
     def card(w, h, big, img):
+        if L.get('light'):
+            ph = int(h * .56)
+            return (w, h, f"""<div class="pg" style="background:{L['paper']};padding:60px;display:flex;flex-direction:column">
+<div style="position:relative;height:{ph}px"><img src="{photo(img)}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:16px;border:2px solid rgba(255,255,255,.85)"></div></div>
+<p class="eye" style="font-size:24px;font-weight:600;margin-top:46px;color:{L['accent']}">Under contract · {esc(d['area'])}</p>
+<h1 class="h" style="font-size:{hs(L, int(big * .82))};line-height:1;margin-top:16px;color:{L['ink']}">Under contract{' ' + dtxt if dtxt else ''}.</h1>
+<p style="margin:22px 0 0;font-size:32px;color:{L['sub']}">{esc(d['address'])}</p>
+<p style="margin:auto 0 0;font-size:24px;color:{L['muted']}">{AGENT['name']} · {AGENT['team']} · {AGENT['phone']}</p></div>""")
         return (w, h, f"""<div class="pg" style="background:{L['dark']}"><img class="cover" src="{photo(img)}">{fr}
 <div style="position:absolute;inset:0;background:linear-gradient(to top,{L['dark']}f0,{L['dark']}20 62%)"></div>
 <p class="h" style="position:absolute;top:70px;left:80px;font-size:{hs(L, 34)};color:{L['paper']}">{AGENT['team']}</p>

@@ -23,11 +23,17 @@ can be done, and leave clear notes in the Office for anything that's waiting on 
    delivered Drive photos are known, write `source/photos/<key>.json` (same shape as the others) and push: the "Listing photos from Drive"
    action downloads and sizes them. Wait for it (check photos/<key>/index.json after a few minutes). If photos aren't
    delivered yet, note "waiting for photos" and stop here for this listing.
-3b. **Photo preview for the sellers.** As soon as the photos are in, run `python3 source/public-site/photo_preview.py <key>`
-   (set `preview` in the facts file first: hero, a trio of the best three, room groups, near-duplicates in `skip`).
-   Look at it on a phone. Then add a Marketing tab row [now, address, "Photo preview ready", "Send the sellers their
-   photos", "<preview link>#for=<seller first names>"] and draft the email to the sellers in Chris's voice (Gmail
-   draft only, in his KW mailbox; never sent by you). The seller names go only in the link's #for= part, never in the repo.
+3b. **Photo preview for the sellers: do this first, the moment photos are in.** Sellers want their photos right away
+   (Chris, Nov 26, 2026), so this comes before everything else in the run. Set `preview` in the facts file (hero, a trio of
+   the best three, room groups, near-duplicates in `skip`), run `python3 source/public-site/photo_preview.py <key>`, look
+   at it on a phone, and push so it's live. Then draft the email in Chris's KW mailbox (Gmail draft only, with his
+   signature; never send). Find the sellers' emails in his inbox (their messages about the address) or the Sellers tab.
+   Wording Chris approved (Nov 26, 2026), subject "Your photos are in":
+   "Hi <first names>, / We have your photos, and they look amazing. Here's a first look at your home. [link] / We're so
+   excited to get your home live and on the market. / Chris"
+   Then add the Marketing tab row the Office shows at the top of Up next:
+   [now, address, "Photo preview ready", "<the Gmail draft's link>", "<preview link>#for=<first names>"].
+   Seller names and emails go only in the draft, the Sheet and the link's #for= part, never in the repo.
 4. **Write the page's words** (lede, features, groups, story, details) from the photos and verified facts, per the brain
    (the client is the hero; specific beats superlative; Fair Housing). Run the copy checker (`--kind print`).
 5. **Build:** `python3 source/public-site/listing.py <key>` (a listing with no MLS number builds as a private preview:

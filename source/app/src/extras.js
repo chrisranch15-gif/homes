@@ -325,6 +325,9 @@ ${pendingDeal() ? `<details style="margin-top:12px"><summary class="btn ghost" s
 ${pendingDeal() ? '</div></details>' : ''}` : ''}</div>`;
 }
 /* ---------- marketing assets: every launch asset for this listing, as a gallery (source/marketing/build_assets.py) ---------- */
+/* design usage: which looks and pieces actually get used, so weak looks can be cycled out (Design usage tab; weekly review task) */
+function logDesign(look, piece, action) { if (!caps.mcp) return; callTool('Google Sheets', 'append_values', { spreadsheetId: LIVE_SHEET, range: "'Design usage'!A1", values: [[liveNow(), street(), look, piece, action, 'Desk']] }).catch(() => {}); }
+document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('#assets .atile a'); if (a) logDesign(activeLook(), (a.querySelector('b') || {}).textContent || '', 'opened'); }, true);
 const LOOK_NAMES = [['editorial', 'Estate Editorial'], ['arch', 'Modern Architectural'], ['heritage', 'Warm Heritage']];
 function activeLook() { const num = (String(street()).match(/^\d+/) || [''])[0]; return L().mode || (typeof ASSET_LOOK !== 'undefined' && ASSET_LOOK[num]) || 'editorial'; }
 function assetsBlock() {
@@ -332,7 +335,7 @@ function assetsBlock() {
   const num = (String(street()).match(/^\d+/) || [''])[0], look = activeLook(), every = ASSETS[num] || [];
   const all = every.filter(a => !a.look || a.look === look);
   if (!all.length) return '';
-  const tile = a => `<div class="atile"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.th ? `<img src="${esc(a.th)}" alt="" loading="lazy">` : '<span class="ph"></span>'}<b>${esc(a.t)}</b></a><button class="chip" data-act="asset-copy" data-u="${esc(a.u)}">Copy link</button></div>`;
+  const tile = a => `<div class="atile"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.th ? `<img src="${esc(a.th)}" alt="" loading="lazy">` : '<span class="ph"></span>'}<b>${esc(a.t)}</b></a><button class="chip" data-act="asset-copy" data-u="${esc(a.u)}" data-t="${esc(a.t)}">Copy link</button></div>`;
   const order = [['Listing page', 'Ready now · pages'], ['Page', 'Ready now · pages'], ['Email', 'Ready now · agent email'], ['Carousel', 'Ready now · Instagram carousel'], ['Social', 'Ready now · posts and stories'], ['Film', 'Ready now · films'], ['Print', 'Print · pick what you want printed']], groups = {};
   order.forEach(([k, g]) => all.filter(a => a.kind === k).forEach(a => (groups[g] = groups[g] || []).push(a)));
   const hasLooks = every.some(a => a.look);
@@ -699,7 +702,7 @@ Object.assign(A, {
   'tc-handled': async (el) => { const k = el.dataset.k, r = (ui.tcRows || []).find(x => tcKey(x) === k); if (!r) return; ui.tcCalls = Object.assign({}, ui.tcCalls, { [k]: 'Handled' }); render();
     await liveAppend("'TC feedback'", [liveNow(), r[1], k, 'Handled', 'Marked on the Desk'], 'Cleared.'); },
   'offer-mail-close': (el) => { delete (ui.offerMail || {})[el.dataset.t]; render(); },
-  'asset-copy': async (el) => { try { await navigator.clipboard.writeText(el.dataset.u); el.textContent = 'Copied'; } catch (e) { el.textContent = el.dataset.u; } },
+  'asset-copy': async (el) => { logDesign(activeLook(), el.dataset.t || '', 'copied link'); try { await navigator.clipboard.writeText(el.dataset.u); el.textContent = 'Copied'; } catch (e) { el.textContent = el.dataset.u; } },
   'show-fbok': async (el) => {
     const x = showList().find(s => s.key === el.dataset.k); if (!x) return;
     ui.fbOk = Object.assign({}, ui.fbOk, { [x.key]: 1 }); render();

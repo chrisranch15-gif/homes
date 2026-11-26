@@ -1359,7 +1359,7 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
     else if (x.action === 'seller-note') writeSellerNote(); },
   verify: el => { const f = E.fact(L(), el.dataset.k); E.setFact(LID, f.key, f.value, 'verified', f.source.replace(' · needs verification', '') + ' · verified by ' + T().agent.name); toast('Verified — now used everywhere.'); },
   policy: el => { const r = E.setPolicy(el.dataset.k, el.dataset.v); if (!r.ok) toast('That guardrail is locked.'); },
-  mode: el => { L().mode = el.dataset.v; dirty = true; scheduleSave(); render(); },
+  mode: el => { L().mode = el.dataset.v; dirty = true; scheduleSave(); render(); if (typeof logDesign === 'function') logDesign(el.dataset.v, '', 'switched to'); },
   'pick-cat': el => { ui.cat = el.dataset.v; el.parentNode.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === el)); },
   'run-tests': () => { testResults = LCTests.run(LC); render(); },
   'sim-mls': el => { const r = E.emit(LID, 'mls.status', { status: el.dataset.v, verified: true }); toast(r.rejected === 'unauthorized' ? 'Held for your authorization — see the Overview.' : r.rejected ? 'Rejected: ' + r.rejected : 'NWMLS: ' + el.dataset.v); },

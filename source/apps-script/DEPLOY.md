@@ -1,5 +1,9 @@
 # Automatic engine deploys
 
+**Set up and working since Nov 25, 2026** (first automatic deploy: version 18). Every push that changes
+`source/apps-script/Code.gs` goes live by itself. If Chris ever signs in again (`clasp login`), replace the
+`CLASPRC_JSON` secret with the new `~/.clasprc.json`. Code.gs must stay plain ASCII.
+
 Once this is set up, every change to `Code.gs` goes live on its own through the
 GitHub Action `engine-deploy.yml`. No more copy-paste into Apps Script. The engine's
 address stays the same (it publishes a new version of the existing deployment).

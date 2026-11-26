@@ -41,8 +41,7 @@ shot = datetime.date.fromisoformat(L['photo_day']).strftime('%A, %B %-d') if L.g
 credit = L.get('credit') or 'Anthony Jones / Rainier Real Estate Photography'
 photographer = credit.split('/')[0].strip().split(' ')[0]
 note = cfg.get('note') or [
-    'Here’s your sneak peek.',
-    'We’re building your listing page and marketing around them now. There’s nothing you need to do. I’ll show you everything before anyone else sees it.']
+    'This is a preview of your photos. I’m excited to get your home live and on the market.']
 
 sections = ''.join(
     f'<section class="room" id="r{i}"><div class="rh"><h2>{e(t)}</h2><span>{len(ss)} photo{"s" if len(ss) > 1 else ""}</span></div>'
@@ -93,7 +92,7 @@ figure img{{transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}}figure:hover img
 .next{{background:var(--night);color:#efe9df;padding:clamp(70px,11vw,130px) 0}}
 .next h2{{font:400 clamp(32px,4.4vw,52px)/1.1 var(--serif);margin:0 0 40px;color:#fff}}
 .steps{{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,48px)}}.steps b{{display:block;font:400 34px/1 var(--serif);color:var(--gold);margin-bottom:14px}}.steps p{{margin:0;color:#cfc8bd}}
-.contact{{margin-top:56px;display:flex;flex-wrap:wrap;gap:12px}}.contact a{{color:var(--night);background:#f3ede4;text-decoration:none;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px}}.contact a.ghost{{background:none;color:#fff;border:1px solid rgba(255,255,255,.35)}}
+.contact{{margin-top:8px;display:flex;flex-wrap:wrap;gap:12px}}.contact a{{color:var(--night);background:#f3ede4;text-decoration:none;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px}}.contact a.ghost{{background:none;color:#fff;border:1px solid rgba(255,255,255,.35)}}
 footer{{background:var(--night);color:#8f887d;font-size:12px;padding:0 0 110px}}footer .wrap{{border-top:1px solid rgba(255,255,255,.12);padding-top:24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}}
 .lb{{position:fixed;inset:0;z-index:30;background:rgba(12,13,14,.96);display:none;align-items:center;justify-content:center}}.lb.on{{display:flex}}
 .lb img{{width:auto;height:auto;max-width:94vw;max-height:84vh;object-fit:contain}}
@@ -115,11 +114,7 @@ footer{{background:var(--night);color:#8f887d;font-size:12px;padding:0 0 110px}}
 <div class="trio reveal">{"".join(f"<figure data-s=\"{s}\">{img(s, sizes='(min-width:900px) 60vw, 100vw', alt='')}<button class=\"fav\" aria-label=\"Favorite\" data-s=\"{s}\">♡</button></figure>" for s in trio)}</div>
 {sections}{plan_html}
 </div>
-<section class="next"><div class="wrap"><h2>What happens next. <em style="color:var(--gold)">We’ve got it from here.</em></h2><div class="steps">
-<div><b>1</b><p>We build your listing page and marketing around these photos.</p></div>
-<div><b>2</b><p>You see all of it before anyone else does.</p></div>
-<div><b>3</b><p>We go live on the day we pick together. Until then, nothing is public.</p></div>
-</div><div class="contact"><a href="sms:+12533355630">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
+<section class="next"><div class="wrap"><h2>Excited to get your home <em style="color:var(--gold)">live and on the market.</em></h2><div class="contact"><a href="sms:+12533355630">Text me</a><a class="ghost" href="tel:+12533355630">Call (253) 335-5630</a></div></div></section>
 </main>
 <footer><div class="wrap"><span>Chris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound</span><span>Photography: {e(credit)}</span></div></footer>
 <div class="lb" id="lb" role="dialog" aria-label="Photo"><img alt=""><button class="x" aria-label="Close">×</button><button class="p" aria-label="Previous">‹</button><button class="n" aria-label="Next">›</button><div class="c"></div></div>

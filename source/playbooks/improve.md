@@ -36,3 +36,10 @@ before saving. If you believe a flag is wrong, keep the text, and file a papercu
 
 Nothing reaches a client between 8 PM and 8 AM Pacific. If your run finds nothing to do, end at once with the
 single line "Quiet." Don't spend time re-reading everything to be sure: the next run will catch it.
+
+## 5. Keep a quiet trail (never shown unless asked)
+When you write a client-facing piece, record in one short line which parts of the brain, the voice guide and the
+playbook shaped it (e.g. "brain §5 just-imagine · brain §2b proof-not-praise · voice: pros short"). Social posts: the
+post's "trail" field in its JSON. Chris never sees the trail in the Office or the Desk; it exists only so that when
+he taps "This feels off", the weekly review can find the cause. Never add sourcing, footnotes or "why" notes to
+anything Chris reads or approves.

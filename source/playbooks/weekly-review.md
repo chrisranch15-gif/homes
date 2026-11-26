@@ -35,6 +35,22 @@ the Undo as an item.
   add measured facts to `source/marketing/brain/evidence.md` (facts only; rule changes go to brain.md via an item).
 - **Answer engines** (first review of each month): run the monthly check in `source/playbooks/pages-aeo.md`.
 
+## 2b. Tone reports ("This feels off")
+For each "Tone reports" row with Status "New":
+- **Feels right** → save the text as a good example in `source/playbooks/tests/tone/feels-right.md` (no names or
+  numbers), mark "Fixed" ("kept as a good example").
+- **Anything else** → find the cause without asking Chris to explain it. Read the text and its trail (column G; if
+  blank, re-create how it would be written today from the playbook, brain and voice guide). List the suspects (each
+  rule, phrase pattern or voice line that shaped it). Rewrite the piece 3 ways, each leaving out or changing one
+  suspect, plus keep everything else the same. Make it one review item: Title "Which one sounds like you?",
+  What happened = the feeling Chris named and the piece (one line), What I'd change = blank, Before = the original,
+  After = the versions as lines starting "A: ", "B: ", "C: ". Set the report's Status "Diagnosing".
+- When Chris picks a version ("Picked B"), the suspect that version removed or changed is the cause: write it in the
+  report's "What caused it", and make the matching fix (narrow the rule, add a voice line, add a copy-checker warning)
+  as a normal item next week, or apply it at once if it's only narrowing a phrase rule. Save the original as a
+  "feels off" example in `tests/tone/feels-off.md` with the feeling. "None of these" → try 3 different suspects next
+  week. Never show the trail itself to Chris unless he asks how something was made.
+
 ## 3. Pick at most 5 improvements, most valuable first
 Kinds of change you may propose:
 - wording or a step in a playbook (`source/playbooks/*.md`, never `locked-rules.md`);

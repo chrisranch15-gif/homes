@@ -20,4 +20,4 @@ scheduled in Metricool. Nothing posts on its own.
 ## Slide layouts
 `cover` (photo + lockup) · `statement` (two lines, alternating italic, optional photo strip) · `feature` (photo over a reason)
 · `list` (eyebrow, headline, 3–4 numbered reasons) · `close` (invitation, Chris, disclosure; optional photo).
-Formats: `feed` 1080×1350, `story` 1080×1920, `gbp` 1200×900. Posts: `id`, `network` (instagram, facebook, gmb, or "instagram,facebook" for stories), `kind`, `format`, `when` (local, YYYY-MM-DDTHH:MM), `slides`, `caption`.
+Formats: `feed` 1080×1350, `story` 1080×1920, `gbp` 1200×900. Posts: `trail` (one short hidden line: which brain/voice rules shaped it; never shown to Chris), `id`, `network` (instagram, facebook, gmb, or "instagram,facebook" for stories), `kind`, `format`, `when` (local, YYYY-MM-DDTHH:MM), `slides`, `caption`.

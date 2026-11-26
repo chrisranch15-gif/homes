@@ -425,7 +425,7 @@ function tcCheckinHtml(r, k) { const c = checkinParts(r), ed = (S.tcCi || {})[k]
     <div class="field" style="margin:0 0 8px"><label>Subject</label><input name="subject" value="${esc(ed.subject)}"></div>
     <div class="field" style="margin:0 0 6px"><label>Message</label><textarea name="body" rows="10" style="min-height:220px">${esc(ed.body)}</textarea></div>
     <p class="s" style="margin:0 0 8px">Your Gmail signature is added when it sends.</p>
-    <div class="acts"><button class="pill" type="button" data-act="tccisend" data-k="${esc(k)}">${S.tcSure === k ? 'Tap again to send to ' + esc(emailsIn(ed.to).join(', ')) : 'Approve & send'}</button><button class="pill ghost" type="button" data-act="tccall" data-k="${esc(k)}" data-v="Skipped">Skip</button><button class="pill ghost" type="button" data-act="tcfix" data-k="${esc(k)}">Change it</button></div></form></div>`; }
+    <div class="acts"><button class="pill" type="button" data-act="tccisend" data-k="${esc(k)}">${S.tcSure === k ? 'Tap again to send to ' + esc(emailsIn(ed.to).join(', ')) : 'Approve & send'}</button><button class="pill ghost" type="button" data-act="tccall" data-k="${esc(k)}" data-v="Skipped">Skip</button><button class="pill ghost" type="button" data-act="tcfix" data-k="${esc(k)}">Change it</button>${typeof ImproveUI !== 'undefined' ? ImproveUI.toneLink('Office', 'TC check-in · ' + (r[1] || ''), ed.body, '') : ''}</div></form></div>`; }
 async function tcCheckinSend(k) { const r = ((S.sheet && S.sheet.shadow) || []).find(x => shadowKey(x) === k); if (!r) return;
   const c = checkinParts(r), ed = (S.tcCi || {})[k] || c, to = emailsIn(ed.to), cc = emailsIn(ed.cc);
   if (!to.length) { S.tcSure = null; tcSheet(r[1]); return toast('Add who it goes to first.'); }

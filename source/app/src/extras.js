@@ -340,7 +340,7 @@ function assetsBlock() {
     ${hasLooks ? `<div style="margin-top:10px"><span class="small muted">Look</span> <span class="seg" role="group" aria-label="Marketing look">${LOOK_NAMES.map(([k, n]) => `<button data-act="mode" data-v="${k}" aria-pressed="${look === k}">${n}</button>`).join('')}</span></div>
     <p class="small muted" style="margin:8px 0 0">Every piece is made in all three looks at launch, so switching is instant. The look you pick here is the one you share and print.</p>` : '<p class="small muted" style="margin:6px 0 0">Everything made for this listing. Tap to open, or copy a link to send.</p>'}
     ${Object.keys(groups).map(g => `<div class="small" style="font-weight:600;margin:16px 0 8px">${esc(g)}</div>${g.startsWith('Print') ? '<p class="small muted" style="margin:-4px 0 8px">Print-ready PDFs. Open the ones you want and send them to your printer or mail house.</p>' : ''}<div class="agrid">${groups[g].map(tile).join('')}</div>`).join('')}
-    <p class="small muted" style="margin-top:14px">Want a change? Tell the Concierge (“swap the postcard photo for the deck”). It’s logged, made, and comes back here for your OK.</p></div>`;
+    <p class="small muted" style="margin-top:14px">Want a change? Tell the Concierge (“swap the postcard photo for the deck”). It’s made in a few minutes and comes back for your OK.</p></div>`;
 }
 const SIGN_SETS = { '19917': { editorial: 'noir', arch: 'daylight', heritage: 'heritage' } }; // look → sign style, printed by source/print/open_house_signs.py
 function ohBlock() {

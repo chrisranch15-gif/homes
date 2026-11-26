@@ -1351,6 +1351,7 @@ THIS WEEK: ${E.report(LID).summary}`, { modelTier: 'default', cache: false });
   'check-drive': () => checkDrive(),
   'all-photos': () => { ui.allPhotos = !ui.allPhotos; render(); },
   'check-metricool': () => checkMetricool(),
+  'soc-now': () => { ui.socNow = true; render(); callTool('Claude Code Remote', 'fire_trigger', { trigger_id: 'trig_01HsnuhtZBs1vsjgVFT5a7rc', text: `${street()} is under contract. Make its pending social set now.` }).then(() => toast('Making them now. Nothing posts until you approve.')).catch(() => { ui.socNow = false; toast('Couldn’t start it here. It will still be made on the next check.'); render(); }); },
   gmail: el => { const st = settings(); st.gmail = el.dataset.v; if (st.gmail === 'drafts') st.gmailSince = Date.now(); dirty = true; scheduleSave(); render(); if (st.gmail === 'drafts' && !L().sellers[0].email) toast('Add your seller’s email in step 4.'); },
   suggest: () => aiSuggest(),
   'do-suggest': el => { const x = (ui.suggest || ruleSuggestions())[el.dataset.i * 1]; if (!x) return;

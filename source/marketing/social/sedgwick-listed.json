@@ -1,0 +1,134 @@
+{
+ "_note": "Copy for the listed posts. Every fact is from source/listings/sedgwick.json and its live page. No price, no seller names, no claim about how recently it listed.",
+ "title": "For sale · 0 SE Sedgwick Road",
+ "link": "https://homes.ranchpnw.com/sedgwick",
+ "posts": [
+  {
+   "id": "ig",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "instagram",
+   "kind": "Carousel",
+   "format": "feed",
+   "when": "2026-12-03T18:30",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-7.jpg",
+     "eyebrow": "For sale · Port Orchard",
+     "head": "Nearly 12 acres, minutes from the ferry.",
+     "line": "0 SE Sedgwick Road",
+     "line2": "Two parcels · zoned RR"
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-5.jpg",
+     "eyebrow": "The land",
+     "head": "Level, usable ground.",
+     "line": "Two parcels, 6.51 and 5.41 acres, zoned Rural Residential. Room for a custom home, a private estate or a small compound."
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-9.jpg",
+     "eyebrow": "The commute",
+     "head": "Country quiet, without the distance.",
+     "line": "About five minutes to the Southworth ferry for Seattle, West Seattle and Vashon Island."
+    },
+    {
+     "layout": "close",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-1.jpg",
+     "eyebrow": "See it in person",
+     "head": "Come walk the land.",
+     "line": "Send me a message and I’ll show you the parcels, or see every photo at homes.ranchpnw.com/sedgwick."
+    }
+   ],
+   "caption": "Nearly 12 acres, about five minutes from the Southworth ferry.\n\n0 SE Sedgwick Road in Port Orchard is two parcels, 6.51 and 5.41 acres, both zoned Rural Residential. Level, usable ground for a custom home, a private estate or a small compound, with the room and privacy to build what you have in mind.\n\nQuiet country living without the distance: the ferry for Seattle, West Seattle and Vashon Island, and minutes to shopping, dining and Highway 16.\n\nWant to walk it? Send me a message and I’ll show you the parcels. Every photo is at homes.ranchpnw.com/sedgwick.\n\nChris Ranch · The Ranch Real Estate Group · (253) 335-5630\nKeller Williams Realty Puget Sound\n\n#PortOrchard #Southworth #KitsapCounty #KitsapRealEstate #LandForSale"
+  },
+  {
+   "id": "fb",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "facebook",
+   "kind": "Album",
+   "format": "feed",
+   "when": "2026-12-03T18:30",
+   "same_as": "ig",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-7.jpg",
+     "eyebrow": "For sale · Port Orchard",
+     "head": "Nearly 12 acres, minutes from the ferry.",
+     "line": "0 SE Sedgwick Road",
+     "line2": "Two parcels · zoned RR"
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-5.jpg",
+     "eyebrow": "The land",
+     "head": "Level, usable ground.",
+     "line": "Two parcels, 6.51 and 5.41 acres, zoned Rural Residential. Room for a custom home, a private estate or a small compound."
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-9.jpg",
+     "eyebrow": "The commute",
+     "head": "Country quiet, without the distance.",
+     "line": "About five minutes to the Southworth ferry for Seattle, West Seattle and Vashon Island."
+    },
+    {
+     "layout": "close",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-1.jpg",
+     "eyebrow": "See it in person",
+     "head": "Come walk the land.",
+     "line": "Send me a message and I’ll show you the parcels, or see every photo at homes.ranchpnw.com/sedgwick."
+    }
+   ],
+   "caption": "Nearly 12 acres, about five minutes from the Southworth ferry.\n\n0 SE Sedgwick Road in Port Orchard: two parcels, 6.51 and 5.41 acres, zoned Rural Residential. Level, usable ground for a custom home, a private estate or a small compound, minutes to the ferry for Seattle, West Seattle and Vashon Island.\n\nIf you’d like to walk the land, call or text me at (253) 335-5630. Every photo is here:\n\nhttps://homes.ranchpnw.com/sedgwick\n\nChris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound"
+  },
+  {
+   "id": "story",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "instagram,facebook",
+   "kind": "Story",
+   "format": "story",
+   "when": "2026-12-03T18:35",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-7.jpg",
+     "eyebrow": "For sale · Port Orchard",
+     "head": "Nearly 12 acres, minutes from the ferry.",
+     "line": "0 SE Sedgwick Road",
+     "line2": "Two parcels · zoned RR",
+     "size": 112
+    },
+    {
+     "layout": "close",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-5.jpg",
+     "eyebrow": "Want to see it?",
+     "head": "Come walk the land.",
+     "line": "Send me a message and I’ll show you the parcels."
+    }
+   ],
+   "caption": ""
+  },
+  {
+   "id": "gbp",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "gmb",
+   "kind": "Update",
+   "format": "gbp",
+   "when": "2026-12-03T18:30",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/sedgwick/8995-se-sedgwick-rd-7.jpg",
+     "eyebrow": "For sale · Port Orchard",
+     "head": "Nearly 12 acres, minutes from the ferry.",
+     "size": 90,
+     "line": "0 SE Sedgwick Road, Port Orchard"
+    }
+   ],
+   "caption": "For sale in Port Orchard: 0 SE Sedgwick Road. Nearly 12 acres (11.92) of level, usable land in two parcels, 6.51 and 5.41 acres, zoned Rural Residential. About five minutes from the Southworth ferry for Seattle, West Seattle and Vashon Island, and minutes to shopping, dining and Highway 16.\n\nTo walk the land, call or text Chris Ranch, The Ranch Real Estate Group, Keller Williams Realty Puget Sound, at (253) 335-5630."
+  }
+ ]
+}

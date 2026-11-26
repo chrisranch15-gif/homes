@@ -1,0 +1,94 @@
+{
+ "key": "10707",
+ "address": "10707 47th St E",
+ "area": "Edgewood",
+ "event": "listed",
+ "title": "For sale \u00b7 10707 47th St E",
+ "look": "editorial",
+ "link": "https://homes.ranchpnw.com/10707",
+ "posts": [
+  {
+   "id": "ig",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "instagram",
+   "kind": "Carousel",
+   "format": "feed",
+   "when": "2026-11-28T09:30",
+   "caption": "The deck wraps nearly all the way around.\n\nAt 10707 47th St E in Edgewood, the mountain view comes along for summer barbecues, parties and morning coffee. Inside: three bedrooms, three baths and 2,572 square feet over three levels, with a primary suite that has a view of its own.\n\nThe lower level is fully finished, with a rec room, a three-quarter bath, a guest room and its own door outside. The lot is a park-like 0.31-acre corner on a dead-end street, with terraced landscaping, sprinklers, RV parking, a large shed and generator wiring.\n\nWant to see it in person? Send me a message and I\u2019ll set up a private showing. Every photo is at homes.ranchpnw.com/10707.\n\nChris Ranch \u00b7 The Ranch Real Estate Group \u00b7 (253) 335-5630\nKeller Williams Realty Puget Sound\n\n#Edgewood #EdgewoodWA #PierceCountyHomes #PugetSoundHomes #PierceCountyRealEstate",
+   "images": [
+    "marketing/10707/editorial/social-listed/ig-1.jpg",
+    "marketing/10707/editorial/social-listed/ig-2.jpg",
+    "marketing/10707/editorial/social-listed/ig-3.jpg",
+    "marketing/10707/editorial/social-listed/ig-4.jpg",
+    "marketing/10707/editorial/social-listed/ig-5.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/ig-1.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/ig-2.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/ig-3.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/ig-4.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/ig-5.jpg"
+   ]
+  },
+  {
+   "id": "fb",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "facebook",
+   "kind": "Album",
+   "format": "feed",
+   "when": "2026-11-28T09:30",
+   "same_as": "ig",
+   "caption": "The deck wraps nearly all the way around.\n\nAt 10707 47th St E in Edgewood, the mountain view comes along for summer barbecues, parties and morning coffee. Three bedrooms, three baths and 2,572 square feet over three levels, a fully finished lower level with its own door outside, and a park-like 0.31-acre corner lot on a dead-end street with RV parking and a large shed.\n\nIf you\u2019d like to see it in person, call or text me at (253) 335-5630. Every photo is here:\n\nhttps://homes.ranchpnw.com/10707\n\nChris Ranch \u00b7 The Ranch Real Estate Group \u00b7 Keller Williams Realty Puget Sound",
+   "images": [
+    "marketing/10707/editorial/social-listed/fb-1.jpg",
+    "marketing/10707/editorial/social-listed/fb-2.jpg",
+    "marketing/10707/editorial/social-listed/fb-3.jpg",
+    "marketing/10707/editorial/social-listed/fb-4.jpg",
+    "marketing/10707/editorial/social-listed/fb-5.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/fb-1.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/fb-2.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/fb-3.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/fb-4.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/fb-5.jpg"
+   ]
+  },
+  {
+   "id": "story",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "instagram,facebook",
+   "kind": "Story",
+   "format": "story",
+   "when": "2026-11-28T09:35",
+   "caption": "",
+   "images": [
+    "marketing/10707/editorial/social-listed/story-1.jpg",
+    "marketing/10707/editorial/social-listed/story-2.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/story-1.jpg",
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/story-2.jpg"
+   ]
+  },
+  {
+   "id": "gbp",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "gmb",
+   "kind": "Update",
+   "format": "gbp",
+   "when": "2026-11-28T09:30",
+   "caption": "For sale in Edgewood: 10707 47th St E. A deck that wraps nearly all the way around, with a mountain view from the deck and the living room. Three bedrooms, three baths and 2,572 square feet over three levels, including a fully finished lower level with its own exterior door. A park-like 0.31-acre corner lot on a dead-end street with RV parking, a large shed and generator wiring.\n\nFor a private showing, call or text Chris Ranch, The Ranch Real Estate Group, Keller Williams Realty Puget Sound, at (253) 335-5630.",
+   "images": [
+    "marketing/10707/editorial/social-listed/gbp-1.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/10707/editorial/social-listed/gbp-1.jpg"
+   ]
+  }
+ ]
+}

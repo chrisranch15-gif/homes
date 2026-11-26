@@ -1,0 +1,142 @@
+{
+ "_note": "Copy for the listed posts. Every fact is from source/listings/12005.json and its live page. No price, no seller names, no claim about how recently it listed.",
+ "title": "For sale · 12005 5th Ave S",
+ "link": "https://homes.ranchpnw.com/12005",
+ "posts": [
+  {
+   "id": "ig",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "instagram",
+   "kind": "Carousel",
+   "format": "feed",
+   "when": "2026-11-30T18:30",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/12005/03-12005-5th-ave-s-3.jpg",
+     "eyebrow": "For sale · Burien",
+     "head": "Just under half an acre, fenced and level.",
+     "line": "12005 5th Ave S",
+     "line2": "Built in 1938 · corner lot"
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/12005/05-12005-5th-ave-s-5.jpg",
+     "eyebrow": "The lot",
+     "head": "A level corner, fully fenced.",
+     "line": "0.43 acre with fruit trees, garden space, RV parking and outbuildings for storage and hobbies."
+    },
+    {
+     "layout": "statement",
+     "eyebrow": "The home",
+     "lines": [
+      "Two bedrooms on the main floor.",
+      "A basement with its own door."
+     ],
+     "line": "Partially finished today, with room for more living space, a rec room or a studio. R2 zoning gives you more to explore.",
+     "photo": "photos/12005/04-12005-5th-ave-s-4.jpg",
+     "size": 84
+    },
+    {
+     "layout": "close",
+     "photo": "photos/12005/10-12005-5th-ave-s-10.jpg",
+     "eyebrow": "See it in person",
+     "head": "Come walk the lot.",
+     "line": "Send me a message for a private showing, or see every photo at homes.ranchpnw.com/12005."
+    }
+   ],
+   "caption": "Just under half an acre, fenced, level and on a corner in Burien.\n\n12005 5th Ave S was built in 1938. Today it lives as a two-bedroom, one-bath home on the main level, with a partially finished basement that has its own entrance. Enjoy it as it is, or picture what the lower level could become: more living space, a rec room, a studio.\n\nOutside: fruit trees, garden space, RV parking and outbuildings for storage and hobbies, on 0.43 acre. R2 zoning gives you more to explore over time (verify zoning and any plans with the city).\n\nWant to walk the lot? Send me a message and I’ll set up a private showing. Every photo is at homes.ranchpnw.com/12005.\n\nChris Ranch · The Ranch Real Estate Group · (253) 335-5630\nKeller Williams Realty Puget Sound\n\n#Burien #BurienWA #KingCountyHomes #SeattleRealEstate #PugetSoundHomes"
+  },
+  {
+   "id": "fb",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "facebook",
+   "kind": "Album",
+   "format": "feed",
+   "when": "2026-11-30T18:30",
+   "same_as": "ig",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/12005/03-12005-5th-ave-s-3.jpg",
+     "eyebrow": "For sale · Burien",
+     "head": "Just under half an acre, fenced and level.",
+     "line": "12005 5th Ave S",
+     "line2": "Built in 1938 · corner lot"
+    },
+    {
+     "layout": "feature",
+     "photo": "photos/12005/05-12005-5th-ave-s-5.jpg",
+     "eyebrow": "The lot",
+     "head": "A level corner, fully fenced.",
+     "line": "0.43 acre with fruit trees, garden space, RV parking and outbuildings for storage and hobbies."
+    },
+    {
+     "layout": "statement",
+     "eyebrow": "The home",
+     "lines": [
+      "Two bedrooms on the main floor.",
+      "A basement with its own door."
+     ],
+     "line": "Partially finished today, with room for more living space, a rec room or a studio. R2 zoning gives you more to explore.",
+     "photo": "photos/12005/04-12005-5th-ave-s-4.jpg",
+     "size": 84
+    },
+    {
+     "layout": "close",
+     "photo": "photos/12005/10-12005-5th-ave-s-10.jpg",
+     "eyebrow": "See it in person",
+     "head": "Come walk the lot.",
+     "line": "Send me a message for a private showing, or see every photo at homes.ranchpnw.com/12005."
+    }
+   ],
+   "caption": "Just under half an acre, fenced, level and on a corner in Burien.\n\n12005 5th Ave S is a 1938 home with two bedrooms and a bath on the main level, plus a partially finished basement with its own entrance. Fruit trees, garden space, RV parking and outbuildings for storage and hobbies, with R2 zoning to explore over time (verify zoning and plans with the city).\n\nIf you’d like to walk it, call or text me at (253) 335-5630. Every photo is here:\n\nhttps://homes.ranchpnw.com/12005\n\nChris Ranch · The Ranch Real Estate Group · Keller Williams Realty Puget Sound"
+  },
+  {
+   "id": "story",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "instagram,facebook",
+   "kind": "Story",
+   "format": "story",
+   "when": "2026-11-30T18:35",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/12005/03-12005-5th-ave-s-3.jpg",
+     "eyebrow": "For sale · Burien",
+     "head": "Just under half an acre, fenced and level.",
+     "line": "12005 5th Ave S",
+     "line2": "Built in 1938 · corner lot",
+     "size": 112
+    },
+    {
+     "layout": "close",
+     "photo": "photos/12005/05-12005-5th-ave-s-5.jpg",
+     "eyebrow": "Want to see it?",
+     "head": "Come walk the lot.",
+     "line": "Send me a message for a private showing."
+    }
+   ],
+   "caption": ""
+  },
+  {
+   "id": "gbp",
+   "trail": "brain §4 just-listed strongest true line · §6 specific beats superlative · §5 one soft CTA · voice: always",
+   "network": "gmb",
+   "kind": "Update",
+   "format": "gbp",
+   "when": "2026-11-30T18:30",
+   "slides": [
+    {
+     "layout": "cover",
+     "photo": "photos/12005/03-12005-5th-ave-s-3.jpg",
+     "eyebrow": "For sale · Burien",
+     "head": "Just under half an acre, fenced and level.",
+     "size": 90,
+     "line": "12005 5th Ave S, Burien"
+    }
+   ],
+   "caption": "For sale in Burien: 12005 5th Ave S. A 1938 home on a fenced, level 0.43-acre corner lot, with two bedrooms and a bath on the main level and a partially finished basement with its own entrance. Fruit trees, garden space, RV parking, outbuildings and R2 zoning (buyers verify zoning and plans with the city).\n\nFor a private showing, call or text Chris Ranch, The Ranch Real Estate Group, Keller Williams Realty Puget Sound, at (253) 335-5630."
+  }
+ ]
+}

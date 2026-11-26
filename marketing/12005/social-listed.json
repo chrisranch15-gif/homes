@@ -1,0 +1,90 @@
+{
+ "key": "12005",
+ "address": "12005 5th Ave S",
+ "area": "Seattle",
+ "event": "listed",
+ "title": "For sale \u00b7 12005 5th Ave S",
+ "look": "editorial",
+ "link": "https://homes.ranchpnw.com/12005",
+ "posts": [
+  {
+   "id": "ig",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "instagram",
+   "kind": "Carousel",
+   "format": "feed",
+   "when": "2026-11-30T18:30",
+   "caption": "Just under half an acre, fenced, level and on a corner in Burien.\n\n12005 5th Ave S was built in 1938. Today it lives as a two-bedroom, one-bath home on the main level, with a partially finished basement that has its own entrance. Enjoy it as it is, or picture what the lower level could become: more living space, a rec room, a studio.\n\nOutside: fruit trees, garden space, RV parking and outbuildings for storage and hobbies, on 0.43 acre. R2 zoning gives you more to explore over time (verify zoning and any plans with the city).\n\nWant to walk the lot? Send me a message and I\u2019ll set up a private showing. Every photo is at homes.ranchpnw.com/12005.\n\nChris Ranch \u00b7 The Ranch Real Estate Group \u00b7 (253) 335-5630\nKeller Williams Realty Puget Sound\n\n#Burien #BurienWA #KingCountyHomes #SeattleRealEstate #PugetSoundHomes",
+   "images": [
+    "marketing/12005/editorial/social-listed/ig-1.jpg",
+    "marketing/12005/editorial/social-listed/ig-2.jpg",
+    "marketing/12005/editorial/social-listed/ig-3.jpg",
+    "marketing/12005/editorial/social-listed/ig-4.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/ig-1.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/ig-2.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/ig-3.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/ig-4.jpg"
+   ]
+  },
+  {
+   "id": "fb",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "facebook",
+   "kind": "Album",
+   "format": "feed",
+   "when": "2026-11-30T18:30",
+   "same_as": "ig",
+   "caption": "Just under half an acre, fenced, level and on a corner in Burien.\n\n12005 5th Ave S is a 1938 home with two bedrooms and a bath on the main level, plus a partially finished basement with its own entrance. Fruit trees, garden space, RV parking and outbuildings for storage and hobbies, with R2 zoning to explore over time (verify zoning and plans with the city).\n\nIf you\u2019d like to walk it, call or text me at (253) 335-5630. Every photo is here:\n\nhttps://homes.ranchpnw.com/12005\n\nChris Ranch \u00b7 The Ranch Real Estate Group \u00b7 Keller Williams Realty Puget Sound",
+   "images": [
+    "marketing/12005/editorial/social-listed/fb-1.jpg",
+    "marketing/12005/editorial/social-listed/fb-2.jpg",
+    "marketing/12005/editorial/social-listed/fb-3.jpg",
+    "marketing/12005/editorial/social-listed/fb-4.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/fb-1.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/fb-2.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/fb-3.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/fb-4.jpg"
+   ]
+  },
+  {
+   "id": "story",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "instagram,facebook",
+   "kind": "Story",
+   "format": "story",
+   "when": "2026-11-30T18:35",
+   "caption": "",
+   "images": [
+    "marketing/12005/editorial/social-listed/story-1.jpg",
+    "marketing/12005/editorial/social-listed/story-2.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/story-1.jpg",
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/story-2.jpg"
+   ]
+  },
+  {
+   "id": "gbp",
+   "trail": "brain \u00a74 just-listed strongest true line \u00b7 \u00a76 specific beats superlative \u00b7 \u00a75 one soft CTA \u00b7 voice: always",
+   "network": "gmb",
+   "kind": "Update",
+   "format": "gbp",
+   "when": "2026-11-30T18:30",
+   "caption": "For sale in Burien: 12005 5th Ave S. A 1938 home on a fenced, level 0.43-acre corner lot, with two bedrooms and a bath on the main level and a partially finished basement with its own entrance. Fruit trees, garden space, RV parking, outbuildings and R2 zoning (buyers verify zoning and plans with the city).\n\nFor a private showing, call or text Chris Ranch, The Ranch Real Estate Group, Keller Williams Realty Puget Sound, at (253) 335-5630.",
+   "images": [
+    "marketing/12005/editorial/social-listed/gbp-1.jpg"
+   ],
+   "look": "editorial",
+   "urls": [
+    "https://homes.ranchpnw.com/marketing/12005/editorial/social-listed/gbp-1.jpg"
+   ]
+  }
+ ]
+}

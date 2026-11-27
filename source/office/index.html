@@ -175,7 +175,7 @@ const I = {
 
 /* ---------- loading ---------- */
 async function loadSheet() {
-  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200", offers: 'Offers!A1:Q300', shadow: "'TC shadow'!A1:L1500", tcfb: "'TC feedback'!A1:E3000", sellertl: "'Seller timeline'!A1:E300", mchanges: "'Marketing changes'!A1:G400", buyers: 'Buyers!A1:M300', banswers: "'Buyer answers'!A1:G1500", bhomes: "'Buyer homes'!A1:H1500" };
+  const tabs = { leads: 'Leads!A1:J400', listings: 'Listings!A1:J60', deals: 'Deals!A1:J300', checks: 'Checks!A1:E400', portals: 'Portals!A1:F200', marketing: 'Marketing!A1:E200', docs: 'Documents!A1:F400', showings: "'Showing agents'!A1:J500", done: "'Hub done'!A1:D2000", shoots: "'Photo shoots'!A1:K200", offers: 'Offers!A1:Q300', shadow: "'TC shadow'!A1:L1500", tcfb: "'TC feedback'!A1:E3000", sellertl: "'Seller timeline'!A1:E300", mchanges: "'Marketing changes'!A1:G400", buyers: 'Buyers!A1:M300', banswers: "'Buyer answers'!A1:G1500", bhomes: "'Buyer homes'!A1:H1500", dsources: "'Deal sources'!A1:G1000", spend: "'Marketing spend'!A1:D600" };
   const out = {};
   await Promise.all(Object.keys(tabs).map(async k => { try { out[k] = await sheetRows(tabs[k]); } catch (e) { out[k] = null; S.err.sheet = e.message || String(e); } }));
   S.sheet = out; S.at = Date.now();
@@ -546,6 +546,8 @@ function needs() {
     const body = showText('fb', first, showAddr(r[1]), at);
     out.push({ ico: I.phone, t: `Feedback · ${street}`, s: `${r[3] || 'Buyer’s agent'}${r[4] ? ' · ' + r[4] : ''} · showed ${new Date(at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`, acts: `<a class="pill" href="sms:${esc(ph)}?&body=${encodeURIComponent(body)}">Text for feedback</a><a class="pill ghost" href="tel:${esc(ph)}">Call</a><button class="pill ghost" data-act="fbok" data-k="${esc(r[0])}" data-a="${esc(street + ' · ' + (r[3] || 'Agent'))}">Got feedback</button>` });
   });
+  { const miss = whereFrom().missing.filter(d => !/preparing/i.test(d.status || ''));
+    if (miss.length) { const d = miss[0]; out.push({ ico: I.chart || I.doc, t: `How did they find you? · ${d.address}`, s: (d.guess ? `Looks like: ${d.guess}. ` : '') + (miss.length > 1 ? `${miss.length} deals need a source. One tap each.` : 'One tap, so you can see what really brings in your business.'), acts: `${d.guess ? `<button class="pill" data-act="srcset" data-a="${esc(d.key)}" data-v="${esc(d.guess)}">${esc(d.guess)}</button>` : ''}<button class="pill${d.guess ? ' ghost' : ''}" data-act="src" data-a="${esc(d.key)}">${d.guess ? 'Something else' : 'Answer'}</button>` }); } }
   { const B = buyersList(), nm = c => (B.find(x => x.code === String(c).toUpperCase()) || {}).names || 'A buyer';
     (sh.banswers || []).filter(r => r[4] !== '(skipped)' && Date.now() - toDate(r[0]) < 7 * 864e5 && !doneIds().has('ba:' + r[0] + '|' + r[1] + '|' + r[2])).slice(-5).reverse().forEach(r =>
       out.push({ ico: I.check || I.doc, t: `Buyer · ${nm(r[1])} answered`, s: `${r[3] || r[2]}: ${r[4] || ''}${r[5] ? ' · ' + r[5] : ''}`, acts: `<button class="pill" data-act="buyer" data-a="${esc(r[1])}">Open buyer</button><button class="pill ghost" data-act="leaddone" data-k="${esc('ba:' + r[0] + '|' + r[1] + '|' + r[2])}" data-a="${esc('Buyer answer · ' + nm(r[1]))}">Seen</button>` }));
@@ -700,12 +702,57 @@ function render() {
       <div class="tile"><span class="k">Active volume · ${biz.active.length} listing${biz.active.length === 1 ? '' : 's'}</span><span class="v">${biz.activeVolume ? k$(biz.activeVolume) : '—'}</span></div>
       <div class="tile"><span class="k">Pending volume · ${biz.pendingCount}</span><span class="v">${biz.pendingVolume ? k$(biz.pendingVolume) : '—'}</span></div>
     </div>
+    ${S.sheet ? whereCard() : ''}
     ${biz.soon.length ? `<div class="group" style="margin-top:12px">${biz.soon.map(x => `<div class="row plain"><div class="body"><div class="t">${esc(x.address)}</div><div class="s">${esc(x.side)} · closes ${new Date(x.closing).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div></div></div>`).join('')}</div>` : ''}
     <p class="note">${biz.missingPct ? `Add your commission on ${biz.missingPct} deal${biz.missingPct > 1 ? 's' : ''} to see GCI. ` : ''}Deals live in your Ranch Sheet until KW Command is connected.</p></section>
   </div>
   ${typeof ImproveUI !== 'undefined' ? `<div style="padding-bottom:96px">${ImproveUI.tools()}</div>` : ''}
   <div class="dock"><form id="tell" autocomplete="off"><input id="tellq" placeholder="Ask your Concierge… “who should I call today?”" aria-label="Ask your Concierge"><button aria-label="Go">${I.up}</button></form></div>`;
 }
+
+/* ---------- where the business comes from: one tap per deal ("How did they find you?"), closings and leads by source, optional spend ---------- */
+const SOURCES = ['Past client', 'Referral', 'Sphere', 'Open house', 'Listing page', 'Unlisted', 'Sign call', 'Social', 'Mailer', 'Other'];
+function leadSource(r) { const c = String(r[8] || '').toLowerCase(), t = String(r[1] || '').toLowerCase();
+  if (/open-house|openhouse/.test(c) || /open house|buyer pass/.test(t)) return 'Open house';
+  if (/unlisted/.test(c) || /unlisted/.test(t)) return 'Unlisted';
+  if (/sign/.test(c)) return 'Sign call'; if (/mail|postcard|letter/.test(c)) return 'Mailer';
+  if (/insta|facebook|fb|ig|social|meta|tiktok|youtube/.test(c)) return 'Social';
+  if (/referr/.test(c)) return 'Referral'; return 'Listing page'; }
+function realLeads() { const mine = (typeof CALENDARS !== 'undefined' ? CALENDARS : []).map(e => String(e).toLowerCase());
+  return ((S.sheet && S.sheet.leads) || []).filter(r => r[0] && r[0] !== 'Received' && !/spam|not a lead/i.test(r[9] || '') && !mine.includes(String(r[4] || '').toLowerCase())); }
+function sourceDeals() {   // every listing and every deal, one per home and side, newest row wins
+  const out = {}, add = (address, side, o) => { const k = hk(address) + '|' + (/buy/i.test(side) ? 'buy' : 'list'); if (!hk(address)) return; out[k] = Object.assign(out[k] || { key: k, address, side: /buy/i.test(side) ? 'Buyer' : 'Listing' }, o); };
+  listings().forEach(l => add(l.address, 'Listing', { client: l.sellers || '', price: +String(l.price || '').replace(/[^\d.]/g, '') || 0, status: l.status }));
+  deals().forEach(d => { const sides = /both/i.test(d.side) ? ['Listing', 'Buyer'] : [d.side || 'Listing']; sides.forEach(sd => add(d.address, sd, { price: d.price || undefined, status: d.status, closing: d.closing })); });
+  const src = {}; ((S.sheet && S.sheet.dsources) || []).forEach(r => { if (r[1] && r[1] !== 'Key') src[r[1]] = r; });
+  return Object.values(out).filter(d => !/withdrawn|removed|cancel/i.test(d.status || '')).map(d => Object.assign(d, { source: src[d.key] ? String(src[d.key][5]) : '', guess: src[d.key] ? '' : sourceGuess(d) })); }
+function sourceGuess(d) {   // a lead or Buyer Pass with the same client name, or a home-value request for this address
+  const words = String(d.client || '').toLowerCase().split(/[^a-z]+/).filter(w => w.length > 2 && !/and|the/.test(w)), n = (String(d.address).match(/^\d{3,6}/) || [])[0];
+  const hit = realLeads().find(r => { const here = n && String(r[6] || '').indexOf(n) === 0; if (d.side === 'Listing' && here && !/home value/i.test(r[1] || '')) return false;   // people who toured this listing are its buyers, not its sellers
+    return (words.length && words.some(w => String(r[2] || '').toLowerCase().split(/\s+/).includes(w))) || (d.side === 'Listing' && n && /home value/i.test(r[1] || '') && String(r[5] || '').indexOf(n) >= 0); });
+  if (hit) return leadSource(hit);
+  const b = ((S.sheet && S.sheet.buyers) || []).find(r => words.length && words.some(w => String(r[1] || '').toLowerCase().split(/\s+/).includes(w)));
+  return b && /open house/i.test(b[11] || '') ? 'Open house' : ''; }
+function whereFrom() {
+  const yr = Date.now() - 365 * 864e5, ds = sourceDeals(), closed = ds.filter(d => /closed|sold/i.test(d.status || '') && (!d.closing || d.closing > yr));
+  const by = {}; SOURCES.concat(['Not set']).forEach(k => by[k] = { closings: 0, volume: 0, leads: 0, spend: 0, open: 0 });
+  closed.forEach(d => { const k = d.source || 'Not set'; by[k].closings++; by[k].volume += d.price || 0; });
+  ds.filter(d => !/closed|sold/i.test(d.status || '') && d.source).forEach(d => by[d.source].open++);
+  realLeads().filter(r => toDate(r[0]) > yr).forEach(r => by[leadSource(r)].leads++);
+  ((S.sheet && S.sheet.spend) || []).filter(r => r[1] && r[0] !== 'Month').forEach(r => { const t = toDate(r[0]) || Date.parse(r[0] + '-01'); if (!t || t > yr) { const k = SOURCES.find(x => x.toLowerCase() === String(r[1]).trim().toLowerCase()) || 'Other'; by[k].spend += +String(r[2] || '').replace(/[^\d.]/g, '') || 0; } });
+  const rows = Object.entries(by).filter(([k, v]) => v.closings || v.leads || v.spend || v.open).sort((a, b) => b[1].closings - a[1].closings || b[1].leads - a[1].leads);
+  return { rows, closings: closed.length, volume: closed.reduce((a, d) => a + (d.price || 0), 0), missing: ds.filter(d => !d.source) }; }
+function whereCard() { const w = whereFrom(), top = Math.max(1, ...w.rows.map(([, v]) => v.closings || 0)), k$s = v => v ? k$(v) : '—';
+  return `<div class="group" style="margin-top:12px;padding:14px 16px"><div class="t" style="font-size:16px;margin-bottom:2px">Where your business comes from</div><div class="s" style="margin-bottom:10px">Last 12 months · ${w.closings} closing${w.closings === 1 ? '' : 's'}${w.volume ? ' · ' + k$(w.volume) : ''}</div>
+    ${w.rows.length ? w.rows.map(([k, v]) => `<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;gap:10px;font-size:14px"><span>${esc(k)}</span><span class="s" style="text-align:right">${v.closings} closed · ${v.leads} lead${v.leads === 1 ? '' : 's'}${v.open ? ' · ' + v.open + ' in progress' : ''}${v.spend ? ' · ' + k$s(v.spend) + (v.closings ? ' (' + k$(v.spend / v.closings) + ' a closing)' : ' spent') : ''}</span></div><div style="height:6px;border-radius:3px;background:var(--line,#e8e2d8);overflow:hidden;margin-top:5px"><div style="height:100%;width:${Math.max(v.closings ? 6 : 0, Math.round((v.closings || 0) / top * 100))}%;background:var(--accent,#8C6A43)"></div></div></div>`).join('') : '<div class="s">Closings show here once your deals have a source.</div>'}
+    <div class="acts" style="margin-top:10px">${w.missing.length ? `<button class="pill" data-act="srcnext">Set ${w.missing.length} source${w.missing.length > 1 ? 's' : ''}</button>` : ''}<button class="pill ghost" data-act="spendadd">Add marketing spend</button></div></div>`; }
+function sourceSheet(key) { const d = sourceDeals().find(x => x.key === key); if (!d) return toast('That deal isn’t in the Sheet anymore. Refresh.');
+  sheet(`<p class="date">${esc(d.side)} · ${esc(d.status || '')}</p><h3>How did they find you?</h3><p class="s" style="margin:-4px 0 14px">${esc(d.address)}${d.client ? ' · ' + esc(d.client) : ''}</p>
+    <div class="acts" style="flex-wrap:wrap">${SOURCES.map(x => `<button class="pill${(d.source || d.guess) === x ? '' : ' ghost'}" data-act="srcset" data-a="${esc(d.key)}" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+    ${d.guess && !d.source ? `<p class="note">“${esc(d.guess)}” is filled in because they came through your ${d.guess === 'Open house' ? 'open house sign-in' : 'website'}. Tap it to confirm, or pick another.</p>` : ''}`); }
+function spendSheet() { const m = new Date().toLocaleDateString('en-CA').slice(0, 7);
+  sheet(`<p class="date">Business</p><h3>Add marketing spend</h3><p class="s" style="margin:-4px 0 14px">Optional. It shows what each closing cost you by source.</p>
+    <form id="spf" class="form"><input name="month" type="month" value="${m}" required><select name="src">${SOURCES.map(x => `<option>${esc(x)}</option>`).join('')}</select><input name="amt" inputmode="decimal" placeholder="Amount, e.g. 1200" required><input name="note" placeholder="What it was (optional)"><button class="pill" data-act="spendgo" type="button">Save</button></form>`); }
 
 /* ---------- buyers: portal at homes.ranchpnw.com/buyers.html ---------- */
 const BUYER_PORTAL = 'https://homes.ranchpnw.com/buyers.html';
@@ -1276,6 +1323,13 @@ document.addEventListener('click', async e => {
   else if (a === 'deal') dealSheet();
   else if (a === 'tc') tcSheet(x);
   else if (a === 'offers') offersSheet(x);
+  else if (a === 'src') sourceSheet(x);
+  else if (a === 'srcnext') { const m = whereFrom().missing[0]; if (m) sourceSheet(m.key); }
+  else if (a === 'srcset') { const d = sourceDeals().find(y => y.key === x); if (!d) return; b.disabled = true; const row = [nowStamp(), d.key, d.address, d.side, d.client || '', b.dataset.v, d.guess && d.guess === b.dataset.v ? 'Matched, confirmed' : 'Chris'];
+    try { await append('Deal sources', [row]); (S.sheet.dsources = S.sheet.dsources || []).push(row); const nx = whereFrom().missing[0]; render(); if (nx && $('#sheet')) sourceSheet(nx.key); else close(); toast('Saved: ' + b.dataset.v + (nx ? '. Next one up.' : '')); } catch (err) { b.disabled = false; toast('Not saved. ' + (err.message || 'Try again.')); } }
+  else if (a === 'spendadd') spendSheet();
+  else if (a === 'spendgo') { const f = $('#spf'); if (!f.reportValidity()) return; const v = Object.fromEntries(new FormData(f)); b.disabled = true; const row = [v.month, v.src, v.amt.replace(/[^\d.]/g, ''), v.note || ''];
+    try { await append('Marketing spend', [row]); (S.sheet.spend = S.sheet.spend || []).push(row); close(); render(); toast('Saved.'); } catch (err) { b.disabled = false; toast('Not saved. ' + (err.message || 'Try again.')); } }
   else if (a === 'buyer') buyerSheet(x);
   else if (a === 'buyeradd') buyerAddSheet();
   else if (a === 'buyercopy') { try { await navigator.clipboard.writeText(x); toast('Link copied.'); } catch (err) { toast(x); } }

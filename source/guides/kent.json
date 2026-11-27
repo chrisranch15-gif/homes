@@ -1,0 +1,537 @@
+{
+ "slug": "kent",
+ "name": "Kent",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-26",
+ "review": "https://claude.ai/artifact/RSqtBtc7RN5LmVv4o1J4Eu",
+ "headline": "Kent: a Green River Valley city between West Hill and East Hill, with Sounder and Link stops.",
+ "lede": "Kent sits in south King County, with the Green River Valley in the middle, West Hill along I-5 and East Hill reaching out toward Lake Meridian and Covington. This guide covers getting around, parks and lakes, schools, everyday errands, housing and city plans, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Kent, Washington",
+   "https://en.wikipedia.org/wiki/Kent,_Washington"
+  ],
+  "acs": [
+   "Census Reporter · Kent, WA (U.S. Census Bureau ACS 2024 1-year)",
+   "https://censusreporter.org/profiles/16000US5335415-kent-wa/"
+  ],
+  "living": [
+   "City of Kent · Living in Kent",
+   "https://jobs.kentwa.gov/living-in-kent"
+  ],
+  "ksd": [
+   "Wikipedia (via Wikiwand) · Kent School District",
+   "https://www.wikiwand.com/en/articles/Kent_School_District"
+  ],
+  "ksdinfo": [
+   "Kent School District · District Information",
+   "https://www.kent.k12.wa.us/page/district-information"
+  ],
+  "kdm": [
+   "Sound Transit · Kent Des Moines Station",
+   "https://www.soundtransit.org/system-expansion/kent-des-moines-station"
+  ],
+  "fwle": [
+   "Wikipedia · Federal Way Link Extension",
+   "https://en.wikipedia.org/wiki/Federal_Way_Link_Extension"
+  ],
+  "sounder": [
+   "Wikipedia · Kent station (Sound Transit)",
+   "https://en.wikipedia.org/wiki/Kent_station_(Sound_Transit)"
+  ],
+  "iline": [
+   "King County Metro · RapidRide I Line",
+   "https://kingcounty.gov/en/dept/metro/travel-options/bus/rapidride/i-line"
+  ],
+  "sr167": [
+   "WSDOT · Tolling on SR 167",
+   "https://wsdot.wa.gov/travel/roads-bridges/toll-roads-bridges-tunnels/tolling-sr-167"
+  ],
+  "meridian": [
+   "Wikipedia · Lake Meridian",
+   "https://en.wikipedia.org/wiki/Lake_Meridian"
+  ],
+  "wdfw": [
+   "Washington Department of Fish and Wildlife · Lake Meridian water access site",
+   "https://wdfw.wa.gov/places-to-go/water-access-sites/30257"
+  ],
+  "clark": [
+   "Wikipedia · Clark Lake Park",
+   "https://en.wikipedia.org/wiki/Clark_Lake_Park"
+  ],
+  "fenwick": [
+   "Wikipedia · Lake Fenwick",
+   "https://en.wikipedia.org/wiki/Lake_Fenwick"
+  ],
+  "grt": [
+   "Wikipedia · Green River Trail",
+   "https://en.wikipedia.org/wiki/Green_River_Trail"
+  ],
+  "riverbend": [
+   "Visit Kent · Riverbend Golf Complex",
+   "https://visitkent.com/travel-directory/riverbend-golf-complex/"
+  ],
+  "commons": [
+   "Washington 211 · Kent Commons Community Center",
+   "https://search.wa211.org/search/bc278816-ed2c-57e4-8655-0110038571f2"
+  ],
+  "showare": [
+   "Wikipedia · Accesso ShoWare Center",
+   "https://en.wikipedia.org/wiki/Accesso_ShoWare_Center"
+  ],
+  "kclspl": [
+   "King County Library System · Kent Panther Lake",
+   "https://kcls.org/locations/kent-panther-lake/"
+  ],
+  "kclskent": [
+   "King County Library System · About Kent Library",
+   "https://kcls.org/about-kent-library"
+  ],
+  "police": [
+   "Washington 211 · Kent Police Department",
+   "https://search.wa211.org/search/102bb28c-df60-50e0-9a65-661acc260746"
+  ],
+  "fire": [
+   "Wikipedia · Puget Sound Regional Fire Authority",
+   "https://en.wikipedia.org/wiki/Puget_Sound_Regional_Fire_Authority"
+  ],
+  "kentstation": [
+   "Kent Reporter · Kent Station reaches highest retail occupancy since opening in 2005",
+   "https://kentreporter.com/business/kent-station-reaches-highest-retail-occupancy-since-opening-in-2005"
+  ],
+  "comp": [
+   "City of Kent · Kent City Council Adopts 2044 Comprehensive Plan",
+   "https://content.govdelivery.com/accounts/WAKENT/bulletins/3c7066e"
+  ],
+  "housing": [
+   "City of Kent · What are Kent’s Housing Priorities?",
+   "https://engage.kentwa.gov/recodehousing/news_feed/what-are-kent-s-housing-priorites"
+  ],
+  "covington": [
+   "Wikipedia · Covington, Washington",
+   "https://en.wikipedia.org/wiki/Covington,_Washington"
+  ],
+  "auburn": [
+   "Wikipedia · Auburn, Washington",
+   "https://en.wikipedia.org/wiki/Auburn,_Washington"
+  ],
+  "renton": [
+   "Wikipedia · Renton, Washington",
+   "https://en.wikipedia.org/wiki/Renton,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "136,588",
+   "people at the 2020 census",
+   "wiki"
+  ],
+  [
+   "1890",
+   "incorporated as a city, May 28",
+   "wiki"
+  ],
+  [
+   "33.5 min",
+   "mean travel time to work, 2024 survey",
+   "acs"
+  ],
+  [
+   "$632,100",
+   "median value of owner-occupied homes, 2024 survey",
+   "acs"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "136,588 at the 2020 census; estimated at 134,871 in 2025",
+   "wiki"
+  ],
+  [
+   "Incorporated",
+   "May 28, 1890, the second-oldest incorporated city in King County after Seattle",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "Three areas: West Hill along I-5, the Valley along the Green River, and East Hill, which is mainly residential",
+   "wiki"
+  ],
+  [
+   "Main roads",
+   "SR 167 runs north–south through the city; I-5 and SR 18 pass through, and SR 516 runs east–west",
+   "wiki"
+  ],
+  [
+   "Panther Lake",
+   "Annexed July 1, 2010, adding about 5 square miles and 24,000 residents",
+   "wiki"
+  ],
+  [
+   "School districts",
+   "Mostly Kent School District, with parts of the city in Federal Way, Highline, Renton and Tahoma districts",
+   "wiki"
+  ],
+  [
+   "Government",
+   "Mayor–council, with a directly elected mayor and a seven-member City Council elected at large",
+   "wiki"
+  ],
+  [
+   "Distances",
+   "The City lists Sea-Tac International Airport at 7 miles and Seattle and Tacoma at 18 miles each",
+   "living"
+  ],
+  [
+   "Light rail",
+   "Kent Des Moines and Star Lake stations opened on the Link 1 Line on December 6, 2025",
+   "fwle"
+  ]
+ ],
+ "notes": [
+  "The Census Bureau’s QuickFacts page for Kent could not be read this session, so home value, household and commute figures come from Census Reporter’s presentation of the 2024 American Community Survey 1-year estimates. Those figures carry margins of error (for example, ±$17,890 on the median home value and ±0.6 minutes on travel time). The owner-occupied rate and median rent were not shown and are left out.",
+  "Population figures differ by source and year: Wikipedia gives 136,588 at the 2020 census and an estimated 134,871 in 2025; Census Reporter shows 136,587 for the 2024 survey; the City’s Living in Kent page still says about 120,000. This guide uses the 2020 census count.",
+  "Area also varies: Wikipedia lists 33.584 square miles of land (34.167 total), Census Reporter 33.8 square miles of land, and the City about 34 square miles. The area figure is left out of the stats.",
+  "Wikipedia’s Kent article still describes the Kent Des Moines and Star Lake stations as planned for late 2025. Sound Transit’s station page and the Federal Way Link Extension article show the line open since December 6, 2025.",
+  "The Kent Des Moines station address is 23525 30th Ave S on Sound Transit’s page and 23461 30th Avenue South on Wikipedia. The guide uses Sound Transit’s address.",
+  "Kent station parking numbers in Wikipedia don’t add up: it gives 996 spaces in total (an 877-stall garage and two surface lots) but also lists a 713-space auxiliary lot. A second garage of about 400 stalls is listed as opening in 2027. The guide uses the 996 figure.",
+  "WSDOT’s SR 167 tolling page says the express toll lanes run between Renton and Sumner in its text, while a map caption says Sumner and Auburn. The guide says Renton and Sumner.",
+  "The Kent School District enrollment of 26,891 is shown without a year. The Wikipedia page was read through the Wikiwand mirror because Wikipedia itself did not load this session.",
+  "The Puget Sound Regional Fire Authority article gives 17 stations in its text and 18 in its infobox, so no station count is shown.",
+  "King County Library System’s Panther Lake page says the Kent Library is being renovated; its address and reopening date were not on the pages read, so check KCLS before visiting.",
+  "The City’s Living in Kent page calls the valley the nation’s fourth-largest warehouse distribution center, and a City housing page says Kent has the most naturally occurring affordable housing in King County. Those ranking claims are left out because no second source was read.",
+  "Several pages could not be read, so these angles were left out or covered from other sources: Census QuickFacts, the Wikipedia Star Lake station page, King County Parks’ Green River Trail page (robots error), and the City’s own park pages.",
+  "The RapidRide I Line start (2027) and the Kent station garage (2027) are plans, and dates may move."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "SR 167 runs north–south through the Valley, I-5 crosses West Hill, and Kent has a Sounder station downtown and Link light rail stops on its western edge. The 2024 survey puts the mean travel time to work for Kent residents at 33.5 minutes.",
+   "dark": false,
+   "items": [
+    [
+     "Highways",
+     "SR 167 runs north–south through Kent, and I-5 and SR 18 pass through the city. SR 516 runs east–west, and SR 181 and SR 515 serve as city-street connectors.",
+     "wiki"
+    ],
+    [
+     "SR 167 express toll lanes",
+     "The express toll lanes run between Renton and Sumner and are tolled from 5 a.m. to 8 p.m. daily, at $1 to $15 depending on traffic. They are free from 8 p.m. to 5 a.m., and carpools of two or more ride free with a Flex Pass.",
+     "sr167"
+    ],
+    [
+     "Kent station (Sounder)",
+     "At 301 Railroad Avenue North in downtown Kent, open since February 5, 2001. The S Line runs 13 weekday round trips, about 27 minutes to Seattle and 35 minutes to Tacoma.",
+     "sounder"
+    ],
+    [
+     "Parking and buses at Kent station",
+     "The station has 996 parking spaces, including a five-story garage, and a second garage of about 400 stalls is scheduled to open in 2027. ST Express routes 566 and 567 stop at peak times, and King County Metro uses nine bus bays.",
+     "sounder"
+    ],
+    [
+     "Kent Des Moines Station",
+     "On the Link 1 Line at 23525 30th Ave S, with a 500-space parking garage and connections to the RapidRide A Line.",
+     "kdm"
+    ],
+    [
+     "Federal Way Link Extension",
+     "Opened December 6, 2025, with 7.8 miles of light rail from Angle Lake to Federal Way. Kent Des Moines station is at Pacific Highway South and Kent-Des Moines Road; Star Lake station, with a park-and-ride, is at Pacific Highway South and South 272nd Street.",
+     "fwle"
+    ],
+    [
+     "RapidRide A Line",
+     "Runs on SR 99 (Pacific Highway) along Kent’s western edge.",
+     "wiki"
+    ],
+    [
+     "RapidRide I Line",
+     "King County Metro is building a 17-mile line linking Renton Transit Center, Kent Transit Center and Auburn Station, upgrading today’s Route 160. Service is planned to begin in 2027.",
+     "iline"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Kent lists 55 parks, miniparks, playfields, skateparks, greenbelts and related facilities, from 4,300 square feet to over 310 acres. The Green River runs north through the Valley, and East Hill has Lake Meridian, Clark Lake and Lake Fenwick nearby.",
+   "dark": false,
+   "items": [
+    [
+     "Lake Meridian Park",
+     "On East Hill just off Kent-Kangley Road, run by the City of Kent, with a large covered shelter, a playfield, restrooms, a swimming beach, fishing access and a boat launch.",
+     "meridian"
+    ],
+    [
+     "Lake Meridian boating",
+     "One of the few lakes in King County that allows motorized boating. The state’s water access site has a gravel boat launch and is open year-round.",
+     "wdfw"
+    ],
+    [
+     "Clark Lake Park",
+     "A 150-acre rural, forested park around 8-acre Clark Lake, with a fishing dock, wildlife viewing, BMX biking and a loop trail that partially circles the lake. The City bought the last private shoreline parcel, the 17-acre Ruth Property, in 2022.",
+     "clark"
+    ],
+    [
+     "Lake Fenwick Park",
+     "A 140.9-acre city-owned park around the 17.2-acre lake, largely forested, with hiking trails, a fishing dock, a public boat ramp and a disc golf course. The lake is stocked with rainbow trout each year.",
+     "fenwick"
+    ],
+    [
+     "Green River Trail",
+     "A 19.6-mile trail from the Duwamish Waterway near Seattle to North Green River Park in Kent, passing Briscoe Park, Riverbend Golf Complex, Foster Park and Riverview Park. It meets the Interurban Trail at Foster Park.",
+     "grt"
+    ],
+    [
+     "Riverbend Golf Complex",
+     "A city-owned complex at 2019 W. Meeker St. with an 18-hole course and a covered driving range.",
+     "riverbend"
+    ],
+    [
+     "Kent Commons",
+     "The community center at 525 4th Avenue North, where Kent Parks, Recreation & Community Services runs sports, community education and recreation programs.",
+     "commons"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Kent is in the Kent School District, and parts of the city are in Federal Way Public Schools, Highline Public Schools and the Renton School District, with far east Kent in the Tahoma School District. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Kent School District",
+     "Covers 73 square miles, including a large area of Kent, all of Covington and parts of Auburn, Renton, SeaTac, Tukwila, Maple Valley and unincorporated King County. It lists 26,891 enrolled students.",
+     "ksd"
+    ],
+    [
+     "Schools",
+     "44 schools: 29 elementary, 7 middle, 2 academy and 4 high schools.",
+     "ksd"
+    ],
+    [
+     "High schools",
+     "Kent-Meridian, Kentwood, Kentlake and Kentridge.",
+     "ksd"
+    ],
+    [
+     "District office",
+     "12033 SE 256th Street, Kent.",
+     "ksdinfo"
+    ],
+    [
+     "Finding an assigned school",
+     "The Kent School District posts a School Boundaries Map on its district information page.",
+     "ksdinfo"
+    ],
+    [
+     "Other districts",
+     "Parts of Kent are served by Federal Way Public Schools, Highline Public Schools and the Renton School District; far east Kent is in the Tahoma School District.",
+     "wiki"
+    ],
+    [
+     "Green River College in Kent",
+     "A branch of Green River College opened at Kent Station in 2007.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "Downtown Kent has the Kent Station shopping center, City Hall and the arena close together, with a second library on East Hill.",
+   "dark": false,
+   "items": [
+    [
+     "Kent Station",
+     "A downtown shopping center that opened in 2005, with about 55 retail tenants in 2021 and the 154-unit Dwell apartments, opened in 2016. It hosts summer concerts on Wednesdays and a farmers market.",
+     "kentstation"
+    ],
+    [
+     "Kent Panther Lake Library",
+     "The King County Library System branch at 20500 108th Avenue SE, open on Sundays while the Kent Library is renovated.",
+     "kclspl"
+    ],
+    [
+     "Kent Library",
+     "The downtown King County Library System branch. Its last completed remodel was in 2009; check current hours while it is renovated.",
+     "kclskent"
+    ],
+    [
+     "accesso ShoWare Center",
+     "A City-owned arena at 625 W. James Street, opened in January 2009, seating 5,887 in its base layout and 7,141 with retractable seats. It is home to the Seattle Thunderbirds and Tacoma Stars.",
+     "showare"
+    ],
+    [
+     "Police",
+     "The Kent Police Department is in the Police Wing of Kent City Hall at 220 4th Avenue South.",
+     "police"
+    ],
+    [
+     "Fire and EMS",
+     "Puget Sound Regional Fire Authority, founded in 1892 as the Kent Fire Department, serves Kent, Covington, Maple Valley, SeaTac and Tukwila, with headquarters at Station 74 in Kent.",
+     "fire"
+    ],
+    [
+     "Events",
+     "Yearly events include Kent Cornucopia Days in July, the Kent Farmers Market and the Kent Saturday Market.",
+     "wiki"
+    ],
+    [
+     "Work in the valley",
+     "Major employers in the City’s 2021 financial report include Amazon, Kent Public Schools and Boeing. Blue Origin, Oberto Sausage Company and Omax Corporation have headquarters in Kent.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Kent’s homes are mostly on West Hill and East Hill, with the Valley mainly industrial and commercial. The City’s 2044 Comprehensive Plan steers new housing and jobs toward centers near high-capacity transit.",
+   "dark": false,
+   "items": [
+    [
+     "Home values",
+     "Median value of owner-occupied homes $632,100 (2024 survey, ±$17,890).",
+     "acs"
+    ],
+    [
+     "Households",
+     "46,607 households, averaging 2.9 persons, and 49,952 housing units (2024 survey).",
+     "acs"
+    ],
+    [
+     "Three parts of the city",
+     "West Hill has mixed homes and businesses along I-5, the Valley is mainly industrial and commercial with parkland along the Green River, and East Hill is mainly residential with retail.",
+     "wiki"
+    ],
+    [
+     "Panther Lake",
+     "Voters approved annexing the Panther Lake area on November 3, 2009, and it joined Kent on July 1, 2010, adding about 5 square miles and 24,000 residents.",
+     "wiki"
+    ],
+    [
+     "2044 Comprehensive Plan",
+     "The City Council adopted the plan in December 2024, along with zoning map updates. The City is also updating its housing code to increase housing supply and options.",
+     "comp"
+    ],
+    [
+     "Planned growth",
+     "Over the next 20 years the City expects 10,200 new housing units and 32,000 new jobs, concentrated in activity centers near high-capacity transit.",
+     "housing"
+    ],
+    [
+     "Downtown and Benson plans",
+     "The Rediscover Downtown Plan updates the Downtown Subarea Plan, and the Benson Corridor along 104th and 108th avenues SE is getting its own plan.",
+     "comp"
+    ],
+    [
+     "From hops to industry",
+     "Kent grew hops in the late 1870s and was known for lettuce during and after the Great Depression. The Howard A. Hanson Dam, finished in 1962, eased Green River flooding, and Boeing began building in Kent in 1965.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Kent sits between Renton to the north, Auburn to the south and Covington to the east, with Sea-Tac Airport a short drive west.",
+   "dark": true,
+   "items": [
+    [
+     "Renton",
+     "Kent forms Renton’s southern border. Renton had 106,785 people at the 2020 census and is home to the Boeing Renton Factory, final assembly point for the 737.",
+     "renton"
+    ],
+    [
+     "Auburn",
+     "Auburn had 87,256 people at the 2020 census. Its downtown Sounder station is about 30 minutes from Seattle by train, and Emerald Downs racetrack is there.",
+     "auburn"
+    ],
+    [
+     "Covington",
+     "East of Kent, with 20,777 people at the 2020 census. It incorporated on August 31, 1997, and its public schools are in the Kent School District.",
+     "covington"
+    ],
+    [
+     "Sea-Tac Airport",
+     "The City lists Sea-Tac International Airport at 7 miles away.",
+     "living"
+    ],
+    [
+     "Seattle and Tacoma",
+     "The City lists Seattle and Tacoma each about 18 miles from Kent.",
+     "living"
+    ],
+    [
+     "Federal Way",
+     "Link light rail continues south from Star Lake to Federal Way Downtown station, at 23rd Avenue South and South 317th Street.",
+     "fwle"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Kent in?",
+   "Kent is in King County, in the south part of the county.",
+   "wiki"
+  ],
+  [
+   "What is the population of Kent, WA?",
+   "The 2020 census counted 136,588 people, and the 2025 estimate is 134,871.",
+   "wiki"
+  ],
+  [
+   "When did Kent become a city?",
+   "Kent incorporated on May 28, 1890, making it the second-oldest incorporated city in King County after Seattle.",
+   "wiki"
+  ],
+  [
+   "What school district is Kent in?",
+   "Most of Kent is in the Kent School District. Parts of the city are in Federal Way, Highline, Renton and Tahoma school districts. Confirm with the district for any specific address.",
+   "wiki"
+  ],
+  [
+   "What high schools are in the Kent School District?",
+   "Kent-Meridian, Kentwood, Kentlake and Kentridge.",
+   "ksd"
+  ],
+  [
+   "Is there light rail in Kent?",
+   "Yes. Kent Des Moines and Star Lake stations opened on the Link 1 Line on December 6, 2025.",
+   "fwle"
+  ],
+  [
+   "How long is the Sounder ride from Kent to Seattle?",
+   "About 27 minutes from Kent station, with 13 weekday round trips on the S Line.",
+   "sounder"
+  ],
+  [
+   "When does the RapidRide I Line open?",
+   "King County Metro plans to start I Line service between Renton, Kent and Auburn in 2027.",
+   "iline"
+  ],
+  [
+   "How far is Kent from Sea-Tac Airport and Seattle?",
+   "The City lists Sea-Tac International Airport at 7 miles and Seattle and Tacoma at 18 miles each.",
+   "living"
+  ],
+  [
+   "How long is the average commute from Kent?",
+   "The 2024 American Community Survey puts the mean travel time to work at 33.5 minutes.",
+   "acs"
+  ],
+  [
+   "What is the median home value in Kent?",
+   "The 2024 American Community Survey puts the median value of owner-occupied homes at $632,100, with a margin of error of ±$17,890.",
+   "acs"
+  ],
+  [
+   "Can you boat on Lake Meridian?",
+   "Yes. It is one of the few lakes in King County that allows motorized boating, and Lake Meridian Park has a boat launch.",
+   "meridian"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

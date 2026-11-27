@@ -1,0 +1,502 @@
+{
+ "slug": "seattle",
+ "name": "Seattle",
+ "county": "King County",
+ "status": "draft",
+ "checked": "2026-11-26",
+ "review": "https://claude.ai/artifact/FkSwbAbVu5FuUavEYVqtVu",
+ "headline": "Seattle: King County’s seat, between Puget Sound and Lake Washington.",
+ "lede": "Seattle sits on an isthmus between Puget Sound and Lake Washington, the seat of King County and Washington’s most populous city. This guide covers getting around, parks, schools, everyday errands, how the city plans housing, and the south-end connections to Burien, Renton and Tacoma, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Seattle",
+   "https://en.wikipedia.org/wiki/Seattle"
+  ],
+  "about": [
+   "City of Seattle · About Seattle (population and demographics)",
+   "https://www.seattle.gov/opcd/population-and-demographics/about-seattle"
+  ],
+  "osp": [
+   "City of Seattle · One Seattle Plan",
+   "https://www.seattle.gov/opcd/one-seattle-plan"
+  ],
+  "growth": [
+   "City of Seattle · One Seattle Plan growth strategy summary (PDF)",
+   "https://www.seattle.gov/documents/Departments/OPCD/SeattlePlan/OneSeattlePlanGrowthStrategySummary-2pager.pdf"
+  ],
+  "hb1110": [
+   "City of Seattle · Implementing HB 1110 (PDF)",
+   "https://www.seattle.gov/documents/Departments/OPCD/SeattlePlan/ImplementingHB1110.pdf"
+  ],
+  "sps": [
+   "Seattle Public Schools · About",
+   "https://www.seattleschools.org/about/"
+  ],
+  "spsfind": [
+   "Seattle Public Schools · Find Your School",
+   "https://www.seattleschools.org/enroll/find-your-school/"
+  ],
+  "spsassign": [
+   "Seattle Public Schools · School Assignment",
+   "https://www.seattleschools.org/enroll/find-your-school/school-assignment/"
+  ],
+  "spr": [
+   "Seattle Parks and Recreation · About Us",
+   "https://www.seattle.gov/parks/aboutus.htm"
+  ],
+  "parkscore": [
+   "Seattle Parks and Recreation · Top 10 ranking in Trust for Public Land’s 2026 ParkScore index",
+   "https://parkways.seattle.gov/2026/05/21/seattle-parks-and-recreation-earns-top-10-ranking-in-trust-for-public-lands-2026-parkscore-index/"
+  ],
+  "greenlake": [
+   "Seattle Parks and Recreation · Green Lake Park",
+   "https://seattle.gov/parks/parks/green-lake-park"
+  ],
+  "waterfront": [
+   "City of Seattle · Office of the Mayor: Leaders celebrate the completion of Waterfront Park",
+   "https://harrell.seattle.gov/2025/09/08/city-community-and-civic-leaders-celebrate-the-completion-of-waterfront-park/"
+  ],
+  "center": [
+   "Seattle Center · About",
+   "https://www.seattlecenter.com/about"
+  ],
+  "spl": [
+   "The Seattle Public Library · About Us",
+   "https://www.spl.org/about-us"
+  ],
+  "pike": [
+   "Seattle Department of Neighborhoods · Pike Place Market Historical District",
+   "https://www.seattle.gov/neighborhoods/historic-preservation/historic-districts/pike-place-market-historical-district"
+  ],
+  "crosslake": [
+   "Sound Transit · Link light rail opens across Lake Washington",
+   "https://soundtransit.org/get-to-know-us/news-events/news-releases/link-light-rail-opens-across-lake-washington"
+  ],
+  "line1": [
+   "Sound Transit · 1 Line Lynnwood–Federal Way schedule",
+   "https://www.soundtransit.org/ride-with-us/routes-schedules/1-line"
+  ],
+  "sline": [
+   "Sound Transit · S Line (Sounder) schedule",
+   "https://www.soundtransit.org/ride-with-us/routes-schedules/s-line"
+  ],
+  "rapidride": [
+   "King County Metro · RapidRide",
+   "https://kingcounty.gov/rapidride"
+  ],
+  "colman": [
+   "WSDOT · Seattle Multimodal Terminal at Colman Dock Project",
+   "https://wsdot.wa.gov/construction-planning/search-projects/ferries-seattle-multimodal-terminal-colman-dock-project"
+  ],
+  "wsfsched": [
+   "WSDOT · Seattle/Bainbridge Island and Seattle/Bremerton sailing schedules update",
+   "https://wsdot.wa.gov/construction-planning/search-studies/seattle-bainbridge-island-and-seattle-bremerton-sailing-schedules-update"
+  ],
+  "sea": [
+   "Port of Seattle · SEA Airport basics",
+   "https://www.portseattle.org/page/sea-airport-basics"
+  ]
+ },
+ "stats": [
+  [
+   "737,015",
+   "people at the 2020 census",
+   "wiki"
+  ],
+  [
+   "63 miles",
+   "of Link light rail, with 50 stations (2026)",
+   "crosslake"
+  ],
+  [
+   "6,643 acres",
+   "of city parkland (2026 ParkScore)",
+   "parkscore"
+  ],
+  [
+   "48,957",
+   "students in Seattle Public Schools (Aug. 2026)",
+   "sps"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "737,015 at the 2020 census; the State of Washington estimated 816,600 on April 1, 2025",
+   "about"
+  ],
+  [
+   "County seat",
+   "Seattle is the seat of King County and the most populous city in Washington",
+   "wiki"
+  ],
+  [
+   "Incorporated",
+   "As a town on January 14, 1865, and re-incorporated as a city on December 2, 1869",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "On an isthmus between Puget Sound to the west and Lake Washington to the east, about 100 miles south of the Canadian border",
+   "wiki"
+  ],
+  [
+   "Area",
+   "83.99 square miles of land and 58.08 square miles of water",
+   "wiki"
+  ],
+  [
+   "Households",
+   "393,135 occupied housing units, with an average household size of 1.97",
+   "about"
+  ],
+  [
+   "Public schools",
+   "Seattle Public Schools serves the vast majority of the city",
+   "wiki"
+  ],
+  [
+   "Government",
+   "Mayor–council",
+   "wiki"
+  ],
+  [
+   "Rainfall",
+   "An average of 39.34 inches of precipitation a year at SeaTac Airport (1991–2020)",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "Population figures differ by source: the City of Seattle quotes a Washington State Office of Financial Management estimate of 816,600 for April 1, 2025, while Wikipedia lists a 2025 estimate of 784,777. Both agree on 737,015 at the 2020 census. This guide shows the City’s figure.",
+  "The U.S. Census Bureau’s QuickFacts page for Seattle could not be loaded this session, so median home value, median rent and mean commute time are left out. Housing figures come from the City’s About Seattle page, which cites state estimates for housing units and the 2024 American Community Survey for household size; it does not name a source year for the 41.9% owner-occupied figure.",
+  "Land area differs slightly: Wikipedia’s infobox gives 83.99 square miles of land and its body text says 84; the City gives 84.4 square miles. The infobox figure is shown.",
+  "Park figures differ: the 2026 ParkScore release gives 6,643 acres (12.2% of the city); Wikipedia gives 6,500 acres and 485 parks; the Parks Department’s About Us page, last updated in 2015, gives about 6,200 acres and 465 parks. Community center, pool and trail counts here come from that older page, so they may have changed.",
+  "The One Seattle Plan and its permanent middle-housing rules took effect January 21, 2026. The growth strategy summary used here (30 Neighborhood Centers, more than 330,000 units of capacity) may describe the plan as proposed rather than as finally adopted. The Centers and Corridors rezoning was released January 29, 2026 and was under Council review on the City’s page as read; its outcome was not confirmed.",
+  "Sound Transit’s Crosslake Connection release (March 28, 2026) confirms the 2 Line now crosses Lake Washington with stations at Mercer Island and Judkins Park and meets the 1 Line at International District/Chinatown, but it does not name the 2 Line’s current endpoints, so they are not stated here. It also noted ST Express bus routes would stay the same only until August 2026.",
+  "Sounder schedule pages showed first and last trips but not a trip count or a King Street–Tacoma Dome travel time, so those are left out. Sounder does not run on Thanksgiving Day or the day after (November 26–27, 2026).",
+  "Washington State Ferries is rebuilding the Seattle–Bainbridge Island and Seattle–Bremerton schedules, with new schedules planned for fall 2027, so crossing times are not given. WSDOT’s Colman Dock page lists the project as complete but shows both 2024 and 2026 as end dates.",
+  "Green Lake’s two swimming beaches were closed to swimming because of toxic algae when the City’s page was checked; conditions change through the year.",
+  "The Port of Seattle’s SEA Airport basics page lists 37 airlines; its SEA overview page lists 31. The guide uses the basics page, which also gives the 2025 passenger count.",
+  "The Pike Place Market Historical District is described as seven acres on the City’s page and nine acres in the same page’s FAQ; the guide gives no acreage.",
+  "Several pages could not be read this session, so these angles were left out or sourced elsewhere: Census QuickFacts, Wikipedia pages for Discovery Park, Colman Dock and Seattle Center, and Sound Transit’s Federal Way opening release. The Discovery Park size comes from the main Wikipedia Seattle article."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "Interstate 5 and State Route 99 are the only routes that run uninterrupted north to south through Seattle, and Link light rail now crosses Lake Washington as well as running north to Lynnwood and south to Federal Way.",
+   "dark": false,
+   "items": [
+    [
+     "Link 1 Line",
+     "Runs between Lynnwood City Center and Federal Way, with Seattle stops including Northgate, Roosevelt, U District, University of Washington, Capitol Hill, Westlake, Pioneer Square, International District/Chinatown, SODO and Beacon Hill. Trains run about every 10 minutes for most of the day.",
+     "line1"
+    ],
+    [
+     "Link 2 Line across the lake",
+     "The Crosslake Connection opened March 28, 2026, adding Judkins Park and Mercer Island stations across Lake Washington. The 2 Line meets the 1 Line at International District/Chinatown, and combined service between there and Lynnwood comes every 4 to 5 minutes.",
+     "crosslake"
+    ],
+    [
+     "Link hours",
+     "Both lines run from about 5 a.m. to midnight, seven days a week. The system spans 63 miles with 50 stations.",
+     "crosslake"
+    ],
+    [
+     "SR 99 tunnel",
+     "State Route 99 ran through downtown on the Alaskan Way Viaduct from 1953 to 2019. The replacement tunnel opened in February 2019.",
+     "wiki"
+    ],
+    [
+     "RapidRide",
+     "King County Metro’s C Line (West Seattle and South Lake Union), D Line (Ballard and Uptown), E Line (Aurora Avenue to Shoreline) and H Line (Delridge to Burien) all serve downtown Seattle. The G Line on Madison Street and a J Line to the University District are planned.",
+     "rapidride"
+    ],
+    [
+     "Sounder to Tacoma",
+     "The S Line runs weekdays only between Seattle and Tacoma Dome and Lakewood, with stops including Kent, Puyallup and Sumner. The first southbound trip to Tacoma Dome leaves at 6:05 a.m.",
+     "sline"
+    ],
+    [
+     "Ferries at Colman Dock",
+     "State ferries leave the Alaskan Way waterfront for Bainbridge Island and Bremerton. A passenger-only terminal on the south side, opened in summer 2019, serves the King County Water Taxi and the Kitsap Fast Ferry.",
+     "colman"
+    ],
+    [
+     "Streetcars",
+     "The South Lake Union Streetcar and the First Hill Streetcar operate today; the city’s original streetcars ended in 1941.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Seattle’s park system covers 6,643 acres, about 12.2% of the city, and the 2026 ParkScore index puts 99% of residents within a 10-minute walk of a park.",
+   "dark": false,
+   "items": [
+    [
+     "Discovery Park",
+     "The city’s largest park, with 534 acres of forestland and saltwater beaches on the Magnolia bluffs.",
+     "wiki"
+    ],
+    [
+     "Waterfront Park",
+     "A 20-acre park from Belltown to Pioneer Square on the former Alaskan Way Viaduct footprint, completed in September 2025. It includes a 17-block promenade, 1.2 miles of protected bike lanes and rebuilt Piers 58 and 62.",
+     "waterfront"
+    ],
+    [
+     "Overlook Walk",
+     "A 60,000-square-foot elevated park that links Pike Place Market to the waterfront across a 100-foot grade change.",
+     "waterfront"
+    ],
+    [
+     "Green Lake Park",
+     "A paved 2.8-mile inner loop circles the lake, with a community center, Evans Pool, two swimming beaches, a Small Craft Center, courts, fields, a play area and fishing piers.",
+     "greenlake"
+    ],
+    [
+     "Trails and boulevards",
+     "The park system includes about 120 miles of walking and hiking trails and 25 miles of boulevards.",
+     "wiki"
+    ],
+    [
+     "Community centers and pools",
+     "Seattle Parks and Recreation lists 26 community centers, eight indoor pools and two outdoor summer pools, plus four golf courses and two small craft centers.",
+     "spr"
+    ],
+    [
+     "Seattle Center",
+     "A 74-acre campus on the site of the 1962 World’s Fair, home to Climate Pledge Arena, MoPOP, Pacific Science Center and the International Fountain.",
+     "center"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Seattle Public Schools serves the vast majority of the city and assigns students by the address of their primary residence. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Seattle Public Schools",
+     "Describes itself as the largest K–12 school system in Washington, with 106 schools from preschool through grade 12 and 48,957 students as of August 2026.",
+     "sps"
+    ],
+    [
+     "Enrollment by level",
+     "23,022 students in grades K–5, 10,938 in grades 6–8 and 14,997 in grades 9–12 (August 2026).",
+     "sps"
+    ],
+    [
+     "Find an assigned school",
+     "The district’s Address Lookup Tool shows the attendance area school for an address. The district’s Enrollment Team is at the John Stanford Center, 2445 Third Ave. S.",
+     "spsfind"
+    ],
+    [
+     "School choice",
+     "Families can apply through Open Enrollment for a school other than their attendance area school. Option schools give priority to students in nearby geo zones, which can change from year to year.",
+     "spsassign"
+    ],
+    [
+     "Linked schools",
+     "If a required service such as Special Education or English Learner services isn’t offered at the attendance area school, a student may be assigned to a linked school.",
+     "spsfind"
+    ],
+    [
+     "Colleges",
+     "The University of Washington is in Seattle, along with Seattle Pacific University and Seattle University; the Seattle Colleges District runs three colleges.",
+     "wiki"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "The Seattle Public Library has 27 locations, and several of the city’s hospitals sit together on First Hill, an area nicknamed “Pill Hill”.",
+   "dark": false,
+   "items": [
+    [
+     "The Seattle Public Library",
+     "27 locations: the Central Library and 26 branches. The system began in 1891 as a single reading room in Pioneer Square.",
+     "spl"
+    ],
+    [
+     "Central Library",
+     "1000 Fourth Ave., downtown.",
+     "spl"
+    ],
+    [
+     "First Hill hospitals",
+     "Harborview Medical Center, Virginia Mason and Swedish Medical Center are on First Hill. Harborview and UW Medical Center are operated by the University of Washington.",
+     "wiki"
+    ],
+    [
+     "Seattle Children’s",
+     "In Laurelhurst, the pediatric referral center for Washington, Alaska, Montana and Idaho.",
+     "wiki"
+    ],
+    [
+     "Pike Place Market",
+     "The City Council designated Pike Place as a public market in 1907. Voters chose to preserve it in November 1971, creating a historical district with its own commission that reviews design and use changes.",
+     "pike"
+    ],
+    [
+     "Jobs",
+     "The City reports 632,813 covered jobs in Seattle in 2024.",
+     "about"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "Seattle plans for growth through its Comprehensive Plan, the One Seattle Plan, which took effect in January 2026 along with new rules for the city’s Neighborhood Residential zones. About 41.9% of occupied homes are owner-occupied and 58.1% are rented.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "426,090 housing units, of which 393,135 were occupied (state estimates, April 1, 2025).",
+     "about"
+    ],
+    [
+     "Household size",
+     "An average of 1.97 people per household: 2.40 in owner-occupied homes and 1.66 in rentals.",
+     "about"
+    ],
+    [
+     "One Seattle Plan",
+     "The City Council adopted the Comprehensive Plan on December 16, 2025, and it took effect January 21, 2026. It guides how the city grows over the next 20 years.",
+     "osp"
+    ],
+    [
+     "Place types",
+     "The plan sorts the city into Regional Centers, Urban Centers, new Neighborhood Centers, Urban Neighborhoods and Manufacturing & Industrial Centers. Neighborhood Centers allow multifamily housing up to six stories near existing businesses and transit.",
+     "growth"
+    ],
+    [
+     "Neighborhood Residential zones",
+     "Permanent rules adopted with the plan rewrote the Neighborhood Residential zone to comply with state middle-housing law. Most parcels now allow at least four units on most parcels, or six where two are affordable or within a quarter mile of major transit.",
+     "growth"
+    ],
+    [
+     "State middle-housing law",
+     "Washington’s HB 1110, adopted in 2023, requires cities like Seattle to allow at least six of nine middle housing types, such as duplexes, townhouses, cottage housing and courtyard apartments, on residential lots.",
+     "hb1110"
+    ],
+    [
+     "Incentives",
+     "The new rules add an affordable housing bonus, an incentive for stacked flats on lots of 6,000 square feet or more, and allowances for corner stores.",
+     "growth"
+    ],
+    [
+     "Next phase",
+     "Centers and Corridors legislation, released January 29, 2026, would allow more apartments and condos in new Neighborhood Centers, new and expanded Urban Centers and along frequent transit routes. It went to the City Council for review.",
+     "osp"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Seattle’s south end connects by bus, light rail and train to Burien, Renton, Sea-Tac Airport and Tacoma, and ferries cross Puget Sound from the downtown waterfront.",
+   "dark": true,
+   "items": [
+    [
+     "Burien",
+     "The RapidRide H Line runs from downtown Seattle through Delridge, Westwood Village and White Center to Burien.",
+     "rapidride"
+    ],
+    [
+     "Renton",
+     "The RapidRide F Line links Burien Transit Center, SeaTac, Tukwila International Boulevard Station, Tukwila Sounder Station, Renton Transit Center and The Landing.",
+     "rapidride"
+    ],
+    [
+     "Seattle–Tacoma International Airport",
+     "Operated by the Port of Seattle at Bow Lake in southwest King County. It served about 52.7 million passengers in 2025, a record, with 37 airlines.",
+     "sea"
+    ],
+    [
+     "Federal Way",
+     "The southern end of the Link 1 Line.",
+     "line1"
+    ],
+    [
+     "Tacoma",
+     "Sounder’s S Line runs weekdays between Seattle and Tacoma Dome, continuing to Lakewood.",
+     "sline"
+    ],
+    [
+     "The Eastside",
+     "The 2 Line crosses Lake Washington to Mercer Island and on to the Eastside; its downtown Redmond section opened in May 2025.",
+     "crosslake"
+    ],
+    [
+     "Bainbridge Island and Bremerton",
+     "Nearly five million people rode the Seattle–Bainbridge Island ferry in 2024, Washington State Ferries’ busiest route. Seattle–Bremerton is back to its regular two-boat service.",
+     "wsfsched"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What is the population of Seattle?",
+   "737,015 at the 2020 census. The State of Washington estimated 816,600 on April 1, 2025.",
+   "about"
+  ],
+  [
+   "What county is Seattle in?",
+   "Seattle is the seat of King County, the most populous county in Washington.",
+   "wiki"
+  ],
+  [
+   "Does light rail cross Lake Washington now?",
+   "Yes. Sound Transit’s Crosslake Connection opened March 28, 2026, with new stations at Judkins Park and Mercer Island.",
+   "crosslake"
+  ],
+  [
+   "Where does the Link 1 Line go?",
+   "It runs between Lynnwood City Center and Federal Way through downtown Seattle, about every 10 minutes for most of the day.",
+   "line1"
+  ],
+  [
+   "Does Sounder run from Seattle to Tacoma on weekends?",
+   "The S Line schedule is weekday only; it runs between Seattle, Tacoma Dome and Lakewood.",
+   "sline"
+  ],
+  [
+   "Where do ferries leave from in Seattle?",
+   "Colman Dock on the Alaskan Way waterfront, with state ferries to Bainbridge Island and Bremerton and passenger-only boats run by the King County Water Taxi and Kitsap Fast Ferry.",
+   "colman"
+  ],
+  [
+   "How do I find my Seattle public school?",
+   "Seattle Public Schools assigns students by home address. Its Address Lookup Tool shows the attendance area school; confirm with the district for any specific address.",
+   "spsfind"
+  ],
+  [
+   "How many students are in Seattle Public Schools?",
+   "48,957 as of August 2026, in 106 schools from preschool through grade 12.",
+   "sps"
+  ],
+  [
+   "What is the One Seattle Plan?",
+   "Seattle’s Comprehensive Plan for the next 20 years. The City Council adopted it on December 16, 2025, and it took effect January 21, 2026.",
+   "osp"
+  ],
+  [
+   "Can more than one home be built on a Seattle lot?",
+   "Under rules effective January 21, 2026, most Neighborhood Residential parcels allow at least four units, or six where two are affordable or within a quarter mile of major transit.",
+   "growth"
+  ],
+  [
+   "What is the largest park in Seattle?",
+   "Discovery Park, with 534 acres of forest and saltwater beaches on the Magnolia bluffs.",
+   "wiki"
+  ],
+  [
+   "How many people rent in Seattle?",
+   "The City reports 58.1% of occupied homes are rented and 41.9% are owner-occupied.",
+   "about"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

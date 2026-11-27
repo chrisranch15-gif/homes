@@ -1,0 +1,574 @@
+{
+ "slug": "sumner",
+ "name": "Sumner",
+ "county": "Pierce County",
+ "status": "draft",
+ "checked": "2026-11-26",
+ "review": "https://claude.ai/artifact/9kkL4adUX6vTiFrRSmrUKX",
+ "headline": "Sumner: a small valley city where SR 167 meets SR 410, with a Sounder station downtown.",
+ "lede": "Sumner sits in the valley of north Pierce County, with Puyallup to the west, Auburn to the north and Bonney Lake up the hill to the east. This guide covers getting around, parks and trails, schools, everyday errands, housing and city plans, and what’s nearby, with a source for every fact.",
+ "sources": {
+  "wiki": [
+   "Wikipedia · Sumner, Washington",
+   "https://en.wikipedia.org/wiki/Sumner,_Washington"
+  ],
+  "stats": [
+   "City of Sumner · Statistics",
+   "https://sumnerwa.gov/statistics/"
+  ],
+  "acs": [
+   "Census Reporter · Sumner, WA (ACS 2024 5-year)",
+   "https://censusreporter.org/profiles/16000US5368435-sumner-wa"
+  ],
+  "history": [
+   "City of Sumner · History",
+   "https://sumnerwa.gov/history/"
+  ],
+  "walk": [
+   "City of Sumner · Historic Walking Tour",
+   "https://sumnerwa.gov/?p=31361"
+  ],
+  "stwiki": [
+   "Wikipedia · Sumner station",
+   "https://en.wikipedia.org/wiki/Sumner_station"
+  ],
+  "stgb": [
+   "Sound Transit · News release: Sumner Station garage groundbreaking (Aug. 6, 2024)",
+   "https://www.soundtransit.org/get-to-know-us/news-events/news-releases/sound-transit-marks-sumner-station-construction-with"
+  ],
+  "stgarage": [
+   "Sound Transit · Sumner Station Parking and Access Improvements",
+   "https://www.soundtransit.org/node/686"
+  ],
+  "bus": [
+   "City of Sumner · Sumner Connects: “The City took the bus service away”",
+   "https://connects.sumnerwa.gov/rumors/news_feed/rumor-the-city-took-the-bus-service-away"
+  ],
+  "sr167": [
+   "Wikipedia (via Wikiwand) · Washington State Route 167",
+   "https://wikiwand.com/en/articles/Washington_State_Route_167"
+  ],
+  "sr410": [
+   "Wikipedia (via Wikiwand) · Washington State Route 410",
+   "https://mobileapps.wikiwand.com/en/Washington_State_Route_410"
+  ],
+  "workforce": [
+   "City of Sumner · Workforce",
+   "https://sumnerwa.gov/?p=13000"
+  ],
+  "parks": [
+   "City of Sumner · Parks",
+   "https://www.sumnerwa.gov/parks"
+  ],
+  "trails": [
+   "City of Sumner · Trails",
+   "https://sumnerwa.gov/trails/"
+  ],
+  "wrr": [
+   "City of Sumner · White River Restoration",
+   "https://connects.sumnerwa.gov/white-river-restoration-project"
+  ],
+  "sbsd": [
+   "Sumner-Bonney Lake School District · About the District",
+   "https://www.sumnersd.org/about-us/overview"
+  ],
+  "sbwiki": [
+   "Wikipedia · Sumner–Bonney Lake School District",
+   "https://en.wikipedia.org/wiki/Sumner%E2%80%93Bonney_Lake_School_District"
+  ],
+  "library": [
+   "Pierce County Library System · Learn about the new Sumner Library",
+   "https://mypcls.org/sumner-pierce-county-library/"
+  ],
+  "police": [
+   "City of Sumner · Police",
+   "https://www.sumnerwa.gov/police"
+  ],
+  "prep": [
+   "City of Sumner · Emergency Preparedness",
+   "https://sumnerwa.gov/police/emergency-preparedness/"
+  ],
+  "drill": [
+   "City of Sumner · Lahar evacuation exercise",
+   "https://sumnerwa.gov/?p=28028"
+  ],
+  "lahar": [
+   "Pierce County · Outdoor Warning System (Lahar Warning System)",
+   "https://www.piercecountywa.gov/5888/Lahar-Warning-System"
+  ],
+  "usgs": [
+   "U.S. Geological Survey · Community exposure to lahar hazards from Mount Rainier, Washington",
+   "https://www.usgs.gov/publications/community-exposure-lahar-hazards-mount-rainier-washington"
+  ],
+  "rhubarb": [
+   "City of Sumner · Rhubarb Days",
+   "https://sumnerwa.gov/event/rhubarb-days/"
+  ],
+  "comp": [
+   "City of Sumner · Planning Sumner’s Future: The 2024 Comprehensive Plan Update",
+   "https://connects.sumnerwa.gov/planning-sumners-future"
+  ],
+  "puyallup": [
+   "Wikipedia · Puyallup, Washington",
+   "https://en.wikipedia.org/wiki/Puyallup,_Washington"
+  ],
+  "bonney": [
+   "Wikipedia · Bonney Lake, Washington",
+   "https://en.wikipedia.org/wiki/Bonney_Lake,_Washington"
+  ],
+  "tapps": [
+   "Wikipedia · Lake Tapps, Washington",
+   "https://en.wikipedia.org/wiki/Lake_Tapps,_Washington"
+  ],
+  "edgewood": [
+   "Wikipedia · Edgewood, Washington",
+   "https://en.wikipedia.org/wiki/Edgewood,_Washington"
+  ],
+  "auburn": [
+   "Wikipedia (via Wikiwand) · Auburn, Washington",
+   "https://wikiwand.com/en/articles/Auburn,_Washington"
+  ]
+ },
+ "stats": [
+  [
+   "10,621",
+   "people at the 2020 census",
+   "wiki"
+  ],
+  [
+   "1853",
+   "founded as Stuck Junction",
+   "wiki"
+  ],
+  [
+   "5.5 mi",
+   "of paved Sumner Link Trail along the White River",
+   "parks"
+  ],
+  [
+   "29.6 min",
+   "mean travel time to work, 2020–2024",
+   "acs"
+  ]
+ ],
+ "glance": [
+  [
+   "Population",
+   "10,621 at the 2020 census; the City lists 10,871 for 2025",
+   "wiki"
+  ],
+  [
+   "Setting",
+   "In northern Pierce County, with Puyallup to the west, Auburn to the north and Bonney Lake to the east",
+   "wiki"
+  ],
+  [
+   "Name",
+   "Called Stuck Junction, then Franklin; the name Sumner was drawn from slips of paper after mail mix-ups with other Franklins",
+   "history"
+  ],
+  [
+   "City status",
+   "George Ryan became the first mayor in 1891, and Sumner changed from a town to a city in 1928",
+   "walk"
+  ],
+  [
+   "Government",
+   "Mayor–council",
+   "wiki"
+  ],
+  [
+   "Main roads",
+   "SR 167 runs through the city, and SR 410 begins at an interchange with it in Sumner",
+   "sr410"
+  ],
+  [
+   "Train",
+   "Sounder S Line trains stop at Sumner station, 810 Maple Street, with 13 weekday round trips",
+   "stwiki"
+  ],
+  [
+   "School district",
+   "Most of the city is in the Sumner–Bonney Lake School District, with some portions in the Dieringer and Puyallup school districts",
+   "wiki"
+  ],
+  [
+   "Lahar zone",
+   "Sumner, Orting and Puyallup lie in the lahar hazard zone for Mount Rainier",
+   "wiki"
+  ]
+ ],
+ "notes": [
+  "The Census Bureau’s QuickFacts page for Sumner could not be loaded this session. Housing and household figures come from the City’s statistics page, which labels them U.S. Census Bureau 2025 data, and from Census Reporter’s ACS 2024 5-year profile; the two agree on 4,586 households and a $519,900 median home value.",
+  "Commute time differs by source: Census Reporter gives a mean travel time to work of 29.6 minutes (ACS 2020–2024), while the City’s statistics page shows 30.2 minutes. This guide uses the Census Reporter figure.",
+  "Land area differs by source: Wikipedia’s infobox gives 7.53 square miles of land (7.65 total), its text gives 7.51 square miles of land, Census Reporter gives 7.6 square miles and the City says 7.2 square miles. The guide does not state an area.",
+  "The City lists a 2025 population of 10,871; Census Reporter gives 10,733 for 2020–2024. Both are estimates; the 2020 census count is 10,621.",
+  "Sumner’s exact incorporation date was not stated on any page read. The City’s walking tour says George Ryan became the first mayor in 1891 and that Sumner changed from a town to a city in 1928.",
+  "Garage timing has slipped: Sound Transit’s 2024 groundbreaking release and Wikipedia list completion in 2026, while Sound Transit’s project page now says it expects the garage to open to the public in late 2026 or early 2027. Stall counts also vary (600 in the release, 602 in other reports). Check Sound Transit before counting on garage parking.",
+  "School district size differs: the district reports 11,033 students for 2025–26, while Wikipedia gives 9,793 with no year. This guide uses the district’s figure.",
+  "Part of the Sumner Link Trail is closed for the White River Restoration project; the City expects it to fully reopen in the first quarter of 2027 or sooner.",
+  "The new Sumner Library has no opening date yet. The library system says construction will take about 22 to 24 months after the October 2025 groundbreaking, and one date on its page (site work beginning Oct. 19, 2026) looked inconsistent, so it is left out.",
+  "Rhubarb Days dates are for 2026 from the City’s event page; 2027 dates were not yet posted.",
+  "Some pages could not be read this session and were left out: the WSDOT SR 410 corridor sketch, the main Wikipedia pages for SR 167 and SR 410 (a Wikipedia mirror was used instead), and Pierce County’s Beyond the Borders page. Sounder travel times from Sumner were not stated on any page read.",
+  "The City’s 2021 handout on the SR 410/166th Avenue interchange described a planned fix, but its current status could not be confirmed, so it is left out."
+ ],
+ "chapters": [
+  {
+   "title": "Getting around and commutes",
+   "intro": "The City describes Sumner as sitting at the junction of three state freeways, and Sounder trains stop downtown. Census figures put the mean travel time to work for Sumner residents at 29.6 minutes (2020–2024).",
+   "dark": false,
+   "items": [
+    [
+     "Sounder at Sumner station",
+     "Sumner station at 810 Maple Street has 13 weekday Sounder S Line round trips, north to King Street Station in Seattle and south to Tacoma Dome or Lakewood. The permanent station opened March 10, 2001.",
+     "stwiki"
+    ],
+    [
+     "Station parking now",
+     "Before the garage, the station had 302 spaces in two lots, with an overflow lot on Academy Street that takes a paid reservation on weekdays. About 190 stalls were closed during construction.",
+     "stwiki"
+    ],
+    [
+     "New parking garage",
+     "Sound Transit broke ground on August 6, 2024 on a 600-stall garage, about 500 net new spaces, as part of a $49 million project.",
+     "stgb"
+    ],
+    [
+     "Garage opening",
+     "Sound Transit’s project page says it expects the garage to open to the public in late 2026 or early 2027, with pedestrian and bicycle improvements included.",
+     "stgarage"
+    ],
+    [
+     "Sound Transit buses",
+     "ST Express Route 578 runs all day from the station to Puyallup, Auburn, Federal Way and downtown Seattle. Peak-only Route 596 links the station with the Bonney Lake park and ride.",
+     "stwiki"
+    ],
+    [
+     "Local bus service",
+     "Pierce Transit local service ended when Sumner withdrew from the transit district in 2012. Beyond the Borders runs a free weekday fixed route for youth, disabled, senior and low-income residents, serving the YMCA, library, grocery stores and senior center.",
+     "bus"
+    ],
+    [
+     "Shuttles",
+     "Pierce County runs a weekday dial-a-ride service between the station, downtown Sumner and Bonney Lake, and a BusUp shuttle to industrial businesses began in January 2023.",
+     "stwiki"
+    ],
+    [
+     "SR 167",
+     "SR 167 curves north along the Puyallup River through Sumner, with interchanges at SR 410 near the train station and at 24th Street East. Its HOT lanes begin in King County, not in Sumner.",
+     "sr167"
+    ],
+    [
+     "SR 410",
+     "A 107.44-mile highway that begins at SR 167 in Sumner and runs east through Bonney Lake, Buckley and Enumclaw, past Mount Rainier National Park and over Cayuse and Chinook passes to Naches.",
+     "sr410"
+    ]
+   ]
+  },
+  {
+   "title": "Parks and outdoors",
+   "intro": "Sumner’s city parks range from ball fields to a downtown plaza, and the paved Sumner Link Trail follows the White River and connects to regional trails.",
+   "dark": false,
+   "items": [
+    [
+     "Sumner Link Trail",
+     "5.5 miles of paved trail along and across the White River, with picnic areas, workout facilities and trailheads. It links north to the Interurban and Lakeland Hills trails and south to the Foothills and Riverwalk trails.",
+     "parks"
+    ],
+    [
+     "Trailheads",
+     "The State Street trailhead at 13114 63rd St. E. has public parking and restrooms. The 16th Street and 24th Street turnarounds and the 142nd Loop have street parking only.",
+     "trails"
+    ],
+    [
+     "White River Restoration",
+     "A City project to reduce flood risk and restore salmon habitat, reconnecting nearly 200 acres of floodplain to the White River. Phase 1 finished in October 2024; construction is scheduled to last until 2027.",
+     "wrr"
+    ],
+    [
+     "Trail closure",
+     "The Link Trail through the restoration site is closed, and the trail no longer crosses the 24th Street bridge. The new trail will sit higher, on a forested berm, and is expected to fully reopen in the first quarter of 2027 or sooner.",
+     "wrr"
+    ],
+    [
+     "Bill Heath Sports Complex",
+     "At 5604 Graham Ave., with a main baseball field, two youth baseball fields, two soccer fields, volleyball, basketball and tennis courts, a jogging trail, a play area and a concession stand.",
+     "parks"
+    ],
+    [
+     "Rainier View Park",
+     "At 15603 Meade McCumber Road, with a covered, lighted court for basketball, pickleball and volleyball, an inclusive playground, a picnic shelter and barbecues.",
+     "parks"
+    ],
+    [
+     "Loyalty Park",
+     "At 1300 Park Street, with a playground, picnic tables, a basketball and pickleball court, horseshoe pits and a sports field.",
+     "parks"
+    ],
+    [
+     "Seibenthaler Park",
+     "At 1602 Bonney Ave., with basketball, soccer, a picnic area, a play area and a temporary pop-up dog park.",
+     "parks"
+    ],
+    [
+     "Heritage Park",
+     "Reuben A. Knoblauch Heritage Park, at 914 Kincaid Ave., is a half-acre downtown plaza with tables, umbrellas and lighted seating. Later phases are not yet complete.",
+     "parks"
+    ]
+   ]
+  },
+  {
+   "title": "Schools",
+   "intro": "Most of Sumner is in the Sumner–Bonney Lake School District, with some portions in the Dieringer and Puyallup school districts. Boundaries change; confirm school assignment with the district for any specific address.",
+   "dark": false,
+   "items": [
+    [
+     "Sumner–Bonney Lake School District",
+     "Reported 11,033 students in 2025–26, with nine elementary schools, three middle schools and two high schools. The district office is at 1202 Wood Avenue in Sumner.",
+     "sbsd"
+    ],
+    [
+     "Area served",
+     "The cities of Bonney Lake and Sumner, parts of Edgewood and Pacific, and unincorporated Pierce County, including most of Alderton and North Puyallup and portions of Lake Tapps and Tehaleh.",
+     "sbwiki"
+    ],
+    [
+     "Middle and high schools",
+     "Middle schools are Lakeridge, Mountain View and Sumner; high schools are Bonney Lake High School and Sumner High School.",
+     "sbwiki"
+    ],
+    [
+     "Elementary schools",
+     "Bonney Lake, Crestwood, Daffodil Valley, Donald Eismann, Emerald Hills, Liberty Ridge, Maple Lawn, Tehaleh Heights and Victor Falls.",
+     "sbwiki"
+    ],
+    [
+     "Programs",
+     "The City notes the district offers Career and Technical Education, DECA and International Baccalaureate programs.",
+     "workforce"
+    ],
+    [
+     "Finding an assigned school",
+     "The district’s website has boundary maps under Transportation and a boundary revisions page under Construction.",
+     "sbsd"
+    ],
+    [
+     "Lahar drills",
+     "Local schools in Sumner, Puyallup and Orting take part in a lahar evacuation exercise; the 2026 drill was set for April 23, with rolling road closures on Valley Avenue, Main Street and 160th Street.",
+     "drill"
+    ]
+   ]
+  },
+  {
+   "title": "Everyday errands",
+   "intro": "City Hall, the library and the Sounder station sit near downtown, and the City runs its own water and sewer utilities.",
+   "dark": false,
+   "items": [
+    [
+     "City Hall",
+     "At 1104 Maple Street. The City lists Metro Animal Services for animal control and the City of Bonney Lake Recreation Program for recreation.",
+     "stats"
+    ],
+    [
+     "Sumner Library",
+     "A Pierce County Library System branch. A new 17,500-square-foot library on East Main Street broke ground on October 2, 2025, replacing the 10,000-square-foot building, which stays open during construction.",
+     "library"
+    ],
+    [
+     "Police",
+     "The Sumner Police Department describes itself as an accredited law enforcement agency, with 24-hour dispatch through South Sound 911.",
+     "police"
+    ],
+    [
+     "Fire and EMS",
+     "The City lists East Pierce Fire & Rescue as its fire service.",
+     "stats"
+    ],
+    [
+     "Utilities and alerts",
+     "The City’s Public Works handles water and sewer, and Puget Sound Energy provides power and natural gas. Sumner Alert sends emergency and community alerts by address.",
+     "prep"
+    ],
+    [
+     "Rhubarb Days",
+     "Sumner calls itself the “Rhubarb Pie Capital of the World.” In 2026 Rhubarb Days ran June 20 on downtown Main Street, with live music, food trucks, a kids’ zone and local vendors.",
+     "rhubarb"
+    ],
+    [
+     "Daffodil Parade",
+     "Sumner hosts part of the four-part Daffodil Parade each April, along with Tacoma, Puyallup and Orting.",
+     "wiki"
+    ],
+    [
+     "Business base",
+     "REI has corporate offices and a large distribution center in Sumner, and Dillanos Coffee Roasters is based here.",
+     "wiki"
+    ],
+    [
+     "Manufacturing center",
+     "The City describes the area its White River work protects from flooding as Pierce County’s largest manufacturing center, with 16,000 jobs.",
+     "wrr"
+    ],
+    [
+     "Fleischmann’s plant",
+     "The Fleischmann’s Yeast plant was completed in June 1913 and finished its final production in Sumner in 2023.",
+     "walk"
+    ]
+   ]
+  },
+  {
+   "title": "Housing and neighborhoods",
+   "intro": "The City updated its Comprehensive Plan and Town Center Plan for 2026. Sumner lies in the Mount Rainier lahar hazard zone, so location matters.",
+   "dark": false,
+   "items": [
+    [
+     "Housing figures",
+     "Owner-occupied housing rate 54%, median owner-occupied home value $519,900 and median gross rent $1,974, from Census data quoted by the City.",
+     "stats"
+    ],
+    [
+     "Households",
+     "4,586 households, with about 2.3 persons per household (Census, 2020–2024).",
+     "acs"
+    ],
+    [
+     "Comprehensive Plan",
+     "The City Council approved the 2025 Comprehensive Plan amendments on November 24, 2025; they took effect January 1, 2026.",
+     "comp"
+    ],
+    [
+     "Town Center Plan",
+     "The 2025 update lowered allowed building heights on parts of Main Street, Cherry Avenue and North Street from five to four stories and added an overlay zone along Zehnder Street and 57th Street East.",
+     "comp"
+    ],
+    [
+     "166th Avenue East rezone",
+     "Ten parcels south of WinCo were rezoned to Medium Density Residential and four to Interchange Commercial, covering 19.9 acres in the southeast urban growth area.",
+     "comp"
+    ],
+    [
+     "Lahar zone",
+     "About 5,600 years ago the Osceola Mudflow left deposits up to 300 feet thick over part of where the city now stands. Sumner, Orting and Puyallup lie in the lahar hazard zone for Mount Rainier.",
+     "wiki"
+    ],
+    [
+     "Lahar exposure",
+     "A 2009 USGS study named Sumner among the communities with the highest percentages of people and assets in the Mount Rainier lahar hazard zone. Ask about any specific address.",
+     "usgs"
+    ],
+    [
+     "Warning sirens",
+     "Pierce County runs 42 outdoor warning sirens in the Puyallup and Nisqually river valleys, tested at noon on the first Monday of every month, and lists Sumner as a partner.",
+     "lahar"
+    ],
+    [
+     "Lucy V. Ryan Park",
+     "In 1926 the Ryan family gave land on Main Street to the city for a park. The house on the site, once a library, was found beyond repair and removed in 2025; the site is slated for future design.",
+     "history"
+    ]
+   ]
+  },
+  {
+   "title": "What’s nearby",
+   "intro": "Sumner sits where the Puyallup and White river valleys meet, between Puyallup, Auburn and Bonney Lake, with SR 410 leading toward Mount Rainier.",
+   "dark": true,
+   "items": [
+    [
+     "Puyallup",
+     "West of Sumner, with 42,973 people at the 2020 census. It is home to the Washington State Fair, which draws over a million visitors a year.",
+     "puyallup"
+    ],
+    [
+     "Bonney Lake",
+     "To the east, with 22,487 people at the 2020 census. It incorporated as a town on February 28, 1949, and SR 410 bisects the city.",
+     "bonney"
+    ],
+    [
+     "Lake Tapps",
+     "An unincorporated community and census-designated place in Pierce County, with 12,962 people at the 2020 census.",
+     "tapps"
+    ],
+    [
+     "Edgewood",
+     "West of Sumner, with 12,327 people at the 2020 census. It incorporated on February 28, 1996.",
+     "edgewood"
+    ],
+    [
+     "Auburn",
+     "Mainly in King County, with 87,256 people in 2020. Sounder trains run from Auburn station to downtown Seattle in about 30 minutes.",
+     "auburn"
+    ],
+    [
+     "Mount Rainier",
+     "SR 410 leads from Sumner through Enumclaw and Greenwater into Mount Rainier National Park, following the Chinook Scenic Byway from Enumclaw.",
+     "sr410"
+    ]
+   ]
+  }
+ ],
+ "picks": null,
+ "faq": [
+  [
+   "What county is Sumner in?",
+   "Sumner is in northern Pierce County, with Puyallup to the west, Auburn to the north and Bonney Lake to the east.",
+   "wiki"
+  ],
+  [
+   "What is the population of Sumner, WA?",
+   "The 2020 census counted 10,621 people; the City lists 10,871 for 2025.",
+   "stats"
+  ],
+  [
+   "How did Sumner get its name?",
+   "The area was called Stuck Junction, then Franklin. Mail was confused with other Franklins, so a new name was drawn from slips of paper, and it came up Sumner.",
+   "history"
+  ],
+  [
+   "Is there a train from Sumner to Seattle?",
+   "Yes. Sounder S Line trains stop at Sumner station, 810 Maple Street, with 13 weekday round trips to King Street Station in Seattle.",
+   "stwiki"
+  ],
+  [
+   "When will the Sumner station parking garage open?",
+   "Sound Transit says it expects the 600-stall garage to open to the public in late 2026 or early 2027.",
+   "stgarage"
+  ],
+  [
+   "Does Pierce Transit serve Sumner?",
+   "No. Pierce Transit local service ended when Sumner withdrew from the transit district in 2012. Sound Transit buses serve the station, and Beyond the Borders runs a free weekday route for youth, disabled, senior and low-income residents.",
+   "bus"
+  ],
+  [
+   "What school district is Sumner in?",
+   "Most of Sumner is in the Sumner–Bonney Lake School District, with some portions in the Dieringer and Puyallup school districts. Confirm school assignment with the district for any specific address.",
+   "wiki"
+  ],
+  [
+   "How long is the average commute from Sumner?",
+   "Census figures put the mean travel time to work for Sumner residents at 29.6 minutes (2020–2024).",
+   "acs"
+  ],
+  [
+   "What is the median home value in Sumner?",
+   "The City lists a median owner-occupied home value of $519,900 and median gross rent of $1,974, from Census data.",
+   "stats"
+  ],
+  [
+   "Is Sumner in a lahar zone?",
+   "Yes. Sumner, Orting and Puyallup lie in the lahar hazard zone for Mount Rainier. Ask about any specific address.",
+   "wiki"
+  ],
+  [
+   "How often are the lahar sirens tested?",
+   "Pierce County tests its outdoor warning sirens at noon on the first Monday of every month.",
+   "lahar"
+  ],
+  [
+   "Is the Sumner Link Trail open?",
+   "Part of it is closed for the White River Restoration project, including the crossing at the 24th Street bridge. The City expects it to fully reopen in the first quarter of 2027 or sooner.",
+   "wrr"
+  ]
+ ],
+ "listings": [],
+ "fine": "Places are described, never the people who live there. Facts are sourced and were checked on the date shown; routes, schedules, school boundaries, zoning and businesses change, so confirm before you rely on them. Chris’s local picks are coming soon."
+}

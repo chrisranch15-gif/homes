@@ -29,6 +29,7 @@ SRC=$(mktemp); python3 "$HOMES/source/office/inject_sites.py" "$HOMES/source/off
 # Office: public copies never hold Chris's addresses
 sed 's/__MY_EMAILS__/[]/' "$SRC" > "$HOMES/office/index.html"
 cp "$HOMES/office/index.html" "$OFFICE/index.html"
+cp "$HOMES/source/office/thumb.jpg" "$HOMES/office/thumb.jpg"; cp "$HOMES/source/office/thumb.jpg" "$OFFICE/thumb.jpg"; cp "$HOMES/source/office/thumb.jpg" /home/claude/hub/thumb.jpg 2>/dev/null || true
 # Private claude.ai copy keeps the CALENDARS line it already has (never committed)
 if [ -f /home/claude/hub/index.html ]; then
   LINE=$(grep -m1 -E '^(const|let) CALENDARS = ' /home/claude/hub/index.html | sed 's/^const /let /' || true)
